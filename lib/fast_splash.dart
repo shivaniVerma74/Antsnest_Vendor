@@ -43,10 +43,10 @@ class _FastsplashState extends State<Fastsplash> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnimatedSplashScreen(
-        splash: 'images/antsLogo.png',
+        splash: 'images/splash_one.png',
         backgroundColor: AppColor.PrimaryDark,
         nextScreen: uid == null || uid == "" ? SplashScreen() : BottomBar(),
-        splashIconSize: 70.sp,
+        splashIconSize: 190.sp,
         duration: 350,
         splashTransition: SplashTransition.slideTransition,
       ),

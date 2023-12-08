@@ -359,8 +359,7 @@ String? selectedTravel;
         String yourDate = picked.toString();
         _dateValue = convertDateTimeDisplay(yourDate);
         print(_dateValue);
-        dateFormate =
-            DateFormat("dd/MM/yyyy").format(DateTime.parse(_dateValue ?? ""));
+        dateFormate = DateFormat("dd/MM/yyyy").format(DateTime.parse(_dateValue ?? ""));
       });
   }
 
@@ -399,42 +398,24 @@ String? selectedTravel;
   String? latitude, longitudes;
 
   getLocation() async {
-    // LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
-    //     builder: (context) => PlacePicker(
-    //       "AIzaSyCqQW9tN814NYD_MdsLIb35HRY65hHomco",
-    //       // "AIzaSyCFSF6SaBE2LbhYbQKUU40o4-o9xiWvDHM"
-    //     )));
-    // print("RESULT DATA === " + result.toString());
-    // print("LOCATION===== ${result.formattedAddress.toString()}");
-    // print("LATITUDE===== ${result.latLng..toString()}");
-    // setState(() {
-    //   addressController.text = result.formattedAddress.toString();
-    //   myLoction = result.formattedAddress.toString();
-    //   longitudes = result.latLng!.longitude.toString();
-    //   latitude = result.latLng!.latitude.toString();
-    // });
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => PlacePicker(
           apiKey: Platform.isAndroid
-              ? "AIzaSyB0uPBgryG9RisP8_0v50Meds1ZePMwsoY"
-              : "AIzaSyB0uPBgryG9RisP8_0v50Meds1ZePMwsoY",
+              ? "AIzaSyB_R73InTM8ee1c57EiJhpkYRqoq3nF_Gc"
+              : "AIzaSyB_R73InTM8ee1c57EiJhpkYRqoq3nF_Gc",
           onPlacePicked: (result) {
             print(result.formattedAddress);
-
             setState(() {
-              addressController.text =
-                  result.formattedAddress.toString();
+              addressController.text = result.formattedAddress.toString();
               latitude = result.geometry!.location.lat.toString();
               longitudes = result.geometry!.location.lng.toString();
               myLoction = result.formattedAddress.toString();
             });
-
             Navigator.of(context).pop();
           },
-          initialPosition: LatLng(
-              22.719568,75.857727),
+          initialPosition: LatLng(22.719568,75.857727),
           useCurrentLocation: true,
         ),
       ),
@@ -442,7 +423,6 @@ String? selectedTravel;
   }
 
   signUpFunction() async {
-
     String langueges = selectedLanguageList.join(",");
     print("new languages are here ${langueges}");
 
@@ -3081,28 +3061,20 @@ String? selectedTravel;
                                  }
                                  print("yes ${cityIdList.length}");
                                  if (_formKey.currentState!.validate()) {
-
                                    if(dateFormate == null){
-
                                      showSnackBar(context, 'please enter date of birth');
-
                                    }else if (selectedCategory == null){
                                      showSnackBar(context, 'please select category');
-
                                    }else if(noOfDays == null){
-
                                      showSnackBar(context, 'please select days');
-
                                    }else if(selectedDayHour== null) {
                                      showSnackBar(context, 'please select hours');
-
                                    }else if(twitterController.text.isEmpty && instagramController.text.isEmpty && facebookLinkController.text.isEmpty && linkedInController.text.isEmpty){
                                      showSnackBar(context, 'At least One Social Media link is Required');
                                    }else if(!_isChecked){
                                      showSnackBar(context, 'please check terms & condition');
                                    }else {
                                      signUpFunction();
-
                                    }
                                  } else {
                                    var snackBar = SnackBar(

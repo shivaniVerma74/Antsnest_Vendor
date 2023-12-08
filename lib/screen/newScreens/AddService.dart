@@ -1984,7 +1984,6 @@ class _AddServicesState extends State<AddServices> {
               "currency": selectedMainCurrency.toString(),
               "addon": addonList.toString(),
             };
-
             print("ADD SERVICE PARAM=====" + param.toString());
             AddServicesModel addModel = await addServices(param);
             if (addModel.responseCode == "1") {
@@ -2006,8 +2005,7 @@ class _AddServicesState extends State<AddServices> {
           UtilityHlepar.getToast("PLease select fields");
         }
       },
-      child: UtilityWidget.lodingButton(
-          buttonLogin: buttonLogin, btntext: 'Submit'),
+      child: UtilityWidget.lodingButton(buttonLogin: buttonLogin, btntext: 'Submit'),
     );
   }
 
@@ -3322,7 +3320,8 @@ class _AddServicesState extends State<AddServices> {
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: addonList2.length,
                   itemBuilder: (context, index) {
-                    return Stack(
+                    return
+                      Stack(
                       children: [
                         Card(
                           elevation: 0,
@@ -3336,19 +3335,15 @@ class _AddServicesState extends State<AddServices> {
                                 child: Column(
                                   children: [
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
                                           flex: 2,
                                           child: Container(
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 10),
+                                            margin: EdgeInsets.symmetric(horizontal: 10),
                                             width: 80.99.w,
                                             height: 7.46.h,
-                                            decoration: boxDecoration(
-                                                radius: 10.0,
-                                                color: AppColor().colorEdit()),
+                                            decoration: boxDecoration(radius: 10.0, color: AppColor().colorEdit()),
                                             child: DropdownButtonHideUnderline(
                                               child: DropdownButton2(
                                                 isExpanded: true,
@@ -3411,13 +3406,10 @@ class _AddServicesState extends State<AddServices> {
                                                 dropdownMaxHeight: 300,
                                                 dropdownPadding: null,
                                                 dropdownDecoration:
-                                                    BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(14),
+                                                    BoxDecoration(borderRadius: BorderRadius.circular(14),
                                                 ),
                                                 dropdownElevation: 8,
-                                                scrollbarRadius:
-                                                    const Radius.circular(40),
+                                                scrollbarRadius: const Radius.circular(40),
                                                 scrollbarThickness: 6,
                                                 scrollbarAlwaysShow: true,
                                               ),
@@ -3715,7 +3707,6 @@ class _AddServicesState extends State<AddServices> {
         }
       });
       setState(() {
-
       });
     } else {
       return null;

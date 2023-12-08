@@ -212,8 +212,7 @@ List<Data> vendorList = [];
                     : SizedBox(height: 0,);
                   },
                 ),
-              )
-                  : Center(
+              ): Center(
                   child: Container(
                     child: Text("No Chat Found!!"),
                   ));
@@ -223,8 +222,6 @@ List<Data> vendorList = [];
               return Center(child: Image.asset("images/icons/loader.gif"),);
             }
           })
-
-
       // ListView.builder(
       //   itemCount: chats.length,
       //   itemBuilder: (BuildContext context, int index) {

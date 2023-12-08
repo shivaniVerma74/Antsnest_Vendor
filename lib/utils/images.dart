@@ -45,5 +45,6 @@ const redIcon="images/red.png";
 const greenIcon="images/grren.png";
 const package="images/package.png";
 const paymentIcon="images/payment_icon.png";
+const chatIcon="images/chat.png";
 const walletIcon="images/wallet.png";
 const editProfile="images/edit_profile.png";

@@ -190,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 return null;
                               },
                               decoration: InputDecoration(
-                                contentPadding: EdgeInsets.only(left: 10),
+                                contentPadding: EdgeInsets.only(left: 10, top: 8),
                                 hintText: "Enter Email Id",
                                 // counterText: '',
                                 hintStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,),
@@ -286,7 +286,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   appLogo(){
     return Container(
-      width: 150,
+      width: 190,
       height: 60,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),

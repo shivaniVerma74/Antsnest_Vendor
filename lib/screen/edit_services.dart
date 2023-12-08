@@ -50,12 +50,12 @@ class EditServices extends StatefulWidget {
       state,
       logo,
       currency,
-      // addOntype,
+      addOntype,
       service,
-      // adddOnservice,
-      // hour,
-      // dayHour,
-      // addOnPrice,
+      adddOnservice,
+      hour,
+      dayHour,
+      addOnPrice,
       serviceDescription;
 
   const EditServices(
@@ -74,12 +74,12 @@ class EditServices extends StatefulWidget {
       this.serviceImage,
       this.subName,
       this.childName,
-        // this.addOntype,
+        this.addOntype,
       this.experts,
-        // this.adddOnservice,
-        // this.addOnPrice,
-        // this.hour,
-        // this.dayHour,
+        this.adddOnservice,
+        this.addOnPrice,
+        this.hour,
+        this.dayHour,
         this.service,
       this.serviceDescription})
       : super(key: key);
@@ -166,7 +166,7 @@ class _EditServicesState extends State<EditServices> {
           setState(() {
             selectedState = widget.state;
           });
-          print("selected state ${selectedState}");
+          print("selected state $selectedState");
           getCities();
         }
       }
@@ -198,7 +198,7 @@ class _EditServicesState extends State<EditServices> {
          setState(() {
            selectedCountry = widget.country;
          });
-         print("selected country ${selectedCountry}");
+         print("selected country $selectedCountry");
          getState();
         }
       }
@@ -210,7 +210,8 @@ class _EditServicesState extends State<EditServices> {
 
   Future getCities() async {
     var request = http.MultipartRequest(
-        'POST', Uri.parse('${Apipath.BASH_URL}get_cities'));
+        'POST', Uri.parse('${Apipath.BASH_URL}get_cities'
+    ));
     request.fields.addAll({'state_id': '$selectedState'});
     print(request);
     print(request.fields);
@@ -467,8 +468,7 @@ class _EditServicesState extends State<EditServices> {
                       ),
                     ],
                   ),
-                  items: countryList
-                      .map((item) => DropdownMenuItem<String>(
+                  items: countryList.map((item) => DropdownMenuItem<String>(
                     value: item.id,
                     child: Text(
                       item.name!,
@@ -479,8 +479,7 @@ class _EditServicesState extends State<EditServices> {
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ))
-                      .toList(),
+                  )).toList(),
                   value: selectedCountry == null ? widget.country : selectedCountry,
                   onChanged: (value) {
                     setState(() {
@@ -521,101 +520,100 @@ class _EditServicesState extends State<EditServices> {
           SizedBox(
             height: 2.5.h,
           ),
-          Container(
-            width: 80.99.w,
-            height: 7.46.h,
-            decoration: boxDecoration(
-              radius: 10.0,
-              color:AppColor().colorEdit(),
-            ),
-            child:DropdownButtonHideUnderline(
-              child: DropdownButton2(
-                isExpanded: true,
-                hint: Row(
-                  children: [
-                    Image.asset(
-                      city,
-                      width: 6.04.w,
-                      height: 5.04.w,
-                      fit: BoxFit.fill,
-                      color: AppColor.PrimaryDark,
-                    ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Expanded(
-                      child: Text(
-                        'Select State',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                items: stateList
-                    .map((item) =>
-                    DropdownMenuItem<String>(
-                      value: item.id,
-                      child: Text(
-                        item.name!,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight:
-                          FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                        overflow:
-                        TextOverflow.ellipsis,
-                      ),
-                    ))
-                    .toList(),
-                value: selectedState == null ? widget.state : selectedState,
-                onChanged: (value) {
-                  setState(() {
-                    selectedState = value as String;
-                    print("selected State===>" +
-                        selectedState.toString());
-                  });
-                  getCities();
-                },
-                icon: const Icon(
-                  Icons.arrow_forward_ios_outlined,
-                  color: AppColor.PrimaryDark,
-                ),
-                iconSize: 14,
-                buttonHeight: 50,
-                buttonWidth: 160,
-                buttonPadding: const EdgeInsets.only(
-                    left: 14, right: 14),
-                buttonDecoration: BoxDecoration(
-                  borderRadius:
-                  BorderRadius.circular(14),
-                  color:AppColor().colorEdit(),
-                ),
-                buttonElevation: 0,
-                itemHeight: 40,
-                itemPadding: const EdgeInsets.only(
-                    left: 14, right: 14),
-                dropdownMaxHeight: 300,
-                dropdownPadding: null,
-                dropdownDecoration: BoxDecoration(
-                  borderRadius:
-                  BorderRadius.circular(14),
-                ),
-                dropdownElevation: 8,
-                scrollbarRadius:
-                const Radius.circular(40),
-                scrollbarThickness: 6,
-                scrollbarAlwaysShow: true,
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 2.5.h,
-          ),
+          // Container(
+          //   width: 80.99.w,
+          //   height: 7.46.h,
+          //   decoration: boxDecoration(
+          //     radius: 10.0,
+          //     color:AppColor().colorEdit(),
+          //   ),
+          //   child:DropdownButtonHideUnderline(
+          //     child: DropdownButton2(
+          //       isExpanded: true,
+          //       hint: Row(
+          //         children: [
+          //           Image.asset(
+          //             city,
+          //             width: 6.04.w,
+          //             height: 5.04.w,
+          //             fit: BoxFit.fill,
+          //             color: AppColor.PrimaryDark,
+          //           ),
+          //           SizedBox(
+          //             width: 4,
+          //           ),
+          //           Expanded(
+          //             child: Text(
+          //               'Select State',
+          //               style: TextStyle(
+          //                 fontSize: 14,
+          //                 fontWeight: FontWeight.normal,
+          //               ),
+          //               overflow: TextOverflow.ellipsis,
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //       items: stateList
+          //           .map((item) =>
+          //           DropdownMenuItem<String>(
+          //             value: item.id,
+          //             child: Text(
+          //               item.name!,
+          //               style: const TextStyle(
+          //                 fontSize: 14,
+          //                 fontWeight:
+          //                 FontWeight.bold,
+          //                 color: Colors.black,
+          //               ),
+          //               overflow: TextOverflow.ellipsis,
+          //             ),
+          //           ),
+          //       ).toList(),
+          //       value: selectedState == null ? widget.state : selectedState,
+          //       onChanged: (value) {
+          //         setState(() {
+          //           selectedState = value as String;
+          //           print("selected State===>" +
+          //               selectedState.toString());
+          //         });
+          //         getCities();
+          //       },
+          //       icon: const Icon(
+          //         Icons.arrow_forward_ios_outlined,
+          //         color: AppColor.PrimaryDark,
+          //       ),
+          //       iconSize: 14,
+          //       buttonHeight: 50,
+          //       buttonWidth: 160,
+          //       buttonPadding: const EdgeInsets.only(
+          //           left: 14, right: 14),
+          //       buttonDecoration: BoxDecoration(
+          //         borderRadius:
+          //         BorderRadius.circular(14),
+          //         color:AppColor().colorEdit(),
+          //       ),
+          //       buttonElevation: 0,
+          //       itemHeight: 40,
+          //       itemPadding: const EdgeInsets.only(
+          //           left: 14, right: 14),
+          //       dropdownMaxHeight: 300,
+          //       dropdownPadding: null,
+          //       dropdownDecoration: BoxDecoration(
+          //         borderRadius:
+          //         BorderRadius.circular(14),
+          //       ),
+          //       dropdownElevation: 8,
+          //       scrollbarRadius:
+          //       const Radius.circular(40),
+          //       scrollbarThickness: 6,
+          //       scrollbarAlwaysShow: true,
+          //     ),
+          //   ),
+          // ),
+          // SizedBox(
+          //   height: 2.5.h,
+          // ),
           Container(
             width: 80.99.w,
             height: 7.46.h,
@@ -1297,298 +1295,285 @@ class _EditServicesState extends State<EditServices> {
           //   ),
           // ),
           ///
-          // Container(
-          //   margin: EdgeInsets.only(bottom: 10),
-          //   padding: EdgeInsets.symmetric(horizontal: 40),
-          //   child: Column(
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: [
-          //       Row(
-          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //         children: [
-          //           Text(
-          //             "Add on service",
-          //             style: TextStyle(fontWeight: FontWeight.bold),
-          //           ),
-          //           ElevatedButton(
-          //             onPressed: () {
-          //               addOnOperation();
-          //               setState(() {});
-          //             },
-          //             style: ElevatedButton.styleFrom(
-          //                 primary: AppColor.PrimaryDark,
-          //                 padding: EdgeInsets.all(0),
-          //                 maximumSize: Size(30, 30),
-          //                 minimumSize: Size(30, 30)),
-          //             child: Align(
-          //               child: Icon(
-          //                 Icons.add,
-          //                 color: Colors.white,
-          //               ),
-          //             ),
-          //           )
-          //         ],
-          //       ),
-          //       SizedBox(
-          //         height: 10,
-          //       ),
-          //       ListView.builder(
-          //         shrinkWrap: true,
-          //         physics: NeverScrollableScrollPhysics(),
-          //         itemCount: 2,
-          //         itemBuilder: (context, index) {
-          //           return Stack(
-          //             children: [
-          //               Card(
-          //                 elevation: 0,
-          //                 shape: RoundedRectangleBorder(
-          //                     borderRadius: BorderRadius.circular(14.0)),
-          //                 color: AppColor().colorEdit(),
-          //                 child: Column(
-          //                   children: [
-          //                     Padding(
-          //                       padding: const EdgeInsets.all(8.0),
-          //                       child: Column(
-          //                         children: [
-          //                           Row(
-          //                             mainAxisAlignment:
-          //                             MainAxisAlignment.spaceBetween,
-          //                             children: [
-          //                               Expanded(
-          //                                 flex: 2,
-          //                                 child: Container(
-          //                                   margin: EdgeInsets.symmetric(
-          //                                       horizontal: 10),
-          //                                   width: 80.99.w,
-          //                                   height: 7.46.h,
-          //                                   decoration: boxDecoration(
-          //                                       radius: 10.0,
-          //                                       color: AppColor().colorEdit()),
-          //                                   child: DropdownButtonHideUnderline(
-          //                                     child: DropdownButton2(
-          //                                       isExpanded: true,
-          //                                       hint: Text(
-          //                                         'Select Hours/Day',
-          //                                         style: TextStyle(
-          //                                           fontSize: 14,
-          //                                           fontWeight: FontWeight.normal,
-          //                                         ),
-          //                                         overflow: TextOverflow.ellipsis,
-          //                                       ),
-          //                                       items: addonServiceList.map((String? item) =>
-          //                                           DropdownMenuItem<String>(
-          //                                             value: item,
-          //                                             child: Text(
-          //                                               item.toString(),
-          //                                               style: const TextStyle(
-          //                                                 fontSize: 14,
-          //                                                 fontWeight:
-          //                                                 FontWeight.bold,
-          //                                                 color: Colors.black,
-          //                                               ),
-          //                                               overflow: TextOverflow.ellipsis,
-          //                                             ),
-          //                                           ),
-          //                                       ).toList(),
-          //                                        value: selectedServiceTypeList[index],
-          //                                        onChanged: (value) {
-          //                                         setState(() {
-          //                                           // selectedServiceTypeList[index] =
-          //                                           value as String;
-          //                                           // // serviceName.text = serviceModel.data!
-          //                                           //     .firstWhere((element) => element.id == value)
-          //                                           //     .cName
-          //                                           //     .toString();
-          //                                         });
-          //                                       },
-          //                                       icon: const Icon(
-          //                                         Icons.arrow_forward_ios_outlined,
-          //                                         color: AppColor.PrimaryDark,
-          //                                       ),
-          //                                       iconSize: 14,
-          //                                       buttonHeight: 50,
-          //                                       buttonWidth: 160,
-          //                                       buttonPadding:
-          //                                       const EdgeInsets.only(left: 14, right: 14),
-          //                                       buttonDecoration: BoxDecoration(
-          //                                         borderRadius:
-          //                                         BorderRadius.circular(14),
-          //                                         color: AppColor().colorBg1(),
-          //                                         //color: Colors.grey.withOpacity(0.05)
-          //                                       ),
-          //                                       buttonElevation: 0,
-          //                                       itemHeight: 40,
-          //                                       itemPadding: const EdgeInsets.only(left: 14, right: 14),
-          //                                       dropdownMaxHeight: 300,
-          //                                       dropdownPadding: null,
-          //                                       dropdownDecoration:
-          //                                       BoxDecoration(borderRadius: BorderRadius.circular(14),
-          //                                       ),
-          //                                       dropdownElevation: 8,
-          //                                       scrollbarRadius:
-          //                                       const Radius.circular(40),
-          //                                       scrollbarThickness: 6,
-          //                                       scrollbarAlwaysShow: true,
-          //                                     ),
-          //                                   ),
-          //                                 ),
-          //                               ),
-          //                               Expanded(
-          //                                 flex: 2,
-          //                                 child: SizedBox(
-          //                                   height: 7.46.h,
-          //                                   child: TextField(
-          //                                     controller: addonServicePriceControllerList[index],
-          //                                     keyboardType: TextInputType.number,
-          //                                     decoration: InputDecoration(
-          //                                         hintText: "I will charge",
-          //                                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10),
-          //                                         ),
-          //                                     ),
-          //                                   ),
-          //                                 ),
-          //                               ),
-          //                             ],
-          //                           ),
-          //                           SizedBox(
-          //                             height: 5,
-          //                           ),
-          //                           Row(
-          //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //                             children: [
-          //                               Expanded(
-          //                                 flex: 2,
-          //                                 child: Container(
-          //                                   margin: EdgeInsets.symmetric(
-          //                                       horizontal: 10),
-          //                                   width: 80.99.w,
-          //                                   height: 7.46.h,
-          //                                   decoration: boxDecoration(
-          //                                       radius: 10.0,
-          //                                       color: AppColor().colorEdit(),
-          //                                   ),
-          //                                   child: DropdownButtonHideUnderline(
-          //                                     child: DropdownButton2(
-          //                                       isExpanded: true,
-          //                                       hint: Text(
-          //                                         'Select Hours / Day',
-          //                                         style: TextStyle(
-          //                                           fontSize: 14,
-          //                                           fontWeight:
-          //                                           FontWeight.normal,
-          //                                         ),
-          //                                         overflow:
-          //                                         TextOverflow.ellipsis,
-          //                                       ),
-          //                                       items: ['Hours', 'Days']
-          //                                           .map((String? item) =>
-          //                                           DropdownMenuItem<
-          //                                               String>(
-          //                                             value: item,
-          //                                             child: Text(
-          //                                               item.toString(),
-          //                                               style:
-          //                                               const TextStyle(
-          //                                                 fontSize: 14,
-          //                                                 fontWeight:
-          //                                                 FontWeight
-          //                                                     .bold,
-          //                                                 color:
-          //                                                 Colors.black,
-          //                                               ),
-          //                                               overflow:
-          //                                               TextOverflow
-          //                                                   .ellipsis,
-          //                                             ),
-          //                                           ),).toList(),
-          //                                       value: selectedServiceHourList[index],
-          //                                       onChanged: (value) {
-          //                                         setState(() {
-          //                                           //selectedServiceHour = value as String;
-          //                                           selectedServiceHourList[index] = value as String;
-          //                                           // // serviceName.text = serviceModel.data!
-          //                                           //     .firstWhere((element) => element.id == value)
-          //                                           //     .cName
-          //                                           //     .toString();
-          //                                         });
-          //                                       },
-          //                                       icon: const Icon(
-          //                                         Icons.arrow_forward_ios_outlined,
-          //                                         color: AppColor.PrimaryDark,
-          //                                       ),
-          //                                       iconSize: 14,
-          //                                       buttonHeight: 50,
-          //                                       buttonWidth: 160,
-          //                                       buttonPadding:
-          //                                       const EdgeInsets.only(
-          //                                           left: 14, right: 14),
-          //                                       buttonDecoration: BoxDecoration(
-          //                                         borderRadius:
-          //                                         BorderRadius.circular(14),
-          //                                         color: AppColor().colorBg1(),
-          //                                         //color: Colors.grey.withOpacity(0.05)
-          //                                       ),
-          //                                       buttonElevation: 0,
-          //                                       itemHeight: 40,
-          //                                       itemPadding:
-          //                                       const EdgeInsets.only(left: 14, right: 14),
-          //                                       dropdownMaxHeight: 300,
-          //                                       dropdownPadding: null,
-          //                                       dropdownDecoration:
-          //                                       BoxDecoration(borderRadius: BorderRadius.circular(14),
-          //                                       ),
-          //                                       dropdownElevation: 8,
-          //                                       scrollbarRadius:
-          //                                       const Radius.circular(40),
-          //                                       scrollbarThickness: 6,
-          //                                       scrollbarAlwaysShow: true,
-          //                                     ),
-          //                                   ),
-          //                                 ),
-          //                               ),
-          //                               Expanded(
-          //                                 flex: 2,
-          //                                 child: SizedBox(
-          //                                   height: 7.46.h,
-          //                                   child: TextField(
-          //                                     controller: addonHourDayPriceControllerList[index],
-          //                                     keyboardType:
-          //                                     TextInputType.number,
-          //                                     decoration: InputDecoration(
-          //                                         hintText: "Hour/Day",
-          //                                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-          //                                   ),
-          //                                 ),
-          //                               ),
-          //                             ],
-          //                           ),
-          //                         ],
-          //                       ),
-          //                     ),
-          //                   ],
-          //                 ),
-          //               ),
-          //               // Positioned(
-          //               //     child: InkWell(
-          //               //         onTap: () {
-          //               //           selectedServiceTypeList.removeAt(index);
-          //               //           selectedServiceHourList.removeAt(index);
-          //               //           addonServicePriceControllerList
-          //               //               .removeAt(index);
-          //               //           addonHourDayPriceControllerList
-          //               //               .removeAt(index);
-          //               //           addonList2.removeAt(index);
-          //               //           setState(() {});
-          //               //         },
-          //               //         child: Icon(Icons.remove_circle_outline)),
-          //               // )
-          //             ],
-          //           );
-          //         },
-          //       )
-          //     ],
-          //   ),
-          // ),
+
+          Container(
+            margin: EdgeInsets.only(bottom: 10),
+            padding: EdgeInsets.symmetric(horizontal: 40),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Add on service",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        addOnOperation();
+                        setState(() {});
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: AppColor.PrimaryDark,
+                          padding: EdgeInsets.all(0),
+                          maximumSize: Size(30, 30),
+                          minimumSize: Size(30, 30)),
+                      child: Align(
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: addonList2.length,
+                  itemBuilder: (context, index) {
+                    return Stack(
+                      children: [
+                        Card(
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14.0)),
+                          color: AppColor().colorEdit(),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            margin: EdgeInsets.symmetric(horizontal: 10),
+                                            width: 80.99.w,
+                                            height: 7.46.h,
+                                            decoration: boxDecoration(radius: 10.0, color: AppColor().colorEdit()),
+                                            child: DropdownButtonHideUnderline(
+                                              child: DropdownButton2(
+                                                isExpanded: true,
+                                                hint: Text(
+                                                  'Select Hours / Day',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                    FontWeight.normal,
+                                                  ),
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                items: addonServiceList.map((String? item) =>
+                                                    DropdownMenuItem<String>(
+                                                      value: item,
+                                                      child: Text(
+                                                        item.toString(),
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Colors.black,
+                                                        ),
+                                                        overflow: TextOverflow.ellipsis,
+                                                      ),
+                                                    ),
+                                                ).toList(),
+                                                value: selectedServiceTypeList[index],
+                                                onChanged: (value) {
+                                                  print("select serviceee typeee hereree ${selectedServiceTypeList[index]}");
+                                                  setState(() {
+                                                    selectedServiceTypeList[index] = value as String;
+                                                    // // serviceName.text = serviceModel.data!
+                                                    //     .firstWhere((element) => element.id == value)
+                                                    //     .cName
+                                                    //     .toString();
+                                                  });
+                                                },
+                                                icon: const Icon(Icons.arrow_forward_ios_outlined, color: AppColor.PrimaryDark),
+                                                iconSize: 14,
+                                                buttonHeight: 50,
+                                                buttonWidth: 160,
+                                                buttonPadding: EdgeInsets.only(left: 14, right: 14),
+                                                buttonDecoration: BoxDecoration(borderRadius: BorderRadius.circular(14), color: AppColor().colorBg1(),
+                                                  //color: Colors.grey.withOpacity(0.05)
+                                                ),
+                                                buttonElevation: 0,
+                                                itemHeight: 40,
+                                                itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                                                dropdownMaxHeight: 300,
+                                                dropdownPadding: null,
+                                                dropdownDecoration:
+                                                BoxDecoration(borderRadius: BorderRadius.circular(14)),
+                                                dropdownElevation: 8,
+                                                scrollbarRadius: const Radius.circular(40),
+                                                scrollbarThickness: 6,
+                                                scrollbarAlwaysShow: true,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: SizedBox(
+                                            height: 7.46.h,
+                                            child: TextField(
+                                              controller: addonServicePriceControllerList[index],
+                                              keyboardType: TextInputType.number,
+                                              decoration: InputDecoration(
+                                                  hintText: "I will charge",
+                                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10),
+                                                  ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            width: 80.99.w,
+                                            height: 7.46.h,
+                                            decoration: boxDecoration(
+                                                radius: 10.0,
+                                                color: AppColor().colorEdit(),
+                                            ),
+                                            child: DropdownButtonHideUnderline(
+                                              child: DropdownButton2(
+                                                isExpanded: true,
+                                                hint: Text(
+                                                  'Select Hours / Day',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                    FontWeight.normal,
+                                                  ),
+                                                  overflow:
+                                                  TextOverflow.ellipsis,
+                                                ),
+                                                items: ['Hours', 'Days']
+                                                    .map((String? item) =>
+                                                    DropdownMenuItem<
+                                                        String>(
+                                                      value: item,
+                                                      child: Text(
+                                                        item.toString(),
+                                                        style:
+                                                        const TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                          FontWeight
+                                                              .bold,
+                                                          color:
+                                                          Colors.black,
+                                                        ),
+                                                        overflow:
+                                                        TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),).toList(),
+                                                value: selectedServiceHourList[index],
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    //selectedServiceHour = value as String;
+                                                    selectedServiceHourList[index] = value as String;
+                                                    // // serviceName.text = serviceModel.data!
+                                                    //     .firstWhere((element) => element.id == value)
+                                                    //     .cName
+                                                    //     .toString();
+                                                  });
+                                                },
+                                                icon: const Icon(
+                                                  Icons.arrow_forward_ios_outlined,
+                                                  color: AppColor.PrimaryDark,
+                                                ),
+                                                iconSize: 14,
+                                                buttonHeight: 50,
+                                                buttonWidth: 160,
+                                                buttonPadding:
+                                                const EdgeInsets.only(
+                                                    left: 14, right: 14),
+                                                buttonDecoration: BoxDecoration(
+                                                  borderRadius:
+                                                  BorderRadius.circular(14),
+                                                  color: AppColor().colorBg1(),
+                                                  //color: Colors.grey.withOpacity(0.05)
+                                                ),
+                                                buttonElevation: 0,
+                                                itemHeight: 40,
+                                                itemPadding:
+                                                const EdgeInsets.only(left: 14, right: 14),
+                                                dropdownMaxHeight: 300,
+                                                dropdownPadding: null,
+                                                dropdownDecoration:
+                                                BoxDecoration(borderRadius: BorderRadius.circular(14),
+                                                ),
+                                                dropdownElevation: 8,
+                                                scrollbarRadius:
+                                                const Radius.circular(40),
+                                                scrollbarThickness: 6,
+                                                scrollbarAlwaysShow: true,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: SizedBox(
+                                            height: 7.46.h,
+                                            child: TextField(
+                                              controller: addonHourDayPriceControllerList[index],
+                                              keyboardType:
+                                              TextInputType.number,
+                                              decoration: InputDecoration(
+                                                  hintText: "Hour/Day",
+                                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                            child: InkWell(
+                                onTap: () {
+                                  selectedServiceTypeList.removeAt(index);
+                                  selectedServiceHourList.removeAt(index);
+                                  addonServicePriceControllerList.removeAt(index);
+                                  addonHourDayPriceControllerList.removeAt(index);
+                                  addonList2.removeAt(index);
+                                  setState(() {});
+                                },
+                                child: Icon(Icons.remove_circle_outline)),
+                        )
+                      ],
+                    );
+                  },
+                )
+              ],
+            ),
+          ),
           SizedBox(
             height: 2.5.h,
           ),
@@ -1604,19 +1589,19 @@ class _EditServicesState extends State<EditServices> {
                       buttonLogin = true;
                     });
 
-                    // for (int i = 0; i < addonServicePriceControllerList.length; i++) {
-                    //   if (addonServicePriceControllerList[i].text.isNotEmpty &&
-                    //       addonHourDayPriceControllerList[i].text.isNotEmpty &&
-                    //       selectedServiceTypeList[i] != null &&
-                    //       selectedServiceHourList[i] != null) {
-                    //       addonList.add(jsonEncode({
-                    //       "service": selectedServiceTypeList[i],
-                    //       "price_a": addonServicePriceControllerList[i].text,
-                    //       "hrly": selectedServiceHourList[i],
-                    //       "days_hrs": addonHourDayPriceControllerList[i].text
-                    //     }));
-                    //   }
-                    // }
+                    for (int i = 0; i < addonServicePriceControllerList.length; i++) {
+                      if (addonServicePriceControllerList[i].text.isNotEmpty &&
+                          addonHourDayPriceControllerList[i].text.isNotEmpty &&
+                           selectedServiceTypeList[i] != null &&
+                          selectedServiceHourList[i] != null) {
+                          addonList.add(jsonEncode({
+                          "service": selectedServiceTypeList[i],
+                          "price_a": addonServicePriceControllerList[i].text,
+                          "hrly": selectedServiceHourList[i],
+                          "days_hrs": addonHourDayPriceControllerList[i].text
+                        }));
+                      }
+                    }
 
                     Map<String, String> param = {
                       'name': '${serviceName.text.toString()}',
@@ -1632,7 +1617,7 @@ class _EditServicesState extends State<EditServices> {
                       "state_id":"${selectedCity.toString()}",
                       "city_id":"${selectedCity.toString()}",
                       "currency": "$selectedCurrency",
-                      // "addon": addonList.toString(),
+                      "addon": addonList.toString(),
                     };
                     print("ADD SERVICE PARAM=====" + param.toString());
                     AddServicesModel addModel = await editServices(param);

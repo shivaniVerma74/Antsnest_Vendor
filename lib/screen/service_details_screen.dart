@@ -88,19 +88,19 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
     if (response.statusCode == 200) {
       var finalResult =  await response.stream.bytesToString();
       final jsonResponse = json.decode(finalResult);
-      print("final response here ${jsonResponse}");
+      print("final response here $jsonResponse");
+      print("finalll resultttt noww ${finalResult}");
       setState(() {
         Fluttertoast.showToast(msg: "${jsonResponse['message']} and OTP is ${jsonResponse['otp']}");
         //setState(() {
          // isStart = false;
-
       });
     }
     else {
       print(response.reasonPhrase);
     }
-
   }
+
   final _fooomKey = GlobalKey<FormState>();
 
   final _forrmKey = GlobalKey<FormState>();
@@ -110,9 +110,9 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
     };
     var request = http.MultipartRequest('POST', Uri.parse('${Apipath.BASH_URL}update_booking_status'));
     request.fields.addAll({
-      'booking_id': '${id}',
+      'booking_id': '$id',
       'otp': otpValue.text,
-      'status': '${status}'
+      'status': '$status'
     });
     print("sfsfsfsfsfsf ${request.fields}");
     request.headers.addAll(headers);
@@ -121,13 +121,11 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
       var finalResult = await response.stream.bytesToString();
       print(finalResult);
       final jsonResponse = json.decode(finalResult);
-      print("checking submit response here ${jsonResponse}");
+      print("checking submit response here $jsonResponse");
       isStart = false ;
-
       setState(() {
         Fluttertoast.showToast(msg: "${jsonResponse['message']}");
       });
-
       if(status == "5"){
         Navigator.pop(context);
       }
@@ -135,7 +133,6 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
     else {
       print(response.reasonPhrase);
     }
-
   }
 
   @override
@@ -201,7 +198,8 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                                 textColor: Color(0xffffffff),
                                 fontSize: 14.sp,
                                 fontFamily: fontMedium,
-                                isCentered: true),
+                                isCentered: true,
+                            ),
                           ),
                         ],
                       ),
@@ -214,9 +212,7 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         text(
-                          "Booking ID-" +
-                              widget.orderResponse.data![widget.i].id
-                                  .toString(),
+                          "Booking ID-" + widget.orderResponse.data![widget.i].id.toString(),
                           textColor: Color(0xff000833),
                           fontSize: 12.sp,
                           fontFamily: fontBold,
@@ -1060,14 +1056,14 @@ Column(children: [
                   SizedBox(
                     height: 2.02.h,
                   ),
-                  widget.orderResponse.data![widget.i].status != "Pending"?Container(
+                  widget.orderResponse.data![widget.i].status != "Pending"? Container(
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     child: Column(
                       children: [
                         widget.orderResponse.data![widget.i].status == "Completed"
                             ? MaterialButton(onPressed: () async {
                           final Uri url = Uri.parse( '${Apipath.BASH_URL}get_invoice/${widget.orderResponse.data![widget.i].id}');
-                          print("checking url here ${url}");
+                          print("checking url here $url");
                           if (await canLaunch(url.toString())) {
                             await launch(url.toString());
                           } else {
@@ -1075,7 +1071,7 @@ Column(children: [
                           }
                         },child: Text("Download Invoice",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 16)),color:AppColor.PrimaryDark) :
                         isCompleted ? SizedBox() :
-                        widget.orderResponse.data![widget.i].status=='Started'?
+                        widget.orderResponse.data![widget.i].status =='Started'?
                         InkWell(
                           onTap:() {
                             isCompleted = true;
@@ -1084,7 +1080,7 @@ Column(children: [
                           },
                           child: Container(
                             height: 40,
-                                width: 150,
+                            width: 150,
                             alignment:Alignment.center,
                             decoration: BoxDecoration(
                                 color: AppColor.PrimaryDark,
@@ -1092,9 +1088,9 @@ Column(children: [
                             ),
                             child: Text("End Service",style: TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w500),),
                           ),
-                        ) :
+                        ):
                         SizedBox(),
-                        SizedBox(height: 10,),
+                        SizedBox(height: 10),
                         /*isCompleted == true ?    TextField(
                           controller: completeOtpController,
                           keyboardType: TextInputType.number,
@@ -1128,7 +1124,6 @@ Column(children: [
                   SizedBox(
                     height: 3.02.h,
                   ),
-
                   /*statusList[4] ==
                               widget.orderResponse.data![widget.i].status
                                   .toString() ||
@@ -1191,7 +1186,6 @@ Column(children: [
                   SizedBox(
                     height: 3.02.h,
                   ),*/
-
                   widget.orderResponse.data![widget.i].aStatus == "8" && widget.orderResponse.data![widget.i].isPaid == "1"
                       ? InkWell(
                     onTap: () async {

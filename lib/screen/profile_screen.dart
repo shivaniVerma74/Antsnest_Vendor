@@ -194,8 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           height: 9.76.h,
                                           width: 9.76.h,
                                           child: snapshot.data!.user!.profileImage != "" ? UtilityHlepar.convertetIMG(
-                                                  snapshot.data!.user!.profileImage
-                                                      .toString(),
+                                                  snapshot.data!.user!.profileImage.toString(),
                                               fit: BoxFit.cover)
                                           : Image(
                                             image: AssetImage(picture),
@@ -204,13 +203,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                       ),
                                    snapshot.data!.activePlan == "1" ?   Positioned(
-                                          right: -5,
+                                          right: -9,
                                           top: 1,
                                           child: Container(
                                               height: 50,
                                               width: 50,
                                               alignment: Alignment.topRight,
-                                              child: Icon(Icons.check,color: Colors.blue,size: 22,))) : SizedBox.shrink(),
+                                              child: Icon(Icons.check,color: Colors.blue,size: 29,))) : SizedBox.shrink(),
                                     ],
                                   ),
                                 ),
@@ -285,7 +284,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 tabItem(context, 7, walletIcon, "My Wallet"),
                 tabItem(context, 1, payment, "Plan History"),
                 // tabItem(context, 2, serviceIcon, "Service History"),
-                // tabItem(context, 6, serviceProfile, "    Chat With User"),
+                tabItem(context, 6, chatIcon, "Chat With User"),
                 tabItem(context, 8, service, "Reviews"),
                 tabItem(context, 11, support, "Customer Support"),
                 tabItem(context, 9, payment, "Availability"),
@@ -326,8 +325,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               //   likedService = [];
                               // });
                               SharedPreferences prefs = await SharedPreferences.getInstance();
-                                await prefs.clear();
-                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()), (route) => false);
+                              await prefs.clear();
+                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()), (route) => false);
                             },
                             color: AppColor.PrimaryDark,
                           ),
@@ -378,9 +377,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Container(
                         height: 7.09.h,
                         width: 42.63.w,
-                        decoration: boxDecoration(
-                            radius: 15.0,
-                            bgColor: AppColor.PrimaryDark),
+                        decoration: boxDecoration(radius: 15.0, bgColor: AppColor.PrimaryDark),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -491,7 +488,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: ChatScreen(),
                 type: PageTransitionType.rightToLeft,
                 duration: Duration(milliseconds: 500),
-              ));
+              ),
+          );
         }
         if (pos == 7) {
           Navigator.push(

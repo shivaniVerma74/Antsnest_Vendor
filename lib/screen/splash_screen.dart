@@ -51,11 +51,11 @@ class _SplashScreenState extends State<SplashScreen>
       backgroundColor: Colors.white,
       body: SafeArea(
           child: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
-        child: Container(
+         physics: NeverScrollableScrollPhysics(),
+         child: Container(
             child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
             AnimatedContainer(
               duration: Duration(milliseconds: 1000),
               curve: Curves.easeInOut,
@@ -64,14 +64,16 @@ class _SplashScreenState extends State<SplashScreen>
               alignment: status ? Alignment.topCenter : Alignment.topCenter,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage(splashBg), fit: BoxFit.fill)),
+                      image: AssetImage(splashBg), fit: BoxFit.fill),
+              ),
               child: Padding(
                   padding: EdgeInsets.only(top: 31.h),
                   child: Image.asset(
                     splashLogo,
                     height: 36.w,
                     width: 36.w,
-                  )),
+                  ),
+              ),
             ),
             AnimatedContainer(
               duration: Duration(milliseconds: 1000),
@@ -98,11 +100,11 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                   Center(
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(10),
                       child: Image.asset(
-                        "images/antsLogo.png",
-                        height: 20.57.h,
-                        width: 30.72.w,
+                        "images/getstarted.png",
+                        height: 25.57.h,
+                        width: 39.72.w,
                       ),
                     ),
                   ),
@@ -112,16 +114,16 @@ class _SplashScreenState extends State<SplashScreen>
                   Center(
                     child: Image.asset(
                       welcomeIcon,
-                      height: 29.72.h,
-                      width: 88.47.w,
+                      height: 25.72.h,
+                      width: 80.47.w,
                     ),
                   ),
                   SizedBox(
-                    height: 1.64.h,
+                    height: 3.64.h,
                   ),
                   Center(
                     child: text(
-                      "Welcome To AntsNest Service Provider",
+                      "Welcome To AntsNest \n  Service Provider",
                       textColor: AppColor.PrimaryDark,
                       fontSize: 14.5.sp,
                       fontFamily: fontBold,
@@ -183,14 +185,14 @@ class _SplashScreenState extends State<SplashScreen>
                                 fontSize: 14.sp,
                                 fontFamily: fontRegular,
                               ),
-                              Center(
-                                child: Image.asset(
-                                  arrowIcon,
-                                  width: 12.78.w,
-                                  height: 12.78.w,
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
+                              // Center(
+                              //   child: Image.asset(
+                              //     arrowIcon,
+                              //     width: 12.78.w,
+                              //     height: 12.78.w,
+                              //     fit: BoxFit.fill,
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),

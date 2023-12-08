@@ -69,7 +69,6 @@ class _ChatState extends State<Chat> {
     // FlutterDownloader.registerCallback(downloadCallback);
     // setupChannel();
     getSharedData();
-
     getMsg();
   }
 

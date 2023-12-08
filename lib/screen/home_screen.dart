@@ -30,6 +30,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
+import 'Chat_Screen.dart';
 import 'splash_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -147,6 +148,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               centerTitle: true,
               backgroundColor: AppColor.PrimaryDark,
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 9, top: 6),
+                  child: InkWell(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
+                      },
+                      child: Icon(Icons.chat_outlined, color: Colors.white, size: 27)),
+                ),
+              ],
             ),
             body: RefreshIndicator(
               onRefresh: () {
@@ -216,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 45,
                                 alignment: Alignment.center,
                                 child: text(
-                                  "Latest Post",
+                                  "Requested Post",
                                   textColor: currentIndex == 1
                                       ? AppColor.PrimaryDark
                                       : Colors.grey,
@@ -301,7 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               itemBuilder: (context, i) {
                                                 print('___________${i}__________');
                                                 print('___________${model.data?.length}__________');
-                                                return   InkWell(
+                                                return  InkWell(
                                                   // onTap: model.data![i].acceptReject ==
                                                   //         ToastString.responseCode
                                                   //     ? () {
@@ -660,9 +671,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               model.data?[i].isPaid == "0"  ?  Text("Unpaid",style: TextStyle(color: Colors.red,fontSize: 15),) : Text("Paid",style: TextStyle(color: Colors.green,fontSize: 15 ),)
                                                               ],
                                                             ),
-                                                            SizedBox(height: 10,),
+                                                            SizedBox(height: 10),
                                                             Divider(),
-                                                            SizedBox(height: 10,),
+                                                            SizedBox(height: 10),
                                                             Row(
                                                               crossAxisAlignment: CrossAxisAlignment.center,
                                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -692,10 +703,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               }),
                                         )
                                       : Container(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              1.5,
+                                          height: MediaQuery.of(context).size.height / 1.5,
                                           child: Center(
                                               child: Text("No Booking Found!!")),
                                         );
@@ -900,11 +908,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     style: TextStyle(
                                                                         color: Colors
                                                                             .white,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w500,
-                                                                        fontSize:
-                                                                            16),
+                                                                        fontWeight: FontWeight.w500, fontSize: 16),
                                                                   ),
                                                                 )
                                                               : Padding(
@@ -1686,7 +1690,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-            )));
+            ),
+        ),
+    );
   }
 
  Widget getAcceptRejectButton({String? value, String? bookingId, int? i, String? name}) {
@@ -1761,7 +1767,7 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 5.8.h,
             decoration: boxDecoration(
               radius: 6.0,
-              bgColor: Colors.orangeAccent,
+              bgColor: Color(0xffEB6C67),
             ),
             child: Center(child: text("view info")),
           ),
@@ -1807,11 +1813,8 @@ class _HomeScreenState extends State<HomeScreen> {
             //alignment: Alignment.center,
            // width: 70.w,
             width: MediaQuery.of(context).size.width,
-
             height: 5.8.h,
-            decoration: boxDecoration(
-              radius: 6.0,
-              bgColor: Colors.green,
+            decoration: boxDecoration(radius: 6.0, bgColor: Colors.green,
             ),
             child: Center(child: text("Completed")),
           ),
@@ -1823,11 +1826,10 @@ class _HomeScreenState extends State<HomeScreen> {
             //alignment: Alignment.center,
             //width: 70.w,
             width: MediaQuery.of(context).size.width,
-
             height: 5.8.h,
             decoration: boxDecoration(
               radius: 6.0,
-              bgColor: Colors.orangeAccent,
+              bgColor: Color(0xffEB6C67),
             ),
             child: Center(child: text("view info")),
           ),
@@ -2111,8 +2113,30 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 3,),
-                  currentValue == 5 ?    Container(
+                  SizedBox(height: 8,),
+                  // Card(
+                  //   elevation: 1,
+                  //   child: Container(
+                  //     height: 50,
+                  //     width: 190,
+                  //     child: TextFormField(
+                  //       decoration: InputDecoration(
+                  //         hintText: "Comment",
+                  //         contentPadding: EdgeInsets.only(left: 10),
+                  //         border: OutlineInputBorder(
+                  //           borderRadius: BorderRadius.circular(15.0),
+                  //           borderSide: BorderSide.none,
+                  //         ),
+                  //         focusedBorder: OutlineInputBorder(
+                  //           borderSide: BorderSide(width: 3, color: Color(0xffEB6C67)),
+                  //         ),
+                  //         // border: InputBorder(borderSide: BorderSide.none),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  SizedBox(height: 3),
+                  currentValue == 5 ? Container(
                     margin: EdgeInsets.only(bottom: 10.0, top: 5.0),
                     child: TextField(
                       controller: reasonController,
@@ -2120,7 +2144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration:
                       InputDecoration(hintText: "Enter Cancel Reason"),
                     ),
-                  ) : SizedBox.shrink(),
+                  ): SizedBox.shrink(),
                   // butn
                   Spacer(),
                   Container(
@@ -2216,7 +2240,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     AcceptRejectRequest request = AcceptRejectRequest(
         statusType: statusType, bookingId: bookingId, reason: cancelReason);
-    print(request.toString());
+    print("requedsttttttttt ${request.toString()}");
     response = await HomeApiHelper.acceptReject(request);
     if (response.responseCode == ToastString.responseCode) {
       if(statusType=='accept'){
@@ -2232,17 +2256,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   gotOderInfo(response, i) async {
     await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ServiceScreenDetails(
-                  orderResponse: response,
-                  i: i,
-                )));
+        context, MaterialPageRoute(builder: (context) => ServiceScreenDetails(orderResponse: response, i: i)),
+    );
    await getVendorBooking("");
   }
 
   Future<VendorOrderModel?> getVendorBooking(String selectedValue) async {
-    print("selected value ${selectedValue}");
+    print("selected value $selectedValue");
     var userId = await MyToken.getUserID();
     var request = http.MultipartRequest(
         'POST', Uri.parse('${Apipath.BASH_URL}get_bookings'));

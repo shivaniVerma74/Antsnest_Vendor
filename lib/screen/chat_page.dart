@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:sizer/sizer.dart';
 
@@ -48,6 +49,7 @@ class ChatPageState extends State<ChatPage> {
     _postsController = new StreamController();
     loadMessage();
     super.initState();
+    convertDateTimeDispla();
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) => getMessage());
     // chatReference =
     //     db.collection("chats").doc(userID).collection('messages');
@@ -252,6 +254,21 @@ class ChatPageState extends State<ChatPage> {
     ];
   }
 
+  String _dateValue = '';
+  var dateFormate;
+  String? formattedDate;
+  String? timeData;
+
+  convertDateTimeDispla() {
+    var now = new DateTime.now();
+    var formatter = new DateFormat('yyyy-MM-dd');
+    formattedDate = formatter.format(now);
+    print("datedetet$formattedDate"); // 2016-01-25
+    timeData = DateFormat("hh:mm:ss a").format(DateTime.now());
+    print("timeeeeeeeeee${timeData}");
+  }
+
+
   generateMessages(AsyncSnapshot<GetChatModel> snapshot) {
     return snapshot.data!.data!
         .map<Widget>((doc) {
@@ -288,7 +305,6 @@ class ChatPageState extends State<ChatPage> {
                         ),
                          );
                       },
-
                       child: Container(
                       height: 90,
                       width: 100,
@@ -309,28 +325,31 @@ class ChatPageState extends State<ChatPage> {
                       ),
                       child: Column(
                         children: [
-
-                          Text("${doc.message}",
+                          Text("$formattedDate", style: new TextStyle(
+                              fontSize: 10.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)),
+                           SizedBox(height: 5),
+                           Text("${doc.message}",
                               // widget.user!.name.toString(),
                               //documentSnapshot.data['sender_name'],
                               style: new TextStyle(
                                   fontSize: 14.0,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold)),
-                          Text("${doc.createdAt}",
+                                  fontWeight: FontWeight.bold),
+                           ),
+                          SizedBox(height: 5),
+                           Text("$timeData",
                               // widget.user!.name.toString(),
                               //documentSnapshot.data['sender_name'],
                               style: new TextStyle(
                                   fontSize: 10,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.bold),
+                          ),
                         ],
                       ),
-                    )
-
-
-                        //: SizedBox(height: 0,),
-
+                    ),
                   ],
                 ),
               ),
