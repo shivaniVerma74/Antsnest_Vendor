@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:fixerking/screen/sub_category_screen.dart';
-import 'package:fixerking/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../api/api_path.dart';
 import '../modal/ServiceCategoryModel.dart';
+import '../utils/colors.dart';
 
 class Categories extends StatefulWidget {
   const Categories({Key? key}) : super(key: key);

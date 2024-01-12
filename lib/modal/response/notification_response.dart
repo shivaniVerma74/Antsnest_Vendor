@@ -9,13 +9,16 @@ String notificationResponseToJson(NotificationResponse data) => json.encode(data
 class NotificationResponse {
   NotificationResponse({
       String? responseCode, 
-      String? message, 
+      String? message,
+    String? count,
       List<Notifications>? notifications, 
       String? status,}){
     _responseCode = responseCode;
     _message = message;
     _notifications = notifications;
     _status = status;
+    _count=count;
+
 }
 
   NotificationResponse.fromJson(dynamic json) {
@@ -28,11 +31,13 @@ class NotificationResponse {
       });
     }
     _status = json['status'];
+    _count=json['total_count'];
   }
   String? _responseCode;
   String? _message;
   List<Notifications>? _notifications;
   String? _status;
+  String? _count;
 NotificationResponse copyWith({  String? responseCode,
   String? message,
   List<Notifications>? notifications,
@@ -46,6 +51,7 @@ NotificationResponse copyWith({  String? responseCode,
   String? get message => _message;
   List<Notifications>? get notifications => _notifications;
   String? get status => _status;
+  String? get count => _count;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -55,6 +61,7 @@ NotificationResponse copyWith({  String? responseCode,
       map['notifications'] = _notifications?.map((v) => v.toJson()).toList();
     }
     map['status'] = _status;
+    map['total_count']=_count;
     return map;
   }
 

@@ -2,9 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/token/app_token_data.dart';
-import 'package:fixerking/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -12,6 +9,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../api/api_path.dart';
+import '../../token/app_token_data.dart';
+import '../../utils/colors.dart';
 import 'constants.dart';
 import 'models/Model.dart';
 
@@ -102,14 +102,14 @@ class _ChatState extends State<Chat> {
 
               Row(
                 children: [
-                  Text(widget.subject.toString(),style: TextStyle(fontSize: 14),),
-                  Text("/${widget.datetime.toString()}",style: TextStyle(fontSize: 14),),
+                  Text(widget.subject.toString()+"\n"+"${widget.datetime.toString()}",style: TextStyle(fontSize: 14),),
+                //  Text("/${widget.datetime.toString()}",style: TextStyle(fontSize: 14),),
                 ],
               ),
               SizedBox(height: 2,),
               Row(
                 children: [
-                  Text(widget.descruption.toString(),style: TextStyle(fontSize: 14),),
+                  Expanded(child: Text(widget.descruption.toString(),style: TextStyle(fontSize: 14),)),
                 ],
               ),
             ],
@@ -508,24 +508,24 @@ class _ChatState extends State<Chat> {
               color: Colors.white,
               child: Row(
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      _imgFromGallery();
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: AppColor.PrimaryDark,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     _imgFromGallery();
+                  //   },
+                  //   child: Container(
+                  //     height: 30,
+                  //     width: 30,
+                  //     decoration: BoxDecoration(
+                  //       color: AppColor.PrimaryDark,
+                  //       borderRadius: BorderRadius.circular(30),
+                  //     ),
+                  //     child: Icon(
+                  //       Icons.add,
+                  //       color: Colors.white,
+                  //       size: 20,
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(
                     width: 15,
                   ),

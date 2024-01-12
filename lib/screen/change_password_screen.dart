@@ -1,23 +1,22 @@
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:fixerking/api/api_helper/auth_helper.dart';
-import 'package:fixerking/fast_splash.dart';
-import 'package:fixerking/modal/request/change_password_request.dart';
-import 'package:fixerking/modal/response/change_password_response.dart';
-import 'package:fixerking/screen/bottom_bar.dart';
-import 'package:fixerking/token/app_token_data.dart';
-import 'package:fixerking/utility_widget/utility_widget.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/images.dart';
-import 'package:fixerking/utils/showDialog.dart';
-import 'package:fixerking/utils/toast_string.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
-import 'package:fixerking/utils/widget.dart';
-import 'package:fixerking/validation/form_validation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+
+import '../api/api_helper/auth_helper.dart';
+import '../fast_splash.dart';
+import '../modal/request/change_password_request.dart';
+import '../modal/response/change_password_response.dart';
+import '../token/app_token_data.dart';
+import '../utils/colors.dart';
+import '../utils/constant.dart';
+import '../utils/images.dart';
+import '../utils/showDialog.dart';
+import '../utils/toast_string.dart';
+import '../utils/utility_hlepar.dart';
+import '../utils/widget.dart';
+import '../validation/form_validation.dart';
 
 class ChangeScreen extends StatefulWidget {
   const ChangeScreen({Key? key}) : super(key: key);

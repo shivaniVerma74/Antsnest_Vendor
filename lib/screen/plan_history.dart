@@ -1,10 +1,9 @@
 import 'dart:convert';
-
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/modal/purchase_plan_history_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../api/api_path.dart';
+import '../modal/purchase_plan_history_model.dart';
 import '../token/app_token_data.dart';
 import '../token/token_string.dart';
 import '../utils/colors.dart';
@@ -92,8 +91,6 @@ class _PlanHistoryState extends State<PlanHistory> {
 
     print(request);
     print(request.fields);
-
-
 
     http.StreamedResponse response = await request.send();
 

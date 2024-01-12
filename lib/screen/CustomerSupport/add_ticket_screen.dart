@@ -1,13 +1,11 @@
 import 'dart:convert';
-
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/screen/CustomerSupport/constants.dart';
-import 'package:fixerking/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
+import '../../api/api_path.dart';
 import '../../token/app_token_data.dart';
+import '../../utils/colors.dart';
 import 'customer_support_faq.dart';
 import 'models/ticket_type_model.dart';
 

@@ -1,10 +1,9 @@
 import 'dart:convert';
-
-import 'package:fixerking/api/api_helper/ApiList.dart';
-import 'package:fixerking/modal/get_availability_response.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import '../api/api_helper/ApiList.dart';
+import '../modal/get_availability_response.dart';
 import '../token/app_token_data.dart';
 import '../utils/colors.dart';
 

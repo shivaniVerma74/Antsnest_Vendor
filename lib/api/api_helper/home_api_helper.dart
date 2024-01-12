@@ -1,33 +1,30 @@
 import 'dart:convert';
-
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/api/api_services.dart';
-import 'package:fixerking/modal/request/accept_reject_request.dart';
-import 'package:fixerking/modal/request/customer_support_request.dart';
-import 'package:fixerking/modal/request/get_new_order_request.dart';
-import 'package:fixerking/modal/request/get_service_profile_request.dart';
-import 'package:fixerking/modal/request/i_am_online_request.dart';
-import 'package:fixerking/modal/request/notification_request.dart';
-import 'package:fixerking/modal/request/order_status_request.dart';
-import 'package:fixerking/modal/request/payment_history_request.dart';
-import 'package:fixerking/modal/request/request_for_payment_request.dart';
-import 'package:fixerking/modal/request/update_service_request.dart';
-import 'package:fixerking/modal/request/work_complete_request.dart';
-import 'package:fixerking/modal/response/accept_reject_response.dart';
-import 'package:fixerking/modal/response/customer_support_response.dart';
-import 'package:fixerking/modal/response/get_faq_response.dart';
-import 'package:fixerking/modal/response/get_new_order_response.dart';
-import 'package:fixerking/modal/response/get_service_profile_response.dart';
-import 'package:fixerking/modal/response/i_am_online_response.dart';
-import 'package:fixerking/modal/response/notification_response.dart';
-import 'package:fixerking/modal/response/payment_history_response.dart';
-import 'package:fixerking/modal/response/request_for_payment_response.dart';
-import 'package:fixerking/modal/response/total_payment_response.dart';
-import 'package:fixerking/modal/response/update_order_status_response.dart';
-import 'package:fixerking/modal/response/update_service_profile_response.dart';
-import 'package:fixerking/modal/response/work_done_response.dart';
-
 import '../../modal/VendorOrderModel.dart';
+import '../../modal/request/accept_reject_request.dart';
+import '../../modal/request/customer_support_request.dart';
+import '../../modal/request/get_new_order_request.dart';
+import '../../modal/request/get_service_profile_request.dart';
+import '../../modal/request/i_am_online_request.dart';
+import '../../modal/request/notification_request.dart';
+import '../../modal/request/order_status_request.dart';
+import '../../modal/request/payment_history_request.dart';
+import '../../modal/request/request_for_payment_request.dart';
+import '../../modal/request/update_service_request.dart';
+import '../../modal/request/work_complete_request.dart';
+import '../../modal/response/accept_reject_response.dart';
+import '../../modal/response/customer_support_response.dart';
+import '../../modal/response/get_faq_response.dart';
+import '../../modal/response/get_service_profile_response.dart';
+import '../../modal/response/i_am_online_response.dart';
+import '../../modal/response/notification_response.dart';
+import '../../modal/response/payment_history_response.dart';
+import '../../modal/response/request_for_payment_response.dart';
+import '../../modal/response/total_payment_response.dart';
+import '../../modal/response/update_order_status_response.dart';
+import '../../modal/response/update_service_profile_response.dart';
+import '../../modal/response/work_done_response.dart';
+import '../api_path.dart';
+import '../api_services.dart';
 
 class HomeApiHelper {
 //  Get Home New orders

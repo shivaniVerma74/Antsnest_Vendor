@@ -19,6 +19,7 @@ class Apipath {
   static const String completed_Work = BASH_URL + 'Completed_Work';
   static const String changePassword = BASH_URL + 'change_password';
   static const String notification = BASH_URL + 'vendor_notification_listing';
+  static const String readnotification = BASH_URL + 'read_notification_message';
   static const String customer_support = BASH_URL + 'support';
   static const String get_faq = BASH_URL + 'get_faq';
   static const String payment_history = BASH_URL + 'get_payment_history';

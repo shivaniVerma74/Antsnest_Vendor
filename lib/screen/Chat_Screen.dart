@@ -1,21 +1,19 @@
 import 'dart:convert';
-
-import 'package:fixerking/screen/Chat_Detail.dart';
-import 'package:fixerking/screen/chat_page.dart';
-import 'package:fixerking/utils/colors.dart';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-
+import '../api/api_helper/ApiList.dart';
 import '../api/api_path.dart';
 import '../modal/MessageModel.dart';
 import '../modal/VendorOrderModel.dart';
 import '../token/app_token_data.dart';
 import 'package:http/http.dart' as http;
-
 import '../utils/app_strings.dart';
+import '../utils/colors.dart';
 import '../utils/constant.dart';
 import '../utils/images.dart';
 import '../utils/widget.dart';
+import 'chat_page.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -35,11 +33,15 @@ List<Data> vendorList = [];
     request.fields.addAll({'user_id': '$userId'});
     print("@@@ $request");
     print(request.fields);
+    print(request.headers);
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
       vendorList = VendorOrderModel.fromJson(json.decode(str)).data!.cast<Data>();
+
+      print(vendorList.length.toString()+"________________");
+      log(vendorList.toString());
 
       print(str);
       return VendorOrderModel.fromJson(json.decode(str));
@@ -53,6 +55,25 @@ List<Data> vendorList = [];
     } else {
       return true;
     }
+  }
+readMessageCount() async {
+  var vendorId = await MyToken.getUserID();
+  var request =
+  http.MultipartRequest('POST', Uri.parse(BaseUrl + 'read_chat_message_user'));
+  request.fields.addAll({'user_id': '${vendorId.toString()}',
+    // 'type':"provider"
+
+  });
+  http.StreamedResponse response = await request.send();
+  var finalResponse = await response.stream.bytesToString();
+  print(finalResponse);
+
+}
+@override
+  void initState() {
+    // TODO: implement initState
+  readMessageCount();
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {
@@ -86,7 +107,7 @@ List<Data> vendorList = [];
                 child:  ListView.builder(
                   itemCount: model.data!.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final Message chat = chats[index];
+                   final Message chat = chats[0];
                     return
                     // model.data![index].id == model.data![index].id
                     //     ? SizedBox(height: 0) :
@@ -152,7 +173,7 @@ List<Data> vendorList = [];
                               child: CircleAvatar(
                                 radius: 25,
                                 backgroundColor: AppColor.PrimaryDark,
-                                backgroundImage: AssetImage(chat.sender!.imageUrl.toString()),
+                                backgroundImage: NetworkImage("${model.data![index].profilePic}",),
                               ),
                             ),
                             Container(

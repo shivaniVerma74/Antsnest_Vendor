@@ -1,37 +1,35 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:fixerking/api/api_helper/ApiList.dart';
-import 'package:fixerking/api/api_helper/home_api_helper.dart';
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/modal/New%20models/LatestPostModel.dart';
-import 'package:fixerking/modal/New%20models/PostStatusModel.dart';
-import 'package:fixerking/modal/VendorOrderModel.dart';
-import 'package:fixerking/modal/request/accept_reject_request.dart';
-import 'package:fixerking/modal/request/get_new_order_request.dart';
-import 'package:fixerking/modal/request/i_am_online_request.dart';
-import 'package:fixerking/modal/response/accept_reject_response.dart';
-import 'package:fixerking/modal/response/get_new_order_response.dart';
-import 'package:fixerking/modal/response/i_am_online_response.dart';
-import 'package:fixerking/screen/chat_page.dart';
 import 'package:fixerking/screen/service_details_screen.dart';
-import 'package:fixerking/token/app_token_data.dart';
-import 'package:fixerking/utility_widget/shimmer_loding_view/loding_home_page.dart';
-import 'package:fixerking/utils/app_strings.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/custom_switch.dart';
-import 'package:fixerking/utils/images.dart';
-import 'package:fixerking/utils/showDialog.dart';
-import 'package:fixerking/utils/toast_string.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
-import 'package:fixerking/utils/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
+import '../api/api_helper/ApiList.dart';
+import '../api/api_helper/home_api_helper.dart';
+import '../api/api_path.dart';
+import '../modal/New models/LatestPostModel.dart';
+import '../modal/New models/PostStatusModel.dart';
+import '../modal/VendorOrderModel.dart';
+import '../modal/message_chat_model.dart';
+import '../modal/request/accept_reject_request.dart';
+import '../modal/request/get_new_order_request.dart';
+import '../modal/request/i_am_online_request.dart';
+import '../modal/response/accept_reject_response.dart';
+import '../modal/response/i_am_online_response.dart';
+import '../token/app_token_data.dart';
+import '../utils/colors.dart';
+import '../utils/constant.dart';
+import '../utils/images.dart';
+import '../utils/showDialog.dart';
+import '../utils/toast_string.dart';
+import '../utils/utility_hlepar.dart';
+import '../utils/widget.dart';
 import 'Chat_Screen.dart';
+import 'chat_page.dart';
 import 'splash_screen.dart';
+import 'package:badges/badges.dart' as badges;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -48,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     // getNewOders();
+    getMessageCount();
   }
 
   @override
@@ -58,7 +57,28 @@ class _HomeScreenState extends State<HomeScreen> {
   int? currentValue;
 
   LatestPostModel? latestPostModel;
+  int countmessage=0;
+  MessageChatModel ?messageChatModel;
+getMessageCount() async {
+  var vendorId = await MyToken.getUserID();
+  var request =
+  http.MultipartRequest('POST', Uri.parse(BaseUrl + 'get_chatlists'));
+  request.fields.addAll({'user_id': '${vendorId.toString()}',
+    'type':"provider"
 
+  });
+  http.StreamedResponse response = await request.send();
+  var finalResponse = await response.stream.bytesToString();
+  messageChatModel=MessageChatModel.fromJson(json.decode(finalResponse));
+
+  //countmessage=int.parse(finalResponse[""].toString());
+  countmessage=int.parse(messageChatModel?.count.toString()??"0");
+  setState(() {
+
+  });
+
+
+}
   getLatestPost() async {
     var vendorId = await MyToken.getUserID();
     var headers = {'Cookie': 'ci_session=2gkq6rsuscin03924605v1edhahcke0t'};
@@ -138,11 +158,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     changeStatusBarColor(AppColor().colorBg2());
     return SafeArea(
         child: Scaffold(
             appBar: AppBar(
-              automaticallyImplyLeading: true,
+              automaticallyImplyLeading: false,
               title: Text(
                 "Home",
               ),
@@ -155,7 +176,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
                       },
-                      child: Icon(Icons.chat_outlined, color: Colors.white, size: 27)),
+                      child:
+                      badges.Badge(
+                          badgeContent: Text('${countmessage ?? 0}'),
+                          showBadge: countmessage==0?false:true,
+                          child:  Icon(Icons.chat_outlined, color: Colors.white, size: 27),
+                          badgeStyle: badges.BadgeStyle(
+                            shape: badges.BadgeShape.circle,
+                            badgeColor: Colors.white,
+                            padding: EdgeInsets.all(5),
+                          )),
+                     ),
                 ),
               ],
             ),

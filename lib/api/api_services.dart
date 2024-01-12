@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'package:fixerking/utils/utility_hlepar.dart';
 import 'package:http/http.dart' as http;
+
+import '../utils/utility_hlepar.dart';
 
 class ApiService {
   //  post api request without token

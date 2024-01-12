@@ -84,6 +84,12 @@ class CityData {
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
   }
+  bool operator ==(dynamic other) =>
+      other != null && other is CityData && this._id == other._id;
+
+  @override
+  int get hashCode => super.hashCode;
+
   String? _id;
   String? _name;
   String? _countryId;

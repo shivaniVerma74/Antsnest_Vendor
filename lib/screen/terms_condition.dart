@@ -1,12 +1,12 @@
 import 'dart:convert';
-
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/modal/Terms_condition_model.dart';
-import 'package:fixerking/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart' as http;
+
+import '../api/api_path.dart';
+import '../modal/Terms_condition_model.dart';
+import '../utils/colors.dart';
 
 
 class TermsConditionScreen extends StatefulWidget {
@@ -94,19 +94,21 @@ class _TermsConditionScreenState extends State<TermsConditionScreen> {
   }
 
   Future<TermsConditionModel?> getTermsCondition() async {
-    var request = http.Request('GET', Uri.parse('${Apipath.BASH_URL}/pages/terms_condition'));
+    var request = http.Request('GET', Uri.parse('${Apipath.BASH_URL}/pages/terms-conditions'));
 
     http.StreamedResponse response = await request.send();
+
     print(request);
     print(response.statusCode);
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
+
       final jsonResponse = TermsConditionModel.fromJson(json.decode(str));
       print(jsonResponse);
       if(jsonResponse.status == "1"){
         setState(() {
           title = jsonResponse.setting?.data;
-          description = jsonResponse.setting?.discription;
+          description = jsonResponse.setting?.description;
           print("datatat $description");
         });
       }

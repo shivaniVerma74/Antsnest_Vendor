@@ -1,6 +1,7 @@
-import 'package:fixerking/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+
+import 'colors.dart';
 
 class MYDialog {
   static showAlertDialogWithTwobtn(BuildContext context,

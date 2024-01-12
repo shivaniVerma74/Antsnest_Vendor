@@ -3,15 +3,6 @@ import 'dart:io';
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:fixerking/api/api_helper/multipart_helper.dart';
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/modal/ServiceCategoryModel.dart';
-import 'package:fixerking/modal/response/get_profile_response.dart';
-import 'package:fixerking/token/app_token_data.dart';
-import 'package:fixerking/utility_widget/utility_widget.dart';
-import 'package:fixerking/utils/images.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
-import 'package:fixerking/validation/form_validation.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,17 +10,26 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
 import 'package:intl/intl.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:sizer/sizer.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/common.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/widget.dart';
 import 'package:http/http.dart' as http;
+import '../../api/api_helper/multipart_helper.dart';
+import '../../api/api_path.dart';
 import '../../modal/City_model.dart';
+import '../../modal/ServiceCategoryModel.dart';
 import '../../modal/ServiceSubCategoryModel.dart';
 import '../../modal/country_model.dart';
+import '../../modal/response/get_profile_response.dart';
 import '../../modal/state_model.dart';
+import '../../token/app_token_data.dart';
+import '../../utility_widget/utility_widget.dart';
+import '../../utils/colors.dart';
+import '../../utils/constant.dart';
+import '../../utils/images.dart';
+import '../../utils/utility_hlepar.dart';
+import '../../utils/widget.dart';
+import '../../validation/form_validation.dart';
 
 class EditProfileScreen extends StatefulWidget {
   late GetProfileResponse response;
@@ -114,6 +114,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     "9",
     "10",
   ];
+  List <String> subcateid=[];
+
   @override
   void initState() {
     super.initState();
@@ -125,6 +127,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
 
 
     print('___________${ widget.response.user!.jsonData!.hrsDay.toString()}__________');
+    print('___________${widget.response.user?.subcategoryId}__________');
   }
 
   ServiceSubCategoryModel?  serviceSubCategory;
@@ -264,9 +267,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
   String? selectedLanguage;
   String? selectedTravel;
   ServiceCategoryModel?  serviceModel ;
+  final MultiSelectController multiSelectController = MultiSelectController();
+  List<String> categorylist=[];
+  Set<String> uniqueValues = Set();
 
   Future<void> getServiceCategory() async {
     // var userId = await MyToken.getUserID();
+
     var request = http.MultipartRequest(
         'POST',
         Uri.parse(
@@ -458,7 +465,11 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     var userid = await MyToken.getUserID();
     String newCityIdsList = _selectedItems.join(",");
     print("sperated city id here now $newCityIdsList");
-
+    String value= categorylist.map((dynamic value) {
+      return value.toString();
+    }).join(', ');
+    print(value.toString()+"________________________");
+    print(categorylist.isEmpty.toString()+"_______________");
     Map<String, String> tojson() => {
       "id": userid,
           // 'name': userNameController.text,
@@ -489,7 +500,11 @@ class _EditProfileScreenState extends State<EditProfileScreen>
       "provide_services":comfertableServiceController.text,
       "join_antsnest": whyJoinController.text,
       "cat":selectedCategory.toString(),
-      "sub_cat":selectedSubCategory.toString(),
+      "sub_cat":categorylist.isEmpty?subcateid.map((dynamic value) {
+        return value.toString();
+      }).join(', '):categorylist.map((String value) {
+        return value.toString();
+      }).join(', '),
       "hrs_day":selectedDayHour.toString(),
       "country_code":"+${phoneCode}",
       "amount":amountController.text,
@@ -557,15 +572,12 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     selectedCategory = widget.response.user!.jsonData!.cat.toString();
     selectedSubCategory = widget.response.user!.jsonData!.subCat.toString();
     amountController.text = widget.response.user!.jsonData!.amount.toString();
-    selectedDayHour = widget.response.user!.jsonData!.hrsDay.toString() == "" || widget.response.user!.jsonData!.hrsDay.toString() == "null" ? "Hour" : widget.response.user!.jsonData!.hrsDay.toString();
+    print(widget.response.user!.jsonData!.hrsDay.toString()+"++++++++++++++++");
+    selectedDayHour = widget.response.user!.jsonData!.hrsDay.toString() == "" || widget.response.user!.jsonData!.hrsDay.toString() == "null"||widget.response.user!.jsonData!.hrsDay.toString()=="Hours" ? "Hour" : widget.response.user!.jsonData!.hrsDay.toString();
     selectedLanguage = widget.response.user!.jsonData!.language.toString();
     selectedTravel = widget.response.user!.jsonData!.canTravel.toString();
     _selectedItems = finalList;
-
-
-
     /// payment purpose section here
-
     payNameController.text = widget.response.user!.paymentDetails?.accountHolderName.toString() ?? '';
     accController.text = widget.response.user!.paymentDetails?.accNo.toString() ?? '';
     bankNameController.text = widget.response.user!.paymentDetails?.bankName.toString() ?? '';
@@ -940,7 +952,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 //COUNTRY
                 Container(
                     width: 69.99.w,
-                    // height: 7.46.h,
+                    // height: 6.h,
                     decoration: boxDecoration(
                       radius: 10.0,
                     ),
@@ -1026,7 +1038,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
               // STATE
                 Container(
                     width: 69.99.w,
-                    // height: 7.46.h,
+                    // height: 6.h,
                     decoration: boxDecoration(
                       radius: 10.0,
                     ),
@@ -1331,7 +1343,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
 
                 Container(
                     width: 69.99.w,
-                    // height: 7.46.h,
+                    // height: 6.h,
                     decoration: boxDecoration(
                       radius: 10.0,
                     ),
@@ -1431,9 +1443,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                         })),
                 ////////////
                 // Container(
-                //   width: 80.99.w,
+                //   width: double.infinity,
                 //   margin: EdgeInsets.symmetric(horizontal: 20),
-                //   height: 7.46.h,
+                //   height: 6.h,
                 //   decoration: boxDecoration(
                 //     radius: 10.0,
                 //     color:AppColor().colorEdit(),
@@ -1861,8 +1873,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 serviceModel == null ? Center(child: CircularProgressIndicator()) :
                 Container(
                     margin: EdgeInsets.symmetric(horizontal: 20),
-                    width: 80.99.w,
-                    height: 7.46.h,
+                    width: double.infinity,
+                    height: 6.h,
                     decoration: boxDecoration(
                       radius: 10.0,
                     ),
@@ -2019,78 +2031,157 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 SizedBox(
                   height: 15,
                 ),
-                serviceSubCategory == null ? Center(child: CircularProgressIndicator()): Container(
+                serviceSubCategory == null ?
+                Center(child: CircularProgressIndicator()): Container(
                     margin: EdgeInsets.symmetric(horizontal: 20),
-                    width: 80.99.w,
-                    height: 7.46.h,
+                    width: double.infinity,
+                    height: 6.h,
                     decoration: boxDecoration(
                       radius: 10.0,
                     ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: Text(
-                          'Select Sub Category',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        items: serviceSubCategory?.data!
-                            .map((item) => DropdownMenuItem<String>(
-                          value: item.id,
-                          child: Text(
-                            item.cName!,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        )).toList(),
-                        value: selectedSubCategory,
-                        // onChanged: (value) {
-                        //   setState(() {
-                        //     selectedSubCategory = value as String;
-                        //     // // serviceName.text = serviceModel.data!
-                        //     //     .firstWhere((element) => element.id == value)
-                        //     //     .cName
-                        //     //     .toString();
+                    child:
+                    // DropdownButtonHideUnderline(
+                    //   child: DropdownButton2(
+                    //     isExpanded: true,
+                    //     hint: Text(
+                    //       'Select Sub Category',
+                    //       style: TextStyle(
+                    //         fontSize: 14,
+                    //         fontWeight: FontWeight.normal,
+                    //       ),
+                    //       overflow: TextOverflow.ellipsis,
+                    //     ),
+                    //     items: serviceSubCategory?.data!
+                    //         .map((item) => DropdownMenuItem<String>(
+                    //       value: item.id,
+                    //       child: Text(
+                    //         item.cName!,
+                    //         style: const TextStyle(
+                    //           fontSize: 14,
+                    //           fontWeight: FontWeight.bold,
+                    //           color: Colors.black,
+                    //         ),
+                    //         overflow: TextOverflow.ellipsis,
+                    //       ),
+                    //     )).toList(),
+                    //     value: selectedSubCategory,
+                    //     // onChanged: (value) {
+                    //     //   setState(() {
+                    //     //     selectedSubCategory = value as String;
+                    //     //     // // serviceName.text = serviceModel.data!
+                    //     //     //     .firstWhere((element) => element.id == value)
+                    //     //     //     .cName
+                    //     //     //     .toString();
+                    //     //
+                    //     //   });
+                    //     //
+                    //     // },
+                    //     icon: const Icon(
+                    //       Icons.arrow_forward_ios_outlined,
+                    //       color: Color(0xffEEF1F9),
+                    //     ),
+                    //     iconSize: 14,
+                    //     buttonHeight: 50,
+                    //     buttonWidth: 160,
+                    //     buttonPadding:
+                    //     const EdgeInsets.only(left: 14, right: 14),
+                    //     buttonDecoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(14),
+                    //       color: AppColor().colorEdit(),
+                    //       //color: Colors.grey.withOpacity(0.05)
+                    //     ),
+                    //     buttonElevation: 0,
+                    //     itemHeight: 40,
+                    //     itemPadding:
+                    //     const EdgeInsets.only(left: 14, right: 14),
+                    //     dropdownMaxHeight: 300,
+                    //     dropdownPadding: null,
+                    //     dropdownDecoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(14),
+                    //     ),
+                    //     dropdownElevation: 8,
+                    //     scrollbarRadius: const Radius.circular(40),
+                    //     scrollbarThickness: 6,
+                    //     scrollbarAlwaysShow: true,
+                    //   ),
+                    // )
+                    MultiSelectDropDown(
+                      hint: "Select Sub Category",
+                      showClearIcon: true,
+                      controller: multiSelectController,
+                      borderColor: Colors.transparent,
+
+                      onOptionSelected: (options) {
+                        categorylist.clear();
+                        for (int i = 0; i < options.length; i++) {
+                          String value = options[i].value??"";
+
+                          // Check if the value is not already in the set
+                          // if (uniqueValues.add(value)) {
+                          //   print(value);
+
+                          categorylist.add(value);
+                          setState(() {
+
+                          });
+                          // }
+                        }
+
+
+                        // setState(() {
                         //
-                        //   });
-                        //
-                        // },
-                        icon: const Icon(
-                          Icons.arrow_forward_ios_outlined,
-                          color: Color(0xffEEF1F9),
-                        ),
-                        iconSize: 14,
-                        buttonHeight: 50,
-                        buttonWidth: 160,
-                        buttonPadding:
-                        const EdgeInsets.only(left: 14, right: 14),
-                        buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          color: AppColor().colorEdit(),
-                          //color: Colors.grey.withOpacity(0.05)
-                        ),
-                        buttonElevation: 0,
-                        itemHeight: 40,
-                        itemPadding:
-                        const EdgeInsets.only(left: 14, right: 14),
-                        dropdownMaxHeight: 300,
-                        dropdownPadding: null,
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        dropdownElevation: 8,
-                        scrollbarRadius: const Radius.circular(40),
-                        scrollbarThickness: 6,
-                        scrollbarAlwaysShow: true,
-                      ),
-                    )
+                        // });
+                        debugPrint(categorylist.toString());
+                      },
+                      options: <ValueItem>[
+                        for (int i = 0; i < serviceSubCategory!.data!.length; i++) ...[
+                          ValueItem(
+                            label: "${serviceSubCategory!.data![i].cName}",
+                            value: "${serviceSubCategory!.data![i].id}",
+                          )
+                        ]
+                      ],
+
+                      selectionType: SelectionType.multi,
+                      selectedOptions: [
+                        for (int i = 0; i < serviceSubCategory!.data!.length; i++) ...[
+                          for(int j=0;j<subcateid.length;j++)...[
+                            "${serviceSubCategory!.data![i].id}" == subcateid[j].toString()
+                                ? ValueItem(
+                              label: "${serviceSubCategory!.data![i].cName}",
+                              value: "${serviceSubCategory!.data![i].id}",
+                            )
+                                : ValueItem(label: "")
+                          ]
+
+                        ]
+                      ]..removeWhere((element) => element.label == ""), // Remove null entries
+                      chipConfig: const ChipConfig(wrapType: WrapType.scroll,backgroundColor: AppColor.PrimaryDark,),
+                      dropdownHeight: 300,
+                      optionTextStyle: const TextStyle(fontSize: 16),
+                      selectedOptionIcon: const Icon(Icons.check_circle,color: AppColor.PrimaryDark,),
+                      selectedOptionTextColor: AppColor.PrimaryDark,
+                      // suffixIcon: IconData(),
+                      // selectedItemBuilder: (BuildContext context, ValueItem item,) {
+                      //   // Customize the appearance of the selected item here
+                      //   return Container(
+                      //     padding: EdgeInsets.all(8.0),
+                      //     decoration: BoxDecoration(
+                      //       color: Colors.red, // Set the background color to red
+                      //       borderRadius: BorderRadius.circular(5.0),
+                      //     ),
+                      //     child: Row(
+                      //       mainAxisSize: MainAxisSize.min,
+                      //       children: [
+                      //         Text(item.label),
+                      //         const SizedBox(width: 8.0),
+                      //         Icon(Icons.close, color: Colors.white, size: 18.0),
+                      //       ],
+                      //     ),
+                      //   );
+                      // },
+
+                    ),
                    /* FutureBuilder(
                         future: getServicesSubCategory(selectedCategory),
                         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -2211,8 +2302,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
-                  width: 80.99.w,
-                  height: 7.46.h,
+                  width: double.infinity,
+                  height: 6.h,
                   decoration: boxDecoration(
                     radius: 10.0,
                   ),
@@ -2288,8 +2379,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 ),
                 // Container(
                 //   margin: EdgeInsets.symmetric(horizontal: 20),
-                //   width: 80.99.w,
-                //   height: 7.46.h,
+                //   width: double.infinity,
+                //   height: 6.h,
                 //   decoration: boxDecoration(
                 //     radius: 10.0,
                 //   ),
@@ -2365,8 +2456,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 ),
                 // Container(
                 //   margin: EdgeInsets.symmetric(horizontal: 20),
-                //   width: 80.99.w,
-                //   height: 7.46.h,
+                //   width: double.infinity,
+                //   height: 6.h,
                 //   decoration: boxDecoration(
                 //     radius: 10.0,
                 //   ),
@@ -2443,8 +2534,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
 
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
-                  width: 80.99.w,
-                  height: 7.46.h,
+                  width: double.infinity,
+                  height: 6.h,
                   decoration: boxDecoration(
                     radius: 10.0,
                   ),
@@ -2531,8 +2622,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   },
                   child: Container(
                       margin: EdgeInsets.symmetric(horizontal: 20),
-                      width: 80.99.w,
-                      height: 7.46.h,
+                      width: double.infinity,
+                      height: 6.h,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: AppColor().colorEdit(),
@@ -3079,8 +3170,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 SizedBox(height: 15,),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
-                  width: 80.99.w,
-                  height: 7.46.h,
+                  width: double.infinity,
+                  height: 6.h,
                   decoration: boxDecoration(
                     radius: 10.0,
                   ),
@@ -3154,8 +3245,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 SizedBox(height: 15,),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
-                  width: 80.99.w,
-                  height: 7.46.h,
+                  width: double.infinity,
+                  height: 6.h,
                   decoration: boxDecoration(
                     radius: 10.0,
                   ),
@@ -3266,6 +3357,11 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           setState(() {
                             buttonLogin = true;
                           });
+                          String value= categorylist.map((dynamic value) {
+                            return value.toString();
+                          }).join(', ');
+                          print(value.toString()+"________________________");
+                          print(categorylist.isEmpty.toString()+"_______________");
                           editProfile();
                         }
                       },
@@ -3273,7 +3369,6 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           buttonLogin: buttonLogin, btntext: 'Save'),
                     )),
                 SizedBox(height: 15,),
-
               ],
             ),
           ),
@@ -3329,6 +3424,10 @@ class _EditProfileScreenState extends State<EditProfileScreen>
   }
 
   Future getCountries() async {
+    subcateid = widget.response.user?.subcategoryId?.split(', ').map((String value) {
+      return value.toString();
+    }).toList()??[];
+    print(subcateid.toString()+"++++++++++++++");
     var request =
     http.Request('GET', Uri.parse('${Apipath.BASH_URL}get_countries'));
     http.StreamedResponse response = await request.send();
@@ -3449,6 +3548,7 @@ class _MultiSelectState extends State<MultiSelect> {
   }
 
   Future getCities() async {
+
     var request = http.MultipartRequest(
         'POST', Uri.parse('${Apipath.BASH_URL}get_cities'));
     request.fields.addAll({'state_id': '${widget.selectedState}'});

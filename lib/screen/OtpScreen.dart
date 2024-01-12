@@ -1,10 +1,4 @@
 import 'dart:convert';
-
-import 'package:fixerking/api/api_helper/ApiList.dart';
-import 'package:fixerking/modal/New%20models/VerifyUserModel.dart';
-import 'package:fixerking/screen/bottom_bar.dart';
-import 'package:fixerking/utility_widget/customLoader.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:otp_text_field/otp_field_style.dart';
@@ -13,11 +7,16 @@ import 'package:otp_text_field/style.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+import '../api/api_helper/ApiList.dart';
 import '../modal/New models/LoginModel.dart';
+import '../modal/New models/VerifyUserModel.dart';
 import '../token/token_string.dart';
+import '../utility_widget/customLoader.dart';
 import '../utils/colors.dart';
 import '../utils/constant.dart';
+import '../utils/utility_hlepar.dart';
 import '../utils/widget.dart';
+import 'bottom_bar.dart';
 
 class OtpScreen extends StatefulWidget {
    String? otp;

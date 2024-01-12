@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fixerking/screen/openImage.dart';
-import 'package:fixerking/token/app_token_data.dart';
-import 'package:fixerking/utils/colors.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -13,10 +11,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:sizer/sizer.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../api/api_path.dart';
 import '../modal/New models/GetChatModel.dart';
+import '../token/app_token_data.dart';
+import '../utils/colors.dart';
 import 'CustomerSupport/add_ticket_screen.dart';
+import 'PdfView/pdf_view.dart';
+import 'openImage.dart';
 
 class ChatPage extends StatefulWidget {
   // final SharedPreferences prefs;
@@ -26,7 +30,12 @@ class ChatPage extends StatefulWidget {
   String? userid;
   String? lastSeen;
   final providerName;
-  ChatPage({this.providerName,this.bookingId,this.fromPost=false,this.userid, this.lastSeen});
+  ChatPage(
+      {this.providerName,
+      this.bookingId,
+      this.fromPost = false,
+      this.userid,
+      this.lastSeen});
   @override
   ChatPageState createState() {
     return new ChatPageState();
@@ -54,6 +63,7 @@ class ChatPageState extends State<ChatPage> {
     // chatReference =
     //     db.collection("chats").doc(userID).collection('messages');
   }
+
   String textValue = "";
   File? imageFiles;
 
@@ -62,18 +72,17 @@ class ChatPageState extends State<ChatPage> {
     timer?.cancel();
     super.dispose();
   }
+
   Future getMessage() async {
     var userId = await MyToken.getUserID();
     var headers = {
       'Cookie': 'ci_session=132b223a903b145b8f1056a17a0c9ef325151d5f'
     };
-    var request = http.MultipartRequest(
-        'POST', Uri.parse('${Apipath.BASH_URL}get_chat'));
-    request.fields.addAll({
-      'booking_id': '${widget.bookingId}'
-    });
+    var request =
+        http.MultipartRequest('POST', Uri.parse('${Apipath.BASH_URL}get_chat'));
+    request.fields.addAll({'booking_id': '${widget.bookingId}'});
 
-    if(widget.fromPost == true) {
+    if (widget.fromPost == true) {
       request.fields.addAll({
         "type": "2",
         "vendor_id": "${userId}",
@@ -90,8 +99,7 @@ class ChatPageState extends State<ChatPage> {
       // });
       //return json.decode(finalResult);
       return GetChatModel.fromJson(json.decode(finalResult));
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
   }
@@ -103,7 +111,7 @@ class ChatPageState extends State<ChatPage> {
     });
   }
 
-  sendChatMessage(String type) async {
+  sendChatMessage(String type,) async {
     var userId = await MyToken.getUserID();
     var headers = {
       'Cookie': 'ci_session=cb5fe5415a2e7a3e28f499c842c30404bfbc8a99'
@@ -117,29 +125,33 @@ class ChatPageState extends State<ChatPage> {
       'message_type': '${type}',
       'booking_id': '${widget.bookingId}',
     });
-    if(widget.fromPost == true) {
+    print(Uri.parse('${Apipath.BASH_URL}send_message').toString()+"____________123");
+
+    if (widget.fromPost == true) {
       request.fields.addAll({
         "type": "2",
         "vendor_id": "${userId}",
         "user_id": "${widget.userid}"
       });
     }
-    imageFiles == null ? null : request.files.add(
-        await http.MultipartFile.fromPath(
+
+    imageFiles == null
+        ? null
+        : request.files.add(await http.MultipartFile.fromPath(
             'chat', '${imageFiles!.path.toString()}'));
+    print( request.fields.toString()+"____________123");
     request.headers.addAll(headers);
+    print( request.headers.toString()+"____________123");
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       textController.clear();
       print(await response.stream.bytesToString());
-      getMessage().then(( res)async{
+      getMessage().then((res) async {
         _postsController!.add(res);
         return res;
       });
-      setState(() {
-      });
-    }
-    else {
+      setState(() {});
+    } else {
       print(response.reasonPhrase);
     }
   }
@@ -268,101 +280,152 @@ class ChatPageState extends State<ChatPage> {
     print("timeeeeeeeeee${timeData}");
   }
 
-
   generateMessages(AsyncSnapshot<GetChatModel> snapshot) {
-    return snapshot.data!.data!
-        .map<Widget>((doc) {
+    return snapshot.data!.data!.map<Widget>((doc) {
       print("check docs here ${doc}");
+
+      print("message" + doc.message.toString());
+      print("message" + doc.messageType.toString());
       return Container(
         margin: EdgeInsets.symmetric(vertical: 10.0),
-        child: new Row(
-            children: [
-              Expanded(
-                child: new Column(
-                  crossAxisAlignment: doc.senderType == "user"
-                      ? CrossAxisAlignment.start
-                      : CrossAxisAlignment.end,
-                  children: <Widget>[
-                    // doc['sender_id'] != "1"?
-                    // generateReceiverLayout(doc)
-                    // Text("receiver end ")
-                    //     :
-                    // widget.providerId == doc['id']
-                    //     ?
-                    //doc.senderType == "user" ?
-                    doc.message == "" || doc.message == null
-                        ? SizedBox.shrink()
-                        : doc.messageType == "image" ? InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => OpenImagePage(image: '${doc.message}',)));
-                        setState(() {
-                        });
-                         Container(
-                           height:200,
-                           width: 200,
-                           child: PhotoView(
-                            imageProvider: NetworkImage("${doc.message}"),
-                        ),
-                         );
+        child: new Row(children: [
+          Expanded(
+            child: new Column(
+              crossAxisAlignment: doc.senderType == "user"
+                  ? CrossAxisAlignment.start
+                  : CrossAxisAlignment.end,
+              children: <Widget>[
+                // doc['sender_id'] != "1"?
+                // generateReceiverLayout(doc)
+                // Text("receiver end ")
+                //     :
+                // widget.providerId == doc['id']
+                //     ?
+                //doc.senderType == "user" ?
+                doc.message == "" || doc.message == null
+                    ? SizedBox.shrink()
+                    : doc.messageType == "image"
+                        ? InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => OpenImagePage(
+                                            image: '${doc.message}',
+                                          )));
+                              setState(() {});
+                              Container(
+                                height: 200,
+                                width: 200,
+                                child: PhotoView(
+                                  imageProvider: NetworkImage("${doc.message}"),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 90,
+                              width: 100,
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(6),
+                                  child: Image.network(
+                                    "${doc.message}",
+                                    fit: BoxFit.fill,
+                                  )),
+                            ))
+                        : doc.messageType == "file"
+                            ?
+                    InkWell(
+                      onTap: () async {
+                      String   url="https://developmentalphawizz.com/antsnest/uploads/chats/"+"${doc.message}";
+                        if (await canLaunch(url)){
+                        await launch("https://developmentalphawizz.com/antsnest/uploads/chats/"+"${doc.message}",
+                        headers: { "Content-Type":"application/pdf",
+                        "Content-Disposition":"inline"}, );
+                        print("browser url");
+
+                        }
+                        else
+                        // can't launch url, there is some error
+                        throw "Could not launch";
+
+                        // Navigator.push(context,MaterialPageRoute(builder: (context)=>
+                        //
+                           //  PdfViewScreen(linkofpdf: "${doc.message}",)
+                        // ));
                       },
                       child: Container(
-                      height: 90,
-                      width: 100,
-                      child: ClipRRect(
-                            borderRadius: BorderRadius.circular(6),
-                            child: Image.network(
-                              "${doc.message}", fit: BoxFit.fill,)
+                        width: 150,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Open with pdf"),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Icon(Icons.picture_as_pdf)
+                          ],
+                        ),
                       ),
-                    )) :
-                    Container(
-                      // constraints:BoxConstraints(
-                      //   maxWidth:  MediaQuery.of(context).size.width/1.5,
-                      // ),
-                       padding: EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                          color: doc.senderType == "user" ? Colors.grey.withOpacity(0.8)  : AppColor.PrimaryDark ,
-                          borderRadius: BorderRadius.circular(6)
-                      ),
-                      child: Column(
-                        children: [
-                          Text("$formattedDate", style: new TextStyle(
-                              fontSize: 10.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold)),
-                           SizedBox(height: 5),
-                           Text("${doc.message}",
-                              // widget.user!.name.toString(),
-                              //documentSnapshot.data['sender_name'],
-                              style: new TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                           ),
-                          SizedBox(height: 5),
-                           Text("$timeData",
-                              // widget.user!.name.toString(),
-                              //documentSnapshot.data['sender_name'],
-                              style: new TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ]
-          //doc.data['sender_id']
-          //     "1" != "1"
-          // ? generateReceiverLayout(doc)
-          // : generateSenderLayout(doc),
-        ),
+                    )
+
+                            : Container(
+                                // constraints:BoxConstraints(
+                                //   maxWidth:  MediaQuery.of(context).size.width/1.5,
+                                // ),
+                                padding: EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                    color: doc.senderType == "user"
+                                        ? Colors.grey.withOpacity(0.8)
+                                        : AppColor.PrimaryDark,
+                                    borderRadius: BorderRadius.circular(6)),
+                                child: Column(
+                                  children: [
+                                    Text("$formattedDate",
+                                        style: new TextStyle(
+                                            fontSize: 10.0,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      "${doc.message}",
+                                      // widget.user!.name.toString(),
+                                      //documentSnapshot.data['sender_name'],
+                                      style: new TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      "$timeData",
+                                      // widget.user!.name.toString(),
+                                      //documentSnapshot.data['sender_name'],
+                                      style: new TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+              ],
+            ),
+          ),
+        ]
+            //doc.data['sender_id']
+            //     "1" != "1"
+            // ? generateReceiverLayout(doc)
+            // : generateSenderLayout(doc),
+            ),
       );
-    })
-        .toList();
+    }).toList();
   }
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -372,17 +435,23 @@ class ChatPageState extends State<ChatPage> {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20)
-              )
-          ),
+                  bottomRight: Radius.circular(20))),
           actions: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
-                  onTap: (){
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TicketPage(bookingId: widget.bookingId,)));
+                  onTap: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TicketPage(
+                                  bookingId: widget.bookingId,
+                                )));
                   },
-                  child: Icon(Icons.report_gmailerrorred,color: Colors.white,)),
+                  child: Icon(
+                    Icons.report_gmailerrorred,
+                    color: Colors.white,
+                  )),
             ),
           ],
           backgroundColor: AppColor.PrimaryDark,
@@ -391,11 +460,21 @@ class ChatPageState extends State<ChatPage> {
             children: [
               Text(
                 '${widget.providerName}',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 5),
-              widget.lastSeen == null || widget.lastSeen == "" ? Text("--", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10)):
-              Text("Last Seen: ${widget.lastSeen}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10))
+              widget.lastSeen == null || widget.lastSeen == ""
+                  ? Text("--",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10))
+                  : Text("Last Seen: ${widget.lastSeen}",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10))
             ],
           ),
           centerTitle: true,
@@ -415,22 +494,18 @@ class ChatPageState extends State<ChatPage> {
                 Navigator.pop(context);
               },
             ),
-          )
-
-      ),
+          )),
       body: Container(
         padding: EdgeInsets.all(5),
         child: new Column(
           children: <Widget>[
             StreamBuilder<GetChatModel>(
               stream: _postsController!.stream,
-              builder: (BuildContext context,
-                  AsyncSnapshot<GetChatModel> snapshot) {
+              builder:
+                  (BuildContext context, AsyncSnapshot<GetChatModel> snapshot) {
                 if (!snapshot.hasData) return new Text("No Chat");
                 return Expanded(
-                  child:
-
-                  ListView(
+                  child: ListView(
                     reverse: false,
                     children: generateMessages(snapshot),
                   ),
@@ -439,11 +514,8 @@ class ChatPageState extends State<ChatPage> {
             ),
             new Divider(height: 1.0),
             new Container(
-              decoration: new BoxDecoration(color: Theme
-                  .of(context)
-                  .cardColor),
-              child:
-              _buildTextComposer(),
+              decoration: new BoxDecoration(color: Theme.of(context).cardColor),
+              child: _buildTextComposer(),
             ),
             new Builder(builder: (BuildContext context) {
               return new Container(width: 0.0, height: 0.0);
@@ -456,15 +528,17 @@ class ChatPageState extends State<ChatPage> {
 
   IconButton getDefaultSendButton() {
     return new IconButton(
-        icon: new Icon(Icons.send, color: AppColor.PrimaryDark,),
+        icon: new Icon(
+          Icons.send,
+          color: AppColor.PrimaryDark,
+        ),
         onPressed: () {
-          if(textController.text.contains(".com")){
+          if (textController.text.contains(".com")) {
             Fluttertoast.showToast(msg: "Email are not allowed");
-          }
-          else if(textController.text.contains(RegExp(r'^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$'))){
+          } else if (textController.text.contains(RegExp(
+              r'^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$'))) {
             Fluttertoast.showToast(msg: "Mobile numbers are not allowed");
-          }
-          else{
+          } else {
             setState(() {
               sendChatMessage("text");
               getMessage().then((res) async {
@@ -476,33 +550,33 @@ class ChatPageState extends State<ChatPage> {
               // textController.clear();
             });
           }
-        }
-    );
+        });
   }
 
   Widget _buildTextComposer() {
     return new IconTheme(
         data: new IconThemeData(
           color: _isWritting
-              ? Theme
-              .of(context)
-              .accentColor
-              : Theme
-              .of(context)
-              .disabledColor,
+              ? Theme.of(context).accentColor
+              : Theme.of(context).disabledColor,
         ),
         child: new Container(
           margin: const EdgeInsets.symmetric(horizontal: 8.0),
           child: new Row(
             children: <Widget>[
               new Container(
-                margin: new EdgeInsets.symmetric(horizontal: 4.0),
+                margin: new EdgeInsets.symmetric(horizontal: 0.0),
                 child: new IconButton(
                     icon: new Icon(
                       Icons.photo_camera,
                       color: AppColor.PrimaryDark,
                     ),
                     onPressed: () async {
+                      FilePickerResult? image =
+                      await FilePicker.platform.pickFiles(
+                        type: FileType.custom,
+                        allowedExtensions: ['jpeg','png'],
+                      );
                       // var image = await ImagePicker.
                       // pickImage(
                       //     source: ImageSource.gallery);
@@ -515,9 +589,9 @@ class ChatPageState extends State<ChatPage> {
                       // storageReference.putFile(image);
                       // await uploadTask.onComplete;
                       // String fileUrl = await storageReference.getDownloadURL();
-                      PickedFile? image = await ImagePicker.platform
-                          .pickImage(source: ImageSource.gallery);
-                      imageFiles = File(image!.path);
+                      // PickedFile? image = await ImagePicker.platform
+                      //     .pickImage(source: ImageSource.gallery);
+                      imageFiles = File("${image?.files.first.path}");
                       print("image files here ${imageFiles!.path.toString()}");
                       if (imageFiles != null) {
                         setState(() {
@@ -526,8 +600,63 @@ class ChatPageState extends State<ChatPage> {
                             _postsController!.add(res);
                             return res;
                           });
-                         // textController.clear();
+                          // textController.clear();
                         });
+                      }
+                    }),
+              ),
+              new Container(
+                margin: new EdgeInsets.symmetric(horizontal: 0.0),
+                child: new IconButton(
+                    icon: new Icon(
+                      Icons.file_present_rounded,
+                      color: AppColor.PrimaryDark,
+                    ),
+                    onPressed: () async {
+
+                      // var image = await ImagePicker.
+                      // pickImage(
+                      //     source: ImageSource.gallery);
+                      // int timestamp = new DateTime.now().millisecondsSinceEpoch;
+                      // StorageReference storageReference = FirebaseStorage
+                      //     .instance
+                      //     .ref()
+                      //     .child('chats/img_' + timestamp.toString() + '.jpg');
+                      // StorageUploadTask uploadTask =
+                      // storageReference.putFile(image);
+                      // await uploadTask.onComplete;
+                      // String fileUrl = await storageReference.getDownloadURL();
+                      // PickedFile? image = await ImagePicker.platform
+                      //     .pickImage(source: ImageSource.gallery);
+                      // imageFiles = File(image!.path);
+                      // print("image files here ${imageFiles!.path.toString()}");
+                      // if (imageFiles != null) {
+                      //   setState(() {
+                      //     sendChatMessage("image");
+                      //     getMessage().then((res) async {
+                      //       _postsController!.add(res);
+                      //       return res;
+                      //     });
+                      //     // textController.clear();
+                      //   });
+                      // }
+                      FilePickerResult? result =
+                          await FilePicker.platform.pickFiles(
+                        type: FileType.custom,
+                        allowedExtensions: ['pdf'],
+                      );
+
+                      if (result != null) {
+                        File file = File(result.files.single.path!);
+                        imageFiles=file;
+                        sendChatMessage("file");
+                        getMessage().then((res) async {
+                          _postsController!.add(res);
+                          return res;
+                        });
+                        print("${file.path}");
+                      } else {
+                        // User canceled the picker
                       }
                     }),
               ),
@@ -536,8 +665,8 @@ class ChatPageState extends State<ChatPage> {
                   key: _formKey,
                   child: TextFormField(
                     controller: textController,
-                    validator: (v){
-                      if(v!.length >5 && v is int){
+                    validator: (v) {
+                      if (v!.length > 5 && v is int) {
                         return "Number can't be send";
                       }
                       // const pattern = r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"
@@ -552,11 +681,11 @@ class ChatPageState extends State<ChatPage> {
                       //     ? 'Enter a valid email address'
                       //     : null;
                     },
-                    onChanged: (String v){
+                    onChanged: (String v) {
                       setState(() {
                         textValue = v;
                       });
-                      if(v.length >5 && v is int){
+                      if (v.length > 5 && v is int) {
                         print("sdfssfs ${v}");
                         //return "Number can't be send";
                       }
@@ -568,8 +697,8 @@ class ChatPageState extends State<ChatPage> {
                     //     _isWritting = messageText.length >0 ;
                     //   });
                     // },
-                    decoration: InputDecoration.collapsed(hintText: "Send a message"),
-
+                    decoration:
+                        InputDecoration.collapsed(hintText: "Send a message"),
                   ),
                 ),
                 // TextFormField(
@@ -636,7 +765,7 @@ class ChatPageState extends State<ChatPage> {
     }).catchError((e) {});
   }
 
-  void _sendImage({ String? messageText, String? imageUrl}) {
+  void _sendImage({String? messageText, String? imageUrl}) {
     chatReference!.add({
       'text': messageText,
 

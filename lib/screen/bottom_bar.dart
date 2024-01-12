@@ -1,20 +1,24 @@
-import 'package:fixerking/api/api_helper/auth_helper.dart';
-import 'package:fixerking/modal/request/get_profile_request.dart';
-import 'package:fixerking/modal/response/get_profile_response.dart';
-import 'package:fixerking/screen/Categories.dart';
-import 'package:fixerking/screen/manage_Service.dart';
-import 'package:fixerking/screen/notification_screen.dart';
+import 'dart:async';
 import 'package:fixerking/screen/profile_screen.dart';
-import 'package:fixerking/token/app_token_data.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/images.dart';
-import 'package:fixerking/utils/toast_string.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:badges/badges.dart' as badges;
+import '../api/api_helper/auth_helper.dart';
+import '../api/api_helper/home_api_helper.dart';
+import '../modal/request/get_profile_request.dart';
+import '../modal/request/notification_request.dart';
+import '../modal/response/get_profile_response.dart';
+import '../modal/response/notification_response.dart';
+import '../token/app_token_data.dart';
+import '../utils/colors.dart';
+import '../utils/constant.dart';
+import '../utils/images.dart';
+import '../utils/toast_string.dart';
+import '../utils/utility_hlepar.dart';
 import 'home_screen.dart';
+import 'manage_Service.dart';
+import 'notification_screen.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({Key? key}) : super(key: key);
@@ -24,7 +28,13 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
-  List<Widget> bodyList = [HomeScreen(), NotificationScreen(), ManageService(), ProfileScreen()];
+  List<Widget> bodyList = [
+    HomeScreen(),
+    NotificationScreen(),
+    ManageService(),
+    ProfileScreen()
+  ];
+  StreamController<NotificationResponse> responseSteam = StreamController();
   int selectedIndex = 0;
 
   @override
@@ -32,6 +42,7 @@ class _BottomBarState extends State<BottomBar> {
     // TODO: implement initState
     super.initState();
     getProfile();
+    getNotification();
   }
 
   void _onItemTapped(int index) {
@@ -40,13 +51,35 @@ class _BottomBarState extends State<BottomBar> {
     });
   }
 
+  late NotificationResponse response;
+  String? count;
+  getNotification() async {
+    try {
+      String userid = await MyToken.getUserID();
+      NotificationRequest request = NotificationRequest(userid: userid);
+      response = await HomeApiHelper.getNotification(request);
+      count = response.count;
+      setState(() {});
+      print(response.notifications?.length);
+      // if (response.responseCode == ToastString.responseCode) {
+      //   responseSteam.sink.add(response);
+      // } else {
+      //   responseSteam.sink.addError(response.message!);
+      // }
+    } catch (e) {
+      UtilityHlepar.getToast(e.toString());
+      responseSteam.sink.addError(ToastString.msgSomeWentWrong);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColor().colorBg2(),
-        body: selectedIndex== 2 ? ManageService(profileResponse: profileResponse) : bodyList[selectedIndex],
+        body: selectedIndex == 2
+            ? ManageService(profileResponse: profileResponse)
+            : bodyList[selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.white,
           type: BottomNavigationBarType.fixed,
@@ -57,31 +90,26 @@ class _BottomBarState extends State<BottomBar> {
           onTap: _onItemTapped,
           items: [
             BottomNavigationBarItem(
-              icon: ImageIcon(
-                AssetImage(home),
-              ),
-              label: "Home"
-            ),
+                icon: ImageIcon(
+                  AssetImage(home),
+                ),
+                label: "Home"),
             BottomNavigationBarItem(
                 // icon: Icon(Icons.category),
-                icon: ImageIcon(
-                    AssetImage(notification)
-                ),
-                label: "Notification"
-            ),
+                icon: badges.Badge(
+                    badgeContent: Text('${count ?? 0}'),
+                    showBadge: count=="0"?false:true,
+                    child: Icon(Icons.notifications),
+                    badgeStyle: badges.BadgeStyle(
+                      shape: badges.BadgeShape.circle,
+                      badgeColor: AppColor.PrimaryDark,
+                      padding: EdgeInsets.all(5),
+                    )),
+                label: "Notification"),
             BottomNavigationBarItem(
-                icon: ImageIcon(
-                    AssetImage(
-                        addIcon)
-                ),
-                label: "Manage Service"
-            ),
+                icon: ImageIcon(AssetImage(addIcon)), label: "Manage Service"),
             BottomNavigationBarItem(
-                icon: ImageIcon(
-                    AssetImage(profile)
-                ),
-                label: "My Account"
-            ),
+                icon: ImageIcon(AssetImage(profile)), label: "My Account"),
           ],
         ),
         /*bottomNavigationBar: Container(
@@ -205,7 +233,8 @@ class _BottomBarState extends State<BottomBar> {
       ),
     );
   }
-   GetProfileResponse?  profileResponse ;
+
+  GetProfileResponse? profileResponse;
 
   getProfile() async {
     // try {
@@ -213,7 +242,7 @@ class _BottomBarState extends State<BottomBar> {
     var vendorId = await MyToken.getUserID();
     // var vendorId = "31";
     GetProfileRequest request = GetProfileRequest(vendorId: vendorId);
-    print("profile request here"  + request.toString());
+    print("profile request here" + request.toString());
     profileResponse = await AuthApiHelper.getProfile(request);
     if (profileResponse?.status == ToastString.success) {
       Fluttertoast.showToast(msg: profileResponse?.message ?? '');

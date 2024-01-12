@@ -1,8 +1,9 @@
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+
+import '../utils/colors.dart';
+import '../utils/constant.dart';
+import '../utils/widget.dart';
 
 class UtilityWidget {
   static AnimatedContainer lodingButton({required buttonLogin, btntext}) {

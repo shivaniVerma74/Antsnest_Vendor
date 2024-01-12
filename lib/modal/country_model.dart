@@ -69,6 +69,11 @@ class CountryData {
     _createdAt = createdAt;
     _updatedAt = updatedAt;
 }
+  bool operator ==(dynamic other) =>
+      other != null && other is CountryData && this.id == other.id;
+
+  @override
+  int get hashCode => super.hashCode;
 
   CountryData.fromJson(dynamic json) {
     _id = json['id'];

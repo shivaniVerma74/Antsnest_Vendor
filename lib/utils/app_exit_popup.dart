@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'package:fixerking/utils/colors.dart';
 import 'package:flutter/material.dart';
+
+import 'colors.dart';
 
 Future<bool> showExitPopup(context) async {
   return await showDialog(

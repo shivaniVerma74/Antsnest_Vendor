@@ -1,6 +1,7 @@
 
 
-import 'package:fixerking/screen/CustomerSupport/constants.dart';
+
+import '../constants.dart';
 
 class SectionModel {
   var id,

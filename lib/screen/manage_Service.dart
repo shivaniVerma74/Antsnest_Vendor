@@ -1,11 +1,10 @@
 import 'dart:convert';
-import 'package:fixerking/modal/response/get_profile_response.dart';
-import 'package:fixerking/screen/newScreens/AddService.dart';
-import 'package:fixerking/api/api_path.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:sizer/sizer.dart';
+import '../api/api_path.dart';
 import '../modal/RemoveServiceModel.dart';
+import '../modal/response/get_profile_response.dart';
 import '../modal/vendor_service_model.dart';
 import '../token/app_token_data.dart';
 import '../utils/colors.dart';
@@ -13,6 +12,7 @@ import 'package:http/http.dart' as http;
 
 import '../utils/utility_hlepar.dart';
 import 'edit_services.dart';
+import 'newScreens/AddService.dart';
 
 class ManageService extends StatefulWidget {
   const ManageService({Key? key,this.profileResponse }) : super(key: key);
@@ -72,7 +72,13 @@ class _ManageServiceState extends State<ManageService> {
         title: Text("Manage Services"),
       ),
       floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => AddServices(profileResponse: widget.profileResponse,)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => AddServices(profileResponse: widget.profileResponse,))
+
+        ).then((value) {
+          Future.delayed(Duration(milliseconds: 200),(){
+            return getVendorAllServices();
+          });
+        } );
       },child: Icon(Icons.add),backgroundColor: AppColor.PrimaryDark,),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -244,6 +250,7 @@ class _ManageServiceState extends State<ManageService> {
                               children: [
                                 TextButton.icon(
                                   onPressed: () async{
+                                  //print(vendorServiceModel!.restaurants![index].type?.first.service,);
                                     bool result = await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -255,12 +262,13 @@ class _ManageServiceState extends State<ManageService> {
                                               serviceName: vendorServiceModel!.restaurants![index].resName,
                                               catId: vendorServiceModel!.restaurants![index].catId,
                                               serviceCharge: vendorServiceModel!.restaurants![index].price,
+
                                               addOntype: vendorServiceModel!.restaurants![index].type,
-                                              adddOnservice: vendorServiceModel!.restaurants![index].type!.first.service,
-                                              hour: vendorServiceModel!.restaurants![index].type!.first.hrly,
-                                              dayHour: vendorServiceModel!.restaurants![index].type!.first.daysHrs,
-                                              addOnPrice: vendorServiceModel!.restaurants![index].type!.first.priceA,
-                                              // serviceTime: vendorModel.restaurants![index].hours,
+                                             //  adddOnservice: vendorServiceModel!.restaurants![index].type?.first.service??"",
+                                             //  hour: vendorServiceModel!.restaurants![index].type!.first.hrly??"",
+                                             //  dayHour: vendorServiceModel!.restaurants![index].type!.first.daysHrs??"",
+                                             // addOnPrice: vendorServiceModel!.restaurants![index].type!.first.priceA??"",
+                                          //   serviceTime: vendorModel.restaurants![index].hours,
                                               subCatId: vendorServiceModel!.restaurants![index].scatId,
                                               serviceId: vendorServiceModel!.restaurants![index].resId,
                                               serviceImage: vendorServiceModel!.restaurants![index].logo,

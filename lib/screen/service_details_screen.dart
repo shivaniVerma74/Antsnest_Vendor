@@ -2,25 +2,6 @@ import 'dart:convert';
 
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:fixerking/api/api_helper/home_api_helper.dart';
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/modal/complete_booking_model.dart';
-import 'package:fixerking/modal/request/order_status_request.dart';
-import 'package:fixerking/modal/request/work_complete_request.dart';
-import 'package:fixerking/modal/response/get_new_order_response.dart';
-import 'package:fixerking/modal/response/update_order_status_response.dart';
-import 'package:fixerking/modal/response/work_done_response.dart';
-import 'package:fixerking/screen/bottom_bar.dart';
-import 'package:fixerking/screen/payment_screen.dart';
-import 'package:fixerking/utils/app_strings.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/images.dart';
-import 'package:fixerking/utils/showDialog.dart';
-import 'package:fixerking/utils/toast_string.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
-import 'package:fixerking/utils/widget.dart';
-import 'package:fixerking/validation/form_validation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -28,7 +9,22 @@ import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+import '../api/api_helper/home_api_helper.dart';
+import '../api/api_path.dart';
 import '../modal/VendorOrderModel.dart';
+import '../modal/complete_booking_model.dart';
+import '../modal/request/order_status_request.dart';
+import '../modal/request/work_complete_request.dart';
+import '../modal/response/update_order_status_response.dart';
+import '../modal/response/work_done_response.dart';
+import '../utils/colors.dart';
+import '../utils/constant.dart';
+import '../utils/images.dart';
+import '../utils/showDialog.dart';
+import '../utils/toast_string.dart';
+import '../utils/utility_hlepar.dart';
+import '../utils/widget.dart';
+import 'bottom_bar.dart';
 import 'chat_page.dart';
 
 class ServiceScreenDetails extends StatefulWidget {
@@ -46,6 +42,7 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
   var statusType = "";
   int statusIndex = 0;
   bool isComplete = false;
+  bool isConfirmButtonShow=false;
   TextEditingController otpController = TextEditingController();
   TextEditingController worktimeContoller = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -74,7 +71,7 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
   TextEditingController startOtpController = TextEditingController();
   TextEditingController completeOtpController = TextEditingController();
 
-      sendOtp(String id)async{
+      sendOtp({required String id,String ?nameOfService})async{
     var headers = {
       'Cookie': 'ci_session=795df498843b3324e3d90f2b104804411663a471'
     };
@@ -92,6 +89,11 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
       print("finalll resultttt noww ${finalResult}");
       setState(() {
         Fluttertoast.showToast(msg: "${jsonResponse['message']} and OTP is ${jsonResponse['otp']}");
+        setState(() {
+         if(nameOfService=="endS"){
+           isConfirmButtonShow=true;
+         }
+        });
         //setState(() {
          // isStart = false;
       });
@@ -338,7 +340,7 @@ Column(children: [
                                 :
                             InkWell(
                               onTap:(){
-                                sendOtp(widget.orderResponse.data![widget.i].id.toString());
+                                sendOtp(id: widget.orderResponse.data![widget.i].id.toString(),nameOfService: "startS");
                                 setState(() {
                                   isStart = true;
                                   isStarted = true ;
@@ -1075,7 +1077,7 @@ Column(children: [
                         InkWell(
                           onTap:() {
                             isCompleted = true;
-                            sendOtp(widget.orderResponse.data![widget.i].id.toString());
+                            sendOtp(id: widget.orderResponse.data![widget.i].id.toString(),nameOfService: "endS");
                             setState(() {});
                           },
                           child: Container(
@@ -1187,7 +1189,9 @@ Column(children: [
                     height: 3.02.h,
                   ),*/
                   widget.orderResponse.data![widget.i].aStatus == "8" && widget.orderResponse.data![widget.i].isPaid == "1"
-                      ? InkWell(
+                      ?
+                  isConfirmButtonShow?
+                  InkWell(
                     onTap: () async {
                       if(_fooomKey.currentState!.validate()) {
                         if (otpController.text.isNotEmpty) {
@@ -1210,7 +1214,7 @@ Column(children: [
                           color: AppColor.PrimaryDark,
                           borderRadius: BorderRadius.circular(10)),
                     ),
-                  )
+                  ):SizedBox.shrink()
                       : Container(),
                   SizedBox(
                     height: 2.02.h,

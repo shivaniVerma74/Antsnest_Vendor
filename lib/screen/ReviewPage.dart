@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/modal/ReviewModel.dart';
-import 'package:fixerking/token/app_token_data.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
+import '../api/api_path.dart';
+import '../modal/ReviewModel.dart';
+import '../token/app_token_data.dart';
 import '../utils/colors.dart';
 
 

@@ -72,7 +72,11 @@ class StateData {
     _createdAt = createdAt;
     _updatedAt = updatedAt;
 }
+  bool operator ==(dynamic other) =>
+      other != null && other is StateData && this._id == other._id;
 
+  @override
+  int get hashCode => super.hashCode;
   StateData.fromJson(dynamic json) {
     _id = json['id'];
     _name = json['name'];

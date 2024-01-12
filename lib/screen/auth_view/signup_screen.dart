@@ -4,25 +4,6 @@ import 'dart:io';
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:fixerking/api/api_helper/ApiList.dart';
-import 'package:fixerking/api/api_helper/auth_helper.dart';
-import 'package:fixerking/modal/New%20models/SignupModel.dart';
-import 'package:fixerking/modal/request/sign_up_request.dart';
-import 'package:fixerking/modal/response/get_service_type_list.dart';
-import 'package:fixerking/screen/auth_view/login_screen.dart';
-import 'package:fixerking/screen/auth_view/service_type_list.dart';
-import 'package:fixerking/screen/auth_view/specialization_list.dart';
-import 'package:fixerking/screen/bottom_bar.dart';
-import 'package:fixerking/screen/privacy_policy.dart';
-import 'package:fixerking/screen/terms_condition.dart';
-import 'package:fixerking/token/token_string.dart';
-import 'package:fixerking/utility_widget/customLoader.dart';
-import 'package:fixerking/utility_widget/shimmer_loding_view/loding_slider.dart';
-import 'package:fixerking/utility_widget/utility_widget.dart';
-import 'package:fixerking/utils/images.dart';
-import 'package:fixerking/utils/toast_string.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
-import 'package:fixerking/validation/form_validation.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -35,24 +16,37 @@ import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:page_transition/page_transition.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/common.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/widget.dart';
-
+import '../../api/api_helper/ApiList.dart';
+import '../../api/api_helper/auth_helper.dart';
 import '../../api/api_path.dart';
 import '../../modal/City_model.dart';
+import '../../modal/New models/SignupModel.dart';
 import '../../modal/ServiceCategoryModel.dart';
 import '../../modal/ServiceSubCategoryModel.dart';
 import '../../modal/country_model.dart';
+import '../../modal/request/sign_up_request.dart';
 import '../../modal/response/sign_up_response.dart';
 import '../../modal/state_model.dart';
 import '../../token/app_token_data.dart';
 import 'package:http/http.dart' as http;
+
+import '../../token/token_string.dart';
+import '../../utility_widget/customLoader.dart';
+import '../../utils/colors.dart';
+import '../../utils/constant.dart';
+import '../../utils/images.dart';
+import '../../utils/toast_string.dart';
+import '../../utils/utility_hlepar.dart';
+import '../../utils/widget.dart';
+import '../../validation/form_validation.dart';
+import '../bottom_bar.dart';
+import '../privacy_policy.dart';
+import '../terms_condition.dart';
+import 'login_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -184,6 +178,8 @@ class _SignUpScreenState extends State<SignUpScreen>
   List<String> selectedCities = [];
   List<bool> isCheck = [] ;
   List _selectedItems = [];
+  final MultiSelectController multiSelectController = MultiSelectController();
+
   @override
   void initState() {
     super.initState();
@@ -192,7 +188,7 @@ class _SignUpScreenState extends State<SignUpScreen>
     // getServiceList();
     // getLocation();
   }
-String? selectedTravel;
+  String? selectedTravel;
   List<String> travelList = [
     "Local",
     "Nationwide",
@@ -237,6 +233,9 @@ String? selectedTravel;
 
   int visibleIndex = 1;
   bool isVisible = false;
+  List<String> categorylist=[];
+  Set<String> uniqueValues = Set();
+
   // citiesDialog(){
   //   return showDialog(
   //       context: context,
@@ -427,7 +426,7 @@ String? selectedTravel;
     print("new languages are here ${langueges}");
 
     String cities = cityIdList.join(",");
-      print("new cities are here ${cities} andc ${cityList} and ${cityIdList}");
+    print("new cities are here ${cities} andc ${cityList} and ${cityIdList}");
     print("checking here ${cityIdList.length}");
     for(var i=0;i<_selectedItems.length;i++){
       print("check now ${_selectedItems[i].id}");
@@ -462,7 +461,9 @@ String? selectedTravel;
       "provide_services":comfertableServiceController.text,
       "join_antsnest": whyJoinController.text,
       "cat":selectedCategory.toString(),
-      "sub_cat":selectedSubCategory.toString(),
+      "sub_cat":categorylist.map((String value) {
+        return value.toString();
+      }).join(', ')??"",
       "hrs_day":selectedDayHour.toString(),
       "amount":amountController.text,
       "language":langueges.toString(),
@@ -586,6 +587,8 @@ String? selectedTravel;
                   SizedBox(height: 10,),
                   Container(
                     height: MediaQuery.of(context).size.height/2,
+                    //height: 500,
+                    width: 300,
                     child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
@@ -597,9 +600,9 @@ String? selectedTravel;
                               onTap: (){
                                 if(selectedLanguageList.contains(languageList[i].toString())){
 
-                                  setState(() {
+                                 setState(() {
                                     selectedLanguageList.remove(languageList[i]);
-                                  });
+                                 });
                                   print("removed language list ${selectedLanguageList}");
                                 }
                                 else{
@@ -623,7 +626,7 @@ String? selectedTravel;
                                         borderRadius:BorderRadius.circular(100)
                                     ),child: Container(
                                     decoration: BoxDecoration(
-                                        color: selectedLanguageList.contains(languageList[i]) ?   AppColor().colorPrimary() : Colors.transparent,
+                                        color: selectedLanguageList.contains(languageList[i]) ?  AppColor().colorPrimary() : Colors.transparent,
                                         borderRadius:BorderRadius.circular(100)
                                     ),
                                   ),),
@@ -653,357 +656,346 @@ String? selectedTravel;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor().colorBg2(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: AnimatedContainer(
-            duration: Duration(milliseconds: 1000),
-            curve: Curves.easeInOut,
-            width: 100.w,
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                center: Alignment(0.0, -0.5),
-                colors: [
-                  AppColor().colorBg1(),
-                  AppColor().colorBg2(),
-                ],
-                radius: 0.8,
-              ),
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              "images/loging_baground.png",
             ),
-            padding: MediaQuery.of(context).viewInsets,
-            child: Stack(
-              alignment: Alignment.topCenter,
+            fit: BoxFit.cover,
+          )),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child:
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  height: 22.65.h,
-                  width: 100.w,
-                  decoration: BoxDecoration(
-                      color: AppColor.PrimaryDark,
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(18),
-                          bottomRight: Radius.circular(18))),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 5.08.h,
-                        ),
-                        text(
-                          "Sign Up",
-                          textColor: Color(0xffffffff),
-                          fontSize: 22.sp,
-                          fontFamily: fontMedium,
-                        ),
-                      ],
+               visibleIndex==2?SizedBox.shrink(): Column(
+                  children: [
+                    SizedBox(
+                      height: 50,
                     ),
-                  ),
+                    text(
+                      "Sign Up",
+                      textColor: Colors.black,
+                      fontSize: 25.sp,
+                      // fontFamily: fontRegular,
+                      fontFamily: fontBold,
+                    ),
+                    text(
+                      "By signing up, you agree to receive emails\nfrom AntsNest.",
+                      textColor: Colors.black,
+                      fontSize: 12.sp,
+                      // fontFamily: fontRegular,
+                      fontFamily: fontRegular,
+                    ),
+                  ],
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  margin: EdgeInsets.only(top: 16.h, left: 25, right: 25),
-                  child: Form(
-                    key: _formKey,
-                    child: visibleIndex == 1 ? Column(
-                      mainAxisSize: MainAxisSize.min,
-                      // padding: EdgeInsets.symmetric(horizontal: 10,vertical: 12),
-                      // physics: ClampingScrollPhysics(),
-                      children: [
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                              color: Color(0xffF9F9F9),
-                              borderRadius: BorderRadius.circular(12)),
-                          child: TextFormField(
-                            controller: fullNameController,
-                            decoration: InputDecoration(
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10),
-                              hintText: "Full Name",
-                              label: Text(
-                                "Full Name",
-                              ),
-                              hintStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                              border: InputBorder.none,
+                Form(
+                  key: _formKey,
+                  child: visibleIndex == 1 ?
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    // padding: EdgeInsets.symmetric(horizontal: 10,vertical: 12),
+                    // physics: ClampingScrollPhysics(),
+                    children: [
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: TextFormField(
+                          controller: fullNameController,
+                          decoration: InputDecoration(
+                            contentPadding:
+                            EdgeInsets.symmetric(horizontal: 10),
+                            hintText: "Full Name",
+                            prefixIcon: Icon(Icons.person,color: AppColor().colorPrimary(),),
+                            label: Text(
+                              "Full Name",
                             ),
-                            validator: (v) {
-                              if (v!.isEmpty) {
-                                return "Enter your name";
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.text,
+                            hintStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                            border: InputBorder.none,
                           ),
+                          validator: (v) {
+                            if (v!.isEmpty) {
+                              return "Enter your name";
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.text,
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        // Container(
-                        //   padding: EdgeInsets.symmetric(vertical: 6),
-                        //   decoration: BoxDecoration(
-                        //       color: Color(0xffF9F9F9),
-                        //       borderRadius: BorderRadius.circular(12)),
-                        //   child: TextFormField(
-                        //     controller: nameController,
-                        //     decoration: InputDecoration(
-                        //       contentPadding:
-                        //       EdgeInsets.symmetric(horizontal: 10),
-                        //       hintText: "First name",
-                        //       label: Text(
-                        //         "First name",
-                        //       ),
-                        //       hintStyle: TextStyle(
-                        //           color: Colors.black,
-                        //           fontWeight: FontWeight.w400),
-                        //       border: InputBorder.none,
-                        //     ),
-                        //     validator: (v) {
-                        //       if (v!.isEmpty) {
-                        //         return "Enter first name";
-                        //       }
-                        //       return null;
-                        //     },
-                        //     keyboardType: TextInputType.text,
-                        //   ),
-                        // ),
-                        // SizedBox(
-                        //   height: 15,
-                        // ),
-                        // Container(
-                        //   padding: EdgeInsets.symmetric(vertical: 6),
-                        //   decoration: BoxDecoration(
-                        //       color: Color(0xffF9F9F9),
-                        //       borderRadius: BorderRadius.circular(12)),
-                        //   child: TextFormField(
-                        //     controller: lastController,
-                        //     decoration: InputDecoration(
-                        //       contentPadding:
-                        //       EdgeInsets.symmetric(horizontal: 10),
-                        //       hintText: "Last name",
-                        //       label: Text(
-                        //         "Last name",
-                        //       ),
-                        //       hintStyle: TextStyle(
-                        //           color: Colors.black,
-                        //           fontWeight: FontWeight.w400),
-                        //       border: InputBorder.none,
-                        //     ),
-                        //     validator: (v) {
-                        //       if (v!.isEmpty) {
-                        //         return "Enter last name";
-                        //       }
-                        //       return null;
-                        //     },
-                        //     keyboardType: TextInputType.text,
-                        //   ),
-                        // ),
-                        // SizedBox(
-                        //   height: 15,
-                        // ),
-                        /*Row(
-                          children: [
-                            InkWell(
-                              onTap: (){
-                                showCountryPicker(
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      // Container(
+                      //   padding: EdgeInsets.symmetric(vertical: 6),
+                      //   decoration: BoxDecoration(
+                      //       color: Color(0xffF9F9F9),
+                      //       borderRadius: BorderRadius.circular(12)),
+                      //   child: TextFormField(
+                      //     controller: nameController,
+                      //     decoration: InputDecoration(
+                      //       contentPadding:
+                      //       EdgeInsets.symmetric(horizontal: 10),
+                      //       hintText: "First name",
+                      //       label: Text(
+                      //         "First name",
+                      //       ),
+                      //       hintStyle: TextStyle(
+                      //           color: Colors.black,
+                      //           fontWeight: FontWeight.w400),
+                      //       border: InputBorder.none,
+                      //     ),
+                      //     validator: (v) {
+                      //       if (v!.isEmpty) {
+                      //         return "Enter first name";
+                      //       }
+                      //       return null;
+                      //     },
+                      //     keyboardType: TextInputType.text,
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 15,
+                      // ),
+                      // Container(
+                      //   padding: EdgeInsets.symmetric(vertical: 6),
+                      //   decoration: BoxDecoration(
+                      //       color: Color(0xffF9F9F9),
+                      //       borderRadius: BorderRadius.circular(12)),
+                      //   child: TextFormField(
+                      //     controller: lastController,
+                      //     decoration: InputDecoration(
+                      //       contentPadding:
+                      //       EdgeInsets.symmetric(horizontal: 10),
+                      //       hintText: "Last name",
+                      //       label: Text(
+                      //         "Last name",
+                      //       ),
+                      //       hintStyle: TextStyle(
+                      //           color: Colors.black,
+                      //           fontWeight: FontWeight.w400),
+                      //       border: InputBorder.none,
+                      //     ),
+                      //     validator: (v) {
+                      //       if (v!.isEmpty) {
+                      //         return "Enter last name";
+                      //       }
+                      //       return null;
+                      //     },
+                      //     keyboardType: TextInputType.text,
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 15,
+                      // ),
+                      /*Row(
+                                children: [
+                                  InkWell(
+                                    onTap: (){
+                                      showCountryPicker(
 
-                                  context: context,
-                                  showPhoneCode: true,
-                                  // optional. Shows phone code before the country name.
-                                  onSelect: ( Country country) {
-                                    print('Select country: ${country.countryCode}');
-                                    String countryCode = country.countryCode;
-                                    String flag = countryCode.toUpperCase().replaceAllMapped(RegExp(r'[A-Z]'),
-                                            (match) => String.fromCharCode(match.group(0)!.codeUnitAt(0) + 127397));
-                                    print(flag);
-                                    setState(() {
-                                      phoneCode = country.phoneCode.toString();
+                                        context: context,
+                                        showPhoneCode: true,
+                                        // optional. Shows phone code before the country name.
+                                        onSelect: ( Country country) {
+                                          print('Select country: ${country.countryCode}');
+                                          String countryCode = country.countryCode;
+                                          String flag = countryCode.toUpperCase().replaceAllMapped(RegExp(r'[A-Z]'),
+                                                  (match) => String.fromCharCode(match.group(0)!.codeUnitAt(0) + 127397));
+                                          print(flag);
+                                          setState(() {
+                                            phoneCode = country.phoneCode.toString();
 
-                                    });
-                                  },
-                                );
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(left: 0),
-                                alignment: Alignment.center,
-                                height: 60,
-                                width: 70,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffF9F9F9),
-                                    borderRadius: BorderRadius.circular(12),
-                                ),
-                                child:  Text('\u{20B9}'),),
-                            ),
+                                          });
+                                        },
+                                      );
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.only(left: 0),
+                                      alignment: Alignment.center,
+                                      height: 60,
+                                      width: 70,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xffF9F9F9),
+                                          borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child:  Text('\u{20B9}'),),
+                                  ),
 
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 6),
-                                decoration: BoxDecoration(
-                                    color: Color(0xffF9F9F9),
-                                    borderRadius: BorderRadius.circular(12)),
-                                child: TextFormField(
-                                  controller: mobileController,
-                                  maxLength: 10,
-                                  decoration: InputDecoration(
-                                    counterText: "",
-                                    contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 10),
-                                    hintText: "Mobile",
-                                    label: Text(
-                                      "Mobile",
+                                  Expanded(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(vertical: 6),
+                                      decoration: BoxDecoration(
+                                          color: Color(0xffF9F9F9),
+                                          borderRadius: BorderRadius.circular(12)),
+                                      child: TextFormField(
+                                        controller: mobileController,
+                                        maxLength: 10,
+                                        decoration: InputDecoration(
+                                          counterText: "",
+                                          contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                          hintText: "Mobile",
+                                          label: Text(
+                                            "Mobile",
+                                          ),
+                                          hintStyle: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w400),
+                                          border: InputBorder.none,
+                                        ),
+                                        keyboardType: TextInputType.number,
+                                        validator: (v) {
+                                          if (v!.isEmpty || v.length != 10) {
+                                            return "Enter mobile number";
+                                          }
+                                          return null;
+                                        },
+                                      ),
                                     ),
-                                    hintStyle: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400),
-                                    border: InputBorder.none,
                                   ),
-                                  keyboardType: TextInputType.number,
-                                  validator: (v) {
-                                    if (v!.isEmpty || v.length != 10) {
-                                      return "Enter mobile number";
-                                    }
-                                    return null;
-                                  },
+                                ],
+                              ),*/
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: IntlPhoneField(
+                          controller: phoneController,
+                          flagsButtonPadding: const EdgeInsets.all(8),
+                          dropdownIconPosition: IconPosition.trailing,
+                          decoration:  InputDecoration(
+                            label: Text('Phone Number',style: TextStyle()),
+
+
+                            focusColor: AppColor.PrimaryDark,
+                            border: InputBorder.none,
+                            hintText: 'Phone Number',
+                            counterText: '',
+                            hintStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          initialCountryCode: 'IN',
+                          validator: (v) {
+                            if (v!.number.isEmpty || v.number.length != 10) {
+                              return "Enter mobile number";
+                            }
+                            return null;
+                          },
+
+                          onChanged: (phone) {
+                            print(phone.completeNumber);
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: TextFormField(
+                          controller: emailController,
+                          decoration: InputDecoration(
+                            contentPadding:
+                            EdgeInsets.symmetric(horizontal: 10),
+                            hintText: "Email",
+                            label: Text(
+                              "Email",
+                            ),
+                            prefixIcon: Icon(Icons.email,color: AppColor().colorPrimary(),),
+                            hintStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                            border: InputBorder.none,
+                          ),
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (v) {
+                            if (!v!.contains('@')) {
+                              return "Enter valid email";
+                            }
+                            // return false;
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: TextFormField(
+                          controller: addressController,
+                          keyboardType: TextInputType.streetAddress,
+                          validator: FormValidation.checkEmptyValidator,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.only(top: 15 ),
+                            hintText: "User Address",
+                            prefixIcon: Icon(
+                              Icons.location_on_outlined,
+                              color: AppColor().colorPrimary(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 5,),
+                      Container(
+                        width: 69.99.w,
+                        child: InkWell(
+                          onTap: () {
+                            getLocation();
+                          },
+                          child: Row(
+                            children: [
+                              Icon(Icons.my_location_outlined,
+                                color: Color(0xff666666),size: 18,),
+                              SizedBox(width: 10,),
+                              Text(
+                                "Use My Current Location",
+                                style: TextStyle(
+                                  color: Color(0xff666666),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),*/
-                        Container(
-                          margin: EdgeInsets.only(left: 0),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Color(0xffF9F9F9),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: IntlPhoneField(
-                            controller: phoneController,
-                            flagsButtonPadding: const EdgeInsets.all(8),
-                            dropdownIconPosition: IconPosition.trailing,
-                            decoration:  InputDecoration(
-                              label: Text('Phone Number',style: TextStyle()),
-
-
-                              focusColor: AppColor.PrimaryDark,
-                              border: InputBorder.none,
-                              hintText: 'Phone Number',
-                              counterText: '',
-                              hintStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            initialCountryCode: 'IN',
-                            validator: (v) {
-                              if (v!.number.isEmpty || v.number.length != 10) {
-                                return "Enter mobile number";
-                              }
-                              return null;
-                            },
-
-                            onChanged: (phone) {
-                              print(phone.completeNumber);
-                            },
+                              )
+                            ],
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                              color: Color(0xffF9F9F9),
-                              borderRadius: BorderRadius.circular(12)),
-                          child: TextFormField(
-                            controller: emailController,
-                            decoration: InputDecoration(
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10),
-                              hintText: "Email",
-                              label: Text(
-                                "Email",
-                              ),
-                              hintStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                              border: InputBorder.none,
-                            ),
-                            keyboardType: TextInputType.emailAddress,
-                            validator: (v) {
-                              if (!v!.contains('@')) {
-                                return "Enter valid email";
-                              }
-                             // return false;
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                              color: Color(0xffF9F9F9),
-                              borderRadius: BorderRadius.circular(12)),
-                          child: TextFormField(
-                            controller: addressController,
-                            keyboardType: TextInputType.streetAddress,
-                            validator: FormValidation.checkEmptyValidator,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.only(top: 15 ),
-                              hintText: "User Address",
-                              prefixIcon: Icon(
-                                Icons.location_on_outlined,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 5,),
-                        Container(
-                          width: 69.99.w,
-                          child: InkWell(
-                            onTap: () {
-                              getLocation();
-                            },
-                            child: Row(
-                              children: [
-                                Icon(Icons.my_location_outlined,
-                                    color: Color(0xff666666),size: 18,),
-                                SizedBox(width: 10,),
-                                Text(
-                                  "Use My Current Location",
-                                  style: TextStyle(
-                                    color: Color(0xff666666),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        //COUNTRY
-                        Container(
-                            width: 80.99.w,
-                            height: 7.46.h,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      //COUNTRY
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
+                          width: double.infinity,
+                            height: 6.h,
                             decoration: boxDecoration(
-                              radius: 10.0,
+                              radius: 6.0,
+                              color: Colors.white,
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton2(
+
                                 isExpanded: true,
                                 hint: Row(
                                   children: [
@@ -1079,13 +1071,18 @@ String? selectedTravel;
                                 scrollbarAlwaysShow: true,
                               ),
                             )),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        //STATE
-                        Container(
-                            width: 80.99.w,
-                            height: 7.46.h,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      //STATE
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
+                            width: double.infinity,
+                            height: 6.h,
                             decoration: boxDecoration(
                               radius: 10.0,
                             ),
@@ -1185,220 +1182,225 @@ String? selectedTravel;
                                         child: CircularProgressIndicator());
                                   }
                                 })),
+                      ),
                       SizedBox(
-                          height: 20,
-                        ),
-                        // CITY
-                        // _selectedItems.isEmpty ?
-                     // InkWell(
-                     //      onTap: (){
-                     //        _showMultiSelect();
-                     //      },
-                     //      child: Container(
-                     //          width: 80.99.w,
-                     //          height: 7.46.h,
-                     //          decoration: BoxDecoration(
-                     //              borderRadius: BorderRadius.circular(10),
-                     //              color: Colors.grey[100]
-                     //          ),
-                     //          // boxDecoration(
-                     //          //   radius: 10.0,
-                     //          // ),
-                     //          child: _selectedItems.isEmpty ?
-                     //          Padding(
-                     //            padding: const EdgeInsets.only(left: 10.0, right: 10),
-                     //            child: Row(
-                     //              children: [
-                     //                Image.asset(
-                     //                  city,
-                     //                  width: 6.04.w,
-                     //                  height: 5.04.w,
-                     //                  fit: BoxFit.fill,
-                     //                  color: AppColor.PrimaryDark,
-                     //                ),
-                     //                Padding(
-                     //                  padding: EdgeInsets.only(left: 8),
-                     //                  child: Text(
-                     //                    'Select Multiple Cities',
-                     //                    style: TextStyle(
-                     //                      fontSize: 14,
-                     //                      color: Colors.black54,
-                     //                      fontWeight: FontWeight.normal,
-                     //                    ),
-                     //                    overflow: TextOverflow.ellipsis,
-                     //                  ),
-                     //                ),
-                     //              ],
-                     //            ),
-                     //          )
-                     //              :  Wrap(
-                     //            children: _selectedItems
-                     //                .map((item){
-                     //              print("okok ${item.id}");
-                     //              return Padding(
-                     //                padding: const EdgeInsets.only(left: 8.0, right: 8),
-                     //                child: Chip(
-                     //                  label:
-                     //                  Text(
-                     //                      "${item.name}"
-                     //                    //item.name
-                     //                  ),
-                     //                ),
-                     //              );
-                     //            })
-                     //                .toList(),
-                     //          )
-                     //        // FutureBuilder(
-                     //        //     future: getCities(),
-                     //        //     builder: (BuildContext context,
-                     //        //         AsyncSnapshot snapshot) {
-                     //        //       if (snapshot.hasData) {
-                     //        //         return DropdownButtonHideUnderline(
-                     //        //           child: DropdownButton2(
-                     //        //             isExpanded: true,
-                     //        //             hint: Row(
-                     //        //               children: [
-                     //        //                 Image.asset(
-                     //        //                   city,
-                     //        //                   width: 6.04.w,
-                     //        //                   height: 5.04.w,
-                     //        //                   fit: BoxFit.fill,
-                     //        //                   color: AppColor.PrimaryDark,
-                     //        //                 ),
-                     //        //                 SizedBox(
-                     //        //                   width: 4,
-                     //        //                 ),
-                     //        //                 Expanded(
-                     //        //                   child: Text(
-                     //        //                     'Select Multiple Cities',
-                     //        //                     style: TextStyle(
-                     //        //                       fontSize: 14,
-                     //        //                       fontWeight: FontWeight.normal,
-                     //        //                     ),
-                     //        //                     overflow: TextOverflow.ellipsis,
-                     //        //                   ),
-                     //        //                 ),
-                     //        //               ],
-                     //        //             ),
-                     //        //             items: cityList.map((item) {
-                     //        //               return DropdownMenuItem<String>(
-                     //        //                 value: item.id,
-                     //        //                 enabled: false,
-                     //        //                 child: StatefulBuilder(
-                     //        //                   builder: (context, menuSetState) {
-                     //        //                     final _isSelected =
-                     //        //                         selectedCities
-                     //        //                             .contains(item);
-                     //        //                     print("SLECTED CITY");
-                     //        //                     return InkWell(
-                     //        //                       onTap: () {
-                     //        //                         _isSelected
-                     //        //                             ? selectedCities
-                     //        //                                 .remove(item.id)
-                     //        //                             : selectedCities
-                     //        //                                 .add(item.id!);
-                     //        //                         setState(() {});
-                     //        //                         menuSetState(() {});
-                     //        //                       },
-                     //        //                       child: Container(
-                     //        //                         height: double.infinity,
-                     //        //                         padding: const EdgeInsets
-                     //        //                                 .symmetric(
-                     //        //                             horizontal: 16.0),
-                     //        //                         child: Row(
-                     //        //                           children: [
-                     //        //                             _isSelected
-                     //        //                                 ? const Icon(Icons
-                     //        //                                     .check_box_outlined)
-                     //        //                                 : const Icon(Icons
-                     //        //                                     .check_box_outline_blank),
-                     //        //                             const SizedBox(
-                     //        //                                 width: 16),
-                     //        //                             Text(
-                     //        //                               item.name!,
-                     //        //                               style:
-                     //        //                                   const TextStyle(
-                     //        //                                 fontSize: 14,
-                     //        //                               ),
-                     //        //                             ),
-                     //        //                           ],
-                     //        //                         ),
-                     //        //                       ),
-                     //        //                     );
-                     //        //                   },
-                     //        //                 ),
-                     //        //               );
-                     //        //             }).toList(),
-                     //        //             //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
-                     //        //             value: selectedCities.isEmpty
-                     //        //                 ? null
-                     //        //                 : selectedCities.last,
-                     //        //             onChanged: (value) {},
-                     //        //             buttonHeight: 50,
-                     //        //             buttonWidth: 160,
-                     //        //             buttonPadding: const EdgeInsets.only(
-                     //        //                 left: 14, right: 14),
-                     //        //             buttonDecoration: BoxDecoration(
-                     //        //               borderRadius:
-                     //        //                   BorderRadius.circular(14),
-                     //        //               color: Color(0xffF9F9F9),
-                     //        //             ),
-                     //        //             buttonElevation: 0,
-                     //        //             itemHeight: 40,
-                     //        //             itemPadding: const EdgeInsets.only(
-                     //        //                 left: 14, right: 14),
-                     //        //             dropdownMaxHeight: 300,
-                     //        //             dropdownPadding: null,
-                     //        //             dropdownDecoration: BoxDecoration(
-                     //        //               borderRadius:
-                     //        //                   BorderRadius.circular(14),
-                     //        //             ),
-                     //        //             dropdownElevation: 8,
-                     //        //             scrollbarRadius:
-                     //        //                 const Radius.circular(40),
-                     //        //             scrollbarThickness: 6,
-                     //        //             scrollbarAlwaysShow: true,
-                     //        //             selectedItemBuilder: (context) {
-                     //        //               return cityList.map(
-                     //        //                 (item) {
-                     //        //                   return Container(
-                     //        //                     // alignment: AlignmentDirectional.center,
-                     //        //                     padding:
-                     //        //                         const EdgeInsets.symmetric(
-                     //        //                             horizontal: 16.0),
-                     //        //                     child: Text(
-                     //        //                       selectedCities.join(','),
-                     //        //                       style: const TextStyle(
-                     //        //                         fontSize: 14,
-                     //        //                         overflow:
-                     //        //                             TextOverflow.ellipsis,
-                     //        //                       ),
-                     //        //                       maxLines: 1,
-                     //        //                     ),
-                     //        //                   );
-                     //        //                 },
-                     //        //               ).toList();
-                     //        //             },
-                     //        //           ),
-                     //        //         );
-                     //        //       } else if (snapshot.hasError) {
-                     //        //         return Icon(Icons.error_outline);
-                     //        //       } else {
-                     //        //         return Center(
-                     //        //             child: CircularProgressIndicator());
-                     //        //       }
-                     //        //     })
-                     //      ),
-                     //    ),
-                     //    SizedBox(
-                     //      height: 20,
-                     //    ),
-                        Container(
-                          width: 80.99.w,
-                          height: 7.46.h,
+                        height: 20,
+                      ),
+                      // CITY
+                      // _selectedItems.isEmpty ?
+                      // InkWell(
+                      //      onTap: (){
+                      //        _showMultiSelect();
+                      //      },
+                      //      child: Container(
+                      //          width: double.infinity,
+                      //          height: 6.h,
+                      //          decoration: BoxDecoration(
+                      //              borderRadius: BorderRadius.circular(10),
+                      //              color: Colors.grey[100]
+                      //          ),
+                      //          // boxDecoration(
+                      //          //   radius: 10.0,
+                      //          // ),
+                      //          child: _selectedItems.isEmpty ?
+                      //          Padding(
+                      //            padding: const EdgeInsets.only(left: 10.0, right: 10),
+                      //            child: Row(
+                      //              children: [
+                      //                Image.asset(
+                      //                  city,
+                      //                  width: 6.04.w,
+                      //                  height: 5.04.w,
+                      //                  fit: BoxFit.fill,
+                      //                  color: AppColor.PrimaryDark,
+                      //                ),
+                      //                Padding(
+                      //                  padding: EdgeInsets.only(left: 8),
+                      //                  child: Text(
+                      //                    'Select Multiple Cities',
+                      //                    style: TextStyle(
+                      //                      fontSize: 14,
+                      //                      color: Colors.black54,
+                      //                      fontWeight: FontWeight.normal,
+                      //                    ),
+                      //                    overflow: TextOverflow.ellipsis,
+                      //                  ),
+                      //                ),
+                      //              ],
+                      //            ),
+                      //          )
+                      //              :  Wrap(
+                      //            children: _selectedItems
+                      //                .map((item){
+                      //              print("okok ${item.id}");
+                      //              return Padding(
+                      //                padding: const EdgeInsets.only(left: 8.0, right: 8),
+                      //                child: Chip(
+                      //                  label:
+                      //                  Text(
+                      //                      "${item.name}"
+                      //                    //item.name
+                      //                  ),
+                      //                ),
+                      //              );
+                      //            })
+                      //                .toList(),
+                      //          )
+                      //        // FutureBuilder(
+                      //        //     future: getCities(),
+                      //        //     builder: (BuildContext context,
+                      //        //         AsyncSnapshot snapshot) {
+                      //        //       if (snapshot.hasData) {
+                      //        //         return DropdownButtonHideUnderline(
+                      //        //           child: DropdownButton2(
+                      //        //             isExpanded: true,
+                      //        //             hint: Row(
+                      //        //               children: [
+                      //        //                 Image.asset(
+                      //        //                   city,
+                      //        //                   width: 6.04.w,
+                      //        //                   height: 5.04.w,
+                      //        //                   fit: BoxFit.fill,
+                      //        //                   color: AppColor.PrimaryDark,
+                      //        //                 ),
+                      //        //                 SizedBox(
+                      //        //                   width: 4,
+                      //        //                 ),
+                      //        //                 Expanded(
+                      //        //                   child: Text(
+                      //        //                     'Select Multiple Cities',
+                      //        //                     style: TextStyle(
+                      //        //                       fontSize: 14,
+                      //        //                       fontWeight: FontWeight.normal,
+                      //        //                     ),
+                      //        //                     overflow: TextOverflow.ellipsis,
+                      //        //                   ),
+                      //        //                 ),
+                      //        //               ],
+                      //        //             ),
+                      //        //             items: cityList.map((item) {
+                      //        //               return DropdownMenuItem<String>(
+                      //        //                 value: item.id,
+                      //        //                 enabled: false,
+                      //        //                 child: StatefulBuilder(
+                      //        //                   builder: (context, menuSetState) {
+                      //        //                     final _isSelected =
+                      //        //                         selectedCities
+                      //        //                             .contains(item);
+                      //        //                     print("SLECTED CITY");
+                      //        //                     return InkWell(
+                      //        //                       onTap: () {
+                      //        //                         _isSelected
+                      //        //                             ? selectedCities
+                      //        //                                 .remove(item.id)
+                      //        //                             : selectedCities
+                      //        //                                 .add(item.id!);
+                      //        //                         setState(() {});
+                      //        //                         menuSetState(() {});
+                      //        //                       },
+                      //        //                       child: Container(
+                      //        //                         height: double.infinity,
+                      //        //                         padding: const EdgeInsets
+                      //        //                                 .symmetric(
+                      //        //                             horizontal: 16.0),
+                      //        //                         child: Row(
+                      //        //                           children: [
+                      //        //                             _isSelected
+                      //        //                                 ? const Icon(Icons
+                      //        //                                     .check_box_outlined)
+                      //        //                                 : const Icon(Icons
+                      //        //                                     .check_box_outline_blank),
+                      //        //                             const SizedBox(
+                      //        //                                 width: 16),
+                      //        //                             Text(
+                      //        //                               item.name!,
+                      //        //                               style:
+                      //        //                                   const TextStyle(
+                      //        //                                 fontSize: 14,
+                      //        //                               ),
+                      //        //                             ),
+                      //        //                           ],
+                      //        //                         ),
+                      //        //                       ),
+                      //        //                     );
+                      //        //                   },
+                      //        //                 ),
+                      //        //               );
+                      //        //             }).toList(),
+                      //        //             //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
+                      //        //             value: selectedCities.isEmpty
+                      //        //                 ? null
+                      //        //                 : selectedCities.last,
+                      //        //             onChanged: (value) {},
+                      //        //             buttonHeight: 50,
+                      //        //             buttonWidth: 160,
+                      //        //             buttonPadding: const EdgeInsets.only(
+                      //        //                 left: 14, right: 14),
+                      //        //             buttonDecoration: BoxDecoration(
+                      //        //               borderRadius:
+                      //        //                   BorderRadius.circular(14),
+                      //        //               color: Color(0xffF9F9F9),
+                      //        //             ),
+                      //        //             buttonElevation: 0,
+                      //        //             itemHeight: 40,
+                      //        //             itemPadding: const EdgeInsets.only(
+                      //        //                 left: 14, right: 14),
+                      //        //             dropdownMaxHeight: 300,
+                      //        //             dropdownPadding: null,
+                      //        //             dropdownDecoration: BoxDecoration(
+                      //        //               borderRadius:
+                      //        //                   BorderRadius.circular(14),
+                      //        //             ),
+                      //        //             dropdownElevation: 8,
+                      //        //             scrollbarRadius:
+                      //        //                 const Radius.circular(40),
+                      //        //             scrollbarThickness: 6,
+                      //        //             scrollbarAlwaysShow: true,
+                      //        //             selectedItemBuilder: (context) {
+                      //        //               return cityList.map(
+                      //        //                 (item) {
+                      //        //                   return Container(
+                      //        //                     // alignment: AlignmentDirectional.center,
+                      //        //                     padding:
+                      //        //                         const EdgeInsets.symmetric(
+                      //        //                             horizontal: 16.0),
+                      //        //                     child: Text(
+                      //        //                       selectedCities.join(','),
+                      //        //                       style: const TextStyle(
+                      //        //                         fontSize: 14,
+                      //        //                         overflow:
+                      //        //                             TextOverflow.ellipsis,
+                      //        //                       ),
+                      //        //                       maxLines: 1,
+                      //        //                     ),
+                      //        //                   );
+                      //        //                 },
+                      //        //               ).toList();
+                      //        //             },
+                      //        //           ),
+                      //        //         );
+                      //        //       } else if (snapshot.hasError) {
+                      //        //         return Icon(Icons.error_outline);
+                      //        //       } else {
+                      //        //         return Center(
+                      //        //             child: CircularProgressIndicator());
+                      //        //       }
+                      //        //     })
+                      //      ),
+                      //    ),
+                      //    SizedBox(
+                      //      height: 20,
+                      //    ),
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
+                          width: double.infinity,
+                          height: 6.h,
                           decoration: boxDecoration(
                             radius: 10.0,
-                            color:AppColor().colorEdit(),
+                            color: Colors.white,
                           ),
                           child:DropdownButtonHideUnderline(
                             child: DropdownButton2(
@@ -1484,137 +1486,143 @@ String? selectedTravel;
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 2.5.h,
-                        ),
-                        InkWell(
-                          onTap: (){
-                            if(_formKey.currentState!.validate()){
-                              if(selectedCountry == null){
-                                Fluttertoast.showToast(msg: "please select country");
-                              }else if(selectedState== null){
-                                Fluttertoast.showToast(msg: "please select state");
-                              }else if(SelectedSignleCity== null){
-                                Fluttertoast.showToast(msg: "please select city");
-                              } else if (phoneController.text.isEmpty || phoneController.text.length != 10) {
-                                Fluttertoast.showToast(msg: "please add valid mobile no");
-                              }else {
-                                setState(() {
-                                  visibleIndex = 2;
-                                });
-                              }
-                            }else{
-                              Fluttertoast.showToast(msg: "please fill all fields");
+                      ),
+                      SizedBox(
+                        height: 2.5.h,
+                      ),
+                      InkWell(
+                        onTap: (){
+                          if(_formKey.currentState!.validate()){
+                            if(selectedCountry == null){
+                              Fluttertoast.showToast(msg: "please select country");
+                            }else if(selectedState== null){
+                              Fluttertoast.showToast(msg: "please select state");
+                            }else if(SelectedSignleCity== null){
+                              Fluttertoast.showToast(msg: "please select city");
+                            } else if (phoneController.text.isEmpty || phoneController.text.length != 10) {
+                              Fluttertoast.showToast(msg: "please add valid mobile no");
+                            }else {
+                              setState(() {
+                                visibleIndex = 2;
+                              });
                             }
-                          },
-                          child: Container(
-                            height: 45,
-                            alignment: Alignment.center,
-                            width: MediaQuery.of(context).size.width/2,
-                            decoration: BoxDecoration(
-                              color: AppColor.PrimaryDark,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              "Next",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 17),
-                            ),
+                          }else{
+                            Fluttertoast.showToast(msg: "please fill all fields");
+                          }
+                        },
+                        child: Container(
+                          width:double.infinity,
+                          height: 45,
+                          alignment: Alignment.center,
+                          //width: MediaQuery.of(context).size.width/2,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            "Next",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 17),
                           ),
                         ),
-                        /// sign up button
-                        // InkWell(
-                        //   onTap: () {
-                        //     cityIdList.clear();
-                        //     print("ok nowoooo ${cityIdList.length}");
-                        //     for(var i=0;i<_selectedItems.length;i++){
-                        //       print("check now ${_selectedItems[i].id}");
-                        //       cityIdList.add(_selectedItems[i].id);
-                        //     }
-                        //     print("yes ${cityIdList.length}");
-                        //     if (_formKey.currentState!.validate()) {
-                        //       signUpFunction();
-                        //     } else {}
-                        //   },
-                        //   child: Container(
-                        //     height: 45,
-                        //     alignment: Alignment.center,
-                        //     width: MediaQuery.of(context).size.width,
-                        //     decoration: BoxDecoration(
-                        //       color: AppColor.PrimaryDark,
-                        //       borderRadius: BorderRadius.circular(8),
-                        //     ),
-                        //     child: Text(
-                        //       "SignUp",
-                        //       style: TextStyle(
-                        //           color: Colors.white,
-                        //           fontWeight: FontWeight.w500,
-                        //           fontSize: 17),
-                        //     ),
-                        //   ),
-                        // ),
+                      ),
+                      /// sign up button
+                      // InkWell(
+                      //   onTap: () {
+                      //     cityIdList.clear();
+                      //     print("ok nowoooo ${cityIdList.length}");
+                      //     for(var i=0;i<_selectedItems.length;i++){
+                      //       print("check now ${_selectedItems[i].id}");
+                      //       cityIdList.add(_selectedItems[i].id);
+                      //     }
+                      //     print("yes ${cityIdList.length}");
+                      //     if (_formKey.currentState!.validate()) {
+                      //       signUpFunction();
+                      //     } else {}
+                      //   },
+                      //   child: Container(
+                      //     height: 45,
+                      //     alignment: Alignment.center,
+                      //     width: MediaQuery.of(context).size.width,
+                      //     decoration: BoxDecoration(
+                      //       color: AppColor.PrimaryDark,
+                      //       borderRadius: BorderRadius.circular(8),
+                      //     ),
+                      //     child: Text(
+                      //       "SignUp",
+                      //       style: TextStyle(
+                      //           color: Colors.white,
+                      //           fontWeight: FontWeight.w500,
+                      //           fontSize: 17),
+                      //     ),
+                      //   ),
+                      // ),
 
-                        Container(
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.only(
-                            top: 30,
-                          ),
-                          child: InkWell(
-                            onTap: () async {
-                              setState(() {
-                                edit = true;
-                              });
-                              await Future.delayed(Duration(milliseconds: 200));
-                              setState(() {
-                                edit = false;
-                              });
-                              Navigator.pop(context);
-                            },
-                            child: ScaleAnimatedWidget.tween(
-                              enabled: edit,
-                              duration: Duration(milliseconds: 200),
-                              scaleDisabled: 1.0,
-                              scaleEnabled: 0.8,
-                              child: RichText(
-                                text: new TextSpan(
-                                  text: "Already Have An Account? ",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 10.sp,
-                                    fontFamily: fontBold,
-                                  ),
-                                  children: <TextSpan>[
-                                    new TextSpan(
-                                      text: 'Login',
-                                      style: TextStyle(
-                                        color: AppColor().colorPrimary(),
-                                        fontSize: 10.sp,
-                                        fontFamily: fontBold,
-                                      ),
-                                    ),
-                                  ],
+                      Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(
+                          top: 30,
+                        ),
+                        child: InkWell(
+                          onTap: () async {
+                            setState(() {
+                              edit = true;
+                            });
+                            await Future.delayed(Duration(milliseconds: 200));
+                            setState(() {
+                              edit = false;
+                            });
+                            Navigator.pop(context);
+                          },
+                          child: ScaleAnimatedWidget.tween(
+                            enabled: edit,
+                            duration: Duration(milliseconds: 200),
+                            scaleDisabled: 1.0,
+                            scaleEnabled: 0.8,
+                            child: RichText(
+                              text: new TextSpan(
+                                text: "Already Have An Account? ",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12.sp,
+                                  fontFamily: fontBold,
                                 ),
+                                children: <TextSpan>[
+                                  new TextSpan(
+                                    text: 'Login',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12.sp,
+                                      fontFamily: fontBold,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ) :
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      // padding: EdgeInsets.symmetric(horizontal: 10,vertical: 12),
-                      // physics: ClampingScrollPhysics(),
-                      children: [
-                        SizedBox(
-                          height: 15,
-                        ),
-                        ///  portfolio / website
-                        Container(
+                      ),
+                    ],
+                  ) :
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    // padding: EdgeInsets.symmetric(horizontal: 10,vertical: 12),
+                    // physics: ClampingScrollPhysics(),
+                    children: [
+                      SizedBox(
+                        height: 15,
+                      ),
+                      ///  portfolio / website
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
                           padding: EdgeInsets.symmetric(vertical: 6),
                           decoration: BoxDecoration(
-                              color: Color(0xffF9F9F9),
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(12)),
                           child: TextFormField(
                             controller: portfolioController,
@@ -1644,14 +1652,19 @@ String? selectedTravel;
                             keyboardType: TextInputType.text,
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        /// twitter link
-                        Container(
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      /// twitter link
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
                           padding: EdgeInsets.symmetric(vertical: 6),
                           decoration: BoxDecoration(
-                              color: Color(0xffF9F9F9),
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(12)),
                           child: TextFormField(
                             controller: twitterController,
@@ -1681,14 +1694,19 @@ String? selectedTravel;
                             keyboardType: TextInputType.text,
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        /// instagram link
-                        Container(
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      /// instagram link
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
                           padding: EdgeInsets.symmetric(vertical: 6),
                           decoration: BoxDecoration(
-                              color: Color(0xffF9F9F9),
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(12)),
                           child: TextFormField(
                             controller: instagramController,
@@ -1713,13 +1731,18 @@ String? selectedTravel;
                             keyboardType: TextInputType.text,
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
                           padding: EdgeInsets.symmetric(vertical: 6),
                           decoration: BoxDecoration(
-                              color: Color(0xffF9F9F9),
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(12)),
                           child: TextFormField(
                             controller: facebookLinkController,
@@ -1744,13 +1767,18 @@ String? selectedTravel;
                             keyboardType: TextInputType.text,
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
                           padding: EdgeInsets.symmetric(vertical: 6),
                           decoration: BoxDecoration(
-                              color: Color(0xffF9F9F9),
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(12)),
                           child: TextFormField(
                             controller: linkedInController,
@@ -1775,22 +1803,27 @@ String? selectedTravel;
                             keyboardType: TextInputType.text,
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
                           padding: EdgeInsets.symmetric(vertical: 6),
                           decoration: BoxDecoration(
-                              color: Color(0xffF9F9F9),
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(12)),
                           child: TextFormField(
                             controller: equipmentController,
                             decoration: InputDecoration(
                               contentPadding:
                               EdgeInsets.symmetric(horizontal: 10),
-                              hintText: "Equipment used",
+                              hintText: "Equipment used (optinal)",
                               label: Text(
-                                "Equipment used",
+                                "Equipment used (optinal)",
                               ),
                               hintStyle: TextStyle(
                                   color: Colors.black,
@@ -1798,30 +1831,34 @@ String? selectedTravel;
                               border: InputBorder.none,
                             ),
                             /*validator: (v) {
-                              if (v!.isEmpty) {
-                                return "Enter equipment";
-                              }
-                              return null;
-                            },*/
+                                      if (v!.isEmpty) {
+                                        return "Enter equipment";
+                                      }
+                                      return null;
+                                    },*/
                             keyboardType: TextInputType.text,
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        InkWell(
-                          onTap: (){
-                            _selectDate();
-                          },
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      InkWell(
+                        onTap: (){
+                          _selectDate();
+                        },
+                        child:Material(
+                          elevation: 4,
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(6),
                           child: Container(
-                            height: 55,
-                            width: MediaQuery.of(context).size.width,
-                            alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.symmetric(vertical: 6,horizontal: 8),
+                            width: double.infinity,
+                            height: 6.h,
+                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 2.h),
                             decoration: BoxDecoration(
-                                color: Color(0xffF9F9F9),
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(12)),
-                            child: _dateValue.length > 0 ? Text("${dateFormate}") : Text("Enter Birthday",style: TextStyle(color: AppColor().colorTextFour().withOpacity(0.7),fontSize: 15),),
+                            child: _dateValue.length > 0 ? Text("${dateFormate}") : Text("When is your birthday?",style: TextStyle(color: AppColor().colorTextFour().withOpacity(0.7),fontSize: 15),),
                             // TextFormField(
                             //   controller: birthDayController,
                             //   decoration: InputDecoration(
@@ -1846,13 +1883,18 @@ String? selectedTravel;
                             // ),
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
                           padding: EdgeInsets.symmetric(vertical: 6),
                           decoration: BoxDecoration(
-                              color: Color(0xffF9F9F9),
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(12)),
                           child: TextFormField(
                             controller: comfertableServiceController,
@@ -1861,7 +1903,7 @@ String? selectedTravel;
                               EdgeInsets.symmetric(horizontal: 10),
                               hintText: "Enter your comfortable service",
                               label: Text(
-                                "Comfortable service",
+                                "What kinds of Service do you feel most comfortable doing",
                               ),
                               hintStyle: TextStyle(
                                   color: Colors.black,
@@ -1877,13 +1919,18 @@ String? selectedTravel;
                             keyboardType: TextInputType.text,
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
                           padding: EdgeInsets.symmetric(vertical: 6),
                           decoration: BoxDecoration(
-                              color: Color(0xffF9F9F9),
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(12)),
                           child: TextFormField(
                             controller: serviceInfoController,
@@ -1908,10 +1955,15 @@ String? selectedTravel;
                             keyboardType: TextInputType.text,
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
                           padding: EdgeInsets.symmetric(vertical: 6),
                           decoration: BoxDecoration(
                               color: Color(0xffF9F9F9),
@@ -1939,12 +1991,17 @@ String? selectedTravel;
                             keyboardType: TextInputType.text,
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
-                            width: 80.99.w,
-                            height: 7.46.h,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
+                            width: double.infinity,
+                            height: 6.h,
                             decoration: boxDecoration(
                               radius: 10.0,
                             ),
@@ -1988,6 +2045,7 @@ String? selectedTravel;
                                             //     .toString();
 
                                           });
+                                          categorylist.clear();
                                           getServicesSubCategory(selectedCategory);
                                           print("CATEGORY ID issssss== $selectedCategory");
                                         },
@@ -2001,9 +2059,9 @@ String? selectedTravel;
                                         buttonPadding:
                                         const EdgeInsets.only(left: 14, right: 14),
                                         buttonDecoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                          // color: AppColor().colorEdit(),
-                                          color: Colors.grey.withOpacity(0.05)
+                                            borderRadius: BorderRadius.circular(14),
+                                            // color: AppColor().colorEdit(),
+                                            color: Colors.grey.withOpacity(0.05)
                                         ),
                                         buttonElevation: 0,
                                         itemHeight: 40,
@@ -2029,165 +2087,99 @@ String? selectedTravel;
                                     return Center(child: CircularProgressIndicator());
                                   }
                                 })),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        serviceSubCategoryModel == null   ? SizedBox()  :  Container(
-                            width: 80.99.w,
-                            height: 7.46.h,
-                            decoration: boxDecoration(
-                              radius: 10.0,
-                            ),
-                            child:DropdownButtonHideUnderline(
-                              child: DropdownButton2(
-                                isExpanded: true,
-                                hint: Text(
-                                  'Select Sub Category',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                items: serviceSubCategoryModel!.data!
-                                    .map((item) => DropdownMenuItem<String>(
-                                  value: item.id,
-                                  child: Text(
-                                    item.cName!,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ))
-                                    .toList(),
-                                value: selectedSubCategory,
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedSubCategory = value as String;
-                                    // // serviceName.text = serviceModel.data!
-                                    //     .firstWhere((element) => element.id == value)
-                                    //     .cName
-                                    //     .toString();
-                                  });
-                                  print("subbbb CATEGORY sub ID== $selectedSubCategory");
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_forward_ios_outlined,
-                                  color: AppColor.PrimaryDark,
-                                ),
-                                iconSize: 14,
-                                buttonHeight: 50,
-                                buttonWidth: 160,
-                                buttonPadding:
-                                const EdgeInsets.only(left: 14, right: 14),
-                                buttonDecoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(14),
-                                    // color: AppColor().colorEdit(),
-                                    color: Colors.grey.withOpacity(0.05)
-                                ),
-                                buttonElevation: 0,
-                                itemHeight: 40,
-                                itemPadding:
-                                const EdgeInsets.only(left: 14, right: 14),
-                                dropdownMaxHeight: 300,
-                                dropdownPadding: null,
-                                dropdownDecoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                                dropdownElevation: 8,
-                                scrollbarRadius: const Radius.circular(40),
-                                scrollbarThickness: 6,
-                                scrollbarAlwaysShow: true,
-                              ),
-                            )
-                            // FutureBuilder(
-                            //     future: getServicesSubCategory(selectedCategory),
-                            //     builder: (BuildContext context, AsyncSnapshot snapshot) {
-                            //       ServiceSubCategoryModel Model = snapshot.data;
-                            //       if (snapshot.hasData) {
-                            //         return DropdownButtonHideUnderline(
-                            //           child: DropdownButton2(
-                            //             isExpanded: true,
-                            //             hint: Text(
-                            //               'Select Sub Category',
-                            //               style: TextStyle(
-                            //                 fontSize: 14,
-                            //                 fontWeight: FontWeight.normal,
-                            //               ),
-                            //               overflow: TextOverflow.ellipsis,
-                            //             ),
-                            //             items: Model.data!
-                            //                 .map((item) => DropdownMenuItem<String>(
-                            //               value: item.id,
-                            //               child: Text(
-                            //                 item.cName!,
-                            //                 style: const TextStyle(
-                            //                   fontSize: 14,
-                            //                   fontWeight: FontWeight.bold,
-                            //                   color: Colors.black,
-                            //                 ),
-                            //                 overflow: TextOverflow.ellipsis,
-                            //               ),
-                            //             ))
-                            //                 .toList(),
-                            //             value: selectedSubCategory,
-                            //             onChanged: (value) {
-                            //               setState(() {
-                            //                 selectedSubCategory = value as String;
-                            //                 // // serviceName.text = serviceModel.data!
-                            //                 //     .firstWhere((element) => element.id == value)
-                            //                 //     .cName
-                            //                 //     .toString();
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      serviceSubCategoryModel == null   ? SizedBox()  :
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child:
+                        MultiSelectDropDown(
+                          hint: "Select Sub Category",
+                          showClearIcon: true,
+                          controller: multiSelectController,
+                          borderColor: Colors.transparent,
+
+                          onOptionSelected: (options) {
+                            categorylist.clear();
+                            for (int i = 0; i < options.length; i++) {
+                              String value = options[i].value??"";
+
+                              // Check if the value is not already in the set
+                              // if (uniqueValues.add(value)) {
+                              //   print(value);
+
+                                categorylist.add(value);
+                                setState(() {
+
+                                });
+                             // }
+                            }
+
+
+                            // setState(() {
                             //
-                            //               });
-                            //               print("CATEGORY sub ID== $selectedSubCategory");
-                            //             },
-                            //             icon: const Icon(
-                            //               Icons.arrow_forward_ios_outlined,
-                            //               color: AppColor.PrimaryDark,
-                            //             ),
-                            //             iconSize: 14,
-                            //             buttonHeight: 50,
-                            //             buttonWidth: 160,
-                            //             buttonPadding:
-                            //             const EdgeInsets.only(left: 14, right: 14),
-                            //             buttonDecoration: BoxDecoration(
-                            //                 borderRadius: BorderRadius.circular(14),
-                            //                 // color: AppColor().colorEdit(),
-                            //                 color: Colors.grey.withOpacity(0.05)
-                            //             ),
-                            //             buttonElevation: 0,
-                            //             itemHeight: 40,
-                            //             itemPadding:
-                            //             const EdgeInsets.only(left: 14, right: 14),
-                            //             dropdownMaxHeight: 300,
-                            //             dropdownPadding: null,
-                            //             dropdownDecoration: BoxDecoration(
-                            //               borderRadius: BorderRadius.circular(14),
-                            //             ),
-                            //             dropdownElevation: 8,
-                            //             scrollbarRadius: const Radius.circular(40),
-                            //             scrollbarThickness: 6,
-                            //             scrollbarAlwaysShow: true,
-                            //           ),
-                            //         );
-                            //       }
-                            //       else if (snapshot.hasError) {
-                            //         print("ERROR===" + snapshot.error.toString());
-                            //         return Icon(Icons.error_outline);
-                            //       }
-                            //       else {
-                            //         return Center(child: CircularProgressIndicator());
-                            //       }
-                            //     })
+                            // });
+                            debugPrint(categorylist.toString());
+                          },
+                          options: <ValueItem>[
+                            for (int i = 0; i < serviceSubCategoryModel!.data!.length; i++) ...[
+                              ValueItem(
+                                label: "${serviceSubCategoryModel!.data![i].cName}",
+                                value: "${serviceSubCategoryModel!.data![i].id}",
+                              )
+                            ]
+                          ],
+
+                          selectionType: SelectionType.multi,
+                          // selectedOptions: [
+                          //   for (int i = 0; i < serviceSubCategoryModel!.data!.length; i++) ...[
+                          //     "${subCategory!.data![i].id}" == widget.profileResponse?.user?.jsonData?.subCat.toString()
+                          //         ? ValueItem(
+                          //       label: "${subCategory!.data![i].cName}",
+                          //       value: "${subCategory!.data![i].id}",
+                          //     )
+                          //         : ValueItem(label: "")
+                          //   ]
+                          // ]..removeWhere((element) => element.label == ""), // Remove null entries
+                          chipConfig: const ChipConfig(wrapType: WrapType.scroll,backgroundColor: AppColor.PrimaryDark,),
+                          dropdownHeight: 300,
+                          optionTextStyle: const TextStyle(fontSize: 16),
+                          selectedOptionIcon: const Icon(Icons.check_circle,color: AppColor.PrimaryDark,),
+                          selectedOptionTextColor: AppColor.PrimaryDark,
+                          // suffixIcon: IconData(),
+                          // selectedItemBuilder: (BuildContext context, ValueItem item,) {
+                          //   // Customize the appearance of the selected item here
+                          //   return Container(
+                          //     padding: EdgeInsets.all(8.0),
+                          //     decoration: BoxDecoration(
+                          //       color: Colors.red, // Set the background color to red
+                          //       borderRadius: BorderRadius.circular(5.0),
+                          //     ),
+                          //     child: Row(
+                          //       mainAxisSize: MainAxisSize.min,
+                          //       children: [
+                          //         Text(item.label),
+                          //         const SizedBox(width: 8.0),
+                          //         Icon(Icons.close, color: Colors.white, size: 18.0),
+                          //       ],
+                          //     ),
+                          //   );
+                          // },
+
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
                           padding: EdgeInsets.symmetric(vertical: 6),
                           decoration: BoxDecoration(
                               color: Color(0xffF9F9F9),
@@ -2218,12 +2210,17 @@ String? selectedTravel;
                             maxLength: 10,
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
-                          width: 80.99.w,
-                          height: 7.46.h,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
+                          width: double.infinity,
+                          height: 6.h,
                           decoration: boxDecoration(
                             radius: 10.0,
                           ),
@@ -2294,131 +2291,141 @@ String? selectedTravel;
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
-                            width: 80.99.w,
-                            height: 7.46.h,
-                            decoration: boxDecoration(
-                              radius: 10.0,
-                            ),
-                            child:DropdownButtonHideUnderline(
-                              child: DropdownButton2(
-                                isExpanded: true,
-                                hint: Text(
-                                  'Select Hours / Day',
-                                  style: TextStyle(
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
+                          width: double.infinity,
+                          height: 6.h,
+                          decoration: boxDecoration(
+                            radius: 10.0,
+                          ),
+                          child:DropdownButtonHideUnderline(
+                            child: DropdownButton2(
+                              isExpanded: true,
+                              hint: Text(
+                                'Select Hours / Day',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              items: timeList
+                                  .map((String? item) => DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(
+                                  item.toString(),
+                                  style: const TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.normal,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                items: timeList
-                                    .map((String? item) => DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ))
-                                    .toList(),
-                                value: selectedDayHour,
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedDayHour = value as String;
-                                    // // serviceName.text = serviceModel.data!
-                                    //     .firstWhere((element) => element.id == value)
-                                    //     .cName
-                                    //     .toString();
+                              ))
+                                  .toList(),
+                              value: selectedDayHour,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedDayHour = value as String;
+                                  // // serviceName.text = serviceModel.data!
+                                  //     .firstWhere((element) => element.id == value)
+                                  //     .cName
+                                  //     .toString();
 
-                                  });
-                                  print("CATEGORY ID== $selectedCategory");
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_forward_ios_outlined,
-                                  color: AppColor.PrimaryDark,
-                                ),
-                                iconSize: 14,
-                                buttonHeight: 50,
-                                buttonWidth: 160,
-                                buttonPadding:
-                                const EdgeInsets.only(left: 14, right: 14),
-                                buttonDecoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(14),
-                                    // color: AppColor().colorEdit(),
-                                    color: Colors.grey.withOpacity(0.05)
-                                ),
-                                buttonElevation: 0,
-                                itemHeight: 40,
-                                itemPadding:
-                                const EdgeInsets.only(left: 14, right: 14),
-                                dropdownMaxHeight: 300,
-                                dropdownPadding: null,
-                                dropdownDecoration: BoxDecoration(
+                                });
+                                print("CATEGORY ID== $selectedCategory");
+                              },
+                              icon: const Icon(
+                                Icons.arrow_forward_ios_outlined,
+                                color: AppColor.PrimaryDark,
+                              ),
+                              iconSize: 14,
+                              buttonHeight: 50,
+                              buttonWidth: 160,
+                              buttonPadding:
+                              const EdgeInsets.only(left: 14, right: 14),
+                              buttonDecoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(14),
-                                ),
-                                dropdownElevation: 8,
-                                scrollbarRadius: const Radius.circular(40),
-                                scrollbarThickness: 6,
-                                scrollbarAlwaysShow: true,
+                                  // color: AppColor().colorEdit(),
+                                  color: Colors.grey.withOpacity(0.05)
                               ),
+                              buttonElevation: 0,
+                              itemHeight: 40,
+                              itemPadding:
+                              const EdgeInsets.only(left: 14, right: 14),
+                              dropdownMaxHeight: 300,
+                              dropdownPadding: null,
+                              dropdownDecoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              dropdownElevation: 8,
+                              scrollbarRadius: const Radius.circular(40),
+                              scrollbarThickness: 6,
+                              scrollbarAlwaysShow: true,
                             ),
+                          ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
 
-                        InkWell(
-                          onTap: ()async{
-                           await openLanguageList();
-                           setState(() {
+                      InkWell(
+                        onTap: ()async{
+                          await openLanguageList();
+                          setState(() {
 
-                           });
-                          },
+                          });
+                        },
+                        child: Material(
+                          elevation: 4,
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(6),
                           child: Container(
-                            width: 80.99.w,
-                            height: 7.46.h,
+                              width: double.infinity,
+                              height: 6.h,
                               padding: EdgeInsets.symmetric(horizontal: 5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
                                 color: Colors.grey.withOpacity(0.05),
-                            ),
-                            child:selectedLanguageList.isEmpty ? Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text("Language(S) Spoken",
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.black54,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                ),
                               ),
-                            ) :  ListView.builder(
-                              shrinkWrap: true,
-                                physics: AlwaysScrollableScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                itemCount: selectedLanguageList.length,
-                                itemBuilder: (c,i){
-                              return Container(
+                              child:selectedLanguageList.isEmpty ? Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text("Language(S) Spoken",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ) :  ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: AlwaysScrollableScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: selectedLanguageList.length,
+                                  itemBuilder: (c,i){
+                                    return Container(
 
-                                alignment: Alignment.center,
-                                  // decoration: BoxDecoration(
-                                  //   borderRadius: BorderRadius.circular(12),
-                                  //   border: Border.all(color: Colors.grey)
-                                  // ),
-                                  child: Padding(
-                                    padding:  EdgeInsets.only(right: 5),
-                                    child: selectedLanguageList.length > 1 ? Text("${selectedLanguageList[i]} ,") : Text("${selectedLanguageList[i]}"),
-                                  ));
-                            })
+                                        alignment: Alignment.center,
+                                        // decoration: BoxDecoration(
+                                        //   borderRadius: BorderRadius.circular(12),
+                                        //   border: Border.all(color: Colors.grey)
+                                        // ),
+                                        child: Padding(
+                                          padding:  EdgeInsets.only(right: 5),
+                                          child: selectedLanguageList.length > 1 ? Text("${selectedLanguageList[i]} ,") : Text("${selectedLanguageList[i]}"),
+                                        ));
+                                  })
                             // Padding(
                             //   padding: const EdgeInsets.only(left: 10.0, right: 10),
                             //   child: Row(
@@ -2519,13 +2526,18 @@ String? selectedTravel;
                             // ),
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
 
-                        Container(
-                          width: 80.99.w,
-                          height: 7.46.h,
+                      Material(
+                        elevation: 4,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
+                          width: double.infinity,
+                          height: 6.h,
                           decoration: boxDecoration(
                             radius: 10.0,
                           ),
@@ -2596,16 +2608,21 @@ String? selectedTravel;
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        InkWell(
-                          onTap: (){
-                            _showMultiSelect();
-                          },
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      InkWell(
+                        onTap: (){
+                          _showMultiSelect();
+                        },
+                        child: Material(
+                          elevation: 4,
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(6),
                           child: Container(
-                              width: 80.99.w,
-                              height: 7.46.h,
+                              width: double.infinity,
+                              height: 6.h,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.grey[100]
@@ -2641,33 +2658,33 @@ String? selectedTravel;
                                 ),
                               )
                                   :
-                                  ListView.builder(
-                                      itemCount: _selectedItems.length,
-                                      physics: AlwaysScrollableScrollPhysics(),
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (c,i){
+                              ListView.builder(
+                                  itemCount: _selectedItems.length,
+                                  physics: AlwaysScrollableScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (c,i){
                                     return Padding(
                                       padding: EdgeInsets.only(right: 5),
                                       child: Chip(label:Text("${_selectedItems[i].name}"),),
                                     );
                                   })
-                              // Wrap(
-                              //   children: _selectedItems
-                              //       .map((item){
-                              //     print("okok ${item.id}");
-                              //     return Padding(
-                              //       padding: const EdgeInsets.only(left: 8.0, right: 8),
-                              //       child: Chip(
-                              //         label:
-                              //         Text(
-                              //             "${item.name}"
-                              //           //item.name
-                              //         ),
-                              //       ),
-                              //     );
-                              //   })
-                              //       .toList(),
-                              // )
+                            // Wrap(
+                            //   children: _selectedItems
+                            //       .map((item){
+                            //     print("okok ${item.id}");
+                            //     return Padding(
+                            //       padding: const EdgeInsets.only(left: 8.0, right: 8),
+                            //       child: Chip(
+                            //         label:
+                            //         Text(
+                            //             "${item.name}"
+                            //           //item.name
+                            //         ),
+                            //       ),
+                            //     );
+                            //   })
+                            //       .toList(),
+                            // )
 
                             // FutureBuilder(
                             //     future: getCities(),
@@ -2811,379 +2828,383 @@ String? selectedTravel;
                             //     })
                           ),
                         ),
+                      ),
 
-                        termsAndCondition(),
-                        SizedBox(height: 30,),
-
-
-                        // Container(
-                        //   padding: EdgeInsets.symmetric(vertical: 6),
-                        //   decoration: BoxDecoration(
-                        //       color: Color(0xffF9F9F9),
-                        //       borderRadius: BorderRadius.circular(12)),
-                        //   child: TextFormField(
-                        //     controller: mobileController,
-                        //     maxLength: 10,
-                        //     decoration: InputDecoration(
-                        //       counterText: "",
-                        //       contentPadding:
-                        //       EdgeInsets.symmetric(horizontal: 10),
-                        //       hintText: "Mobile",
-                        //       label: Text(
-                        //         "Mobile",
-                        //       ),
-                        //       hintStyle: TextStyle(
-                        //           color: Colors.black,
-                        //           fontWeight: FontWeight.w400),
-                        //       border: InputBorder.none,
-                        //     ),
-                        //     keyboardType: TextInputType.number,
-                        //     validator: (v) {
-                        //       if (v!.isEmpty || v.length != 10) {
-                        //         return "Enter mobile nuber";
-                        //       }
-                        //       return null;
-                        //     },
-                        //   ),
-                        // ),
-                        // SizedBox(
-                        //   height: 15,
-                        // ),
-                        // Container(
-                        //   padding: EdgeInsets.symmetric(vertical: 6),
-                        //   decoration: BoxDecoration(
-                        //       color: Color(0xffF9F9F9),
-                        //       borderRadius: BorderRadius.circular(12)),
-                        //   child: TextFormField(
-                        //     controller: emailController,
-                        //     decoration: InputDecoration(
-                        //       contentPadding:
-                        //       EdgeInsets.symmetric(horizontal: 10),
-                        //       hintText: "Email",
-                        //       label: Text(
-                        //         "Email",
-                        //       ),
-                        //       hintStyle: TextStyle(
-                        //           color: Colors.black,
-                        //           fontWeight: FontWeight.w400),
-                        //       border: InputBorder.none,
-                        //     ),
-                        //     keyboardType: TextInputType.emailAddress,
-                        //     validator: (v) {
-                        //       if (!v!.contains('@')) {
-                        //         return "Enter valid email";
-                        //       }
-                        //       return null;
-                        //     },
-                        //   ),
-                        // ),
-                        // SizedBox(
-                        //   height: 15,
-                        // ),
-                        // Container(
-                        //   padding: EdgeInsets.symmetric(vertical: 6),
-                        //   decoration: BoxDecoration(
-                        //       color: Color(0xffF9F9F9),
-                        //       borderRadius: BorderRadius.circular(12)),
-                        //   child: TextFormField(
-                        //     controller: addressController,
-                        //     keyboardType: TextInputType.streetAddress,
-                        //     validator: FormValidation.checkEmptyValidator,
-                        //     decoration: InputDecoration(
-                        //       border: InputBorder.none,
-                        //       contentPadding: EdgeInsets.zero,
-                        //       hintText: "User Address",
-                        //       prefixIcon: Icon(
-                        //         Icons.location_on_outlined,
-                        //         color: Colors.grey,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // Container(
-                        //   width: 69.99.w,
-                        //   child: InkWell(
-                        //     onTap: () {
-                        //       getLocation();
-                        //     },
-                        //     child: Row(
-                        //       children: [
-                        //         Icon(Icons.my_location_outlined,
-                        //             color: Color(0xff666666)),
-                        //         Text(
-                        //           "Use My Current Location",
-                        //           style: TextStyle(
-                        //             color: Color(0xff666666),
-                        //             fontSize: 12,
-                        //             fontWeight: FontWeight.bold,
-                        //           ),
-                        //         )
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
-                        // SizedBox(
-                        //   height: 15,
-                        // ),
-                        // //COUNTRY
-                        // Container(
-                        //     width: 80.99.w,
-                        //     height: 7.46.h,
-                        //     decoration: boxDecoration(
-                        //       radius: 10.0,
-                        //     ),
-                        //     child: DropdownButtonHideUnderline(
-                        //       child: DropdownButton2(
-                        //         isExpanded: true,
-                        //         hint: Row(
-                        //           children: [
-                        //             Image.asset(
-                        //               country,
-                        //               width: 6.04.w,
-                        //               height: 5.04.w,
-                        //               fit: BoxFit.fill,
-                        //               color: AppColor.PrimaryDark,
-                        //             ),
-                        //             SizedBox(
-                        //               width: 4,
-                        //             ),
-                        //             Expanded(
-                        //               child: Text(
-                        //                 'Select Country',
-                        //                 style: TextStyle(
-                        //                   fontSize: 14,
-                        //                   fontWeight: FontWeight.normal,
-                        //                 ),
-                        //                 overflow: TextOverflow.ellipsis,
-                        //               ),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //         items: countryList
-                        //             .map((item) => DropdownMenuItem<String>(
-                        //           value: item.id,
-                        //           child: Text(
-                        //             item.name!,
-                        //             style: const TextStyle(
-                        //               fontSize: 14,
-                        //               fontWeight: FontWeight.bold,
-                        //               color: Colors.black,
-                        //             ),
-                        //             overflow: TextOverflow.ellipsis,
-                        //           ),
-                        //         ))
-                        //             .toList(),
-                        //         value: selectedCountry,
-                        //         onChanged: (value) {
-                        //           setState(() {
-                        //             selectedCountry = value as String;
-                        //             print("selectedCategory=>" +
-                        //                 selectedCountry.toString());
-                        //           });
-                        //         },
-                        //         icon: const Icon(
-                        //           Icons.arrow_forward_ios_outlined,
-                        //           color: AppColor.PrimaryDark,
-                        //         ),
-                        //         iconSize: 14,
-                        //         buttonHeight: 50,
-                        //         buttonWidth: 160,
-                        //         buttonPadding:
-                        //         const EdgeInsets.only(left: 14, right: 14),
-                        //         buttonDecoration: BoxDecoration(
-                        //           borderRadius: BorderRadius.circular(14),
-                        //           color: Color(0xffF9F9F9),
-                        //         ),
-                        //         buttonElevation: 0,
-                        //         itemHeight: 40,
-                        //         itemPadding:
-                        //         const EdgeInsets.only(left: 14, right: 14),
-                        //         dropdownMaxHeight: 300,
-                        //         dropdownPadding: null,
-                        //         dropdownDecoration: BoxDecoration(
-                        //           borderRadius: BorderRadius.circular(14),
-                        //         ),
-                        //         dropdownElevation: 8,
-                        //         scrollbarRadius: const Radius.circular(40),
-                        //         scrollbarThickness: 6,
-                        //         scrollbarAlwaysShow: true,
-                        //       ),
-                        //     )),
-                        // SizedBox(
-                        //   height: 15,
-                        // ),
-                        //STATE
+                      termsAndCondition(),
+                      SizedBox(height: 30,),
 
 
-                        // _selectedItems.isEmpty ?
+                      // Container(
+                      //   padding: EdgeInsets.symmetric(vertical: 6),
+                      //   decoration: BoxDecoration(
+                      //       color: Color(0xffF9F9F9),
+                      //       borderRadius: BorderRadius.circular(12)),
+                      //   child: TextFormField(
+                      //     controller: mobileController,
+                      //     maxLength: 10,
+                      //     decoration: InputDecoration(
+                      //       counterText: "",
+                      //       contentPadding:
+                      //       EdgeInsets.symmetric(horizontal: 10),
+                      //       hintText: "Mobile",
+                      //       label: Text(
+                      //         "Mobile",
+                      //       ),
+                      //       hintStyle: TextStyle(
+                      //           color: Colors.black,
+                      //           fontWeight: FontWeight.w400),
+                      //       border: InputBorder.none,
+                      //     ),
+                      //     keyboardType: TextInputType.number,
+                      //     validator: (v) {
+                      //       if (v!.isEmpty || v.length != 10) {
+                      //         return "Enter mobile nuber";
+                      //       }
+                      //       return null;
+                      //     },
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 15,
+                      // ),
+                      // Container(
+                      //   padding: EdgeInsets.symmetric(vertical: 6),
+                      //   decoration: BoxDecoration(
+                      //       color: Color(0xffF9F9F9),
+                      //       borderRadius: BorderRadius.circular(12)),
+                      //   child: TextFormField(
+                      //     controller: emailController,
+                      //     decoration: InputDecoration(
+                      //       contentPadding:
+                      //       EdgeInsets.symmetric(horizontal: 10),
+                      //       hintText: "Email",
+                      //       label: Text(
+                      //         "Email",
+                      //       ),
+                      //       hintStyle: TextStyle(
+                      //           color: Colors.black,
+                      //           fontWeight: FontWeight.w400),
+                      //       border: InputBorder.none,
+                      //     ),
+                      //     keyboardType: TextInputType.emailAddress,
+                      //     validator: (v) {
+                      //       if (!v!.contains('@')) {
+                      //         return "Enter valid email";
+                      //       }
+                      //       return null;
+                      //     },
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 15,
+                      // ),
+                      // Container(
+                      //   padding: EdgeInsets.symmetric(vertical: 6),
+                      //   decoration: BoxDecoration(
+                      //       color: Color(0xffF9F9F9),
+                      //       borderRadius: BorderRadius.circular(12)),
+                      //   child: TextFormField(
+                      //     controller: addressController,
+                      //     keyboardType: TextInputType.streetAddress,
+                      //     validator: FormValidation.checkEmptyValidator,
+                      //     decoration: InputDecoration(
+                      //       border: InputBorder.none,
+                      //       contentPadding: EdgeInsets.zero,
+                      //       hintText: "User Address",
+                      //       prefixIcon: Icon(
+                      //         Icons.location_on_outlined,
+                      //         color: Colors.grey,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // Container(
+                      //   width: 69.99.w,
+                      //   child: InkWell(
+                      //     onTap: () {
+                      //       getLocation();
+                      //     },
+                      //     child: Row(
+                      //       children: [
+                      //         Icon(Icons.my_location_outlined,
+                      //             color: Color(0xff666666)),
+                      //         Text(
+                      //           "Use My Current Location",
+                      //           style: TextStyle(
+                      //             color: Color(0xff666666),
+                      //             fontSize: 12,
+                      //             fontWeight: FontWeight.bold,
+                      //           ),
+                      //         )
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 15,
+                      // ),
+                      // //COUNTRY
+                      // Container(
+                      //     width: double.infinity,
+                      //     height: 6.h,
+                      //     decoration: boxDecoration(
+                      //       radius: 10.0,
+                      //     ),
+                      //     child: DropdownButtonHideUnderline(
+                      //       child: DropdownButton2(
+                      //         isExpanded: true,
+                      //         hint: Row(
+                      //           children: [
+                      //             Image.asset(
+                      //               country,
+                      //               width: 6.04.w,
+                      //               height: 5.04.w,
+                      //               fit: BoxFit.fill,
+                      //               color: AppColor.PrimaryDark,
+                      //             ),
+                      //             SizedBox(
+                      //               width: 4,
+                      //             ),
+                      //             Expanded(
+                      //               child: Text(
+                      //                 'Select Country',
+                      //                 style: TextStyle(
+                      //                   fontSize: 14,
+                      //                   fontWeight: FontWeight.normal,
+                      //                 ),
+                      //                 overflow: TextOverflow.ellipsis,
+                      //               ),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //         items: countryList
+                      //             .map((item) => DropdownMenuItem<String>(
+                      //           value: item.id,
+                      //           child: Text(
+                      //             item.name!,
+                      //             style: const TextStyle(
+                      //               fontSize: 14,
+                      //               fontWeight: FontWeight.bold,
+                      //               color: Colors.black,
+                      //             ),
+                      //             overflow: TextOverflow.ellipsis,
+                      //           ),
+                      //         ))
+                      //             .toList(),
+                      //         value: selectedCountry,
+                      //         onChanged: (value) {
+                      //           setState(() {
+                      //             selectedCountry = value as String;
+                      //             print("selectedCategory=>" +
+                      //                 selectedCountry.toString());
+                      //           });
+                      //         },
+                      //         icon: const Icon(
+                      //           Icons.arrow_forward_ios_outlined,
+                      //           color: AppColor.PrimaryDark,
+                      //         ),
+                      //         iconSize: 14,
+                      //         buttonHeight: 50,
+                      //         buttonWidth: 160,
+                      //         buttonPadding:
+                      //         const EdgeInsets.only(left: 14, right: 14),
+                      //         buttonDecoration: BoxDecoration(
+                      //           borderRadius: BorderRadius.circular(14),
+                      //           color: Color(0xffF9F9F9),
+                      //         ),
+                      //         buttonElevation: 0,
+                      //         itemHeight: 40,
+                      //         itemPadding:
+                      //         const EdgeInsets.only(left: 14, right: 14),
+                      //         dropdownMaxHeight: 300,
+                      //         dropdownPadding: null,
+                      //         dropdownDecoration: BoxDecoration(
+                      //           borderRadius: BorderRadius.circular(14),
+                      //         ),
+                      //         dropdownElevation: 8,
+                      //         scrollbarRadius: const Radius.circular(40),
+                      //         scrollbarThickness: 6,
+                      //         scrollbarAlwaysShow: true,
+                      //       ),
+                      //     )),
+                      // SizedBox(
+                      //   height: 15,
+                      // ),
+                      //STATE
 
 
-                        SizedBox(
-                          height: 20,
-                        ),
-                       Row(
-                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                         children: [
-                           Expanded(
-                             child: InkWell(
-                               onTap:(){
-                                 setState(() {
-                                   visibleIndex = 1;
-                                 });
-                               },
-                               child: Container(
-                                 height: 45,
-                                 alignment: Alignment.center,
-                                 width: MediaQuery.of(context).size.width/2,
-                                 decoration: BoxDecoration(
-                                   color: AppColor.PrimaryDark,
-                                   borderRadius: BorderRadius.circular(8),
-                                 ),
-                                 child: Text(
-                                   "Previous",
-                                   style: TextStyle(
-                                       color: Colors.white,
-                                       fontWeight: FontWeight.w500,
-                                       fontSize: 17),
-                                 ),
-                               ),
-                             ),
-                           ),
-                           SizedBox(width: 20,),
-                           Expanded(
-                             child: InkWell(
-                               onTap: () {
-                                 cityIdList.clear();
-                                 print("ok nowoooo ${cityIdList.length}");
-                                 for(var i=0;i<_selectedItems.length;i++){
-                                   print("check now ${_selectedItems[i].id}");
-                                   cityIdList.add(_selectedItems[i].name);
-                                 }
-                                 print("yes ${cityIdList.length}");
-                                 if (_formKey.currentState!.validate()) {
-                                   if(dateFormate == null){
-                                     showSnackBar(context, 'please enter date of birth');
-                                   }else if (selectedCategory == null){
-                                     showSnackBar(context, 'please select category');
-                                   }else if(noOfDays == null){
-                                     showSnackBar(context, 'please select days');
-                                   }else if(selectedDayHour== null) {
-                                     showSnackBar(context, 'please select hours');
-                                   }else if(twitterController.text.isEmpty && instagramController.text.isEmpty && facebookLinkController.text.isEmpty && linkedInController.text.isEmpty){
-                                     showSnackBar(context, 'At least One Social Media link is Required');
-                                   }else if(!_isChecked){
-                                     showSnackBar(context, 'please check terms & condition');
-                                   }else {
-                                     signUpFunction();
-                                   }
-                                 } else {
-                                   var snackBar = SnackBar(
-                                     content: Text('Details are required'),
-                                   );
-                                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                 }
-                               },
-                               child: Container(
-                                 height: 45,
-                                 alignment: Alignment.center,
-                                 width: MediaQuery.of(context).size.width/2,
-                                 decoration: BoxDecoration(
-                                   color: AppColor.PrimaryDark,
-                                   borderRadius: BorderRadius.circular(8),
-                                 ),
-                                 child: Text(
-                                   "Sign up",
-                                   style: TextStyle(
-                                       color: Colors.white,
-                                       fontWeight: FontWeight.w500,
-                                       fontSize: 17),
-                                 ),
-                               ),
-                             ),
-                           ),
-                         ],
-                       ),
+                      // _selectedItems.isEmpty ?
 
 
-                        /// sign up button
-                        // InkWell(
-                        //   onTap: () {
-                        //     cityIdList.clear();
-                        //     print("ok nowoooo ${cityIdList.length}");
-                        //     for(var i=0;i<_selectedItems.length;i++){
-                        //       print("check now ${_selectedItems[i].id}");
-                        //       cityIdList.add(_selectedItems[i].id);
-                        //     }
-                        //     print("yes ${cityIdList.length}");
-                        //     if (_formKey.currentState!.validate()) {
-                        //       signUpFunction();
-                        //     } else {}
-                        //   },
-                        //   child: Container(
-                        //     height: 45,
-                        //     alignment: Alignment.center,
-                        //     width: MediaQuery.of(context).size.width,
-                        //     decoration: BoxDecoration(
-                        //       color: AppColor.PrimaryDark,
-                        //       borderRadius: BorderRadius.circular(8),
-                        //     ),
-                        //     child: Text(
-                        //       "SignUp",
-                        //       style: TextStyle(
-                        //           color: Colors.white,
-                        //           fontWeight: FontWeight.w500,
-                        //           fontSize: 17),
-                        //     ),
-                        //   ),
-                        // ),
-
-                        Container(
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.only(
-                            top: 30,
-                          ),
-                          child: InkWell(
-                            onTap: () async {
-                              setState(() {
-                                edit = true;
-                              });
-                              await Future.delayed(Duration(milliseconds: 200));
-                              setState(() {
-                                edit = false;
-                              });
-                              Navigator.pop(context);
-                            },
-                            child: ScaleAnimatedWidget.tween(
-                              enabled: edit,
-                              duration: Duration(milliseconds: 200),
-                              scaleDisabled: 1.0,
-                              scaleEnabled: 0.8,
-                              child: RichText(
-                                text: new TextSpan(
-                                  text: "Already Have An Account? ",
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap:(){
+                                setState(() {
+                                  visibleIndex = 1;
+                                });
+                              },
+                              child: Container(
+                                height: 45,
+                                alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width/2,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  "Previous",
                                   style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 10.sp,
-                                    fontFamily: fontBold,
-                                  ),
-                                  children: <TextSpan>[
-                                    new TextSpan(
-                                      text: 'Login',
-                                      style: TextStyle(
-                                        color: AppColor().colorPrimary(),
-                                        fontSize: 10.sp,
-                                        fontFamily: fontBold,
-                                      ),
-                                    ),
-                                  ],
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17),
                                 ),
                               ),
                             ),
                           ),
+                          SizedBox(width: 20,),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                cityIdList.clear();
+                                print("ok nowoooo ${cityIdList.length}");
+                                for(var i=0;i<_selectedItems.length;i++){
+                                  print("check now ${_selectedItems[i].id}");
+                                  cityIdList.add(_selectedItems[i].name);
+                                }
+                                print("yes ${cityIdList.length}");
+                                if (_formKey.currentState!.validate()) {
+                                  if(dateFormate == null){
+                                    showSnackBar(context, 'please enter date of birth');
+                                  }else if (selectedCategory == null){
+                                    showSnackBar(context, 'please select category');
+                                  }else if(noOfDays == null){
+                                    showSnackBar(context, 'please select days');
+                                  }else if(selectedDayHour== null) {
+                                    showSnackBar(context, 'please select hours');
+                                  }else if(twitterController.text.isEmpty && instagramController.text.isEmpty && facebookLinkController.text.isEmpty && linkedInController.text.isEmpty){
+                                    showSnackBar(context, 'At least One Social Media link is Required');
+                                  }else if(!_isChecked){
+                                    showSnackBar(context, 'please check terms & condition');
+                                  }else {
+                                    signUpFunction();
+                                  }
+                                } else {
+                                  var snackBar = SnackBar(
+                                    content: Text('Details are required'),
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                }
+                              },
+                              child: Container(
+                                height: 45,
+                                alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width/2,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  "Sign up",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+
+                      /// sign up button
+                      // InkWell(
+                      //   onTap: () {
+                      //     cityIdList.clear();
+                      //     print("ok nowoooo ${cityIdList.length}");
+                      //     for(var i=0;i<_selectedItems.length;i++){
+                      //       print("check now ${_selectedItems[i].id}");
+                      //       cityIdList.add(_selectedItems[i].id);
+                      //     }
+                      //     print("yes ${cityIdList.length}");
+                      //     if (_formKey.currentState!.validate()) {
+                      //       signUpFunction();
+                      //     } else {}
+                      //   },
+                      //   child: Container(
+                      //     height: 45,
+                      //     alignment: Alignment.center,
+                      //     width: MediaQuery.of(context).size.width,
+                      //     decoration: BoxDecoration(
+                      //       color: AppColor.PrimaryDark,
+                      //       borderRadius: BorderRadius.circular(8),
+                      //     ),
+                      //     child: Text(
+                      //       "SignUp",
+                      //       style: TextStyle(
+                      //           color: Colors.white,
+                      //           fontWeight: FontWeight.w500,
+                      //           fontSize: 17),
+                      //     ),
+                      //   ),
+                      // ),
+
+                      Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(
+                          top: 30,
                         ),
-                      ],
-                    ),
+                        child: InkWell(
+                          onTap: () async {
+                            setState(() {
+                              edit = true;
+                            });
+                            await Future.delayed(Duration(milliseconds: 200));
+                            setState(() {
+                              edit = false;
+                            });
+                            Navigator.pop(context);
+                          },
+                          child: ScaleAnimatedWidget.tween(
+                            enabled: edit,
+                            duration: Duration(milliseconds: 200),
+                            scaleDisabled: 1.0,
+                            scaleEnabled: 0.8,
+                            child: RichText(
+                              text: new TextSpan(
+                                text: "Already Have An Account? ",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 13.sp,
+                                  fontFamily: fontBold,
+                                ),
+                                children: <TextSpan>[
+                                  new TextSpan(
+                                    text: 'Login',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 13.sp,
+                                      fontFamily: fontBold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                    ],
                   ),
+                ),
+                SizedBox(
+                  height: 30,
                 ),
               ],
             ),
@@ -3194,7 +3215,7 @@ String? selectedTravel;
   }
   bool _isChecked = false;
 
-Widget termsAndCondition () {
+  Widget termsAndCondition () {
     return Align(
       alignment: Alignment.topLeft,
       child: Row(
@@ -3215,48 +3236,48 @@ Widget termsAndCondition () {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-            Text('I agree to Antsnest' ,style: TextStyle( fontSize: 12)),
-            RichText(
-              softWrap: false,
-              text: TextSpan(
+              Text('I agree to Antsnest' ,style: TextStyle( fontSize: 12)),
+              RichText(
+                softWrap: false,
+                text: TextSpan(
 
-                children: [
-                  TextSpan(
-                    text: 'Privacy Policy',
-                    style: TextStyle(color: AppColor.PrimaryDark, fontSize: 12),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
+                  children: [
+                    TextSpan(
+                      text: 'Privacy Policy',
+                      style: TextStyle(color: Colors.black, fontSize: 12),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
 
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => PrivacyPolicyScreen(),));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => PrivacyPolicyScreen(),));
 
-                        // Handle the Privacy Policy click action here.
-                      },
-                  ),
-                  TextSpan(
-                    text: ' & ',
-                    style: TextStyle(color: Colors.black, fontSize: 12),
-                  ),
-                  TextSpan(
-                    text: 'Terms and Conditions',
-                    style: TextStyle(color: AppColor.PrimaryDark, fontSize: 12),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        // Handle the Terms and Conditions click action here.
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => TermsConditionScreen(),));
-                      },
-                  ),
-                  TextSpan(
-                    text: '.',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
+                          // Handle the Privacy Policy click action here.
+                        },
+                    ),
+                    TextSpan(
+                      text: ' & ',
+                      style: TextStyle(color: Colors.black, fontSize: 12),
+                    ),
+                    TextSpan(
+                      text: 'Terms and Conditions',
+                      style: TextStyle(color: Colors.black, fontSize: 12),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          // Handle the Terms and Conditions click action here.
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => TermsConditionScreen(),));
+                        },
+                    ),
+                    TextSpan(
+                      text: '.',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],)
+            ],)
         ],
       ),
     );
-}
+  }
 
 
   Widget firstSign(BuildContext context) {
@@ -4350,7 +4371,7 @@ Widget termsAndCondition () {
 
         Container(
           width: 69.99.w,
-          height: 7.46.h,
+          height: 6.h,
           decoration: boxDecoration(
             radius: 10.0,
             bgColor: AppColor().colorEdit(),
@@ -4419,7 +4440,7 @@ Widget termsAndCondition () {
         ),
         Container(
           width: 69.99.w,
-          height: 7.46.h,
+          height: 6.h,
           decoration: boxDecoration(
             radius: 10.0,
             bgColor: AppColor().colorEdit(),
@@ -4864,9 +4885,10 @@ Widget termsAndCondition () {
     print(request);
     print(request.fields);
     http.StreamedResponse response = await request.send();
-
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
+      print(str);
       /*var fullResponse = json.decode(str);
       serviceList = fullResponse["data"];
       print(serviceList.length);
@@ -4880,6 +4902,8 @@ Widget termsAndCondition () {
       print(boolServiceMapList.length);
       print(boolList.length);*/
       final jsonResponse = CityModel.fromJson(json.decode(str));
+
+
       if (jsonResponse.responseCode == "1") {
         setState(() {
           cityList = jsonResponse.data!;
@@ -4902,6 +4926,7 @@ Widget termsAndCondition () {
               return DropdownButtonHideUnderline(
                 child: DropdownButton2(
                   isExpanded: true,
+
                   hint: Row(
                     children: [
                       Image.asset(
@@ -5037,6 +5062,7 @@ Widget termsAndCondition () {
   productListWidget() {
     return Container(
       width: 69.99.w,
+
       child: FutureBuilder(
           future: getServiceCategory(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -5267,6 +5293,7 @@ class _MultiSelectState extends State<MultiSelect> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     getCities();
   }
   @override
@@ -5359,4 +5386,3 @@ class _MultiSelectState extends State<MultiSelect> {
     );
   }
 }
-

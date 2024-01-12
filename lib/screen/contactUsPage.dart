@@ -1,13 +1,10 @@
 import 'dart:convert';
-
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/utility_widget/utility_widget.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-
+import '../api/api_path.dart';
+import '../utils/colors.dart';
+import '../utils/utility_hlepar.dart';
 
 class ContactUsPage extends StatefulWidget {
   const ContactUsPage({Key? key}) : super(key: key);

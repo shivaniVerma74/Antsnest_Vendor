@@ -1,44 +1,39 @@
 import 'dart:async';
 
 import 'package:animated_widgets/widgets/scale_animated.dart';
-import 'package:fixerking/api/api_helper/auth_helper.dart';
-import 'package:fixerking/fast_splash.dart';
-import 'package:fixerking/modal/request/get_profile_request.dart';
-import 'package:fixerking/modal/response/get_profile_response.dart';
-import 'package:fixerking/screen/Chat_Screen.dart';
-import 'package:fixerking/screen/ReviewPage.dart';
-import 'package:fixerking/screen/availablity.dart';
-import 'package:fixerking/screen/change_password_screen.dart';
-import 'package:fixerking/screen/contactUsPage.dart';
-import 'package:fixerking/screen/main_customer_support.dart';
-import 'package:fixerking/screen/my_wallet.dart';
 import 'package:fixerking/screen/paymentHistory.dart';
 import 'package:fixerking/screen/plan_history.dart';
 import 'package:fixerking/screen/profile/edit_profile_screen.dart';
-import 'package:fixerking/screen/auth_view/login_screen.dart';
-import 'package:fixerking/screen/payment_screen.dart';
-import 'package:fixerking/screen/service_history.dart';
-import 'package:fixerking/screen/profile/service_profile_screen.dart';
 import 'package:fixerking/screen/profile/view_profile_screen.dart';
+import 'package:fixerking/screen/service_history.dart';
 import 'package:fixerking/screen/subscription_screen.dart';
-import 'package:fixerking/token/app_token_data.dart';
-import 'package:fixerking/utility_widget/shimmer_loding_view/loding_all_page.dart';
-import 'package:fixerking/utils/toast_string.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
-import 'package:flutter/material.dart';
 
-import 'package:fixerking/screen/bottom_bar.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/images.dart';
-import 'package:fixerking/utils/widget.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
+import '../api/api_helper/auth_helper.dart';
+import '../modal/request/get_profile_request.dart';
+import '../modal/response/get_profile_response.dart';
+import '../token/app_token_data.dart';
+import '../utility_widget/shimmer_loding_view/loding_all_page.dart';
+import '../utils/colors.dart';
+import '../utils/constant.dart';
+import '../utils/images.dart';
+import '../utils/toast_string.dart';
+import '../utils/utility_hlepar.dart';
+import '../utils/widget.dart';
+import 'Chat_Screen.dart';
 import 'CustomerSupport/customer_support_faq.dart';
+import 'ReviewPage.dart';
+import 'auth_view/login_screen.dart';
+import 'availablity.dart';
+import 'change_password_screen.dart';
+import 'contactUsPage.dart';
+import 'my_wallet.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);

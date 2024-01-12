@@ -1,25 +1,24 @@
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:fixerking/api/api_helper/ApiList.dart';
-import 'package:fixerking/modal/New%20models/WalletHistory.dart';
 import 'package:fixerking/screen/testScreen.dart';
-import 'package:fixerking/utils/toast_string.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:sizer/sizer.dart';
-
+import '../api/api_helper/ApiList.dart';
 import '../api/api_helper/auth_helper.dart';
 import '../api/api_path.dart';
 import '../api/api_services.dart';
+import '../modal/CurrencyModel.dart';
+import '../modal/New models/WalletHistory.dart';
 import '../modal/purchase_plan_model.dart';
 import '../modal/request/get_profile_request.dart';
 import '../modal/response/get_profile_response.dart';
 import '../token/app_token_data.dart';
 import '../utility_widget/utility_widget.dart';
 import '../utils/colors.dart';
+import '../utils/toast_string.dart';
 import '../utils/utility_hlepar.dart';
 import 'package:http/http.dart' as http;
 
@@ -47,7 +46,7 @@ class _WalletScreenState extends State<WalletScreen> {
   TextEditingController msgC = TextEditingController();
   TextEditingController amountController = TextEditingController();
   var planI;
-  List<Data> walletHistory = [];
+  List<WalletModelData> walletHistory = [];
 
   String? validateField(String value, String? msg) {
     if (value.length == 0)
@@ -998,10 +997,11 @@ class _WalletScreenState extends State<WalletScreen> {
                   child: ListView.builder(
                     shrinkWrap: true,
                     //physics: NeverScrollableScrollPhysics(),
-                    reverse: true,
+                    reverse: false,
                       itemCount: walletHistory.length,
                       itemBuilder: (context, index) {
-                        return Card(
+                        return
+                          Card(
                           child: Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 15.0),

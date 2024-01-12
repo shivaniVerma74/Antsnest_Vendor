@@ -1,16 +1,14 @@
-
 import 'package:flutter/material.dart';
-
 import 'package:animated_widgets/widgets/scale_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:fixerking/screen/bottom_bar.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/images.dart';
-import 'package:fixerking/utils/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+
+import '../utils/colors.dart';
+import '../utils/constant.dart';
+import '../utils/images.dart';
+import '../utils/widget.dart';
 class EditServiceScreen extends StatefulWidget {
   const EditServiceScreen({Key? key}) : super(key: key);
 
@@ -161,7 +159,7 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
       children: [
 
         Container(
-          height: 7.46.h,
+          height: 6.h,
           decoration: boxDecoration(
             radius: 10.0,
             bgColor: AppColor().colorEdit(),
@@ -203,7 +201,7 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
           height: 2.5.h,
         ),
         Container(
-          height: 7.46.h,
+          height: 6.h,
           decoration: boxDecoration(
             radius: 10.0,
             bgColor: AppColor().colorEdit(),

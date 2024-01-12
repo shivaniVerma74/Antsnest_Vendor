@@ -1,19 +1,15 @@
 import 'dart:async';
-
-import 'package:fixerking/api/api_helper/home_api_helper.dart';
-import 'package:fixerking/modal/request/get_new_order_request.dart';
-import 'package:fixerking/modal/response/get_new_order_response.dart';
-import 'package:fixerking/screen/service_details_screen.dart';
-import 'package:fixerking/token/app_token_data.dart';
-import 'package:fixerking/utility_widget/myappbar.dart';
-import 'package:fixerking/utility_widget/shimmer_loding_view/loding_home_page.dart';
-import 'package:fixerking/utils/app_strings.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/toast_string.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
-import 'package:fixerking/utils/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+
+import '../modal/request/get_new_order_request.dart';
+import '../modal/response/get_new_order_response.dart';
+import '../token/app_token_data.dart';
+import '../utility_widget/shimmer_loding_view/loding_home_page.dart';
+import '../utils/colors.dart';
+import '../utils/toast_string.dart';
+import '../utils/utility_hlepar.dart';
+import '../utils/widget.dart';
 
 class MainServiceHistory extends StatefulWidget {
   const MainServiceHistory({Key? key}) : super(key: key);

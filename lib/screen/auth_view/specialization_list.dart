@@ -1,19 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:fixerking/api/api_helper/auth_helper.dart';
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/modal/ServiceSubCategoryModel.dart';
-import 'package:fixerking/modal/request/specilization_list_request.dart';
-import 'package:fixerking/modal/response/specilization_list_response.dart';
-import 'package:fixerking/utility_widget/shimmer_loding_view/loding_all_page.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/toast_string.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
-import 'package:fixerking/utils/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../api/api_path.dart';
+import '../../modal/ServiceSubCategoryModel.dart';
+import '../../modal/response/specilization_list_response.dart';
+import '../../utils/colors.dart';
 
 class SpecializationList extends StatefulWidget {
   final String serviceId;

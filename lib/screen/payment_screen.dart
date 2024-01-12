@@ -2,29 +2,28 @@ import 'dart:async';
 
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:fixerking/api/api_helper/home_api_helper.dart';
-import 'package:fixerking/modal/request/payment_history_request.dart';
-import 'package:fixerking/modal/request/request_for_payment_request.dart';
-import 'package:fixerking/modal/response/payment_history_response.dart';
-import 'package:fixerking/modal/response/request_for_payment_response.dart';
-import 'package:fixerking/modal/response/total_payment_response.dart';
-import 'package:fixerking/screen/bottom_bar.dart';
-import 'package:fixerking/token/app_token_data.dart';
-import 'package:fixerking/utility_widget/myappbar.dart';
-import 'package:fixerking/utility_widget/shimmer_loding_view/loding_all_page.dart';
-import 'package:fixerking/utility_widget/shimmer_loding_view/loding_slider.dart';
-import 'package:fixerking/utils/app_strings.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/images.dart';
-import 'package:fixerking/utils/showDialog.dart';
-import 'package:fixerking/utils/toast_string.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
-import 'package:fixerking/utils/widget.dart';
-import 'package:fixerking/validation/form_validation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
+
+import '../api/api_helper/home_api_helper.dart';
+import '../modal/request/payment_history_request.dart';
+import '../modal/request/request_for_payment_request.dart';
+import '../modal/response/payment_history_response.dart';
+import '../modal/response/request_for_payment_response.dart';
+import '../modal/response/total_payment_response.dart';
+import '../token/app_token_data.dart';
+import '../utility_widget/shimmer_loding_view/loding_all_page.dart';
+import '../utility_widget/shimmer_loding_view/loding_slider.dart';
+import '../utils/app_strings.dart';
+import '../utils/colors.dart';
+import '../utils/constant.dart';
+import '../utils/images.dart';
+import '../utils/showDialog.dart';
+import '../utils/toast_string.dart';
+import '../utils/utility_hlepar.dart';
+import '../utils/widget.dart';
+import '../validation/form_validation.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({Key? key}) : super(key: key);

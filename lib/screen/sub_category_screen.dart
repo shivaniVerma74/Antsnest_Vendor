@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:fixerking/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../api/api_path.dart';
 import '../modal/ServiceSubCategoryModel.dart';
+import '../utils/colors.dart';
 
 class SubCategoryScreen extends StatefulWidget {
   final name, id;

@@ -1,24 +1,17 @@
 import 'dart:async';
-
 import 'package:animated_widgets/animated_widgets.dart';
-import 'package:fixerking/api/api_helper/home_api_helper.dart';
-import 'package:fixerking/modal/request/customer_support_request.dart';
-import 'package:fixerking/modal/response/customer_support_response.dart';
-import 'package:fixerking/modal/response/get_faq_response.dart';
-import 'package:fixerking/screen/customer_support_faq.dart';
-import 'package:fixerking/token/app_token_data.dart';
-import 'package:fixerking/utility_widget/myappbar.dart';
-import 'package:fixerking/utility_widget/shimmer_loding_view/loding_all_page.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/images.dart';
-import 'package:fixerking/utils/showDialog.dart';
-import 'package:fixerking/utils/toast_string.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
-import 'package:fixerking/utils/widget.dart';
-import 'package:fixerking/validation/form_validation.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+
+import '../api/api_helper/home_api_helper.dart';
+import '../modal/request/customer_support_request.dart';
+import '../modal/response/customer_support_response.dart';
+import '../modal/response/get_faq_response.dart';
+import '../token/app_token_data.dart';
+import '../utils/colors.dart';
+import '../utils/showDialog.dart';
+import '../utils/toast_string.dart';
+import '../utils/utility_hlepar.dart';
 
 class MainCustomerSupport extends StatefulWidget {
   const MainCustomerSupport({Key? key}) : super(key: key);

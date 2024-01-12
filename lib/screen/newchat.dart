@@ -1,20 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:fixerking/modal/UploadImageModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:fixerking/modal/MessageModel.dart';
-import 'package:fixerking/utils/colors.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_chat_app/pages/gallary_page.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../modal/UploadImageModel.dart';
 import '../modal/User_Model.dart';
 import '../modal/VendorOrderModel.dart';
+import '../utils/colors.dart';
 
 class ChatPage extends StatefulWidget {
   //final SharedPreferences prefs;

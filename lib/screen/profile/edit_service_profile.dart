@@ -1,22 +1,24 @@
-import 'package:fixerking/api/api_helper/home_api_helper.dart';
-import 'package:fixerking/modal/request/update_service_request.dart';
-import 'package:fixerking/modal/response/get_service_profile_response.dart';
-import 'package:fixerking/modal/response/update_service_profile_response.dart';
-import 'package:fixerking/screen/auth_view/service_type_list.dart';
-import 'package:fixerking/screen/auth_view/specialization_list.dart';
-import 'package:fixerking/token/app_token_data.dart';
-import 'package:fixerking/utility_widget/utility_widget.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/images.dart';
-import 'package:fixerking/utils/showDialog.dart';
-import 'package:fixerking/utils/toast_string.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
-import 'package:fixerking/utils/widget.dart';
-import 'package:fixerking/validation/form_validation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../api/api_helper/home_api_helper.dart';
+import '../../modal/request/update_service_request.dart';
+import '../../modal/response/get_service_profile_response.dart';
+import '../../modal/response/update_service_profile_response.dart';
+import '../../token/app_token_data.dart';
+import '../../utility_widget/utility_widget.dart';
+import '../../utils/colors.dart';
+import '../../utils/constant.dart';
+import '../../utils/images.dart';
+import '../../utils/showDialog.dart';
+import '../../utils/toast_string.dart';
+import '../../utils/utility_hlepar.dart';
+import '../../utils/widget.dart';
+import '../../validation/form_validation.dart';
+import '../auth_view/service_type_list.dart';
+import '../auth_view/specialization_list.dart';
 
 class EditServiceProfile extends StatefulWidget {
   late ServiceProfileResponse profileResponse;
@@ -114,11 +116,10 @@ class _EditServiceProfileState extends State<EditServiceProfile> {
             SizedBox(
               height: 5.02.h,
             ),
-
             // new
             Container(
               width: 90.99.w,
-              height: 7.46.h,
+              height: 6.h,
               decoration: boxDecoration(
                 radius: 10.0,
                 bgColor: AppColor().colorEdit(),
@@ -184,7 +185,7 @@ class _EditServiceProfileState extends State<EditServiceProfile> {
             // new line2
             Container(
               width: 90.99.w,
-              height: 7.46.h,
+              height: 6.h,
               decoration: boxDecoration(
                 radius: 10.0,
                 bgColor: AppColor().colorEdit(),

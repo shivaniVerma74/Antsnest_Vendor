@@ -1,12 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:fixerking/fast_splash.dart';
 import 'package:fixerking/screen/push_notification_service.dart';
 import 'package:fixerking/utils/colors.dart';
 import 'package:fixerking/utils/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
+
+import 'fast_splash.dart';
 
 Future<void> main() async {
 

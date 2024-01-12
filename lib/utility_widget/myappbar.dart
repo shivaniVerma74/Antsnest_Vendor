@@ -1,8 +1,9 @@
-import 'package:fixerking/utils/images.dart';
-import 'package:fixerking/utils/widget.dart';
 import 'package:flutter/material.dart';
-import 'package:fixerking/utils/constant.dart';
 import 'package:sizer/sizer.dart';
+
+import '../utils/constant.dart';
+import '../utils/images.dart';
+import '../utils/widget.dart';
 
 class MyappBarView extends StatelessWidget {
   String mytitle;

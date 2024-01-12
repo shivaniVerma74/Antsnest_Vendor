@@ -273,8 +273,8 @@
 //                 borderRadius: BorderRadius.circular(14.0)),
 //             color: AppColor().colorEdit(),
 //             child: Container(
-//                 width: 80.99.w,
-//                 height: 7.46.h,
+//                 width: double.infinity,
+//                 height: 6.h,
 //                 decoration: boxDecoration(
 //                   radius: 14.0,
 //                   bgColor: AppColor().colorEdit(),
@@ -305,8 +305,8 @@
 //                 borderRadius: BorderRadius.circular(14.0)),
 //             color: AppColor().colorEdit(),
 //             child: Container(
-//                 width: 80.99.w,
-//                 height: 7.46.h,
+//                 width: double.infinity,
+//                 height: 6.h,
 //                 decoration: boxDecoration(
 //                   radius: 14.0,
 //                   bgColor: AppColor().colorEdit(),
@@ -333,8 +333,8 @@
 //             height: 2.5.h,
 //           ),
 //           Container(
-//               width: 80.99.w,
-//               height: 7.46.h,
+//               width: double.infinity,
+//               height: 6.h,
 //               decoration: boxDecoration(
 //                 radius: 10.0,
 //                 color:  AppColor().colorEdit(),
@@ -422,8 +422,8 @@
 //           ),
 //           //STATE
 //           Container(
-//               width: 80.99.w,
-//               height: 7.46.h,
+//               width: double.infinity,
+//               height: 6.h,
 //               decoration: boxDecoration(
 //                 radius: 10.0,
 //                 color:AppColor().colorEdit(),
@@ -617,8 +617,8 @@
 //               _showMultiSelect();
 //             },
 //             child: Container(
-//                 width: 80.99.w,
-//                 height: 7.46.h,
+//                 width: double.infinity,
+//                 height: 6.h,
 //                 decoration: BoxDecoration(
 //                     borderRadius: BorderRadius.circular(10),
 //                     color:  AppColor().colorEdit(),
@@ -818,8 +818,8 @@
 //             height: 2.5.h,
 //           ),
 //           Container(
-//               width: 80.99.w,
-//               height: 7.46.h,
+//               width: double.infinity,
+//               height: 6.h,
 //               decoration: boxDecoration(
 //                 radius: 10.0,
 //               ),
@@ -928,8 +928,8 @@
 //
 //           // SERVICE SUBCATEGORY
 //           Container(
-//               width: 80.99.w,
-//               height: 7.46.h,
+//               width: double.infinity,
+//               height: 6.h,
 //               decoration: boxDecoration(
 //                 radius: 10.0,
 //                 // bgColor: AppColor().colorEdit(),
@@ -1031,8 +1031,8 @@
 //                 borderRadius: BorderRadius.circular(14.0)),
 //             color: AppColor().colorEdit(),
 //             child: Container(
-//                 width: 80.99.w,
-//                 // height: 7.46.h,
+//                 width: double.infinity,
+//                 // height: 6.h,
 //                 decoration: boxDecoration(
 //                   radius: 14.0,
 //                   bgColor: AppColor().colorEdit(),
@@ -1080,8 +1080,8 @@
 //                 borderRadius: BorderRadius.circular(14.0)),
 //             color: AppColor().colorEdit(),
 //             child: Container(
-//                 width: 80.99.w,
-//                 height: 7.46.h,
+//                 width: double.infinity,
+//                 height: 6.h,
 //                 decoration: boxDecoration(
 //                   radius: 14.0,
 //                   bgColor: AppColor().colorEdit(),
@@ -1114,8 +1114,8 @@
 //             ),
 //             color: AppColor().colorEdit(),
 //             child: Container(
-//                 width: 80.99.w,
-//                 height: 7.46.h,
+//                 width: double.infinity,
+//                 height: 6.h,
 //                 decoration: boxDecoration(
 //                   radius: 14.0,
 //                   bgColor: AppColor().colorEdit(),
@@ -1148,8 +1148,8 @@
 //             ),
 //             color: AppColor().colorEdit(),
 //             child: Container(
-//                 width: 80.99.w,
-//                 height: 7.46.h,
+//                 width: double.infinity,
+//                 height: 6.h,
 //                 decoration: boxDecoration(
 //                   radius: 14.0,
 //                   bgColor: AppColor().colorEdit(),
@@ -1182,8 +1182,8 @@
 //                 borderRadius: BorderRadius.circular(14.0)),
 //             color: AppColor().colorEdit(),
 //             child: Container(
-//                 width: 80.99.w,
-//                 height: 7.46.h,
+//                 width: double.infinity,
+//                 height: 6.h,
 //                 decoration: boxDecoration(
 //                   radius: 14.0,
 //                   bgColor: AppColor().colorEdit(),
@@ -1223,7 +1223,7 @@
 //                   borderRadius: BorderRadius.circular(14.0)),
 //               color: AppColor().colorEdit(),
 //               child: Container(
-//                 width: 80.99.w,
+//                 width: double.infinity,
 //                 height: 10.46.h,
 //                 decoration: boxDecoration(
 //                   radius: 14.0,
@@ -1555,24 +1555,16 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
-import 'package:fixerking/api/api_helper/ApiList.dart';
-import 'package:fixerking/modal/CurrencyModel.dart';
-import 'package:fixerking/modal/ModelCategoryModel.dart';
-import 'package:fixerking/modal/New%20models/VerifyUserModel.dart';
-import 'package:fixerking/modal/New%20models/VerifyUserPlanModel.dart';
-import 'package:fixerking/modal/response/get_profile_response.dart';
-import 'package:fixerking/modal/state_model.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
+import 'package:multi_dropdown/enum/app_enums.dart';
+import 'package:multi_dropdown/models/chip_config.dart';
+import 'package:multi_dropdown/models/value_item.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:path/path.dart' as path;
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/modal/AddServicesModel.dart';
-import 'package:fixerking/modal/ServiceCategoryModel.dart';
-import 'package:fixerking/modal/ServiceChildCategoryModel.dart';
-import 'package:fixerking/modal/VisitChargeModel.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -1580,9 +1572,17 @@ import 'package:sizer/sizer.dart';
 import 'package:time_picker_sheet/widget/sheet.dart';
 import 'package:time_picker_sheet/widget/time_picker.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
+import '../../api/api_helper/ApiList.dart';
+import '../../api/api_path.dart';
+import '../../modal/AddServicesModel.dart';
 import '../../modal/City_model.dart';
+import '../../modal/CurrencyModel.dart';
+import '../../modal/New models/VerifyUserPlanModel.dart';
+import '../../modal/ServiceCategoryModel.dart';
 import '../../modal/ServiceSubCategoryModel.dart';
 import '../../modal/country_model.dart';
+import '../../modal/response/get_profile_response.dart';
+import '../../modal/state_model.dart';
 import '../../token/app_token_data.dart';
 import '../../utility_widget/utility_widget.dart';
 import '../../utils/colors.dart';
@@ -1604,6 +1604,7 @@ class AddServices extends StatefulWidget {
 }
 
 class _AddServicesState extends State<AddServices> {
+
   TextEditingController onpenTime = new TextEditingController();
   TextEditingController imageC = new TextEditingController();
   TextEditingController closeTime = new TextEditingController();
@@ -1624,6 +1625,10 @@ class _AddServicesState extends State<AddServices> {
 
   bool buttonLogin = false;
   String? selectedCategory, selectSubCategory, selectChildCategory, selectModel;
+  dynamic selectedCategory11;
+  //String ?selectedSubCategory11;
+  List<String> categorylist=[];
+  Set<String> uniqueValues = Set();
   double perMinServiceCharge = 0.0;
   String? visitingCharge;
   String? issue;
@@ -1663,6 +1668,7 @@ class _AddServicesState extends State<AddServices> {
   List<TextEditingController> addonHourDayPriceControllerList = [];
 
   List<String> hourDayList = ["Hour", "Day"];
+
 
   Future getState() async {
     var request = http.MultipartRequest(
@@ -1741,7 +1747,7 @@ class _AddServicesState extends State<AddServices> {
 
   TextEditingController addonServiceController = TextEditingController();
   TextEditingController addonPriceController = TextEditingController();
-
+  final MultiSelectController _controller = MultiSelectController();
   List addonList = [];
   List<Map> addonList2 = [];
 
@@ -1771,7 +1777,10 @@ class _AddServicesState extends State<AddServices> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    categorylist.clear();
     getServiceCategories();
+
     addOnOperation();
     getVerifyUser();
     getCountries();
@@ -1818,6 +1827,7 @@ class _AddServicesState extends State<AddServices> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       bottomSheet: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -1943,12 +1953,16 @@ class _AddServicesState extends State<AddServices> {
       onTap: () async {
 
         var userId = await MyToken.getUserID();
+        print(  selectedCategory11.id );
+        print(serviceName.text.isNotEmpty);
+
         if (serviceName.text.isNotEmpty &&
-            serviceCategory.text != "" &&
+             selectedCategory11.id != "null" &&
             selectedCurrency != "" &&
             serviceCharge.text.isNotEmpty) {
-          if (serviceCategory.text.isNotEmpty &&
-              serviceSubCategory.text.isNotEmpty &&
+          if (
+          selectedCategory11.id.isNotEmpty &&
+              categorylist.isNotEmpty||subcateid.isNotEmpty &&
               serviceCharge.text.isNotEmpty) {
             setState(() {
               buttonLogin = true;
@@ -1971,8 +1985,13 @@ class _AddServicesState extends State<AddServices> {
             Map<String, String> param = {
               'name': '${serviceName.text.toString()}',
               'description': '${descriptionController.text}',
-              'cat_id': widget.profileResponse?.user?.jsonData?.cat.toString() ?? '',
-              'scat_id': widget.profileResponse?.user?.jsonData?.subCat.toString() ?? '',
+              'cat_id': selectedCategory11.id??'',
+              'scat_id': categorylist.isEmpty?subcateid.map((dynamic value) {
+                return value.toString();
+              }).join(', '): categorylist.map((String value) {
+                return value.toString();
+              }).join(', '),
+             // categorylist.toString().toJ??'',
               'vid': '$userId',
               'price': '${serviceCharge.text.toString()}',
               'country_id': "${selectedCountry.toString()}",
@@ -1991,12 +2010,17 @@ class _AddServicesState extends State<AddServices> {
               UtilityHlepar.getToast('Service added successfully');
             } else {
               UtilityHlepar.getToast(addModel.message);
+
             }
-          } else if (serviceCategory.text.isEmpty) {
+
+          }
+          else if (selectedCategory11.id.toString()=="null") {
             UtilityHlepar.getToast(ToastString.msgSelectServiceType);
-          } else if (serviceSubCategory.text.isEmpty) {
+          }
+          else if (categorylist.isEmpty) {
             UtilityHlepar.getToast(ToastString.msgSelectServiceSubType);
-          } else if (serviceCharge.text.isEmpty) {
+          }
+          else if (serviceCharge.text.isEmpty) {
             UtilityHlepar.getToast(ToastString.msgServiceCharge);
           } else if (servicePic == null) {
             UtilityHlepar.getToast("Service Image Required");
@@ -2035,8 +2059,8 @@ class _AddServicesState extends State<AddServices> {
                 borderRadius: BorderRadius.circular(14.0)),
             color: AppColor().colorEdit(),
             child: Container(
-                width: 80.99.w,
-                height: 7.46.h,
+                width: double.infinity,
+                height: 6.h,
                 decoration: boxDecoration(
                   radius: 14.0,
                   bgColor: AppColor().colorEdit(),
@@ -2068,8 +2092,8 @@ class _AddServicesState extends State<AddServices> {
           //       borderRadius: BorderRadius.circular(14.0)),
           //   color: AppColor().colorEdit(),
           //   child: Container(
-          //       width: 80.99.w,
-          //       height: 7.46.h,
+          //       width: double.infinity,
+          //       height: 6.h,
           //       decoration: boxDecoration(
           //         radius: 14.0,
           //         bgColor: AppColor().colorEdit(),
@@ -2095,8 +2119,8 @@ class _AddServicesState extends State<AddServices> {
           //   height: 2.5.h,
           // ),
           Container(
-              width: 80.99.w,
-              height: 7.46.h,
+              width: double.infinity,
+              height: 6.h,
               decoration: boxDecoration(
                 radius: 10.0,
                 color: AppColor().colorEdit(),
@@ -2180,8 +2204,8 @@ class _AddServicesState extends State<AddServices> {
             height: 2.5.h,
           ),
           Container(
-            width: 80.99.w,
-            height: 7.46.h,
+            width: double.infinity,
+            height: 6.h,
             decoration: boxDecoration(
               radius: 10.0,
               color: AppColor().colorEdit(),
@@ -2266,8 +2290,8 @@ class _AddServicesState extends State<AddServices> {
             height: 2.5.h,
           ),
           Container(
-            width: 80.99.w,
-            height: 7.46.h,
+            width: double.infinity,
+            height: 6.h,
             decoration: boxDecoration(
               radius: 10.0,
               color: AppColor().colorEdit(),
@@ -2353,8 +2377,8 @@ class _AddServicesState extends State<AddServices> {
           currencyModel == null
               ? SizedBox()
               : Container(
-                  width: 80.99.w,
-                  height: 7.46.h,
+                  width: double.infinity,
+                  height: 6.h,
                   decoration: boxDecoration(
                     radius: 10.0,
                     color: AppColor().colorEdit(),
@@ -2444,8 +2468,8 @@ class _AddServicesState extends State<AddServices> {
                 borderRadius: BorderRadius.circular(14.0)),
             color: AppColor().colorEdit(),
             child: Container(
-                width: 80.99.w,
-                height: 7.46.h,
+                width: double.infinity,
+                height: 6.h,
                 decoration: boxDecoration(
                   radius: 14.0,
                   bgColor: AppColor().colorEdit(),
@@ -2471,8 +2495,8 @@ class _AddServicesState extends State<AddServices> {
             height: 2.5.h,
           ),
           Container(
-            width: 80.99.w,
-            height: 7.46.h,
+            width: double.infinity,
+            height: 6.h,
             decoration: boxDecoration(
               radius: 10.0,
               // color: AppColor().colorEdit(),
@@ -2562,7 +2586,7 @@ class _AddServicesState extends State<AddServices> {
                 borderRadius: BorderRadius.circular(14.0)),
             color: AppColor().colorEdit(),
             child: Container(
-                width: 80.99.w,
+                width: double.infinity,
                 decoration: boxDecoration(
                   radius: 14.0,
                   bgColor: AppColor().colorEdit(),
@@ -2589,52 +2613,55 @@ class _AddServicesState extends State<AddServices> {
           ),
           // SERVICE CATEGORY
           serviceModel == null ? Center(child: CircularProgressIndicator()) :
-          Card(
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14.0),
-            ),
-            color: AppColor().colorEdit(),
-            child: Container(
-                width: 80.99.w,
-                height: 7.46.h,
-                decoration: boxDecoration(
-                  radius: 14.0,
-                  bgColor: AppColor().colorEdit(),
-                ),
-                child: TextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: serviceCategory,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                    overflow: TextOverflow.ellipsis,
+          // Card(
+          //   elevation: 0,
+          //   shape: RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.circular(14.0),
+          //   ),
+          //   color: AppColor().colorEdit(),
+          //   child: Container(
+          //       width: double.infinity,
+          //       height: 6.h,
+          //       decoration: boxDecoration(
+          //         radius: 14.0,
+          //         bgColor: AppColor().colorEdit(),
+          //       ),
+          //       child: TextFormField(
+          //         keyboardType: TextInputType.text,
+          //         controller: serviceCategory,
+          //         style: const TextStyle(
+          //           fontSize: 14,
+          //           fontWeight: FontWeight.bold,
+          //           color: Colors.black,
+          //           overflow: TextOverflow.ellipsis,
+          //
+          //         ),
+          //         readOnly: true,
+          //         //inputFormatters: [LengthLimitingTextInputFormatter(5)],
+          //         textAlignVertical: TextAlignVertical.center,
+          //         decoration: InputDecoration(
+          //
+          //           hintText: "Service Category",
+          //           border: InputBorder.none,
+          //           contentPadding:
+          //           EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
+          //           /*prefixIcon: Icon(
+          //             Icons.credit_card_outlined,
+          //             color: AppColor.PrimaryDark,
+          //           ),*/
+          //         ),
+          //       )),
+          // ),
 
-                  ),
-                  readOnly: true,
-                  //inputFormatters: [LengthLimitingTextInputFormatter(5)],
-                  textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(
 
-                    hintText: "Service Category",
-                    border: InputBorder.none,
-                    contentPadding:
-                    EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
-                    /*prefixIcon: Icon(
-                      Icons.credit_card_outlined,
-                      color: AppColor.PrimaryDark,
-                    ),*/
-                  ),
-                )),
-          ),
+
           SizedBox(
             height: 2.5.h,
           ),
           /*Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
-              width: 80.99.w,
-              height: 7.46.h,
+              width: double.infinity,
+              height: 6.h,
               decoration: boxDecoration(
                 radius: 10.0,
               ),
@@ -2703,248 +2730,325 @@ class _AddServicesState extends State<AddServices> {
               )
            )*/
 
+          Container(
+              width: double.infinity,
+              height: 6.h,
+              decoration: boxDecoration(
+                radius: 10.0,
+              ),
+              child:
+              DropdownButtonHideUnderline(
+                child: DropdownButton2<dynamic>(
+                  isExpanded: true,
+                  hint: Row(
+                    children: [
+                      Image.asset(
+                        service,
+                        width: 6.04.w,
+                        height: 5.04.w,
+                        fit: BoxFit.fill,
+                        color: AppColor.PrimaryDark,
+                      ),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Select Category',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  items: serviceModel?.data!
+                      .map((item) => DropdownMenuItem<dynamic>(
+                    value: item,
+                    child: Text(
+                      item.cName!,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ))
+                      .toList(),
+                  value: selectedCategory11,
+                  // onChanged: (value) {
+                  //   setState(() {
+                  //     selectedCategory11 = value;
+                  //     // // serviceName.text = serviceModel.data!
+                  //     //     .firstWhere((element) => element.id == value)
+                  //     //     .cName
+                  //     //     .toString();
+                  //     print("selectedCategory=>" +
+                  //         selectedCategory.toString() +
+                  //         "serviceName" +
+                  //         serviceName.text);
+                  //     getServicesSubCategory(selectedCategory11?.id);
+                  //   });
+                  //   print("CATEGORY ID== $selectedCategory");
+                  // },
+                  // icon: const Icon(
+                  //   Icons.arrow_forward_ios_outlined,
+                  //   color: AppColor.PrimaryDark,
+                  // ),
+                  iconSize: 0,
+                  buttonHeight: 50,
+                  buttonWidth: 160,
+                  buttonPadding:
+                  const EdgeInsets.only(left: 14, right: 14),
+                  buttonDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: AppColor().colorEdit(),
+                  ),
+                  buttonElevation: 0,
+                  itemHeight: 40,
+                  itemPadding:
+                  const EdgeInsets.only(left: 14, right: 14),
+                  dropdownMaxHeight: 300,
+                  dropdownPadding: null,
+                  dropdownDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  dropdownElevation: 8,
+                  scrollbarRadius: const Radius.circular(40),
+                  scrollbarThickness: 6,
+                  scrollbarAlwaysShow: true,
+                ),
+
+          ),
+          ),
+
+          // selectedCategory == "" || selectedCategory == null
+          //     ? SizedBox.shrink()
+          //     : SizedBox(height: 2.5.h
+          // ),
+          // SERVICE SUBCATEGORY
+          //  subCategory == null
+          //     ? SizedBox.shrink()
+          //     : Card(
+          //   elevation: 0,
+          //   shape: RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.circular(14.0),
+          //   ),
+          //   color: AppColor().colorEdit(),
+          //   child: Container(
+          //       width: double.infinity,
+          //       height: 6.h,
+          //       decoration: boxDecoration(
+          //         radius: 14.0,
+          //         bgColor: AppColor().colorEdit(),
+          //       ),
+          //       child: TextFormField(
+          //         keyboardType: TextInputType.text,
+          //         controller: serviceSubCategory,
+          //         readOnly: true,
+          //         style: const TextStyle(
+          //           fontSize: 14,
+          //           fontWeight: FontWeight.bold,
+          //           color: Colors.black,
+          //           overflow: TextOverflow.ellipsis,
+          //         ),
+          //         inputFormatters: [LengthLimitingTextInputFormatter(5)],
+          //         textAlignVertical: TextAlignVertical.center,
+          //         decoration: InputDecoration(
+          //           hintText: "Sub Category",
+          //           border: InputBorder.none,
+          //           contentPadding:
+          //           EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
+          //           /*prefixIcon: Icon(
+          //             Icons.credit_card_outlined,
+          //             color: AppColor.PrimaryDark,
+          //           ),*/
+          //         ),
+          //       ),
+          //   ),
+          // ),
+
+          subCategory?.data==null?SizedBox.shrink():
+
+          Column(
+            children: [
+              SizedBox(height: 20,),
+              MultiSelectDropDown(
+                hint: "Select Sub Category",
+                showClearIcon: true,
+                controller: _controller,
+                onOptionSelected: (options) {
+
+                  for (int i = 0; i < options.length; i++) {
+                    String value = options[i].value??"";
+
+                    // Check if the value is not already in the set
+                    if (uniqueValues.add(value)) {
+                      print(value);
+
+                      categorylist.add(value);
+                      setState(() {
+
+                      });
+                    }
+                  }
+                  debugPrint(categorylist.toString()+"+++++++++++++");
+
+                  // setState(() {
+                  //
+                  // });
+
+                },
+                options: <ValueItem>[
+                  for (int i = 0; i < subCategory!.data!.length; i++) ...[
+                    ValueItem(
+                      label: "${subCategory!.data![i].cName}",
+                      value: "${subCategory!.data![i].id}",
+                    )
+                  ]
+                ],
+
+                selectionType: SelectionType.multi,
+                selectedOptions: [
+                  for (int i = 0; i < subCategory!.data!.length; i++) ...[
+
+                     for(int j=0;j<subcateid.length;j++)...[
+
+                    "${subCategory!.data![i].id}" == subcateid[j].toString()
+                        ? ValueItem(
+                      label: "${subCategory!.data![i].cName}",
+                      value: "${subCategory!.data![i].id}",
+                    )
+                        : ValueItem(label: "")
+  ]
+                  ]
+                ]..removeWhere((element) => element.label == ""), // Remove null entries
+                chipConfig: const ChipConfig(wrapType: WrapType.scroll,backgroundColor: AppColor.PrimaryDark,),
+                dropdownHeight: 300,
+                optionTextStyle: const TextStyle(fontSize: 16),
+                selectedOptionIcon: const Icon(Icons.check_circle,color: AppColor.PrimaryDark,),
+                  selectedOptionTextColor: AppColor.PrimaryDark,
+               // suffixIcon: IconData(),
+                  // selectedItemBuilder: (BuildContext context, ValueItem item,) {
+                  //   // Customize the appearance of the selected item here
+                  //   return Container(
+                  //     padding: EdgeInsets.all(8.0),
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.red, // Set the background color to red
+                  //       borderRadius: BorderRadius.circular(5.0),
+                  //     ),
+                  //     child: Row(
+                  //       mainAxisSize: MainAxisSize.min,
+                  //       children: [
+                  //         Text(item.label),
+                  //         const SizedBox(width: 8.0),
+                  //         Icon(Icons.close, color: Colors.white, size: 18.0),
+                  //       ],
+                  //     ),
+                  //   );
+                  // },
+
+              ),
+
+            ],
+          ),
           // Container(
-          //     width: 80.99.w,
-          //     height: 7.46.h,
-          //     decoration: boxDecoration(
-          //       radius: 10.0,
-          //     ),
-          //     child: FutureBuilder(
-          //         future: getServiceCategory(),
-          //         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          //           ServiceCategoryModel serviceModel = snapshot.data;
-          //           if (snapshot.hasData) {
-          //             return DropdownButtonHideUnderline(
-          //               child: DropdownButton2(
-          //                 isExpanded: true,
-          //                 hint: Row(
-          //                   children: [
-          //                     Image.asset(
-          //                       service,
-          //                       width: 6.04.w,
-          //                       height: 5.04.w,
-          //                       fit: BoxFit.fill,
-          //                       color: AppColor.PrimaryDark,
-          //                     ),
-          //                     SizedBox(
-          //                       width: 4,
-          //                     ),
-          //                     Expanded(
-          //                       child: Text(
-          //                         'Select Category',
-          //                         style: TextStyle(
-          //                           fontSize: 14,
-          //                           fontWeight: FontWeight.normal,
+          //         width: double.infinity,
+          //         height: 6.h,
+          //         decoration: boxDecoration(
+          //           radius: 10.0,
+          //           // bgColor: AppColor().colorEdit(),
+          //         ),
+          //         child: FutureBuilder(
+          //             future: getServicesSubCategory(selectedCategory),
+          //             builder: (BuildContext context, AsyncSnapshot snapshot) {
+          //               ServiceSubCategoryModel subCatModel = snapshot.data;
+          //               print("SUB CAT DATA=== ${subCatModel} and ${subCatModel.data}  and ${snapshot.hasData}");
+          //               if (snapshot.hasData) {
+          //                 return DropdownButtonHideUnderline(
+          //                   child: DropdownButton2(
+          //                     isExpanded: true,
+          //                     hint: Row(
+          //                       children: [
+          //                         Image.asset(
+          //                           special,
+          //                           width: 6.04.w,
+          //                           height: 5.04.w,
+          //                           fit: BoxFit.fill,
+          //                           color: AppColor.PrimaryDark,
           //                         ),
-          //                         overflow: TextOverflow.ellipsis,
-          //                       ),
-          //                     ),
-          //                   ],
-          //                 ),
-          //                 items: serviceModel.data!
-          //                     .map((item) => DropdownMenuItem<String>(
-          //                           value: item.id,
+          //                         SizedBox(
+          //                           width: 5,
+          //                         ),
+          //                         Expanded(
           //                           child: Text(
-          //                             item.cName!,
-          //                             style: const TextStyle(
+          //                             'Select Sub Category',
+          //                             style: TextStyle(
           //                               fontSize: 14,
-          //                               fontWeight: FontWeight.bold,
-          //                               color: Colors.black,
+          //                               fontWeight: FontWeight.normal,
           //                             ),
           //                             overflow: TextOverflow.ellipsis,
           //                           ),
-          //                         ))
-          //                     .toList(),
-          //                 value: selectedCategory,
-          //                 onChanged: (value) {
-          //                   setState(() {
-          //                     selectedCategory = value as String;
-          //                     // // serviceName.text = serviceModel.data!
-          //                     //     .firstWhere((element) => element.id == value)
-          //                     //     .cName
-          //                     //     .toString();
-          //                     print("selectedCategory=>" +
-          //                         selectedCategory.toString() +
-          //                         "serviceName" +
-          //                         serviceName.text);
-          //                   });
-          //                   print("CATEGORY ID== $selectedCategory");
-          //                 },
-          //                 icon: const Icon(
-          //                   Icons.arrow_forward_ios_outlined,
-          //                   color: AppColor.PrimaryDark,
-          //                 ),
-          //                 iconSize: 14,
-          //                 buttonHeight: 50,
-          //                 buttonWidth: 160,
-          //                 buttonPadding:
-          //                     const EdgeInsets.only(left: 14, right: 14),
-          //                 buttonDecoration: BoxDecoration(
-          //                   borderRadius: BorderRadius.circular(14),
-          //                   color: AppColor().colorEdit(),
-          //                 ),
-          //                 buttonElevation: 0,
-          //                 itemHeight: 40,
-          //                 itemPadding:
-          //                 const EdgeInsets.only(left: 14, right: 14),
-          //                 dropdownMaxHeight: 300,
-          //                 dropdownPadding: null,
-          //                 dropdownDecoration: BoxDecoration(
-          //                   borderRadius: BorderRadius.circular(14),
-          //                 ),
-          //                 dropdownElevation: 8,
-          //                 scrollbarRadius: const Radius.circular(40),
-          //                 scrollbarThickness: 6,
-          //                 scrollbarAlwaysShow: true,
-          //               ),
-          //             );
-          //           } else if (snapshot.hasError) {
-          //             print("ERROR===" + snapshot.error.toString());
-          //             return Icon(Icons.error_outline);
-          //           } else {
-          //             return Center(child: CircularProgressIndicator());
-          //           }
-          //         })),
-
-          selectedCategory == "" || selectedCategory == null
-              ? SizedBox.shrink()
-              : SizedBox(height: 2.5.h
-          ),
-          // SERVICE SUBCATEGORY
-           subCategory == null
-              ? SizedBox.shrink()
-              : Card(
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14.0),
-            ),
-            color: AppColor().colorEdit(),
-            child: Container(
-                width: 80.99.w,
-                height: 7.46.h,
-                decoration: boxDecoration(
-                  radius: 14.0,
-                  bgColor: AppColor().colorEdit(),
-                ),
-                child: TextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: serviceSubCategory,
-                  readOnly: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  inputFormatters: [LengthLimitingTextInputFormatter(5)],
-                  textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(
-                    hintText: "Sub Category",
-                    border: InputBorder.none,
-                    contentPadding:
-                    EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
-                    /*prefixIcon: Icon(
-                      Icons.credit_card_outlined,
-                      color: AppColor.PrimaryDark,
-                    ),*/
-                  ),
-                ),
-            ),
-          ),
-          /*Container(
-                  width: 80.99.w,
-                  height: 7.46.h,
-                  decoration: boxDecoration(
-                    radius: 10.0,
-                    // bgColor: AppColor().colorEdit(),
-                  ),
-                  child: FutureBuilder(
-                      future: getServicesSubCategory(selectedCategory),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        ServiceSubCategoryModel subCatModel = snapshot.data;
-                        print("SUB CAT DATA=== ${subCatModel} and ${subCatModel.data}  and ${snapshot.hasData}");
-                        if (snapshot.hasData) {
-                          return DropdownButtonHideUnderline(
-                            child: DropdownButton2(
-                              isExpanded: true,
-                              hint: Row(
-                                children: [
-                                  Image.asset(
-                                    special,
-                                    width: 6.04.w,
-                                    height: 5.04.w,
-                                    fit: BoxFit.fill,
-                                    color: AppColor.PrimaryDark,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      'Select Sub Category',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              items: subCatModel.data!
-                                  .map((item) => DropdownMenuItem<String>(
-                                        value: item.id,
-                                        child: Text(
-                                          item.cName!,
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ))
-                                  .toList(),
-                              value: selectSubCategory,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectSubCategory = value as String;
-                                });
-                                print("SUB CATEGORY ID== $selectSubCategory");
-                              },
-                              icon: const Icon(
-                                Icons.arrow_forward_ios_outlined,
-                                color: AppColor.PrimaryDark,
-                              ),
-                              iconSize: 14,
-                              buttonHeight: 50,
-                              buttonWidth: 160,
-                              buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                              buttonDecoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                                color: AppColor().colorEdit(),
-                              ),
-                              buttonElevation: 0,
-                              itemHeight: 40,
-                              itemPadding:
-                                  const EdgeInsets.only(left: 14, right: 14),
-                              dropdownMaxHeight: 300,
-                              dropdownPadding: null,
-                              dropdownDecoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              dropdownElevation: 8,
-                              scrollbarRadius: const Radius.circular(40),
-                              scrollbarThickness: 6,
-                              scrollbarAlwaysShow: true,
-                            ),
-                          );
-                        } else if (snapshot.hasError) {
-                          return Icon(Icons.error_outline);
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      }))*/
+          //                         ),
+          //                       ],
+          //                     ),
+          //                     items: subCatModel.data!
+          //                         .map((item) => DropdownMenuItem<String>(
+          //                               value: item.id,
+          //                               child: Text(
+          //                                 item.cName!,
+          //                                 style: const TextStyle(
+          //                                   fontSize: 14,
+          //                                   fontWeight: FontWeight.bold,
+          //                                   color: Colors.black,
+          //                                 ),
+          //                                 overflow: TextOverflow.ellipsis,
+          //                               ),
+          //                             ))
+          //                         .toList(),
+          //                     value: selectSubCategory,
+          //                     onChanged: (value) {
+          //                       setState(() {
+          //                         selectSubCategory = value as String;
+          //                       });
+          //                       print("SUB CATEGORY ID== $selectSubCategory");
+          //                     },
+          //                     icon: const Icon(
+          //                       Icons.arrow_forward_ios_outlined,
+          //                       color: AppColor.PrimaryDark,
+          //                     ),
+          //                     iconSize: 14,
+          //                     buttonHeight: 50,
+          //                     buttonWidth: 160,
+          //                     buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+          //                     buttonDecoration: BoxDecoration(
+          //                       borderRadius: BorderRadius.circular(14),
+          //                       color: AppColor().colorEdit(),
+          //                     ),
+          //                     buttonElevation: 0,
+          //                     itemHeight: 40,
+          //                     itemPadding:
+          //                         const EdgeInsets.only(left: 14, right: 14),
+          //                     dropdownMaxHeight: 300,
+          //                     dropdownPadding: null,
+          //                     dropdownDecoration: BoxDecoration(
+          //                       borderRadius: BorderRadius.circular(14),
+          //                     ),
+          //                     dropdownElevation: 8,
+          //                     scrollbarRadius: const Radius.circular(40),
+          //                     scrollbarThickness: 6,
+          //                     scrollbarAlwaysShow: true,
+          //                   ),
+          //                 );
+          //               } else if (snapshot.hasError) {
+          //                 return Icon(Icons.error_outline);
+          //               } else {
+          //                 return Center(child: CircularProgressIndicator());
+          //               }
+          //             })),
           SizedBox(
             height: 2.62.h,
           ),
@@ -2955,8 +3059,8 @@ class _AddServicesState extends State<AddServices> {
                 borderRadius: BorderRadius.circular(14.0)),
             color: AppColor().colorEdit(),
             child: Container(
-                width: 80.99.w,
-                height: 7.46.h,
+                width: double.infinity,
+                height: 6.h,
                 decoration: boxDecoration(
                   radius: 14.0,
                   bgColor: AppColor().colorEdit(),
@@ -2990,8 +3094,8 @@ class _AddServicesState extends State<AddServices> {
             ),
             color: AppColor().colorEdit(),
             child: Container(
-                width: 80.99.w,
-                height: 7.46.h,
+                width: double.infinity,
+                height: 6.h,
                 decoration: boxDecoration(
                   radius: 14.0,
                   bgColor: AppColor().colorEdit(),
@@ -3025,8 +3129,8 @@ class _AddServicesState extends State<AddServices> {
             ),
             color: AppColor().colorEdit(),
             child: Container(
-                width: 80.99.w,
-                height: 7.46.h,
+                width: double.infinity,
+                height: 6.h,
                 decoration: boxDecoration(
                   radius: 14.0,
                   bgColor: AppColor().colorEdit(),
@@ -3058,8 +3162,8 @@ class _AddServicesState extends State<AddServices> {
                 borderRadius: BorderRadius.circular(14.0)),
             color: AppColor().colorEdit(),
             child: Container(
-                width: 80.99.w,
-                height: 7.46.h,
+                width: double.infinity,
+                height: 6.h,
                 decoration: boxDecoration(
                   radius: 14.0,
                   bgColor: AppColor().colorEdit(),
@@ -3098,7 +3202,7 @@ class _AddServicesState extends State<AddServices> {
                   borderRadius: BorderRadius.circular(14.0)),
               color: AppColor().colorEdit(),
               child: Container(
-                width: 80.99.w,
+                width: double.infinity,
                 height: 10.46.h,
                 decoration: boxDecoration(
                   radius: 14.0,
@@ -3193,90 +3297,90 @@ class _AddServicesState extends State<AddServices> {
             height: 2.5.h,
           ),
 
-          addonList.length == 0
-              ? SizedBox.shrink()
-              : Container(
-                  padding: EdgeInsets.symmetric(horizontal: 30),
-                  child: Column(
-                    children: [
-                      Container(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Name",
-                            style: TextStyle(
-                              color: AppColor.PrimaryDark,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Text(
-                            "Price",
-                            style: TextStyle(
-                              color: AppColor.PrimaryDark,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Text(
-                            "Hour/Day",
-                            style: TextStyle(
-                              color: AppColor.PrimaryDark,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Text(
-                            "Value",
-                            style: TextStyle(
-                              color: AppColor.PrimaryDark,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      )),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      /*addonList.length == 0
-                          ? SizedBox()
-                          : ListView.builder(
-                              // padding: EdgeInsets.symmetric(horizontal: 30),
-                              shrinkWrap: true,
-                              itemCount: addonList.length,
-                              itemBuilder: (c, i) {
-                                print("addon list here ${addonList}");
-                                List<dynamic> decodedData =
-                                    json.decode(json.encode(addonList)) as List;
-                                var fianlData = decodedData[i];
-                                return Container(
-                                  margin: EdgeInsets.only(top: 5),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                          child:
-                                              Text("${fianlData["service"]}")),
-                                      // Expanded(child: Text("\u{20B9} ${addonList[i]['price_a']}")),
-                                      // Expanded(child: Text("${addonList[i]['hrly']}")),
-                                      // Text("${addonList[i]['days_hrs']}"),
-                                      // InkWell(
-                                      //     onTap: (){
-                                      //       setState(() {
-                                      //         addonList.removeAt(addonList[i]['serviceName']);
-                                      //         addonList.removeAt(addonList[i]['addonPrice']);
-                                      //       });
-                                      //     },
-                                      //     child: Icon(Icons.clear)),
-                                    ],
-                                  ),
-                                );
-                              })*/
-                    ],
-                  ),
-                ),
+          // addonList.length == 0
+          //     ? SizedBox.shrink()
+          //     : Container(
+          //         padding: EdgeInsets.symmetric(horizontal: 30),
+          //         child: Column(
+          //           children: [
+          //             Container(
+          //                 child: Row(
+          //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //               crossAxisAlignment: CrossAxisAlignment.start,
+          //               children: [
+          //                 Text(
+          //                   "Name",
+          //                   style: TextStyle(
+          //                     color: AppColor.PrimaryDark,
+          //                     fontWeight: FontWeight.w500,
+          //                   ),
+          //                 ),
+          //                 Text(
+          //                   "Price",
+          //                   style: TextStyle(
+          //                     color: AppColor.PrimaryDark,
+          //                     fontWeight: FontWeight.w500,
+          //                   ),
+          //                 ),
+          //                 Text(
+          //                   "Hour/Day",
+          //                   style: TextStyle(
+          //                     color: AppColor.PrimaryDark,
+          //                     fontWeight: FontWeight.w500,
+          //                   ),
+          //                 ),
+          //                 Text(
+          //                   "Value",
+          //                   style: TextStyle(
+          //                     color: AppColor.PrimaryDark,
+          //                     fontWeight: FontWeight.w500,
+          //                   ),
+          //                 ),
+          //               ],
+          //             )),
+          //             SizedBox(
+          //               height: 10,
+          //             ),
+          //             /*addonList.length == 0
+          //                 ? SizedBox()
+          //                 : ListView.builder(
+          //                     // padding: EdgeInsets.symmetric(horizontal: 30),
+          //                     shrinkWrap: true,
+          //                     itemCount: addonList.length,
+          //                     itemBuilder: (c, i) {
+          //                       print("addon list here ${addonList}");
+          //                       List<dynamic> decodedData =
+          //                           json.decode(json.encode(addonList)) as List;
+          //                       var fianlData = decodedData[i];
+          //                       return Container(
+          //                         margin: EdgeInsets.only(top: 5),
+          //                         child: Row(
+          //                           mainAxisAlignment:
+          //                               MainAxisAlignment.spaceBetween,
+          //                           crossAxisAlignment:
+          //                               CrossAxisAlignment.start,
+          //                           children: [
+          //                             Expanded(
+          //                                 child:
+          //                                     Text("${fianlData["service"]}")),
+          //                             // Expanded(child: Text("\u{20B9} ${addonList[i]['price_a']}")),
+          //                             // Expanded(child: Text("${addonList[i]['hrly']}")),
+          //                             // Text("${addonList[i]['days_hrs']}"),
+          //                             // InkWell(
+          //                             //     onTap: (){
+          //                             //       setState(() {
+          //                             //         addonList.removeAt(addonList[i]['serviceName']);
+          //                             //         addonList.removeAt(addonList[i]['addonPrice']);
+          //                             //       });
+          //                             //     },
+          //                             //     child: Icon(Icons.clear)),
+          //                           ],
+          //                         ),
+          //                       );
+          //                     })*/
+          //           ],
+          //         ),
+          //       ),
 
           ///
 
@@ -3341,8 +3445,8 @@ class _AddServicesState extends State<AddServices> {
                                           flex: 2,
                                           child: Container(
                                             margin: EdgeInsets.symmetric(horizontal: 10),
-                                            width: 80.99.w,
-                                            height: 7.46.h,
+                                            width: double.infinity,
+                                            height: 6.h,
                                             decoration: boxDecoration(radius: 10.0, color: AppColor().colorEdit()),
                                             child: DropdownButtonHideUnderline(
                                               child: DropdownButton2(
@@ -3419,7 +3523,7 @@ class _AddServicesState extends State<AddServices> {
                                         Expanded(
                                           flex: 2,
                                           child: SizedBox(
-                                            height: 7.46.h,
+                                            height: 6.h,
                                             child: TextField(
                                               controller: addonServicePriceControllerList[index],
                                               keyboardType: TextInputType.number,
@@ -3444,8 +3548,8 @@ class _AddServicesState extends State<AddServices> {
                                           flex: 2,
                                           child: Container(
                                             margin: EdgeInsets.symmetric(horizontal: 10),
-                                            width: 80.99.w,
-                                            height: 7.46.h,
+                                            width: double.infinity,
+                                            height: 6.h,
                                             decoration: boxDecoration(
                                                 radius: 10.0,
                                                 color: AppColor().colorEdit()),
@@ -3523,7 +3627,7 @@ class _AddServicesState extends State<AddServices> {
                                         Expanded(
                                           flex: 2,
                                           child: SizedBox(
-                                            height: 7.46.h,
+                                            height: 6.h,
                                             child: TextField(
                                               controller:
                                                   addonHourDayPriceControllerList[
@@ -3653,10 +3757,15 @@ class _AddServicesState extends State<AddServices> {
     }
   }
 
-
+  List <String> subcateid=[];
   Future<void> getServiceCategories() async {
     // var userId = await MyToken.getUserID();
-
+    String stringRepresentation = "${widget.profileResponse?.user?.subcategoryId}";
+    print(stringRepresentation.toString()+"_________");
+    subcateid = stringRepresentation.split(', ').map((String value) {
+      return value.toString();
+    }).toList();
+    print(categorylist.toString()+"_________");
     var request = http.MultipartRequest(
         'POST',
         Uri.parse(
@@ -3667,19 +3776,34 @@ class _AddServicesState extends State<AddServices> {
       final str = await response.stream.bytesToString();
       serviceModel = ServiceCategoryModel.fromJson(jsonDecode(str));
       print('____________${widget.profileResponse?.user?.jsonData?.cat.toString()}');
-
-      serviceModel?.data?.forEach((element) {
-        if(element.id.toString() == widget.profileResponse?.user?.jsonData?.cat.toString()){
-          serviceCategory.text = element.cName ?? '' ;
-          getServicesSubCategory(element.id.toString());
-
-        } else {
-          selectedCategory = '' ;
-        }
-      });
       setState(() {
+        selectedCategory11=serviceModel?.data?.firstWhere((item) {
+
+          if(item.id.toString() == widget.profileResponse?.user?.jsonData?.cat.toString()){
+            return true;
+          }
+          return false;
+        });
+        print(selectedCategory11.cName);
+
+        getServicesSubCategory(selectedCategory11.id);
 
       });
+
+
+      // serviceModel?.data?.forEach((element) {
+      //
+      //
+      //   if(element.id.toString() == widget.profileResponse?.user?.jsonData?.cat.toString()){
+      //     serviceCategory.text = element.cName ?? '' ;
+      //
+      //     getServicesSubCategory(element.id.toString());
+      //
+      //   } else {
+      //     selectedCategory = '' ;
+      //   }
+      // });
+
     } else {
       return null;
     }

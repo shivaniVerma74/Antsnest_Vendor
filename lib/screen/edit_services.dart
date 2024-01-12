@@ -1,11 +1,14 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
+import 'package:multi_dropdown/enum/app_enums.dart';
+import 'package:multi_dropdown/models/chip_config.dart';
+import 'package:multi_dropdown/models/value_item.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 import 'package:time_picker_sheet/widget/sheet.dart';
@@ -119,31 +122,36 @@ class _EditServicesState extends State<EditServices> {
   var servicePic;
   var imageList;
   var imagePathList;
-  String? selectedCurrency;
+  dynamic? selectedCurrency;
   var storeId;
   DateTime dateTimeSelected = DateTime.now();
-  String? selectedCountry;
-  String? selectedState;
-  String? selectedCity;
+  dynamic? selectedCountry;
+  dynamic? selectedState;
+  dynamic? selectedCity;
+
+  final MultiSelectController _controller = MultiSelectController();
+
   List<CityData> cityList = [];
   List<CountryData> countryList = [];
   List<StateData> stateList = [];
+  List<String> categorylist=[];
+  Set<String> uniqueValues = Set();
+  List <dynamic> subcateid=[];
 
-
-  void addOnOperation() {
-    selectedServiceTypeList.add(selectedServiceType);
-    selectedServiceHourList.add(selectedServiceHour);
-    addonServicePriceControllerList.add(TextEditingController());
-    addonHourDayPriceControllerList.add(TextEditingController());
+  void addOnOperation({ String ?charges, String ?houranddays,String ?serviceType,String ?serviceHour}) {
+   print(serviceHour.toString()+"++++++++++");
+    selectedServiceTypeList.add(serviceType??selectedServiceType);
+    selectedServiceHourList.add(serviceHour??selectedServiceHour);
+    addonServicePriceControllerList.add(TextEditingController(text: "${charges??""}"));
+    addonHourDayPriceControllerList.add(TextEditingController(text: "${houranddays??""}"));
     addonList2.add({"service": '', "price_a": '', "hrly": '', "days_hrs": ''});
   }
-
 
   Future getState() async {
     print("ok now working");
     var request = http.MultipartRequest(
         'POST', Uri.parse('${Apipath.BASH_URL}get_states'));
-    request.fields.addAll({'country_id': '$selectedCountry'});
+    request.fields.addAll({'country_id': '${selectedCountry.id}'});
     http.StreamedResponse response = await request.send();
     print(request);
     print(request.fields);
@@ -163,10 +171,12 @@ class _EditServicesState extends State<EditServices> {
         }
         print("checking state widget ${widget.state}");
         if(stateIdList.contains(widget.state)){
+          selectedState=stateList.firstWhere((item) => item.id == widget.state);
+
           setState(() {
-            selectedState = widget.state;
+           // selectedState = widget.state;
           });
-          print("selected state $selectedState");
+          // print("selected state $selectedState");
           getCities();
         }
       }
@@ -177,7 +187,10 @@ class _EditServicesState extends State<EditServices> {
   }
 
   Future getCountries() async {
+
     print("checking country id ${widget.country}");
+    print("checking country id ${widget.city}");
+    print("checking country id ${widget.state}");
     var request =
     http.Request('GET', Uri.parse('${Apipath.BASH_URL}get_countries'));
     http.StreamedResponse response = await request.send();
@@ -191,12 +204,17 @@ class _EditServicesState extends State<EditServices> {
           countryList = jsonResponse.data!;
         });
         List countryIdList= [];
+        selectedCountry=countryList.firstWhere((item) => item.id == widget.country);
+
+        //selectedCountry=countryList.firstWhere((item) => item.id == widget.country);
+
         for(var i=0;i<countryList.length;i++){
           countryIdList.add(countryList[i].id);
         }
         if(countryIdList.contains(widget.country)){
          setState(() {
-           selectedCountry = widget.country;
+
+           //selectedCountry = widget.country;
          });
          print("selected country $selectedCountry");
          getState();
@@ -212,7 +230,7 @@ class _EditServicesState extends State<EditServices> {
     var request = http.MultipartRequest(
         'POST', Uri.parse('${Apipath.BASH_URL}get_cities'
     ));
-    request.fields.addAll({'state_id': '$selectedState'});
+    request.fields.addAll({'state_id': '${selectedState.id}'});
     print(request);
     print(request.fields);
     http.StreamedResponse response = await request.send();
@@ -242,7 +260,8 @@ class _EditServicesState extends State<EditServices> {
         }
         if(cityIdList.contains(widget.city)){
           setState(() {
-            selectedCity = widget.city;
+          //  selectedCity = widget.city;
+            selectedCity=cityList.firstWhere((item) => item.id == widget.city);
           });
         }
       }
@@ -256,8 +275,13 @@ class _EditServicesState extends State<EditServices> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    addOnOperation();
+    categorylist.clear();
+    for(int i=0;i<widget.addOntype.length;i++){
+      addOnOperation(charges:widget.addOntype[i].priceA ,houranddays: widget.addOntype[i].daysHrs,serviceHour:widget.addOntype[i].hrly,serviceType: widget.addOntype[i].service );
+    }
+
     // onpenTime = new TextEditingController(text: widget.serviceTime);
+
     serviceCharge = new TextEditingController(text: widget.serviceCharge);
     serviceName = new TextEditingController(text: widget.serviceName);
     descriptionController = new TextEditingController(text: widget.serviceDescription);
@@ -265,8 +289,20 @@ class _EditServicesState extends State<EditServices> {
     servicePic = widget.serviceImage;
     selectedCategory = widget.catId;
     selectSubCategory = widget.subCatId;
-    selectedCurrency = widget.currency.toString();
+    //selectedCurrency = widget.currency.toString();
+
+    print("${widget.country}"+"_______________________");
+    print("${widget.state}"+"_______________________");
+    print("${widget.city}"+"_______________________");
+    print("${widget.currency}"+"_______________________");
+    print("${widget.subCatId}"+"_______________________");
+    subcateid = widget.subCatId.split(', ').map((String value) {
+      return value.toString();
+    }).toList();
+
     getCountries();
+    getServicesSubCategory(widget.catId);
+
     Future.delayed(Duration(milliseconds: 200),() {
       return getCurrency();
     });
@@ -284,17 +320,37 @@ class _EditServicesState extends State<EditServices> {
     if (response.statusCode == 200) {
       var finalResult = await response.stream.bytesToString();
       final jsonResult = CurrencyModel.fromJson(json.decode(finalResult));
+
       setState(() {
         currencyModel = jsonResult;
+      });
+      print(widget.currency.toString()+"++++++++++++++++++++");
+      selectedCurrency=currencyModel?.data?.firstWhere((item) {
+        print(item.symbol.toString()+"++++++++++++++++++++");
+
+        if(item.symbol == widget.currency.toString()){
+          return true;
+        }
+        return false;
       });
     }
     else {
       print(response.reasonPhrase);
     }
+
+
+
+
   }
 
+
+getUpdate(){
+    selectedCountry=countryList.firstWhere((item) => item.id == widget.country);
+}
   @override
   Widget build(BuildContext context) {
+      print("${widget.addOntype.length}");
+
     print("checking city here now ${widget.city} and ${widget.state}");
     return SafeArea(
       child: Scaffold(
@@ -407,8 +463,8 @@ class _EditServicesState extends State<EditServices> {
                 borderRadius: BorderRadius.circular(14.0)),
             color: AppColor().colorEdit(),
             child: Container(
-                width: 80.99.w,
-                height: 7.46.h,
+                width: double.infinity,
+                height: 6.h,
                 decoration: boxDecoration(
                   radius: 14.0,
                   bgColor: AppColor().colorEdit(),
@@ -435,14 +491,15 @@ class _EditServicesState extends State<EditServices> {
             height: 2.5.h,
           ),
           Container(
-              width: 80.99.w,
-              height: 7.46.h,
+              width: double.infinity,
+              height: 6.h,
               decoration: boxDecoration(
                 radius: 10.0,
                 color:  AppColor().colorEdit(),
               ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton2(
+              child:
+              DropdownButtonHideUnderline(
+                child: DropdownButton2<dynamic>(
                   isExpanded: true,
                   hint: Row(
                     children: [
@@ -468,8 +525,8 @@ class _EditServicesState extends State<EditServices> {
                       ),
                     ],
                   ),
-                  items: countryList.map((item) => DropdownMenuItem<String>(
-                    value: item.id,
+                  items: countryList.map((item) => DropdownMenuItem<dynamic>(
+                    value: item,
                     child: Text(
                       item.name!,
                       style: const TextStyle(
@@ -480,10 +537,11 @@ class _EditServicesState extends State<EditServices> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   )).toList(),
-                  value: selectedCountry == null ? widget.country : selectedCountry,
+                  value: selectedCountry ,
+                      //== null ? widget.country : selectedCountry,
                   onChanged: (value) {
                     setState(() {
-                      selectedCountry = value as String;
+                      selectedCountry = value;
                       print("selectedCategory=>" +
                           selectedCountry.toString());
                       getState();
@@ -520,109 +578,110 @@ class _EditServicesState extends State<EditServices> {
           SizedBox(
             height: 2.5.h,
           ),
-          // Container(
-          //   width: 80.99.w,
-          //   height: 7.46.h,
-          //   decoration: boxDecoration(
-          //     radius: 10.0,
-          //     color:AppColor().colorEdit(),
-          //   ),
-          //   child:DropdownButtonHideUnderline(
-          //     child: DropdownButton2(
-          //       isExpanded: true,
-          //       hint: Row(
-          //         children: [
-          //           Image.asset(
-          //             city,
-          //             width: 6.04.w,
-          //             height: 5.04.w,
-          //             fit: BoxFit.fill,
-          //             color: AppColor.PrimaryDark,
-          //           ),
-          //           SizedBox(
-          //             width: 4,
-          //           ),
-          //           Expanded(
-          //             child: Text(
-          //               'Select State',
-          //               style: TextStyle(
-          //                 fontSize: 14,
-          //                 fontWeight: FontWeight.normal,
-          //               ),
-          //               overflow: TextOverflow.ellipsis,
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //       items: stateList
-          //           .map((item) =>
-          //           DropdownMenuItem<String>(
-          //             value: item.id,
-          //             child: Text(
-          //               item.name!,
-          //               style: const TextStyle(
-          //                 fontSize: 14,
-          //                 fontWeight:
-          //                 FontWeight.bold,
-          //                 color: Colors.black,
-          //               ),
-          //               overflow: TextOverflow.ellipsis,
-          //             ),
-          //           ),
-          //       ).toList(),
-          //       value: selectedState == null ? widget.state : selectedState,
-          //       onChanged: (value) {
-          //         setState(() {
-          //           selectedState = value as String;
-          //           print("selected State===>" +
-          //               selectedState.toString());
-          //         });
-          //         getCities();
-          //       },
-          //       icon: const Icon(
-          //         Icons.arrow_forward_ios_outlined,
-          //         color: AppColor.PrimaryDark,
-          //       ),
-          //       iconSize: 14,
-          //       buttonHeight: 50,
-          //       buttonWidth: 160,
-          //       buttonPadding: const EdgeInsets.only(
-          //           left: 14, right: 14),
-          //       buttonDecoration: BoxDecoration(
-          //         borderRadius:
-          //         BorderRadius.circular(14),
-          //         color:AppColor().colorEdit(),
-          //       ),
-          //       buttonElevation: 0,
-          //       itemHeight: 40,
-          //       itemPadding: const EdgeInsets.only(
-          //           left: 14, right: 14),
-          //       dropdownMaxHeight: 300,
-          //       dropdownPadding: null,
-          //       dropdownDecoration: BoxDecoration(
-          //         borderRadius:
-          //         BorderRadius.circular(14),
-          //       ),
-          //       dropdownElevation: 8,
-          //       scrollbarRadius:
-          //       const Radius.circular(40),
-          //       scrollbarThickness: 6,
-          //       scrollbarAlwaysShow: true,
-          //     ),
-          //   ),
-          // ),
-          // SizedBox(
-          //   height: 2.5.h,
-          // ),
           Container(
-            width: 80.99.w,
-            height: 7.46.h,
+            width: double.infinity,
+            height: 6.h,
+            decoration: boxDecoration(
+              radius: 10.0,
+              color:AppColor().colorEdit(),
+            ),
+            child:DropdownButtonHideUnderline(
+              child: DropdownButton2<dynamic>(
+                isExpanded: true,
+                hint: Row(
+                  children: [
+                    Image.asset(
+                      city,
+                      width: 6.04.w,
+                      height: 5.04.w,
+                      fit: BoxFit.fill,
+                      color: AppColor.PrimaryDark,
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Select State',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                items: stateList
+                    .map((item) =>
+                    DropdownMenuItem<dynamic>(
+                      value: item,
+                      child: Text(
+                        item.name!,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight:
+                          FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                ).toList(),
+                value: selectedState ,
+                    // == null ? widget.state : selectedState,
+                onChanged: (value) {
+                  setState(() {
+                    selectedState = value;
+                    print("selected State===>" +
+                        selectedState.toString());
+                  });
+                  getCities();
+                },
+                icon: const Icon(
+                  Icons.arrow_forward_ios_outlined,
+                  color: AppColor.PrimaryDark,
+                ),
+                iconSize: 14,
+                buttonHeight: 50,
+                buttonWidth: 160,
+                buttonPadding: const EdgeInsets.only(
+                    left: 14, right: 14),
+                buttonDecoration: BoxDecoration(
+                  borderRadius:
+                  BorderRadius.circular(14),
+                  color:AppColor().colorEdit(),
+                ),
+                buttonElevation: 0,
+                itemHeight: 40,
+                itemPadding: const EdgeInsets.only(
+                    left: 14, right: 14),
+                dropdownMaxHeight: 300,
+                dropdownPadding: null,
+                dropdownDecoration: BoxDecoration(
+                  borderRadius:
+                  BorderRadius.circular(14),
+                ),
+                dropdownElevation: 8,
+                scrollbarRadius:
+                const Radius.circular(40),
+                scrollbarThickness: 6,
+                scrollbarAlwaysShow: true,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 2.5.h,
+          ),
+          Container(
+            width: double.infinity,
+            height: 6.h,
             decoration: boxDecoration(
               radius: 10.0,
               color: AppColor().colorEdit(),
             ),
             child: DropdownButtonHideUnderline(
-              child: DropdownButton2(
+              child: DropdownButton2<dynamic>(
                 isExpanded: true,
                 hint: Row(
                   children: [
@@ -648,8 +707,8 @@ class _EditServicesState extends State<EditServices> {
                     ),
                   ],
                 ),
-                items: cityList.map((item) => DropdownMenuItem<String>(
-                  value: item.id,
+                items: cityList.map((item) => DropdownMenuItem<dynamic>(
+                  value: item,
                   child: Text(
                     item.name!,
                     style: const TextStyle(
@@ -660,10 +719,11 @@ class _EditServicesState extends State<EditServices> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 )).toList(),
-                value: selectedCity == null ? widget.city : selectedCity,
+                value: selectedCity,
+                 //== null ? widget.city : selectedCity,
                 onChanged: (value) {
                   setState(() {
-                    selectedCity = value as String;
+                    selectedCity = value ;
                     print("selected State===>" + selectedCity.toString());
                   });
                 },
@@ -694,18 +754,19 @@ class _EditServicesState extends State<EditServices> {
               ),
             ),
           ),
+
           SizedBox(
             height: 2.5.h,
           ),
            currencyModel == null ? SizedBox() : Container(
-              width: 80.99.w,
-              height: 7.46.h,
+              width: double.infinity,
+              height: 6.h,
               decoration: boxDecoration(
                 radius: 10.0,
                 color:  AppColor().colorEdit(),
               ),
               child: DropdownButtonHideUnderline(
-                child: DropdownButton2(
+                child: DropdownButton2<dynamic>(
                   isExpanded: true,
                   hint: Row(
                     children: [
@@ -732,8 +793,8 @@ class _EditServicesState extends State<EditServices> {
                     ],
                   ),
                   items: currencyModel!.data!
-                      .map((item) => DropdownMenuItem<String>(
-                    value: item.symbol.toString(),
+                      .map((item) => DropdownMenuItem<dynamic>(
+                    value: item,
                     child: Text(
                       item.symbol.toString(),
                       style: const TextStyle(
@@ -744,10 +805,12 @@ class _EditServicesState extends State<EditServices> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   )).toList(),
-                  value: selectedCurrency == null ? widget.currency : selectedCurrency,
+                  value: selectedCurrency ,
+                      // ==
+                      //  null ? widget.currency : selectedCurrency,
                   onChanged: (value) {
                     setState(() {
-                      selectedCurrency = value as String;
+                      selectedCurrency = value;
                       print("selectedCategory=>" + selectedCurrency.toString());
                       getState();
                     });
@@ -786,8 +849,8 @@ class _EditServicesState extends State<EditServices> {
 
           // SERVICE CATEGORY
           Container(
-              width: 80.99.w,
-              height: 7.46.h,
+              width: double.infinity,
+              height: 6.h,
               decoration: boxDecoration(
                 radius: 10.0,
               ),
@@ -838,6 +901,10 @@ class _EditServicesState extends State<EditServices> {
                           ),
                           ).toList(),
                           value: selectedCategory,
+                          // icon:  Icon(
+                          //   Icons.arrow_forward_ios_outlined,
+                          //   color: AppColor.PrimaryDark,
+                          // ),
                           // onChanged: (value) {
                           //   setState(() {
                           //     selectedCategory = value as String;
@@ -847,13 +914,12 @@ class _EditServicesState extends State<EditServices> {
                           //     //     .toString();
                           //     print("selectedCategory=>" + selectedCategory.toString() + "serviceName" + serviceName.text);
                           //   });
+                          //   categorylist.clear();
+                          //   getServicesSubCategory(selectedCategory);
                           //   print("CATEGORY ID== $selectedCategory");
                           // },
-                          icon: const Icon(
-                            Icons.arrow_forward_ios_outlined,
-                            color: Color(0xffEEF1F9),
-                          ),
-                          iconSize: 14,
+
+                          iconSize: 0,
                           buttonHeight: 50,
                           buttonWidth: 160,
                           buttonPadding:
@@ -888,102 +954,177 @@ class _EditServicesState extends State<EditServices> {
               ),
           ),
           SizedBox(height: 2.5.h,),
+
+          SizedBox(height: 20,),
+          subCategory?.data==null?SizedBox.shrink():
+          MultiSelectDropDown(
+            hint: "Select Sub Category",
+           // alwaysShowOptionIcon: true,
+
+            showClearIcon: true,
+            controller: _controller,
+            onOptionSelected: (options) {
+              for (int i = 0; i < options.length; i++) {
+                String value = options[i].value??"";
+
+                // Check if the value is not already in the set
+                if (uniqueValues.add(value)) {
+                  // If the value is added to the set (i.e., it's unique), add it to the list
+                  categorylist.add(value);
+                }
+              }
+              // setState(() {
+              //
+              // });
+              debugPrint(categorylist.toString());
+            },
+            options: <ValueItem>[
+              for (int i = 0; i < subCategory!.data!.length; i++) ...[
+                ValueItem(
+                  label: "${subCategory!.data![i].cName}",
+                  value: "${subCategory!.data![i].id}",
+                )
+              ]
+            ],
+
+            selectionType: SelectionType.multi,
+            selectedOptions: [
+              for (int i = 0; i < subCategory!.data!.length; i++) ...[
+                for(int j=0;j<subcateid.length;j++)...[
+                  "${subCategory!.data![i].id}" == subcateid[j].toString()
+                      ? ValueItem(
+                    label: "${subCategory!.data![i].cName}",
+                    value: "${subCategory!.data![i].id}",
+                  )
+                      : ValueItem(label: "")
+                ]
+
+              ]
+            ]..removeWhere((element) => element.label == ""), // Remove null entries
+            chipConfig: const ChipConfig(wrapType: WrapType.scroll,backgroundColor: AppColor.PrimaryDark,
+
+            ),
+            dropdownHeight: 300,
+            optionTextStyle: const TextStyle(fontSize: 16),
+            selectedOptionIcon: const Icon(Icons.check_circle,color: AppColor.PrimaryDark,),
+            selectedOptionTextColor: AppColor.PrimaryDark,
+            // suffixIcon: IconData(),
+            // selectedItemBuilder: (BuildContext context, ValueItem item,) {
+            //   // Customize the appearance of the selected item here
+            //   return Container(
+            //     padding: EdgeInsets.all(8.0),
+            //     decoration: BoxDecoration(
+            //       color: Colors.red, // Set the background color to red
+            //       borderRadius: BorderRadius.circular(5.0),
+            //     ),
+            //     child: Row(
+            //       mainAxisSize: MainAxisSize.min,
+            //       children: [
+            //         Text(item.label),
+            //         const SizedBox(width: 8.0),
+            //         Icon(Icons.close, color: Colors.white, size: 18.0),
+            //       ],
+            //     ),
+            //   );
+            // },
+
+          ),
           // SERVICE SUBCATEGORY
-          Container(
-              width: 80.99.w,
-              height: 7.46.h,
-              decoration: boxDecoration(
-                radius: 10.0,
-                // bgColor: AppColor().colorEdit(),
-              ),
-              child: FutureBuilder(
-                  future: getServicesSubCategory(selectedCategory),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    ServiceSubCategoryModel subCatModel = snapshot.data;
-                    print("SUB CAT DATA=== $subCatModel");
-                    if (snapshot.hasData) {
-                      return DropdownButtonHideUnderline(
-                        child: DropdownButton2(
-                          isExpanded: true,
-                          hint: Row(
-                            children: [
-                              Image.asset(
-                                special,
-                                width: 6.04.w,
-                                height: 5.04.w,
-                                fit: BoxFit.fill,
-                                color: AppColor.PrimaryDark,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  'Select Sub Category',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                          items: subCatModel.data!
-                              .map((item) => DropdownMenuItem<String>(
-                            value: item.id,
-                            child: Text(
-                              item.cName!,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          ).toList(),
-                          value: selectSubCategory,
-                          // onChanged: (value) {
-                          //   setState(() {
-                          //     selectSubCategory = value as String;
-                          //   });
-                          //   print("SUB CATEGORY ID== $selectSubCategory");
-                          // },
-                          icon: const Icon(
-                            Icons.arrow_forward_ios_outlined,
-                            color: Color(0xffEEF1F9)
-                          ),
-                          iconSize: 14,
-                          buttonHeight: 50,
-                          buttonWidth: 160,
-                          buttonPadding:
-                          const EdgeInsets.only(left: 14, right: 14),
-                          buttonDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                            color: AppColor().colorEdit(),
-                          ),
-                          buttonElevation: 0,
-                          itemHeight: 40,
-                          itemPadding:
-                          const EdgeInsets.only(left: 14, right: 14),
-                          dropdownMaxHeight: 300,
-                          dropdownPadding: null,
-                          dropdownDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          dropdownElevation: 8,
-                          scrollbarRadius: const Radius.circular(40),
-                          scrollbarThickness: 6,
-                          scrollbarAlwaysShow: true,
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Icon(Icons.error_outline);
-                    } else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  })),
+          // Container(
+          //     width: double.infinity,
+          //     height: 6.h,
+          //     decoration: boxDecoration(
+          //       radius: 10.0,
+          //       // bgColor: AppColor().colorEdit(),
+          //     ),
+          //     child: FutureBuilder(
+          //         future: getServicesSubCategory(selectedCategory),
+          //         builder: (BuildContext context, AsyncSnapshot snapshot) {
+          //           ServiceSubCategoryModel subCatModel = snapshot.data;
+          //           print("SUB CAT DATA=== $subCatModel");
+          //           if (snapshot.hasData) {
+          //             return DropdownButtonHideUnderline(
+          //               child: DropdownButton2(
+          //                 isExpanded: true,
+          //                 hint: Row(
+          //                   children: [
+          //                     Image.asset(
+          //                       special,
+          //                       width: 6.04.w,
+          //                       height: 5.04.w,
+          //                       fit: BoxFit.fill,
+          //                       color: AppColor.PrimaryDark,
+          //                     ),
+          //                     SizedBox(
+          //                       width: 5,
+          //                     ),
+          //                     Expanded(
+          //                       child: Text(
+          //                         'Select Sub Category',
+          //                         style: TextStyle(
+          //                           fontSize: 14,
+          //                           fontWeight: FontWeight.normal,
+          //                         ),
+          //                         overflow: TextOverflow.ellipsis,
+          //                       ),
+          //                     ),
+          //                   ],
+          //                 ),
+          //                 items: subCatModel.data!
+          //                     .map((item) => DropdownMenuItem<String>(
+          //                   value: item.id,
+          //                   child: Text(
+          //                     item.cName!,
+          //                     style: const TextStyle(
+          //                       fontSize: 14,
+          //                       fontWeight: FontWeight.bold,
+          //                       color: Colors.black,
+          //                     ),
+          //                     overflow: TextOverflow.ellipsis,
+          //                   ),
+          //                 ),
+          //                 ).toList(),
+          //                 value: selectSubCategory,
+          //                 onChanged: (value) {
+          //                   setState(() {
+          //                     selectSubCategory = value as String;
+          //                   });
+          //                   print("SUB CATEGORY ID== $selectSubCategory");
+          //                 },
+          //                 icon: const Icon(
+          //                   Icons.arrow_forward_ios_outlined,
+          //                   color: Color(0xffEEF1F9)
+          //                 ),
+          //                 iconSize: 14,
+          //                 buttonHeight: 50,
+          //                 buttonWidth: 160,
+          //                 buttonPadding:
+          //                 const EdgeInsets.only(left: 14, right: 14),
+          //                 buttonDecoration: BoxDecoration(
+          //                   borderRadius: BorderRadius.circular(14),
+          //                   color: AppColor().colorEdit(),
+          //                 ),
+          //                 buttonElevation: 0,
+          //                 itemHeight: 40,
+          //                 itemPadding:
+          //                 const EdgeInsets.only(left: 14, right: 14),
+          //                 dropdownMaxHeight: 300,
+          //                 dropdownPadding: null,
+          //                 dropdownDecoration: BoxDecoration(
+          //                   borderRadius: BorderRadius.circular(14),
+          //                 ),
+          //                 dropdownElevation: 8,
+          //                 scrollbarRadius: const Radius.circular(40),
+          //                 scrollbarThickness: 6,
+          //                 scrollbarAlwaysShow: true,
+          //               ),
+          //             );
+          //           } else if (snapshot.hasError) {
+          //             return Icon(Icons.error_outline);
+          //           } else {
+          //             return Center(child: CircularProgressIndicator());
+          //           }
+          //         })),
           SizedBox(
             height: 2.62.h,
           ),
@@ -995,8 +1136,8 @@ class _EditServicesState extends State<EditServices> {
                 borderRadius: BorderRadius.circular(14.0)),
             color: AppColor().colorEdit(),
             child: Container(
-                width: 80.99.w,
-                height: 7.46.h,
+                width: double.infinity,
+                height: 6.h,
                 decoration: boxDecoration(
                   radius: 14.0,
                   bgColor: AppColor().colorEdit(),
@@ -1030,8 +1171,8 @@ class _EditServicesState extends State<EditServices> {
             ),
             color: AppColor().colorEdit(),
             child: Container(
-                width: 80.99.w,
-                height: 7.46.h,
+                width: double.infinity,
+                height: 6.h,
                 decoration: boxDecoration(
                   radius: 14.0,
                   bgColor: AppColor().colorEdit(),
@@ -1065,8 +1206,8 @@ class _EditServicesState extends State<EditServices> {
             ),
             color: AppColor().colorEdit(),
             child: Container(
-                width: 80.99.w,
-                height: 7.46.h,
+                width: double.infinity,
+                height: 6.h,
                 decoration: boxDecoration(
                   radius: 14.0,
                   bgColor: AppColor().colorEdit(),
@@ -1099,8 +1240,8 @@ class _EditServicesState extends State<EditServices> {
                 borderRadius: BorderRadius.circular(14.0)),
             color: AppColor().colorEdit(),
             child: Container(
-                width: 80.99.w,
-                height: 7.46.h,
+                width: double.infinity,
+                height: 6.h,
                 decoration: boxDecoration(
                   radius: 14.0,
                   bgColor: AppColor().colorEdit(),
@@ -1139,7 +1280,7 @@ class _EditServicesState extends State<EditServices> {
                   borderRadius: BorderRadius.circular(14.0)),
               color: AppColor().colorEdit(),
               child: Container(
-                width: 80.99.w,
+                width: double.infinity,
                 height: 10.46.h,
                 decoration: boxDecoration(
                   radius: 14.0,
@@ -1357,8 +1498,8 @@ class _EditServicesState extends State<EditServices> {
                                           flex: 2,
                                           child: Container(
                                             margin: EdgeInsets.symmetric(horizontal: 10),
-                                            width: 80.99.w,
-                                            height: 7.46.h,
+                                            width: double.infinity,
+                                            height: 6.h,
                                             decoration: boxDecoration(radius: 10.0, color: AppColor().colorEdit()),
                                             child: DropdownButtonHideUnderline(
                                               child: DropdownButton2(
@@ -1423,7 +1564,7 @@ class _EditServicesState extends State<EditServices> {
                                         Expanded(
                                           flex: 2,
                                           child: SizedBox(
-                                            height: 7.46.h,
+                                            height: 6.h,
                                             child: TextField(
                                               controller: addonServicePriceControllerList[index],
                                               keyboardType: TextInputType.number,
@@ -1448,8 +1589,8 @@ class _EditServicesState extends State<EditServices> {
                                           child: Container(
                                             margin: EdgeInsets.symmetric(
                                                 horizontal: 10),
-                                            width: 80.99.w,
-                                            height: 7.46.h,
+                                            width: double.infinity,
+                                            height: 6.h,
                                             decoration: boxDecoration(
                                                 radius: 10.0,
                                                 color: AppColor().colorEdit(),
@@ -1536,7 +1677,7 @@ class _EditServicesState extends State<EditServices> {
                                         Expanded(
                                           flex: 2,
                                           child: SizedBox(
-                                            height: 7.46.h,
+                                            height: 6.h,
                                             child: TextField(
                                               controller: addonHourDayPriceControllerList[index],
                                               keyboardType:
@@ -1583,7 +1724,7 @@ class _EditServicesState extends State<EditServices> {
                 var userId = await MyToken.getUserID();
                 if (_formKey.currentState!.validate()) {
                   if (selectedCategory!.isNotEmpty &&
-                      selectSubCategory!.isNotEmpty &&
+                      subcateid!.isNotEmpty &&
                       serviceCharge.text.isNotEmpty ) {
                     setState(() {
                       buttonLogin = true;
@@ -1607,16 +1748,20 @@ class _EditServicesState extends State<EditServices> {
                       'name': '${serviceName.text.toString()}',
                       'description': '${descriptionController.text}',
                       'cat_id': '$selectedCategory',
-                      'scat_id': '$selectSubCategory',
+                      'scat_id':categorylist.isEmpty?subcateid.map((dynamic value) {
+                        return value.toString();
+                      }).join(', '): categorylist.map((String value) {
+                        return value.toString();
+                      }).join(', '),
                       'vid': '$userId',
                       'price': '${serviceCharge.text.toString()}',
                       // 'hours': '${onpenTime.text.toString()}',
                       // 'experts': '${expertsC.text}',
                       'id': widget.serviceId,
-                      'country_id': "${selectedCountry.toString()}",
-                      "state_id":"${selectedCity.toString()}",
-                      "city_id":"${selectedCity.toString()}",
-                      "currency": "$selectedCurrency",
+                      'country_id': "${selectedCountry.id.toString()}",
+                      "state_id":"${selectedState.id.toString()}",
+                      "city_id":"${selectedCity.id.toString()}",
+                      "currency": "${selectedCurrency.symbol}",
                       "addon": addonList.toString(),
                     };
                     print("ADD SERVICE PARAM=====" + param.toString());
@@ -1631,7 +1776,7 @@ class _EditServicesState extends State<EditServices> {
                   else if (selectedCategory!.isEmpty) {
                     UtilityHlepar.getToast(ToastString.msgSelectServiceType);
                   }
-                  else if (selectSubCategory!.isEmpty) {
+                  else if (subcateid!.isEmpty) {
                     UtilityHlepar.getToast(ToastString.msgSelectServiceSubType);
                   }
                   // else if (onpenTime.text.isEmpty) {
@@ -1655,7 +1800,7 @@ class _EditServicesState extends State<EditServices> {
       ),
     );
   }
-
+  ServiceCategoryModel ?serviceCategoryModel11;
   Future<ServiceCategoryModel?> getServiceCategory() async {
     // var userId = await MyToken.getUserID();
     var request = http.MultipartRequest(
@@ -1668,11 +1813,14 @@ class _EditServicesState extends State<EditServices> {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
+      serviceCategoryModel11=ServiceCategoryModel.fromJson(json.decode(str));
+
       return ServiceCategoryModel.fromJson(json.decode(str));
     } else {
       return null;
     }
   }
+  ServiceSubCategoryModel ?subCategory;
 
   Future<ServiceSubCategoryModel?> getServicesSubCategory(catId) async {
     var request = http.MultipartRequest(
@@ -1687,6 +1835,10 @@ class _EditServicesState extends State<EditServices> {
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
       print(str);
+      subCategory=ServiceSubCategoryModel.fromJson(json.decode(str));
+      setState(() {
+
+      });
       return ServiceSubCategoryModel.fromJson(json.decode(str));
     } else {
       return null;
@@ -1750,6 +1902,7 @@ class _EditServicesState extends State<EditServices> {
     http.StreamedResponse response = await request.send();
     print(request.toString());
     print(request.fields.toString());
+    print(response.statusCode.toString()+"___________________");
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
       print(str.toString());

@@ -1,16 +1,13 @@
 import 'dart:async';
-
-import 'package:fixerking/api/api_helper/auth_helper.dart';
-import 'package:fixerking/modal/response/get_service_type_list.dart';
-import 'package:fixerking/utility_widget/myappbar.dart';
-import 'package:fixerking/utility_widget/shimmer_loding_view/loding_all_page.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/toast_string.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
-import 'package:fixerking/utils/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:sizer/sizer.dart';
+import '../../api/api_helper/auth_helper.dart';
+import '../../modal/response/get_service_type_list.dart';
+import '../../utility_widget/shimmer_loding_view/loding_all_page.dart';
+import '../../utils/colors.dart';
+import '../../utils/toast_string.dart';
+import '../../utils/utility_hlepar.dart';
 
 class ServiceTypeList extends StatefulWidget {
   const ServiceTypeList({Key? key}) : super(key: key);

@@ -1,22 +1,22 @@
 import 'package:animated_widgets/animated_widgets.dart';
-import 'package:fixerking/api/api_helper/auth_helper.dart';
-import 'package:fixerking/modal/request/forgot_password.dart';
-import 'package:fixerking/modal/response/forgot_password_response.dart';
-import 'package:fixerking/utility_widget/utility_widget.dart';
-import 'package:fixerking/utils/images.dart';
-import 'package:fixerking/utils/toast_string.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
-import 'package:fixerking/validation/form_validation.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:sizer/sizer.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/common.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/widget.dart';
+
+import '../../api/api_helper/auth_helper.dart';
+import '../../modal/request/forgot_password.dart';
+import '../../modal/response/forgot_password_response.dart';
+import '../../utility_widget/utility_widget.dart';
+import '../../utils/colors.dart';
+import '../../utils/constant.dart';
+import '../../utils/images.dart';
+import '../../utils/toast_string.dart';
+import '../../utils/utility_hlepar.dart';
+import '../../utils/widget.dart';
+import '../../validation/form_validation.dart';
 
 class ForgetScreen extends StatefulWidget {
   const ForgetScreen({Key? key}) : super(key: key);

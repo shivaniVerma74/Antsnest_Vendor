@@ -6,7 +6,7 @@ class WalletHistory {
   WalletHistory({
       String? responseCode, 
       String? msg, 
-      List<Data>? data,}){
+      List<WalletModelData>? data,}){
     _responseCode = responseCode;
     _msg = msg;
     _data = data;
@@ -18,23 +18,23 @@ class WalletHistory {
     if (json['data'] != null) {
       _data = [];
       json['data'].forEach((v) {
-        _data?.add(Data.fromJson(v));
+        _data?.add(WalletModelData.fromJson(v));
       });
     }
   }
   String? _responseCode;
   String? _msg;
-  List<Data>? _data;
+  List<WalletModelData>? _data;
 WalletHistory copyWith({  String? responseCode,
   String? msg,
-  List<Data>? data,
+  List<WalletModelData>? data,
 }) => WalletHistory(  responseCode: responseCode ?? _responseCode,
   msg: msg ?? _msg,
   data: data ?? _data,
 );
   String? get responseCode => _responseCode;
   String? get msg => _msg;
-  List<Data>? get data => _data;
+  List<WalletModelData>? get data => _data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -60,8 +60,8 @@ WalletHistory copyWith({  String? responseCode,
 /// created_at : "2023-06-23 06:08:11"
 /// updated_at : "2023-06-23 06:08:11"
 
-class Data {
-  Data({
+class WalletModelData {
+  WalletModelData({
       String? id, 
       String? userId, 
       String? amount, 
@@ -86,7 +86,7 @@ class Data {
     _updatedAt = updatedAt;
 }
 
-  Data.fromJson(dynamic json) {
+  WalletModelData.fromJson(dynamic json) {
     _id = json['id'];
     _userId = json['user_id'];
     _amount = json['amount'];
@@ -110,7 +110,7 @@ class Data {
   String? _status;
   String? _createdAt;
   String? _updatedAt;
-Data copyWith({  String? id,
+  WalletModelData copyWith({  String? id,
   String? userId,
   String? amount,
   String? convinienceFee,
@@ -121,7 +121,7 @@ Data copyWith({  String? id,
   String? status,
   String? createdAt,
   String? updatedAt,
-}) => Data(  id: id ?? _id,
+}) => WalletModelData(  id: id ?? _id,
   userId: userId ?? _userId,
   amount: amount ?? _amount,
   convinienceFee: convinienceFee ?? _convinienceFee,

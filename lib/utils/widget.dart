@@ -2,8 +2,8 @@ import 'package:fixerking/utils/utility_hlepar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
-import 'package:fixerking/utils/colors.dart';
 
+import 'colors.dart';
 import 'constant.dart';
 
 Widget text(

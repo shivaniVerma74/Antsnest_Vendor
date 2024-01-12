@@ -1,18 +1,18 @@
 import 'dart:async';
-import 'package:fixerking/api/api_helper/home_api_helper.dart';
-import 'package:fixerking/modal/request/notification_request.dart';
-import 'package:fixerking/modal/response/notification_response.dart';
-import 'package:fixerking/screen/bottom_bar.dart';
-import 'package:fixerking/token/app_token_data.dart';
-import 'package:fixerking/utility_widget/shimmer_loding_view/loding_all_page.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/images.dart';
-import 'package:fixerking/utils/toast_string.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
-import 'package:fixerking/utils/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import '../api/api_helper/home_api_helper.dart';
+import '../api/api_path.dart';
+import '../api/api_services.dart';
+import '../modal/request/notification_request.dart';
+import '../modal/response/notification_response.dart';
+import '../token/app_token_data.dart';
+import '../utils/colors.dart';
+import '../utils/constant.dart';
+import '../utils/images.dart';
+import '../utils/toast_string.dart';
+import '../utils/utility_hlepar.dart';
+import '../utils/widget.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);
@@ -28,6 +28,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   void initState() {
     super.initState();
     getNotification();
+    getReadNotification();
   }
 
   @override
@@ -208,12 +209,22 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
+
+getReadNotification() async {
+  String userid = await MyToken.getUserID();
+  var responsData = await ApiService.postAPI(
+      path: Apipath.readnotification, parameters: {"user_id":"${userid}"});
+
+  print(responsData.body);
+  print(responsData.statusCode);
+}
   late NotificationResponse response;
   getNotification() async {
+    String userid = await MyToken.getUserID();
     try {
-      String userid = await MyToken.getUserID();
       NotificationRequest request = NotificationRequest(userid: userid);
       response = await HomeApiHelper.getNotification(request);
+      print(response.notifications?.length);
       if (response.responseCode == ToastString.responseCode) {
         responseSteam.sink.add(response);
       } else {

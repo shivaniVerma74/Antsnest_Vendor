@@ -1,27 +1,24 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:animated_widgets/widgets/scale_animated.dart';
-import 'package:fixerking/api/api_helper/home_api_helper.dart';
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/modal/RemoveServiceModel.dart';
 // import 'package:fixerking/modal/VendorServiceModel.dart';
-import 'package:fixerking/modal/request/get_service_profile_request.dart';
-import 'package:fixerking/modal/response/get_service_profile_response.dart';
-import 'package:fixerking/screen/edit_services.dart';
-import 'package:fixerking/screen/profile/edit_service_profile.dart';
-import 'package:fixerking/token/app_token_data.dart';
-import 'package:fixerking/utility_widget/shimmer_loding_view/loding_all_page.dart';
-import 'package:fixerking/utils/toast_string.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
 import 'package:flutter/material.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/images.dart';
+
 import 'package:http/http.dart' as http;
-import 'package:fixerking/utils/widget.dart';
+
 import 'package:page_transition/page_transition.dart';
 import 'package:sizer/sizer.dart';
+import '../../api/api_helper/home_api_helper.dart';
+import '../../api/api_path.dart';
+import '../../modal/RemoveServiceModel.dart';
+import '../../modal/request/get_service_profile_request.dart';
+import '../../modal/response/get_service_profile_response.dart';
 import '../../modal/vendor_service_model.dart';
+import '../../token/app_token_data.dart';
+import '../../utils/colors.dart';
+import '../../utils/toast_string.dart';
+import '../../utils/utility_hlepar.dart';
+import '../../utils/widget.dart';
 import '../edit_service_profile_screen.dart';
 
 class ServiceProfileScreen extends StatefulWidget {

@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/token/app_token_data.dart';
-import 'package:fixerking/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
+import '../../api/api_path.dart';
+import '../../token/app_token_data.dart';
+import '../../utils/colors.dart';
 import '../bottom_bar.dart';
 import '../home_screen.dart';
 import 'chat_page.dart';
@@ -15,8 +15,6 @@ import 'constants.dart';
 import 'models/Model.dart';
 import 'models/ticket_model.dart';
 import 'models/ticket_type_model.dart';
-
-
 
 class CustomerSupport extends StatefulWidget {
   @override
@@ -48,7 +46,7 @@ class _CustomerSupportState extends State<CustomerSupport>
   int total = 0, curEdit = -1;
   bool isLoadingmore = true;
   String? userId;
-  void checkingLogin() async {
+   checkingLogin() async {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
    userId = await MyToken.getUserID();
 
@@ -60,12 +58,13 @@ class _CustomerSupportState extends State<CustomerSupport>
   @override
   void initState() {
     super.initState();
-    getType();
+    //getType();
     statusList = [
       Model(id: "3", title: "Resolved"),
       Model(id: "5", title: "Reopen")
     ];
-    checkingLogin();
+    getData();
+   // checkingLogin();
     // buttonController = new AnimationController(
     //     duration: new Duration(milliseconds: 2000), vsync: this);
     //
@@ -95,7 +94,10 @@ class _CustomerSupportState extends State<CustomerSupport>
     // });
 
   }
-
+   getData() async {
+  await  getType();
+  await checkingLogin();
+   }
   @override
   void dispose() {
     super.dispose();
@@ -202,7 +204,8 @@ class _CustomerSupportState extends State<CustomerSupport>
                 //     : SizedBox.shrink(),
                 //     : Container(),
                 ticketList.length > 0
-                    ? ListView.separated(
+                    ?
+                ListView.separated(
                     separatorBuilder:
                         (BuildContext context, int index) =>
                         Divider(),
@@ -522,6 +525,7 @@ class _CustomerSupportState extends State<CustomerSupport>
   //   // }
   // }
   Future getType() async {
+    print("gettype");
 
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // String? userId = prefs.getString(TokenString.userid);
@@ -560,7 +564,7 @@ class _CustomerSupportState extends State<CustomerSupport>
   }
 
   Future getTicket() async {
-
+   print("getid");
     var vendorId = await MyToken.getUserID();
     var request = http.MultipartRequest(
         'POST', Uri.parse('${Apipath.getTicketsApi}'));
@@ -572,12 +576,14 @@ class _CustomerSupportState extends State<CustomerSupport>
     print("this is request !! ${request.url}");
 
     http.StreamedResponse response = await request.send();
+    print(response.statusCode);
     if (response.statusCode == 200) {
       print("this response @@ ${response.statusCode}");
       final str = await response.stream.bytesToString();
       var dat = TicketModel.fromJson(json.decode(str));
+
       setState(() {
-        ticketList = dat.data!;
+        ticketList=dat.data??[] ;
       });
 
       print("this is ticket list data ${ticketList.length}");

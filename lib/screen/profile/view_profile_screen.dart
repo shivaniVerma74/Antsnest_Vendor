@@ -1,8 +1,4 @@
 import 'package:animated_widgets/animated_widgets.dart';
-import 'package:fixerking/modal/response/get_profile_response.dart';
-import 'package:fixerking/screen/profile/edit_profile_screen.dart';
-import 'package:fixerking/utils/images.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +6,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:sizer/sizer.dart';
-import 'package:fixerking/utils/colors.dart';
-import 'package:fixerking/utils/common.dart';
-import 'package:fixerking/utils/constant.dart';
-import 'package:fixerking/utils/widget.dart';
+
+import '../../modal/response/get_profile_response.dart';
+import '../../utils/colors.dart';
+import '../../utils/constant.dart';
+import '../../utils/images.dart';
+import '../../utils/utility_hlepar.dart';
+import '../../utils/widget.dart';
+import 'edit_profile_screen.dart';
 
 class ViewProfileScreen extends StatefulWidget {
   late GetProfileResponse response;

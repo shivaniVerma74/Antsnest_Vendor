@@ -1,23 +1,22 @@
 import 'dart:convert';
-
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/api/api_services.dart';
-import 'package:fixerking/modal/request/change_password_request.dart';
-import 'package:fixerking/modal/request/forgot_password.dart';
-import 'package:fixerking/modal/request/get_profile_request.dart';
-import 'package:fixerking/modal/request/login_with_email.dart';
-import 'package:fixerking/modal/request/login_with_phone.dart';
-import 'package:fixerking/modal/request/sign_up_request.dart';
-import 'package:fixerking/modal/request/specilization_list_request.dart';
-import 'package:fixerking/modal/response/change_password_response.dart';
-import 'package:fixerking/modal/response/forgot_password_response.dart';
-import 'package:fixerking/modal/response/get_profile_response.dart';
-import 'package:fixerking/modal/response/get_service_type_list.dart';
-import 'package:fixerking/modal/response/login_email_response.dart';
-import 'package:fixerking/modal/response/login_phone_response.dart';
-import 'package:fixerking/modal/response/sign_up_response.dart';
-import 'package:fixerking/modal/response/specilization_list_response.dart';
-import 'package:fixerking/utils/utility_hlepar.dart';
+import '../../modal/request/change_password_request.dart';
+import '../../modal/request/forgot_password.dart';
+import '../../modal/request/get_profile_request.dart';
+import '../../modal/request/login_with_email.dart';
+import '../../modal/request/login_with_phone.dart';
+import '../../modal/request/sign_up_request.dart';
+import '../../modal/request/specilization_list_request.dart';
+import '../../modal/response/change_password_response.dart';
+import '../../modal/response/forgot_password_response.dart';
+import '../../modal/response/get_profile_response.dart';
+import '../../modal/response/get_service_type_list.dart';
+import '../../modal/response/login_email_response.dart';
+import '../../modal/response/login_phone_response.dart';
+import '../../modal/response/sign_up_response.dart';
+import '../../modal/response/specilization_list_response.dart';
+import '../../utils/utility_hlepar.dart';
+import '../api_path.dart';
+import '../api_services.dart';
 
 class AuthApiHelper {
   // login with Email

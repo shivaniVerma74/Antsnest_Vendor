@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fixerking/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +6,7 @@ import 'package:sizer/sizer.dart';
 
 import '../modal/MessageModel.dart';
 import '../modal/User_Model.dart';
+import '../utils/colors.dart';
 
 class ChatDetailScreen extends StatefulWidget {
    User? user;

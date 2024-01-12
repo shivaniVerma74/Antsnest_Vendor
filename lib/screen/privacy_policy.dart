@@ -1,10 +1,11 @@
 import 'dart:convert';
-import 'package:fixerking/api/api_path.dart';
-import 'package:fixerking/modal/privacy_model.dart';
-import 'package:fixerking/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart' as http;
+
+import '../api/api_path.dart';
+import '../modal/privacy_model.dart';
+import '../utils/colors.dart';
 
 
 class PrivacyPolicyScreen extends StatefulWidget {
@@ -96,17 +97,21 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
     var request = http.Request('GET', Uri.parse('${Apipath.BASH_URL}/pages/privacy_policy'));
 
     http.StreamedResponse response = await request.send();
+
     print(request);
     print(response.statusCode);
+    print(response..stream);
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
       final jsonResponse = PrivacyModel.fromJson(json.decode(str));
-      print(jsonResponse);
+      //print(jsonResponse);
       if(jsonResponse.status == "1"){
         setState(() {
           title = jsonResponse.setting?.data;
-          description = jsonResponse.setting?.discription;
+          description = jsonResponse.setting?.description??"";
         });
+
+
       }
       return PrivacyModel.fromJson(json.decode(str));
     }
