@@ -44,7 +44,7 @@ class Data {
   String? size;
   String? status;
   String? aStatus;
-  Null? reason;
+  dynamic? reason;
   String? isPaid;
   String? otp;
   String? amount;

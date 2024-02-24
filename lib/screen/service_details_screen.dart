@@ -42,7 +42,7 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
   var statusType = "";
   int statusIndex = 0;
   bool isComplete = false;
-  bool isConfirmButtonShow=false;
+  bool isConfirmButtonShow = false;
   TextEditingController otpController = TextEditingController();
   TextEditingController worktimeContoller = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -71,34 +71,34 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
   TextEditingController startOtpController = TextEditingController();
   TextEditingController completeOtpController = TextEditingController();
 
-      sendOtp({required String id,String ?nameOfService})async{
+  sendOtp({required String id, String? nameOfService}) async {
     var headers = {
       'Cookie': 'ci_session=795df498843b3324e3d90f2b104804411663a471'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('${Apipath.BASH_URL}send_booking_otp'));
-    request.fields.addAll({
-      'id': '${id}'
-    });
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('${Apipath.BASH_URL}send_booking_otp'));
+    request.fields.addAll({'id': '${id}'});
     print(" params here ${request.fields}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
-      var finalResult =  await response.stream.bytesToString();
+      var finalResult = await response.stream.bytesToString();
       final jsonResponse = json.decode(finalResult);
       print("final response here $jsonResponse");
       print("finalll resultttt noww ${finalResult}");
       setState(() {
-        Fluttertoast.showToast(msg: "${jsonResponse['message']} and OTP is ${jsonResponse['otp']}");
+        Fluttertoast.showToast(
+            msg:
+                "${jsonResponse['message']} and OTP is ${jsonResponse['otp']}");
         setState(() {
-         if(nameOfService=="endS"){
-           isConfirmButtonShow=true;
-         }
+          if (nameOfService == "endS") {
+            isConfirmButtonShow = true;
+          }
         });
         //setState(() {
-         // isStart = false;
+        // isStart = false;
       });
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
   }
@@ -106,16 +106,14 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
   final _fooomKey = GlobalKey<FormState>();
 
   final _forrmKey = GlobalKey<FormState>();
-  submitOtp(String id,TextEditingController otpValue, String status)async{
+  submitOtp(String id, TextEditingController otpValue, String status) async {
     var headers = {
       'Cookie': 'ci_session=795df498843b3324e3d90f2b104804411663a471'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('${Apipath.BASH_URL}update_booking_status'));
-    request.fields.addAll({
-      'booking_id': '$id',
-      'otp': otpValue.text,
-      'status': '$status'
-    });
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('${Apipath.BASH_URL}update_booking_status'));
+    request.fields.addAll(
+        {'booking_id': '$id', 'otp': otpValue.text, 'status': '$status'});
     print("sfsfsfsfsfsf ${request.fields}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
@@ -124,22 +122,22 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
       print(finalResult);
       final jsonResponse = json.decode(finalResult);
       print("checking submit response here $jsonResponse");
-      isStart = false ;
+      isStart = false;
       setState(() {
         Fluttertoast.showToast(msg: "${jsonResponse['message']}");
       });
-      if(status == "5"){
+      if (status == "5") {
         Navigator.pop(context);
       }
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print("STATUS====>"+widget.orderResponse.data![widget.i].status.toString());
+    print(
+        "STATUS====>" + widget.orderResponse.data![widget.i].status.toString());
     print("INDEX====>  ${widget.i.toString()}");
     print("INDEX===dddddd=>  ${widget.orderResponse.data![widget.i].aStatus}");
     changeStatusBarColor(AppColor().colorPrimary());
@@ -196,11 +194,12 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                           ),
                           Container(
                             width: 65.w,
-                            child: text("Booking Details",
-                                textColor: Color(0xffffffff),
-                                fontSize: 14.sp,
-                                fontFamily: fontMedium,
-                                isCentered: true,
+                            child: text(
+                              "Booking Details",
+                              textColor: Color(0xffffffff),
+                              fontSize: 14.sp,
+                              fontFamily: fontMedium,
+                              isCentered: true,
                             ),
                           ),
                         ],
@@ -214,7 +213,9 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         text(
-                          "Booking ID-" + widget.orderResponse.data![widget.i].id.toString(),
+                          "Booking ID-" +
+                              widget.orderResponse.data![widget.i].id
+                                  .toString(),
                           textColor: Color(0xff000833),
                           fontSize: 12.sp,
                           fontFamily: fontBold,
@@ -231,23 +232,21 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                               SizedBox(
                                 width: 5,
                               ),
-                              widget.orderResponse.data![widget.i].isPaid!='0'?
-                              text(
-                                widget.orderResponse.data![widget.i].total
-                                    .toString(),
-                                textColor:Color(0xff13CE3F),
-
-                                fontSize: 10.sp,
-                                fontFamily: fontBold,
-                              ):
-
-                              text(
-                                widget.orderResponse.data![widget.i].total
-                                    .toString(),
-                                textColor: AppColor().colorPrimaryDark(),
-                                fontSize: 10.sp,
-                                fontFamily: fontBold,
-                              ),
+                              widget.orderResponse.data![widget.i].isPaid != '0'
+                                  ? text(
+                                      widget.orderResponse.data![widget.i].total
+                                          .toString(),
+                                      textColor: Color(0xff13CE3F),
+                                      fontSize: 10.sp,
+                                      fontFamily: fontBold,
+                                    )
+                                  : text(
+                                      widget.orderResponse.data![widget.i].total
+                                          .toString(),
+                                      textColor: AppColor().colorPrimaryDark(),
+                                      fontSize: 10.sp,
+                                      fontFamily: fontBold,
+                                    ),
                             ],
                           ),
                         ),
@@ -261,57 +260,56 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        widget.orderResponse.data![widget.i].isPaid == "1" ? Row(
-                          children: [
-                            text(
-                              "Payment Status:" ,
-                              textColor: Colors.black,
-                              fontSize: 10.sp,
-                              fontFamily: fontSemibold,
-                            ),
-                            text(
-                              " PAID" ,
-                              textColor: Color(0xff13CE3F),
-                              fontSize: 10.sp,
-                              fontFamily: fontSemibold,
-                            ),
-                          ],
-                        ) : Row(
-                          children: [
-                            text(
-                              "Payment Status:" ,
-                              textColor: Colors.black,
-                              fontSize: 10.sp,
-                              fontFamily: fontSemibold,
-                            ),
-                            text(
-                              " UNPAID" ,
-                              textColor: Colors.red,
-                              fontSize: 10.sp,
-                              fontFamily: fontSemibold,
-                            ),
-                          ],
-                        ),
+                        widget.orderResponse.data![widget.i].isPaid == "1"
+                            ? Row(
+                                children: [
+                                  text(
+                                    "Payment Status:",
+                                    textColor: Colors.black,
+                                    fontSize: 10.sp,
+                                    fontFamily: fontSemibold,
+                                  ),
+                                  text(
+                                    " PAID",
+                                    textColor: Color(0xff13CE3F),
+                                    fontSize: 10.sp,
+                                    fontFamily: fontSemibold,
+                                  ),
+                                ],
+                              )
+                            : Row(
+                                children: [
+                                  text(
+                                    "Payment Status:",
+                                    textColor: Colors.black,
+                                    fontSize: 10.sp,
+                                    fontFamily: fontSemibold,
+                                  ),
+                                  text(
+                                    " UNPAID",
+                                    textColor: Colors.red,
+                                    fontSize: 10.sp,
+                                    fontFamily: fontSemibold,
+                                  ),
+                                ],
+                              ),
 
                         // SizedBox(width: 20,),
-Column(children: [
-
-
-                     dateTimeText(widget.orderResponse.data![widget.i].date!),
-                        text("${widget.orderResponse.data![widget.i].slot!}",
-                          textColor: Colors.black,
-                          fontSize: 10.sp,
-                          fontFamily: fontSemibold,
-
-
-                        ),
-],)
-
+                        Column(
+                          children: [
+                            dateTimeText(
+                                widget.orderResponse.data![widget.i].date!),
+                            text(
+                              "${widget.orderResponse.data![widget.i].slot!}",
+                              textColor: Colors.black,
+                              fontSize: 10.sp,
+                              fontFamily: fontSemibold,
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
-
-
 
                   Container(
                     margin: EdgeInsets.only(
@@ -324,131 +322,168 @@ Column(children: [
                   SizedBox(
                     height: 1.52.h,
                   ),
-                Container(
+                  Container(
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     child: Column(
                       children: [
                         Row(
-                          mainAxisAlignment:MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            widget.orderResponse.data![widget.i].status == "Completed" || widget.orderResponse.data![widget.i].status == "Cancelled by user"
+                            widget.orderResponse.data![widget.i].status ==
+                                        "Completed" ||
+                                    widget.orderResponse.data![widget.i]
+                                            .status ==
+                                        "Cancelled by user"
                                 ? SizedBox()
-                                : widget.orderResponse.data![widget.i].isPaid == "0"
-                                ? SizedBox()
-                                : isStarted || widget.orderResponse.data![widget.i].aStatus == '8'
-                                ? SizedBox()
-                                :
-                            InkWell(
-                              onTap:(){
-                                sendOtp(id: widget.orderResponse.data![widget.i].id.toString(),nameOfService: "startS");
-                                setState(() {
-                                  isStart = true;
-                                  isStarted = true ;
-                                });
-                              },
-                              child: Container(
-                                height: 40,
-                                width: 150,
-                                alignment:Alignment.center,
-                                decoration: BoxDecoration(
-                                    color: AppColor.PrimaryDark,
-                                    borderRadius: BorderRadius.circular(6)
-                                ),
-                                child: Text("Start Service",style: TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w500),),
-                              ),
+                                : widget.orderResponse.data![widget.i].isPaid ==
+                                        "0"
+                                    ? SizedBox()
+                                    : isStarted ||
+                                            widget.orderResponse.data![widget.i]
+                                                    .aStatus ==
+                                                '8'
+                                        ? SizedBox()
+                                        : InkWell(
+                                            onTap: () {
+                                              sendOtp(
+                                                  id: widget.orderResponse
+                                                      .data![widget.i].id
+                                                      .toString(),
+                                                  nameOfService: "startS");
+                                              setState(() {
+                                                isStart = true;
+                                                isStarted = true;
+                                              });
+                                            },
+                                            child: Container(
+                                              height: 40,
+                                              width: 150,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                  color: AppColor.PrimaryDark,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6)),
+                                              child: Text(
+                                                "Start Service",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                            ),
+                                          ),
+                            SizedBox(
+                              width: 10,
                             ),
-                                SizedBox(width: 10,),
-                            widget.orderResponse.data![widget.i].status == "Complete" ? SizedBox() :
-                            InkWell(
-                              onTap:(){
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) =>
-                                        ChatPage(
-                                            bookingId: widget.orderResponse.data![widget.i].id.toString(),
-                                            providerName: widget.orderResponse.data![widget.i].username.toString()
-                                          //  ChatDetailScreen(
-                                          // user: chat.sender,
+                            widget.orderResponse.data![widget.i].status ==
+                                    "Complete"
+                                ? SizedBox()
+                                : InkWell(
+                                    onTap: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => ChatPage(
+                                              bookingId: widget.orderResponse
+                                                  .data![widget.i].id
+                                                  .toString(),
+                                              providerName: widget.orderResponse
+                                                  .data![widget.i].username
+                                                  .toString()
+                                              //  ChatDetailScreen(
+                                              // user: chat.sender,
+                                              ),
                                         ),
+                                      );
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      width: 150,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          color: AppColor.PrimaryDark,
+                                          borderRadius:
+                                              BorderRadius.circular(6)),
+                                      child: Text(
+                                        "Start Chat",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
                                   ),
-                                );
-                              },
-
-                              child: Container(
-                                height: 40,
-                                width: 150,
-                                alignment:Alignment.center,
-                                decoration: BoxDecoration(
-                                    color: AppColor.PrimaryDark,
-                                    borderRadius: BorderRadius.circular(6)
-                                ),
-                                child: Text("Start Chat",style: TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w500),),
-                              ),
-                            ),
-
                           ],
                         ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        isStart
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 25, right: 25),
+                                child: Form(
+                                  key: _forrmKey,
+                                  child: TextFormField(
+                                    maxLength: 4,
+                                    controller: startOtpController,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      counterText: '',
+                                      hintText: "Enter OTP",
+                                      // border: OutlineInputBorder(
+                                      //   borderRadius: BorderRadius.circular(8),
+                                      //
+                                      // )
+                                    ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter Otp';
+                                      } else if (value.length < 4) {
+                                        return 'Please enter valid otp';
+                                      }
 
-
-                        SizedBox(height: 20,),
-                        isStart  ?  Padding(
-                          padding: const EdgeInsets.only(left: 25,right: 25),
-                          child: Form(
-                            key: _forrmKey,
-                            child: TextFormField(
-                              maxLength: 4,
-                              controller: startOtpController,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                counterText: '',
-                                hintText: "Enter OTP",
-                                // border: OutlineInputBorder(
-                                //   borderRadius: BorderRadius.circular(8),
-                                //
-                                // )
-                              ),
-                              validator: (value) {
-
-
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter Otp';
-                                }
-                               else if (value.length<4) {
-                                  return 'Please enter valid otp';
-                                }
-
-                                return null;
-                              },
-                            ),
-                          ),
-                        ) : SizedBox.shrink(),
-                        SizedBox(height: 20,),
-                    isStart ?    InkWell(
-                      onTap: (){
-                        if(_forrmKey.currentState!.validate()) {
-                          submitOtp(widget.orderResponse.data![widget.i].id
-                              .toString(), startOtpController, '8');
-                        }
-
-                      },
-                      child: Container(
-                            height: 40,
-                            width: 100,
-                            alignment:Alignment.center,
-                            decoration: BoxDecoration(
-                                color: AppColor.PrimaryDark,
-                                borderRadius: BorderRadius.circular(6)
-                            ),
-                            child: Text("Submit",style: TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w500),),
-                          ),
-                    ) : SizedBox.shrink(),
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              )
+                            : SizedBox.shrink(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        isStart
+                            ? InkWell(
+                                onTap: () {
+                                  if (_forrmKey.currentState!.validate()) {
+                                    submitOtp(
+                                        widget.orderResponse.data![widget.i].id
+                                            .toString(),
+                                        startOtpController,
+                                        '8');
+                                  }
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 100,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: AppColor.PrimaryDark,
+                                      borderRadius: BorderRadius.circular(6)),
+                                  child: Text(
+                                    "Submit",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              )
+                            : SizedBox.shrink(),
                       ],
                     ),
-                  ) ,
-
-
-
+                  ),
 
                   SizedBox(
                     height: 1.52.h,
@@ -463,12 +498,14 @@ Column(children: [
                     height: 1.52.h,
                   ),
 
-
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 15),
-                  //  margin: EdgeInsets.only(left: 8.33.w, right: 8.33.w),
+                    //  margin: EdgeInsets.only(left: 8.33.w, right: 8.33.w),
                     padding: EdgeInsets.only(
-                        left: 2.91.w, right: 2.91.w, top: 2.67.h,bottom:2.67.h ),
+                        left: 2.91.w,
+                        right: 2.91.w,
+                        top: 2.67.h,
+                        bottom: 2.67.h),
                     // height: 23.82.h,
                     decoration: boxDecoration(
                       showShadow: true,
@@ -477,8 +514,6 @@ Column(children: [
                     ),
                     child: Column(
                       children: [
-
-
                         Row(
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -489,8 +524,7 @@ Column(children: [
                               fontFamily: fontBold,
                             ),
                             text(
-                              widget.orderResponse.data![widget.i]
-                                  .username!,
+                              widget.orderResponse.data![widget.i].username!,
                               textColor: Color(0xff757575),
                               fontSize: 10.sp,
                               fontFamily: fontSemibold,
@@ -524,7 +558,7 @@ Column(children: [
                             // ),
                             //
                             //
-                           // Container(
+                            // Container(
                             //   child: Column(
                             //     mainAxisAlignment: MainAxisAlignment.start,
                             //     crossAxisAlignment: CrossAxisAlignment.start,
@@ -556,11 +590,7 @@ Column(children: [
                             // ),
                           ],
                         ),
-
-                        SizedBox(
-                          height:10
-                        ),
-
+                        SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -575,26 +605,23 @@ Column(children: [
                               height: 1.02.h,
                             ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width/1.5,
+                              width: MediaQuery.of(context).size.width / 1.5,
                               child: text(
-                                  widget.orderResponse.data![widget.i]
-                                      .address!,
+                                widget.orderResponse.data![widget.i].address!,
 
-                                  textColor: Color(0xff757575),
-                                  fontSize: 9.sp,
-                                  fontFamily: fontSemibold,
-                                  maxLine: 3,
+                                textColor: Color(0xff757575),
+                                fontSize: 9.sp,
+                                fontFamily: fontSemibold,
+                                maxLine: 3,
 
-                              // overFlow: TextOverflow.ellipsis
+                                // overFlow: TextOverflow.ellipsis
                               ),
                             ),
                           ],
                         ),
-
                       ],
                     ),
                   ),
-
 
                   SizedBox(
                     height: 1.52.h,
@@ -610,15 +637,15 @@ Column(children: [
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 15),
-                    padding: EdgeInsets.symmetric(horizontal: 12,vertical: 10),
-                   // margin: EdgeInsets.only(left: 8.33.w, right: 8.33.w),
-                   //  padding: EdgeInsets.only(
-                   //      left: 2.91.w, right: 2.91.w, top: 2.67.h),
-                   // height: 12.32.h,
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    // margin: EdgeInsets.only(left: 8.33.w, right: 8.33.w),
+                    //  padding: EdgeInsets.only(
+                    //      left: 2.91.w, right: 2.91.w, top: 2.67.h),
+                    // height: 12.32.h,
                     decoration: boxDecoration(
                       showShadow: true,
                       radius: 20.0,
-                      bgColor:AppColor().colorBg1(),
+                      bgColor: AppColor().colorBg1(),
                     ),
                     child: Column(
                       children: [
@@ -637,10 +664,8 @@ Column(children: [
                                   fontFamily: fontBold,
                                 ),
                                 text(
-                                      UtilityHlepar.convertNA(widget
-                                          .orderResponse
-                                          .data![widget.i]
-                                          .resName),
+                                  UtilityHlepar.convertNA(widget
+                                      .orderResponse.data![widget.i].resName),
                                   textColor: Colors.black,
                                   fontSize: 10.sp,
                                   fontFamily: fontSemibold,
@@ -658,20 +683,15 @@ Column(children: [
                                   fontFamily: fontBold,
                                 ),
                                 text(
-                                  widget
-                                      .orderResponse
-                                      .data![widget.i]
-                                      .currency! /*AppStrings.currencySymbols*/ +
+                                  widget.orderResponse.data![widget.i]
+                                          .currency! /*AppStrings.currencySymbols*/ +
                                       " " +
                                       UtilityHlepar.convertNA(widget
-                                          .orderResponse
-                                          .data![widget.i]
-                                          .price),
+                                          .orderResponse.data![widget.i].price),
                                   textColor: Colors.black,
                                   fontSize: 10.sp,
                                   fontFamily: fontSemibold,
                                 ),
-
                               ],
                             ),
                             Row(
@@ -685,16 +705,16 @@ Column(children: [
                                   fontFamily: fontBold,
                                 ),
                                 text(
-                                  /*AppStrings.currencySymbols*/widget
-                                    .orderResponse
-                                    .data![widget.i]
-                                    .currency! +
+                                  /*AppStrings.currencySymbols*/ widget
+                                          .orderResponse
+                                          .data![widget.i]
+                                          .currency! +
                                       " " +
                                       UtilityHlepar.convertNA(widget
                                           .orderResponse
                                           .data![widget.i]
                                           .addons),
-                                  textColor:Colors.black,
+                                  textColor: Colors.black,
                                   fontSize: 10.sp,
                                   fontFamily: fontSemibold,
                                 ),
@@ -722,10 +742,10 @@ Column(children: [
                                   fontFamily: fontBold,
                                 ),
                                 text(
-                                  /*AppStrings.currencySymbols*/widget
-                                    .orderResponse
-                                    .data![widget.i]
-                                    .currency! +
+                                  /*AppStrings.currencySymbols*/ widget
+                                          .orderResponse
+                                          .data![widget.i]
+                                          .currency! +
                                       " " +
                                       UtilityHlepar.convertNA(widget
                                           .orderResponse
@@ -760,10 +780,10 @@ Column(children: [
                                   fontFamily: fontBold,
                                 ),
                                 text(
-                                  /*AppStrings.currencySymbols*/widget
-                                    .orderResponse
-                                    .data![widget.i]
-                                    .currency! +
+                                  /*AppStrings.currencySymbols*/ widget
+                                          .orderResponse
+                                          .data![widget.i]
+                                          .currency! +
                                       " " +
                                       UtilityHlepar.convertNA(widget
                                           .orderResponse
@@ -775,18 +795,17 @@ Column(children: [
                                 ),
                               ],
 
-                                // text(
-                                //   AppStrings.currencySymbols +
-                                //       " " +
-                                //       UtilityHlepar.convertNA(widget
-                                //           .orderResponse
-                                //           .data![widget.i]
-                                //           .addons),
-                                //   textColor: Color(0xffFD531F),
-                                //   fontSize: 10.sp,
-                                //   fontFamily: fontSemibold,
-                                // ),
-
+                              // text(
+                              //   AppStrings.currencySymbols +
+                              //       " " +
+                              //       UtilityHlepar.convertNA(widget
+                              //           .orderResponse
+                              //           .data![widget.i]
+                              //           .addons),
+                              //   textColor: Color(0xffFD531F),
+                              //   fontSize: 10.sp,
+                              //   fontFamily: fontSemibold,
+                              // ),
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -800,14 +819,12 @@ Column(children: [
                                 ),
                                 text(
                                   /*AppStrings.currencySymbols*/ widget
-                                    .orderResponse
-                                    .data![widget.i]
-                                    .currency!+
-                                      " " +
-                                      UtilityHlepar.convertNA(widget
                                           .orderResponse
                                           .data![widget.i]
-                                          .total),
+                                          .currency! +
+                                      " " +
+                                      UtilityHlepar.convertNA(widget
+                                          .orderResponse.data![widget.i].total),
                                   textColor: Colors.black,
                                   fontSize: 10.sp,
                                   fontFamily: fontSemibold,
@@ -837,17 +854,15 @@ Column(children: [
                                 ),
                                 Container(
                                   alignment: Alignment.centerRight,
-                                  width: MediaQuery.of(context).size.width/1.5,
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.5,
                                   child: text(
                                       UtilityHlepar.convertNA(widget
-                                          .orderResponse
-                                          .data![widget.i]
-                                          .size),
+                                          .orderResponse.data![widget.i].size),
                                       textColor: Colors.black,
                                       fontSize: 10.sp,
                                       fontFamily: fontSemibold,
-                                      maxLine: 2
-                                  ),
+                                      maxLine: 2),
                                 ),
                                 // text(
                                 //   AppStrings.currencySymbols +
@@ -905,15 +920,15 @@ Column(children: [
                     // height: 62.62.h,
                     width: 83.88.w,
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomLeft,
-                      tileMode: TileMode.clamp,
-                      colors: [
-                        AppColor().colorBg1(),
-                        AppColor().colorBg2(),
-                      ],
-                    ),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomLeft,
+                        tileMode: TileMode.clamp,
+                        colors: [
+                          AppColor().colorBg1(),
+                          AppColor().colorBg2(),
+                        ],
+                      ),
                     ),
                     child: Column(
                       children: [
@@ -943,6 +958,39 @@ Column(children: [
                             ),
                           ),
                         ),
+                        SizedBox(
+                          height: 1.52.h,
+                        ),
+                        widget.orderResponse.data![widget.i].status ==
+                                "Cancelled by user"
+                            ? DottedBorder(
+                                color: Color(0xff707070),
+                                strokeWidth: 1,
+                                dashPattern: [3],
+                                strokeCap: StrokeCap.square,
+                                radius: const Radius.circular(10),
+                                child: Container(
+                                  // width: 50.69.w,
+                                  // height: 4.37.h,
+                                  child: Center(
+                                    child: text(
+                                      "Reason : " +
+                                          "(" +
+                                          UtilityHlepar.convertNA(widget
+                                                  .orderResponse
+                                                  .data![widget.i]
+                                                  .reason
+                                                  .toString() +
+                                              ")"),
+                                      textColor: AppColor.PrimaryDark,
+                                      fontSize: 14.sp,
+                                      fontFamily: fontBold,
+                                      isCentered: true,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : SizedBox.shrink(),
                         SizedBox(
                           height: 3.02.h,
                         ),
@@ -990,7 +1038,9 @@ Column(children: [
                                 ),
                               )
                             : Container(),*/
-                        widget.orderResponse.data![widget.i].aStatus == "8" && widget.orderResponse.data![widget.i].isPaid == "1"
+                        widget.orderResponse.data![widget.i].aStatus == "8" &&
+                                widget.orderResponse.data![widget.i].isPaid ==
+                                    "1"
                             ? Container(
                                 width: 69.99.w,
                                 // height: 9.46.h,
@@ -1017,8 +1067,6 @@ Column(children: [
                                             style: BorderStyle.solid),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(10.0)),
-
-
                                       ),
                                       labelText: 'Enter Customer OTP',
                                       labelStyle: TextStyle(
@@ -1042,12 +1090,11 @@ Column(children: [
                                       if (value == null || value.isEmpty) {
                                         return 'Please enter otp';
                                       }
-                                      if (value.length<4) {
+                                      if (value.length < 4) {
                                         return 'Please enter valid otp';
                                       }
                                       return null;
                                     },
-
                                   ),
                                 ),
                               )
@@ -1058,42 +1105,67 @@ Column(children: [
                   SizedBox(
                     height: 2.02.h,
                   ),
-                  widget.orderResponse.data![widget.i].status != "Pending"? Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12),
-                    child: Column(
-                      children: [
-                        widget.orderResponse.data![widget.i].status == "Completed"
-                            ? MaterialButton(onPressed: () async {
-                          final Uri url = Uri.parse( '${Apipath.BASH_URL}get_invoice/${widget.orderResponse.data![widget.i].id}');
-                          print("checking url here $url");
-                          if (await canLaunch(url.toString())) {
-                            await launch(url.toString());
-                          } else {
-                            throw 'Could not launch $url';
-                          }
-                        },child: Text("Download Invoice",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 16)),color:AppColor.PrimaryDark) :
-                        isCompleted ? SizedBox() :
-                        widget.orderResponse.data![widget.i].status =='Started'?
-                        InkWell(
-                          onTap:() {
-                            isCompleted = true;
-                            sendOtp(id: widget.orderResponse.data![widget.i].id.toString(),nameOfService: "endS");
-                            setState(() {});
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 150,
-                            alignment:Alignment.center,
-                            decoration: BoxDecoration(
-                                color: AppColor.PrimaryDark,
-                                borderRadius: BorderRadius.circular(6)
-                            ),
-                            child: Text("End Service",style: TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w500),),
-                          ),
-                        ):
-                        SizedBox(),
-                        SizedBox(height: 10),
-                        /*isCompleted == true ?    TextField(
+                  widget.orderResponse.data![widget.i].status != "Pending"
+                      ? Container(
+                          padding: EdgeInsets.symmetric(horizontal: 12),
+                          child: Column(
+                            children: [
+                              widget.orderResponse.data![widget.i].status ==
+                                      "Completed"
+                                  ? MaterialButton(
+                                      onPressed: () async {
+                                        final Uri url = Uri.parse(
+                                            '${Apipath.BASH_URL}get_invoice/${widget.orderResponse.data![widget.i].id}');
+                                        print("checking url here $url");
+                                        if (await canLaunch(url.toString())) {
+                                          await launch(url.toString());
+                                        } else {
+                                          throw 'Could not launch $url';
+                                        }
+                                      },
+                                      child: Text("Download Invoice",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16)),
+                                      color: AppColor.PrimaryDark)
+                                  : isCompleted
+                                      ? SizedBox()
+                                      : widget.orderResponse.data![widget.i]
+                                                  .status ==
+                                              'Started'
+                                          ? InkWell(
+                                              onTap: () {
+                                                isCompleted = true;
+                                                sendOtp(
+                                                    id: widget.orderResponse
+                                                        .data![widget.i].id
+                                                        .toString(),
+                                                    nameOfService: "endS");
+                                                setState(() {});
+                                              },
+                                              child: Container(
+                                                height: 40,
+                                                width: 150,
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                    color: AppColor.PrimaryDark,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            6)),
+                                                child: Text(
+                                                  "End Service",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ),
+                                            )
+                                          : SizedBox(),
+                              SizedBox(height: 10),
+                              /*isCompleted == true ?    TextField(
                           controller: completeOtpController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
@@ -1120,9 +1192,10 @@ Column(children: [
                             child: Text("Submit OTP",style: TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w500),),
                           ),
                         ) : SizedBox.shrink(),*/
-                      ],
-                    ),
-                  ): SizedBox.shrink(),
+                            ],
+                          ),
+                        )
+                      : SizedBox.shrink(),
                   SizedBox(
                     height: 3.02.h,
                   ),
@@ -1188,33 +1261,36 @@ Column(children: [
                   SizedBox(
                     height: 3.02.h,
                   ),*/
-                  widget.orderResponse.data![widget.i].aStatus == "8" && widget.orderResponse.data![widget.i].isPaid == "1"
-                      ?
-                  isConfirmButtonShow?
-                  InkWell(
-                    onTap: () async {
-                      if(_fooomKey.currentState!.validate()) {
-                        if (otpController.text.isNotEmpty) {
-                          CompleteBookingModel cmplteModel = await completeBooking();
-                          if (cmplteModel.responseCode == "1") {
-                            UtilityHlepar.getToast("${cmplteModel.msg}");
-                            Navigator.pop(context, true);
-                          }
-                        } else {
-                          UtilityHlepar.getToast("Please Enter OTP");
-                        }
-                      }
-                    },
-                    child: Container(
-                      child: text("Complete Work"),
-                      height: 8.h,
-                      width: 90.w,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: AppColor.PrimaryDark,
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                  ):SizedBox.shrink()
+                  widget.orderResponse.data![widget.i].aStatus == "8" &&
+                          widget.orderResponse.data![widget.i].isPaid == "1"
+                      ? isConfirmButtonShow
+                          ? InkWell(
+                              onTap: () async {
+                                if (_fooomKey.currentState!.validate()) {
+                                  if (otpController.text.isNotEmpty) {
+                                    CompleteBookingModel cmplteModel =
+                                        await completeBooking();
+                                    if (cmplteModel.responseCode == "1") {
+                                      UtilityHlepar.getToast(
+                                          "${cmplteModel.msg}");
+                                      Navigator.pop(context, true);
+                                    }
+                                  } else {
+                                    UtilityHlepar.getToast("Please Enter OTP");
+                                  }
+                                }
+                              },
+                              child: Container(
+                                child: text("Complete Work"),
+                                height: 8.h,
+                                width: 90.w,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    color: AppColor.PrimaryDark,
+                                    borderRadius: BorderRadius.circular(10)),
+                              ),
+                            )
+                          : SizedBox.shrink()
                       : Container(),
                   SizedBox(
                     height: 2.02.h,
@@ -1242,8 +1318,8 @@ Column(children: [
   late UpdateStatusResponse statusResponse;
 
   Future completeBooking() async {
-    
-    var request = http.MultipartRequest('POST', Uri.parse('${Apipath.BASH_URL}complete_booking'));
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('${Apipath.BASH_URL}complete_booking'));
     request.fields.addAll({
       'id': '${widget.orderResponse.data![widget.i].id}',
       'otp': '${otpController.text.toString()}'
@@ -1254,11 +1330,9 @@ Column(children: [
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
       return CompleteBookingModel.fromJson(json.decode(str));
-    }
-    else {
+    } else {
       return null;
     }
-
   }
 
   updateStatus() async {
@@ -1266,7 +1340,8 @@ Column(children: [
     print(statusList.indexOf(statusList[statusIndex]));
     print(statusList.indexOf(widget.orderResponse.data![widget.i].status!) >
         statusIndex);
-    if (statusList.indexOf(widget.orderResponse.data![widget.i].status!) > statusIndex) {
+    if (statusList.indexOf(widget.orderResponse.data![widget.i].status!) >
+        statusIndex) {
       UtilityHlepar.getToast(ToastString.statusAlreadyUpdate);
     } else {
       if (statusList[4] == statusList[statusIndex]) {
@@ -1277,8 +1352,8 @@ Column(children: [
     }
   }
 
-  dateTimeText(String date){
-    DateTime dateTime =DateTime.parse(date);
+  dateTimeText(String date) {
+    DateTime dateTime = DateTime.parse(date);
     return text(
       DateFormat("dd-MMM-yyyy").format(dateTime),
       textColor: Color(0xff2E2E2E),
@@ -1333,6 +1408,4 @@ Column(children: [
           (route) => false);
     }
   }
-
 }
-

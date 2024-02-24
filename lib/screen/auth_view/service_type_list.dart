@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../api/api_helper/auth_helper.dart';
 import '../../modal/response/get_service_type_list.dart';
 import '../../utility_widget/shimmer_loding_view/loding_all_page.dart';

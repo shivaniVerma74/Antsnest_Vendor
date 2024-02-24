@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'package:fixerking/screen/testScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:sizer/sizer.dart';
 import '../api/api_helper/ApiList.dart';
 import '../api/api_helper/auth_helper.dart';
 import '../api/api_path.dart';
@@ -46,7 +44,7 @@ class _WalletScreenState extends State<WalletScreen> {
   TextEditingController msgC = TextEditingController();
   TextEditingController amountController = TextEditingController();
   var planI;
-  List<WalletModelData> walletHistory = [];
+  List<WalletHistoryData> walletHistory = [];
 
   String? validateField(String value, String? msg) {
     if (value.length == 0)

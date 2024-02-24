@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'package:animated_widgets/widgets/scale_animated.dart';
 // import 'package:fixerking/modal/VendorServiceModel.dart';
 import 'package:flutter/material.dart';
-
 import 'package:http/http.dart' as http;
-
 import 'package:page_transition/page_transition.dart';
 import 'package:sizer/sizer.dart';
 import '../../api/api_helper/home_api_helper.dart';

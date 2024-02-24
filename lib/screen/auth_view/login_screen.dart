@@ -12,6 +12,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
+
 import '../../api/api_helper/ApiList.dart';
 import '../../api/api_helper/auth_helper.dart';
 import '../../modal/New models/LoginModel.dart';
@@ -478,7 +479,7 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                       SizedBox(
                           width: 30,
-                          child: Image.asset("images/twitter (1).png")),
+                          child: Image.asset("images/x.png")),
                       SizedBox(
                         width: 10,
                       ),
@@ -487,6 +488,7 @@ class _LoginScreenState extends State<LoginScreen>
                     ],
                   ),
                   Spacer(),
+
                   Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(top: 20),
@@ -505,8 +507,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   child: SignUpScreen(),
                                   type: PageTransitionType.rightToLeft,
                                   duration: Duration(milliseconds: 500),
-                                ),
-                            );
+                                ));
                           },
                           child: ScaleAnimatedWidget.tween(
                             enabled: edit,

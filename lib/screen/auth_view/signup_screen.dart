@@ -626,7 +626,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                         borderRadius:BorderRadius.circular(100)
                                     ),child: Container(
                                     decoration: BoxDecoration(
-                                        color: selectedLanguageList.contains(languageList[i]) ?  AppColor().colorPrimary() : Colors.transparent,
+                                        color: selectedLanguageList.contains(languageList[i]) ?   AppColor().colorPrimary() : Colors.transparent,
                                         borderRadius:BorderRadius.circular(100)
                                     ),
                                   ),),
@@ -2092,6 +2092,8 @@ class _SignUpScreenState extends State<SignUpScreen>
                         height: 15,
                       ),
                       serviceSubCategoryModel == null   ? SizedBox()  :
+
+
                       Material(
                         elevation: 4,
                         color: Colors.white,

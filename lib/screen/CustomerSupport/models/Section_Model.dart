@@ -1,6 +1,4 @@
 
-
-
 import '../constants.dart';
 
 class SectionModel {

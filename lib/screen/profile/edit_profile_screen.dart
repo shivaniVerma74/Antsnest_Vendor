@@ -12,6 +12,7 @@ import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 import '../../api/api_helper/multipart_helper.dart';
@@ -115,6 +116,14 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     "10",
   ];
   List <String> subcateid=[];
+  Future<void> checkAndRequestCameraPermission() async {
+    var status = await Permission.camera.status;
+
+    if (status.isDenied) {
+      // Permission is denied, open app settings
+      openAppSettings();
+    }
+  }
 
   @override
   void initState() {
@@ -123,6 +132,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     changePage();
     getCountries();
     setFromField();
+    checkAndRequestCameraPermission();
     getServiceCategory();
 
 
@@ -575,9 +585,14 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     print(widget.response.user!.jsonData!.hrsDay.toString()+"++++++++++++++++");
     selectedDayHour = widget.response.user!.jsonData!.hrsDay.toString() == "" || widget.response.user!.jsonData!.hrsDay.toString() == "null"||widget.response.user!.jsonData!.hrsDay.toString()=="Hours" ? "Hour" : widget.response.user!.jsonData!.hrsDay.toString();
     selectedLanguage = widget.response.user!.jsonData!.language.toString();
-    selectedTravel = widget.response.user!.jsonData!.canTravel.toString();
+    print("${widget.response.user!.jsonData!.canTravel.toString()}"+"+++++++++++++++");
+    selectedTravel = widget.response.user!.jsonData!.canTravel.toString()=="null"?null:widget.response.user!.jsonData!.canTravel.toString();
     _selectedItems = finalList;
+
+
+
     /// payment purpose section here
+
     payNameController.text = widget.response.user!.paymentDetails?.accountHolderName.toString() ?? '';
     accController.text = widget.response.user!.paymentDetails?.accNo.toString() ?? '';
     bankNameController.text = widget.response.user!.paymentDetails?.bankName.toString() ?? '';
@@ -3364,11 +3379,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           print(categorylist.isEmpty.toString()+"_______________");
                           editProfile();
                         }
+
                       },
                       child: UtilityWidget.lodingButton(
                           buttonLogin: buttonLogin, btntext: 'Save'),
                     )),
                 SizedBox(height: 15,),
+
               ],
             ),
           ),

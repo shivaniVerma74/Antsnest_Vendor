@@ -30,7 +30,7 @@ class BottomBar extends StatefulWidget {
 class _BottomBarState extends State<BottomBar> {
   List<Widget> bodyList = [
     HomeScreen(),
-    NotificationScreen(),
+    // NotificationScreen(),
     ManageService(),
     ProfileScreen()
   ];
@@ -49,6 +49,7 @@ class _BottomBarState extends State<BottomBar> {
     setState(() {
       selectedIndex = index;
     });
+    print(selectedIndex);
   }
 
   late NotificationResponse response;
@@ -77,7 +78,7 @@ class _BottomBarState extends State<BottomBar> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColor().colorBg2(),
-        body: selectedIndex == 2
+        body: selectedIndex == 1
             ? ManageService(profileResponse: profileResponse)
             : bodyList[selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
@@ -94,18 +95,7 @@ class _BottomBarState extends State<BottomBar> {
                   AssetImage(home),
                 ),
                 label: "Home"),
-            BottomNavigationBarItem(
-                // icon: Icon(Icons.category),
-                icon: badges.Badge(
-                    badgeContent: Text('${count ?? 0}'),
-                    showBadge: count=="0"?false:true,
-                    child: Icon(Icons.notifications),
-                    badgeStyle: badges.BadgeStyle(
-                      shape: badges.BadgeShape.circle,
-                      badgeColor: AppColor.PrimaryDark,
-                      padding: EdgeInsets.all(5),
-                    )),
-                label: "Notification"),
+
             BottomNavigationBarItem(
                 icon: ImageIcon(AssetImage(addIcon)), label: "Manage Service"),
             BottomNavigationBarItem(

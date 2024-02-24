@@ -12,7 +12,9 @@ class PdfViewScreen extends StatelessWidget {
     return Scaffold(
       body:
       Container(
+
                       child: SfPdfViewer.network(
+
                           'https://developmentalphawizz.com/antsnest/uploads/chats/${linkofpdf}')),
     );
   }

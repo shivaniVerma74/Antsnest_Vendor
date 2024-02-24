@@ -16,8 +16,10 @@ import '../modal/message_chat_model.dart';
 import '../modal/request/accept_reject_request.dart';
 import '../modal/request/get_new_order_request.dart';
 import '../modal/request/i_am_online_request.dart';
+import '../modal/request/notification_request.dart';
 import '../modal/response/accept_reject_response.dart';
 import '../modal/response/i_am_online_response.dart';
+import '../modal/response/notification_response.dart';
 import '../token/app_token_data.dart';
 import '../utils/colors.dart';
 import '../utils/constant.dart';
@@ -28,6 +30,7 @@ import '../utils/utility_hlepar.dart';
 import '../utils/widget.dart';
 import 'Chat_Screen.dart';
 import 'chat_page.dart';
+import 'notification_screen.dart';
 import 'splash_screen.dart';
 import 'package:badges/badges.dart' as badges;
 
@@ -47,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     // getNewOders();
     getMessageCount();
+    getNotification();
   }
 
   @override
@@ -103,7 +107,28 @@ getMessageCount() async {
       print(response.reasonPhrase);
     }
   }
+  String? count;
+  late NotificationResponse response;
+  StreamController<NotificationResponse> responseSteam = StreamController();
 
+  getNotification() async {
+    try {
+      String userid = await MyToken.getUserID();
+      NotificationRequest request = NotificationRequest(userid: userid);
+      response = await HomeApiHelper.getNotification(request);
+      count = response.count;
+      setState(() {});
+      print(response.notifications?.length);
+      // if (response.responseCode == ToastString.responseCode) {
+      //   responseSteam.sink.add(response);
+      // } else {
+      //   responseSteam.sink.addError(response.message!);
+      // }
+    } catch (e) {
+      UtilityHlepar.getToast(e.toString());
+      responseSteam.sink.addError(ToastString.msgSomeWentWrong);
+    }
+  }
   bool isStatus = false;
   updateRequestFunction(String id, String value, {String? name}) async {
     var vendorId = await MyToken.getUserID();
@@ -130,7 +155,12 @@ getMessageCount() async {
       print("final result here ${jsonResponse.msg}");
       if (jsonResponse.responseCode == "1") {
         if(value== 'accept'){
-          Fluttertoast.showToast(msg: " Booking Accepted Successfully, You can now chat with ${name}");
+          var snackBar = SnackBar(
+            backgroundColor: Colors.green,
+            content: Text("Booking Accepted Successfully, You can now chat with ${name}"),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        //  Fluttertoast.showToast(msg: " );
 
         }else {
           Fluttertoast.showToast(msg: "${jsonResponse.msg}");
@@ -150,7 +180,7 @@ getMessageCount() async {
  String? selectedStatus;
   List<String> statusList = [
     "Pending",
-    "Confirm",
+    "Confirmed",
     "Completed",
     "Cancelled by vendor",
     "Cancelled by user"
@@ -164,14 +194,34 @@ getMessageCount() async {
         child: Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              title: Text(
-                "Home",
-              ),
-              centerTitle: true,
+              title:
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Image.asset('images/home_one.png', height: 90),
+                  ),
+              centerTitle: false,
               backgroundColor: AppColor.PrimaryDark,
               actions: [
+                InkWell(
+                  onTap: (){
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => NotificationScreen()));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15, top: 15,),
+                    child: badges.Badge(
+                        badgeContent: Text('${count ?? 0}'),
+                        showBadge: count=="0"?false:true,
+                        child: Icon(Icons.notifications,size: 25,),
+                        badgeStyle: badges.BadgeStyle(
+                          shape: badges.BadgeShape.circle,
+                          badgeColor: Colors.white,
+                          padding: EdgeInsets.all(4),
+                        )),
+                  ),
+                ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 9, top: 6),
+                  padding: const EdgeInsets.only(right: 15, top: 15),
                   child: InkWell(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
@@ -184,7 +234,7 @@ getMessageCount() async {
                           badgeStyle: badges.BadgeStyle(
                             shape: badges.BadgeShape.circle,
                             badgeColor: Colors.white,
-                            padding: EdgeInsets.all(5),
+                            padding: EdgeInsets.all(4),
                           )),
                      ),
                 ),
@@ -318,8 +368,10 @@ getMessageCount() async {
                             }).toList(),
                             onChanged: (String? newValue) {
                               setState(() {
-                                selectedStatus = newValue!;
-                                getVendorBooking(selectedStatus.toString());
+
+                                  selectedStatus=newValue;
+
+                                getVendorBooking(selectedStatus=="Confirmed"?"Confirm":selectedStatus.toString());
                               });
                             },
                           ),
@@ -327,7 +379,7 @@ getMessageCount() async {
                       ),
                       currentIndex == 0 ?
                       FutureBuilder(
-                              future: getVendorBooking(selectedStatus.toString()),
+                              future: getVendorBooking(selectedStatus.toString()=="Confirmed"?"Confirm":selectedStatus.toString()),
                               builder: (BuildContext context,
                                   AsyncSnapshot snapshot) {
                                 VendorOrderModel? model = snapshot.data;
@@ -672,7 +724,13 @@ getMessageCount() async {
                                                                   model.data?[i].username ?? '',
                                                                   style: TextStyle(color:  Color(0xff191919),fontSize: 14.sp,fontFamily: fontBold),
                                                                 ),
-                                                                Text("${model.data?[i].date}")
+                                                                Column(
+                                                                  children: [
+                                                                    Text("${model.data?[i].date}"),
+                                                                    SizedBox(height: 5,),
+                                                                    Text("${model.data?[i].slot}"),
+                                                                  ],
+                                                                )
                                                               ],
                                                             ),
                                                             SizedBox(height: 10,),
@@ -2275,7 +2333,12 @@ getMessageCount() async {
     response = await HomeApiHelper.acceptReject(request);
     if (response.responseCode == ToastString.responseCode) {
       if(statusType=='accept'){
-        Fluttertoast.showToast(msg: 'Booking Accepted Successfully, You can now chat with ${name}');
+        var snackBar = SnackBar(
+          backgroundColor: Colors.green,
+          content: Text("Booking Accepted Successfully, You can now chat with ${name}"),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+       // Fluttertoast.showToast(msg: 'Booking Accepted Successfully, You can now chat with ${name}');
       }
       // UtilityHlepar.getToast(response.message.toString());
       Navigator.pop(context);

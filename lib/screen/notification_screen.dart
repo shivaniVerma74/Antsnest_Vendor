@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'package:fixerking/screen/service_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../api/api_helper/home_api_helper.dart';
 import '../api/api_path.dart';
 import '../api/api_services.dart';
+import '../modal/VendorOrderModel.dart';
+import '../modal/request/get_new_order_request.dart';
 import '../modal/request/notification_request.dart';
 import '../modal/response/notification_response.dart';
 import '../token/app_token_data.dart';
@@ -30,6 +33,26 @@ class _NotificationScreenState extends State<NotificationScreen> {
     getNotification();
     getReadNotification();
   }
+  late VendorOrderModel orderResponse;
+
+  getNewOders(i,String bookinId) async {
+
+    var userid = await MyToken.getUserID();
+    GetNewOrderRequest request = GetNewOrderRequest(userId: userid,bookingId:bookinId );
+    orderResponse = await HomeApiHelper.getNewOrder(request);
+    if (orderResponse.responseCode == ToastString.responseCode) {
+
+      gotOderInfo(orderResponse, i);
+    } else {
+    }
+  }
+  gotOderInfo(response, i) async {
+    await Navigator.push(
+      context, MaterialPageRoute(builder: (context) => ServiceScreenDetails(orderResponse: response, i: i)),
+    );
+   // await getVendorBooking("");
+  }
+
 
   @override
   void dispose() {
@@ -135,69 +158,74 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: snapshot.data!.notifications!.length,
                             itemBuilder: (context, i) {
-                              return Container(
-                                  height: 11.40.h,
-                                  width: 82.91.w,
-                                  decoration: boxDecoration(
-                                    showShadow: true,
-                                    radius: 0.0,
-                                    bgColor: AppColor().colorBg1(),
-                                  ),
-                                  margin: EdgeInsets.only(
-                                      left: 8.33.w,
-                                      right: 8.33.w,
-                                      bottom: 1.87.h),
-                                  padding: EdgeInsets.only(
-                                      left: 3.05.w, right: 2.05.w),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        height: 6.32.h,
-                                        width: 6.32.h,
-                                        child: Image(
-                                          image: AssetImage(notificationIcon),
-                                          fit: BoxFit.fill,
+                              return InkWell(
+                                onTap: () async {
+                                  getNewOders(0,"${snapshot.data!.notifications?[i].dataId}");
+                                },
+                                child: Container(
+                                    height: 11.40.h,
+                                    width: 82.91.w,
+                                    decoration: boxDecoration(
+                                      showShadow: true,
+                                      radius: 0.0,
+                                      bgColor: AppColor().colorBg1(),
+                                    ),
+                                    margin: EdgeInsets.only(
+                                        left: 8.33.w,
+                                        right: 8.33.w,
+                                        bottom: 1.87.h),
+                                    padding: EdgeInsets.only(
+                                        left: 3.05.w, right: 2.05.w),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          height: 6.32.h,
+                                          width: 6.32.h,
+                                          child: Image(
+                                            image: AssetImage(notificationIcon),
+                                            fit: BoxFit.fill,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: 3.05.w,
-                                      ),
-                                      Container(
-                                        width: 57.5.w,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              child: text(
-                                                  snapshot
-                                                      .data!.notifications![i].title!,
-                                                  textColor: Color(0xff191919),
-                                                  fontSize: 11.5.sp,
-                                                  fontFamily: fontBold,
-                                                  overFlow: true),
-                                            ),
-                                            SizedBox(
-                                              height: 0.79.h,
-                                            ),
-                                            Container(
-                                              child: text(
-                                                snapshot
-                                                    .data!.notifications![i].message!,
-                                                textColor: Color(0xff2a2a2a),
-                                                fontSize: 7.sp,
-                                                overFlow: true,
-                                                fontFamily: fontRegular,
-                                                maxLine: 2,
+                                        SizedBox(
+                                          width: 3.05.w,
+                                        ),
+                                        Container(
+                                          width: 57.5.w,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                child: text(
+                                                    snapshot
+                                                        .data!.notifications![i].title!,
+                                                    textColor: Color(0xff191919),
+                                                    fontSize: 11.5.sp,
+                                                    fontFamily: fontBold,
+                                                    overFlow: true),
                                               ),
-                                            ),
-                                          ],
+                                              SizedBox(
+                                                height: 0.79.h,
+                                              ),
+                                              Container(
+                                                child: text(
+                                                  snapshot
+                                                      .data!.notifications![i].message!,
+                                                  textColor: Color(0xff2a2a2a),
+                                                  fontSize: 7.sp,
+                                                  overFlow: true,
+                                                  fontFamily: fontRegular,
+                                                  maxLine: 2,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ));
+                                      ],
+                                    )),
+                              );
                             }),
                       );
                     }),
@@ -208,8 +236,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
       ),
     );
   }
-
-
 getReadNotification() async {
   String userid = await MyToken.getUserID();
   var responsData = await ApiService.postAPI(
@@ -221,7 +247,9 @@ getReadNotification() async {
   late NotificationResponse response;
   getNotification() async {
     String userid = await MyToken.getUserID();
+
     try {
+
       NotificationRequest request = NotificationRequest(userid: userid);
       response = await HomeApiHelper.getNotification(request);
       print(response.notifications?.length);

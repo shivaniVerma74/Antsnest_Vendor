@@ -5,9 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
-import 'package:multi_dropdown/enum/app_enums.dart';
-import 'package:multi_dropdown/models/chip_config.dart';
-import 'package:multi_dropdown/models/value_item.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
@@ -138,6 +135,7 @@ class _EditServicesState extends State<EditServices> {
   Set<String> uniqueValues = Set();
   List <dynamic> subcateid=[];
 
+
   void addOnOperation({ String ?charges, String ?houranddays,String ?serviceType,String ?serviceHour}) {
    print(serviceHour.toString()+"++++++++++");
     selectedServiceTypeList.add(serviceType??selectedServiceType);
@@ -146,6 +144,8 @@ class _EditServicesState extends State<EditServices> {
     addonHourDayPriceControllerList.add(TextEditingController(text: "${houranddays??""}"));
     addonList2.add({"service": '', "price_a": '', "hrly": '', "days_hrs": ''});
   }
+
+
 
   Future getState() async {
     print("ok now working");
@@ -964,6 +964,7 @@ getUpdate(){
             showClearIcon: true,
             controller: _controller,
             onOptionSelected: (options) {
+
               for (int i = 0; i < options.length; i++) {
                 String value = options[i].value??"";
 
@@ -973,6 +974,8 @@ getUpdate(){
                   categorylist.add(value);
                 }
               }
+
+
               // setState(() {
               //
               // });

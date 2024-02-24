@@ -88,12 +88,9 @@ class _PlanHistoryState extends State<PlanHistory> {
     request.fields.addAll({
       'user_id': '$userId'
     });
-
     print(request);
     print(request.fields);
-
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
       return PurchasePlanHistoryModel.fromJson(json.decode(str));
@@ -102,5 +99,4 @@ class _PlanHistoryState extends State<PlanHistory> {
       return null;
     }
   }
-
 }

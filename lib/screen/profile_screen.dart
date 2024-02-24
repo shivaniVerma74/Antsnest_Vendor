@@ -3,18 +3,18 @@ import 'dart:async';
 import 'package:animated_widgets/widgets/scale_animated.dart';
 import 'package:fixerking/screen/paymentHistory.dart';
 import 'package:fixerking/screen/plan_history.dart';
+import 'package:fixerking/screen/privacy_policy.dart';
 import 'package:fixerking/screen/profile/edit_profile_screen.dart';
 import 'package:fixerking/screen/profile/view_profile_screen.dart';
 import 'package:fixerking/screen/service_history.dart';
 import 'package:fixerking/screen/subscription_screen.dart';
-
+import 'package:fixerking/screen/terms_condition.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
-
 import '../api/api_helper/auth_helper.dart';
 import '../modal/request/get_profile_request.dart';
 import '../modal/response/get_profile_response.dart';
@@ -31,8 +31,10 @@ import 'CustomerSupport/customer_support_faq.dart';
 import 'ReviewPage.dart';
 import 'auth_view/login_screen.dart';
 import 'availablity.dart';
+import 'cancellation_screen.dart';
 import 'change_password_screen.dart';
 import 'contactUsPage.dart';
+import 'my_booking_list.dart';
 import 'my_wallet.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -183,6 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               children: [
                                 Container(
                                   child: Stack(
+
                                     children: [
                                       ClipOval(
                                         child: Container(
@@ -198,7 +201,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                       ),
                                    snapshot.data!.activePlan == "1" ?   Positioned(
-                                          right: -9,
+                                          right: 0,
                                           top: 1,
                                           child: Container(
                                               height: 50,
@@ -276,16 +279,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     }),
                 tabItem(context, 5, subscription, "Subscription Plans"),
+                tabItem(context, 14, "images/BOOKING LIST.png", "My BookingList"),
                 tabItem(context, 7, walletIcon, "My Wallet"),
                 tabItem(context, 1, payment, "Plan History"),
                 // tabItem(context, 2, serviceIcon, "Service History"),
                 tabItem(context, 6, chatIcon, "Chat With User"),
                 tabItem(context, 8, service, "Reviews"),
                 tabItem(context, 11, support, "Customer Support"),
-                tabItem(context, 9, payment, "Availability"),
+                tabItem(context, 9, "images/avail.png", "Availability"),
                 tabItem(context, 10, payment, "Payment History"),
+                tabItem(context, 12, "images/privacy.png", "Privacy Policy "),
+                tabItem(context, 15, "images/privacy.png", "Cancellation Policy "),
+                tabItem(context, 13, "images/terms.png", "Terms & Condition "),
                 // tabItem(context, 3, changePass, "Change Password"),
                 tabItem(context, 4, support, "Contact Us"),
+
                 SizedBox(
                   height: 2.5.h,
                 ),
@@ -374,7 +382,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: 42.63.w,
                         decoration: boxDecoration(radius: 15.0, bgColor: AppColor.PrimaryDark),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Center(
                               child: Image.asset(
@@ -384,6 +392,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 fit: BoxFit.fill,
                               ),
                             ),
+                            SizedBox(width: 5,),
                             text(
                               "Log Out",
                               textColor: Color(0xffffffff),
@@ -524,6 +533,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 type: PageTransitionType.rightToLeft,
                 duration: Duration(milliseconds: 500),
               ));
+
+        }
+        if (pos == 12) {
+          Navigator.push(
+              context,
+              PageTransition(
+                child: PrivacyPolicyScreen(
+                  // walletAmount: walletAmount.toString(),
+                ),
+                type: PageTransitionType.rightToLeft,
+                duration: Duration(milliseconds: 500),
+              ));
+
+        }
+        if (pos == 13) {
+          Navigator.push(
+              context,
+              PageTransition(
+                child: TermsConditionScreen(
+                  // walletAmount: walletAmount.toString(),
+                ),
+                type: PageTransitionType.rightToLeft,
+                duration: Duration(milliseconds: 500),
+              ));
+
+        }
+        if (pos == 14) {
+          Navigator.push(
+              context,
+              PageTransition(
+                child: MyBookinglistScreen(
+                  // walletAmount: walletAmount.toString(),
+                ),
+                type: PageTransitionType.rightToLeft,
+                duration: Duration(milliseconds: 500),
+              ));
+
+        }if (pos == 15) {
+          Navigator.push(
+              context,
+              PageTransition(
+                child: CancellationScreen(
+                  // walletAmount: walletAmount.toString(),
+                ),
+                type: PageTransitionType.rightToLeft,
+                duration: Duration(milliseconds: 500),
+              ));
+
         }
       },
       child: Container(

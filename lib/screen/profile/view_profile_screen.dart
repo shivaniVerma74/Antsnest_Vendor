@@ -6,7 +6,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../modal/response/get_profile_response.dart';
 import '../../utils/colors.dart';
 import '../../utils/constant.dart';

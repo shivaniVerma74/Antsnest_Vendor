@@ -4,7 +4,6 @@ import 'package:fixerking/screen/bottom_bar.dart';
 import 'package:fixerking/screen/push_notification_service.dart';
 import 'package:fixerking/screen/splash_screen.dart';
 import 'package:fixerking/utils/colors.dart';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';

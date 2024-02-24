@@ -110,8 +110,6 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
           title = jsonResponse.setting?.data;
           description = jsonResponse.setting?.description??"";
         });
-
-
       }
       return PrivacyModel.fromJson(json.decode(str));
     }

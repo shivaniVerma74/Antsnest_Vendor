@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:animated_widgets/widgets/scale_animated.dart';
 import 'package:flutter/material.dart';
@@ -126,8 +127,6 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
                             fontFamily: fontRegular,
                           ),
                         ),
-
-
                       ),
                     ),
                   ),

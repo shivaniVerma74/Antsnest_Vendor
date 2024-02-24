@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:sizer/sizer.dart';
 import '../api/api_path.dart';
@@ -46,6 +48,7 @@ class _ManageServiceState extends State<ManageService> {
   String showImage = '';
   String service_price = "";
   String service_name = "";
+  bool _switchValue = true;
 
   @override
   void initState() {
@@ -60,6 +63,30 @@ class _ManageServiceState extends State<ManageService> {
   Future _refresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
     return getVendorAllServices();
+  }
+  activeDeactiveService(String serviceid,String status) async {
+    var headers = {
+      'Cookie': 'ci_session=5d20c59aa4198d23adadefd0d956a319531a4aca'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse('${Apipath.BASH_URL}vendor_service_status'));
+    request.fields.addAll({
+      'service_id': '${serviceid}',
+      'status': '${status}'
+    });
+
+    request.headers.addAll(headers);
+    print('_________this${request.fields}_______');
+    http.StreamedResponse response = await request.send();
+     var data =jsonDecode("${await response.stream.bytesToString()}");
+    if (response.statusCode == 200) {
+
+      Fluttertoast.showToast(msg: "${data["msg"]}");
+
+    }
+    else {
+    print(response.reasonPhrase);
+    }
+
   }
 
   @override
@@ -347,9 +374,14 @@ class _ManageServiceState extends State<ManageService> {
                         },
                        color: AppColor.PrimaryDark,
                         ),
+
+
+
+
                         ],
                            ).show();
                        },
+
                                   // onPressed: () async {
                                   //   RemoveServiceModel?
                                   //   removeModel = await removeServices(
@@ -377,6 +409,36 @@ class _ManageServiceState extends State<ManageService> {
                                 ),
                               ],
                             ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+
+                                  CupertinoSwitch(
+                                   // thumbColor: Colors.red,
+                                    trackColor: Colors.red,
+                                    value: enablelist[index]=="0"?false:true,
+
+                                    onChanged: (value) async {
+                                       enablelist[index]=value==true?"1":"0";
+                                      setState(() {
+
+                                      });
+                                       activeDeactiveService("${vendorServiceModel?.restaurants?[index].resId}", "${enablelist[index]}");
+                                         getVendorAllServices();
+                                    },
+                                  ),Row(
+                                    children: [
+                                      Icon(Icons.location_on_rounded),
+                                      Text("${vendorServiceModel?.restaurants?[index].cityName}",maxLines: 1,)
+                                    ],
+                                  ),
+
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10,),
                           ],
                         ),
                       );
@@ -583,6 +645,7 @@ class _ManageServiceState extends State<ManageService> {
   }
 
   VendorServiceModel? vendorServiceModel;
+  List enablelist=[];
 
   Future getVendorAllServices() async {
     // var userId = await MyToken.getUserID();
@@ -616,6 +679,12 @@ class _ManageServiceState extends State<ManageService> {
       var finalResult = await response.stream.bytesToString();
       //return VendorServiceModel.fromJson(json.decode(finalResult));
       final jsonResult = VendorServiceModel.fromJson(json.decode(finalResult));
+      if(jsonResult.restaurants?.isNotEmpty??false) {
+        for (int i = 0; i < jsonResult.restaurants!.length; i++) {
+          enablelist.add("${jsonResult.restaurants?[i].status}");
+          print("${jsonResult.restaurants?[i].status}");
+        }
+      }
       setState(() {
         vendorServiceModel = jsonResult;
       });

@@ -1559,9 +1559,6 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
-import 'package:multi_dropdown/enum/app_enums.dart';
-import 'package:multi_dropdown/models/chip_config.dart';
-import 'package:multi_dropdown/models/value_item.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:path/path.dart' as path;
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -1898,50 +1895,53 @@ class _AddServicesState extends State<AddServices> {
                       ),
                     ),
                   )
-                : Column(
-                    children: [
-                      // Container(
-                      //   height: 9.92.h,
-                      //   width: 100.w,
-                      //   decoration: BoxDecoration(color: AppColor.PrimaryDark),
-                      //   child: Center(
-                      //     child: Row(
-                      //       crossAxisAlignment: CrossAxisAlignment.center,
-                      //       children: [
-                      //         Container(
-                      //             width: 6.38.w,
-                      //             height: 6.38.w,
-                      //             alignment: Alignment.centerLeft,
-                      //             margin: EdgeInsets.only(left: 7.91.w),
-                      //             child: InkWell(
-                      //                 onTap: () {
-                      //                   Navigator.pop(context);
-                      //                 },
-                      //                 child: Image.asset(
-                      //                   back,
-                      //                   height: 4.0.h,
-                      //                   width: 8.w,
-                      //                 ))),
-                      //         SizedBox(
-                      //           width: 2.08.h,
-                      //         ),
-                      //         Container(
-                      //           width: 65.w,
-                      //           child: text(
-                      //             "Add Services",
-                      //             textColor: Color(0xffffffff),
-                      //             fontSize: 14.sp,
-                      //             fontFamily: fontMedium,
-                      //             isCentered: true,
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
-                      secondSign(context),
-                    ],
-                  ),
+                : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Column(
+                      children: [
+                        // Container(
+                        //   height: 9.92.h,
+                        //   width: 100.w,
+                        //   decoration: BoxDecoration(color: AppColor.PrimaryDark),
+                        //   child: Center(
+                        //     child: Row(
+                        //       crossAxisAlignment: CrossAxisAlignment.center,
+                        //       children: [
+                        //         Container(
+                        //             width: 6.38.w,
+                        //             height: 6.38.w,
+                        //             alignment: Alignment.centerLeft,
+                        //             margin: EdgeInsets.only(left: 7.91.w),
+                        //             child: InkWell(
+                        //                 onTap: () {
+                        //                   Navigator.pop(context);
+                        //                 },
+                        //                 child: Image.asset(
+                        //                   back,
+                        //                   height: 4.0.h,
+                        //                   width: 8.w,
+                        //                 ))),
+                        //         SizedBox(
+                        //           width: 2.08.h,
+                        //         ),
+                        //         Container(
+                        //           width: 65.w,
+                        //           child: text(
+                        //             "Add Services",
+                        //             textColor: Color(0xffffffff),
+                        //             fontSize: 14.sp,
+                        //             fontFamily: fontMedium,
+                        //             isCentered: true,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
+                        secondSign(context),
+                      ],
+                    ),
+                ),
           ),
         ),
       ),

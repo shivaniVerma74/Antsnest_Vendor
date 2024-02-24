@@ -68,6 +68,8 @@ readMessageCount() async {
   var finalResponse = await response.stream.bytesToString();
   print(finalResponse);
 
+
+
 }
 @override
   void initState() {
@@ -206,6 +208,32 @@ readMessageCount() async {
                                       //     color: Colors.black54,
                                       //   ),
                                       // ),
+
+                                      InkWell(
+                                          onTap: (){
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) =>
+                                                    ChatPage(
+                                                        bookingId: model.data![index].id.toString(),
+                                                        providerName: model.data![index].username.toString()
+                                                      //  ChatDetailScreen(
+                                                      // user: chat.sender,
+                                                    ),
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            width: 60,
+                                            height: 25,
+                                            
+                                            decoration: BoxDecoration(
+                                              color: AppColor.PrimaryDark,
+                                              borderRadius: BorderRadius.circular(2)
+                                            ),
+                                            child: Center(child: Text("Chat",style: TextStyle(color: Colors.white,),)),
+                                          )),
                                     ],
                                   ),
                                   // SizedBox(

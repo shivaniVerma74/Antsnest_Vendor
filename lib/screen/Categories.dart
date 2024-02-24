@@ -140,9 +140,7 @@ class _CategoriesState extends State<Categories> {
         collectionModal = ServiceCategoryModel.fromJson(userData);
       });
     }
-
     print(responseData);
     return null;
   }
-
 }

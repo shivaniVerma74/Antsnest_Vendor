@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
