@@ -31,10 +31,8 @@ import 'CustomerSupport/customer_support_faq.dart';
 import 'ReviewPage.dart';
 import 'auth_view/login_screen.dart';
 import 'availablity.dart';
-import 'cancellation_screen.dart';
 import 'change_password_screen.dart';
 import 'contactUsPage.dart';
-import 'my_booking_list.dart';
 import 'my_wallet.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -45,7 +43,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  StreamController<GetProfileResponse> profileResponseStram = StreamController();
+  StreamController<GetProfileResponse> profileResponseStram =
+      StreamController();
   late GetProfileResponse profileResponse;
   bool selected = false, enabled = false, edit1 = false;
   String? walletAmount;
@@ -156,7 +155,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ConnectionState.waiting) {
                         return SizedBox(height: 15.h, child: LodingAllPage());
                       }
-                      print("wallet amount here ${snapshot.data!.user!.wallet}");
+                      print(
+                          "wallet amount here ${snapshot.data!.user!.wallet}");
                       walletAmount = snapshot.data!.user!.wallet.toString();
                       return InkWell(
                         onTap: () async {
@@ -185,29 +185,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               children: [
                                 Container(
                                   child: Stack(
-
                                     children: [
                                       ClipOval(
                                         child: Container(
                                           height: 9.76.h,
                                           width: 9.76.h,
-                                          child: snapshot.data!.user!.profileImage != "" ? UtilityHlepar.convertetIMG(
-                                                  snapshot.data!.user!.profileImage.toString(),
-                                              fit: BoxFit.cover)
-                                          : Image(
-                                            image: AssetImage(picture),
-                                            fit: BoxFit.fill,
-                                          ),
+                                          child: snapshot.data!.user!
+                                                      .profileImage !=
+                                                  ""
+                                              ? UtilityHlepar.convertetIMG(
+                                                  snapshot
+                                                      .data!.user!.profileImage
+                                                      .toString(),
+                                                  fit: BoxFit.cover)
+                                              : Image(
+                                                  image: AssetImage(picture),
+                                                  fit: BoxFit.fill,
+                                                ),
                                         ),
                                       ),
-                                   snapshot.data!.activePlan == "1" ?   Positioned(
-                                          right: 0,
-                                          top: 1,
-                                          child: Container(
-                                              height: 50,
-                                              width: 50,
-                                              alignment: Alignment.topRight,
-                                              child: Icon(Icons.check,color: Colors.blue,size: 29,))) : SizedBox.shrink(),
+                                      snapshot.data!.activePlan == "1"
+                                          ? Positioned(
+                                              right: 0,
+                                              top: 1,
+                                              child: Container(
+                                                  height: 50,
+                                                  width: 50,
+                                                  alignment: Alignment.topRight,
+                                                  child: Icon(
+                                                    Icons.check,
+                                                    color: Colors.blue,
+                                                    size: 29,
+                                                  )))
+                                          : SizedBox.shrink(),
                                     ],
                                   ),
                                 ),
@@ -222,8 +232,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     children: [
                                       Container(
                                         child: text(
-                                            snapshot.data!.user!.fname.toString() + " "
-                                                + snapshot.data!.user!.lname.toString(),
+                                            snapshot.data!.user!.fname
+                                                    .toString() +
+                                                " " +
+                                                snapshot.data!.user!.lname
+                                                    .toString(),
                                             textColor: Color(0xff191919),
                                             fontSize: 14.0.sp,
                                             fontFamily: fontBold,
@@ -279,7 +292,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     }),
                 tabItem(context, 5, subscription, "Subscription Plans"),
-                tabItem(context, 14, "images/BOOKING LIST.png", "My BookingList"),
+                tabItem(
+                    context, 14, "images/BOOKING LIST.png", "My BookingList"),
                 tabItem(context, 7, walletIcon, "My Wallet"),
                 tabItem(context, 1, payment, "Plan History"),
                 // tabItem(context, 2, serviceIcon, "Service History"),
@@ -289,7 +303,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 tabItem(context, 9, "images/avail.png", "Availability"),
                 tabItem(context, 10, payment, "Payment History"),
                 tabItem(context, 12, "images/privacy.png", "Privacy Policy "),
-                tabItem(context, 15, "images/privacy.png", "Cancellation Policy "),
+                tabItem(
+                    context, 15, "images/privacy.png", "Cancellation Policy "),
                 tabItem(context, 13, "images/terms.png", "Terms & Condition "),
                 // tabItem(context, 3, changePass, "Change Password"),
                 tabItem(context, 4, support, "Contact Us"),
@@ -300,14 +315,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Center(
                   child: InkWell(
                     onTap: () {
-                      Alert (
+                      Alert(
                         context: context,
                         title: "Log out",
                         desc: "Are you sure you want to log out?",
                         style: AlertStyle(
                           isCloseButton: false,
-                          descStyle:
-                          TextStyle(fontFamily: "MuliRegular", fontSize: 15),
+                          descStyle: TextStyle(
+                              fontFamily: "MuliRegular", fontSize: 15),
                           titleStyle: TextStyle(fontFamily: "MuliRegular"),
                         ),
                         buttons: [
@@ -327,9 +342,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               //   likedProduct = [];
                               //   likedService = [];
                               // });
-                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
                               await prefs.clear();
-                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()), (route) => false);
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginScreen()),
+                                  (route) => false);
                             },
                             color: AppColor.PrimaryDark,
                           ),
@@ -380,7 +400,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Container(
                         height: 7.09.h,
                         width: 42.63.w,
-                        decoration: boxDecoration(radius: 15.0, bgColor: AppColor.PrimaryDark),
+                        decoration: boxDecoration(
+                            radius: 15.0, bgColor: AppColor.PrimaryDark),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -392,7 +413,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 fit: BoxFit.fill,
                               ),
                             ),
-                            SizedBox(width: 5,),
+                            SizedBox(
+                              width: 5,
+                            ),
                             text(
                               "Log Out",
                               textColor: Color(0xffffffff),
@@ -419,17 +442,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   getProfile() async {
     // try {
     print("sdsds");
-      var vendorId = await MyToken.getUserID();
-      // var vendorId = "31";
-      GetProfileRequest request = GetProfileRequest(vendorId: vendorId);
-      print("profile request here"  + request.toString());
-      profileResponse = await AuthApiHelper.getProfile(request);
-      print("response here ${profileResponse.responseCode} and here ${profileResponse.status}");
-      if (profileResponse.status == ToastString.success) {
-        profileResponseStram.sink.add(profileResponse);
-      } else {
-        profileResponseStram.sink.addError(profileResponse.message.toString());
-      }
+    var vendorId = await MyToken.getUserID();
+    // var vendorId = "31";
+    GetProfileRequest request = GetProfileRequest(vendorId: vendorId);
+    print("profile request here" + request.toString());
+    profileResponse = await AuthApiHelper.getProfile(request);
+    print(
+        "response here ${profileResponse.responseCode} and here ${profileResponse.status}");
+    if (profileResponse.status == ToastString.success) {
+      profileResponseStram.sink.add(profileResponse);
+    } else {
+      profileResponseStram.sink.addError(profileResponse.message.toString());
+    }
     //}
     // catch (e) {
     //   UtilityHlepar.getToast(e.toString());
@@ -485,42 +509,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 duration: Duration(milliseconds: 500),
               ));
         }
-        if( pos == 6){
+        if (pos == 6) {
           Navigator.push(
-              context,
-              PageTransition(
-                child: ChatScreen(),
-                type: PageTransitionType.rightToLeft,
-                duration: Duration(milliseconds: 500),
-              ),
+            context,
+            PageTransition(
+              child: ChatScreen(),
+              type: PageTransitionType.rightToLeft,
+              duration: Duration(milliseconds: 500),
+            ),
           );
         }
         if (pos == 7) {
           Navigator.push(
-              context,
-              PageTransition(
-                child: WalletScreen(
-                  walletAmount: walletAmount.toString(),
-                ),
-                type: PageTransitionType.rightToLeft,
-                duration: Duration(milliseconds: 500),
+            context,
+            PageTransition(
+              child: WalletScreen(
+                walletAmount: walletAmount.toString(),
               ),
+              type: PageTransitionType.rightToLeft,
+              duration: Duration(milliseconds: 500),
+            ),
           );
-        }
-        else if(pos == 8){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ReviewPage()));
-        }
-        else if(pos == 10){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentHistory()));
+        } else if (pos == 8) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => ReviewPage()));
+        } else if (pos == 10) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => PaymentHistory()));
         }
         if (pos == 9) {
           Navigator.push(
-              context,
-              PageTransition(
-                child: Availability(),
-                type: PageTransitionType.rightToLeft,
-                duration: Duration(milliseconds: 500),
-              ),
+            context,
+            PageTransition(
+              child: Availability(),
+              type: PageTransitionType.rightToLeft,
+              duration: Duration(milliseconds: 500),
+            ),
           );
         }
         if (pos == 11) {
@@ -528,59 +552,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
               context,
               PageTransition(
                 child: CustomerSupport(
-                  // walletAmount: walletAmount.toString(),
-                ),
+                    // walletAmount: walletAmount.toString(),
+                    ),
                 type: PageTransitionType.rightToLeft,
                 duration: Duration(milliseconds: 500),
               ));
-
         }
         if (pos == 12) {
           Navigator.push(
               context,
               PageTransition(
                 child: PrivacyPolicyScreen(
-                  // walletAmount: walletAmount.toString(),
-                ),
+                    // walletAmount: walletAmount.toString(),
+                    ),
                 type: PageTransitionType.rightToLeft,
                 duration: Duration(milliseconds: 500),
               ));
-
         }
         if (pos == 13) {
           Navigator.push(
               context,
               PageTransition(
                 child: TermsConditionScreen(
-                  // walletAmount: walletAmount.toString(),
-                ),
+                    // walletAmount: walletAmount.toString(),
+                    ),
                 type: PageTransitionType.rightToLeft,
                 duration: Duration(milliseconds: 500),
               ));
-
         }
         if (pos == 14) {
-          Navigator.push(
-              context,
-              PageTransition(
-                child: MyBookinglistScreen(
-                  // walletAmount: walletAmount.toString(),
-                ),
-                type: PageTransitionType.rightToLeft,
-                duration: Duration(milliseconds: 500),
-              ));
-
-        }if (pos == 15) {
-          Navigator.push(
-              context,
-              PageTransition(
-                child: CancellationScreen(
-                  // walletAmount: walletAmount.toString(),
-                ),
-                type: PageTransitionType.rightToLeft,
-                duration: Duration(milliseconds: 500),
-              ));
-
+          // Navigator.push(
+          //     context,
+          //     PageTransition(
+          //       child: MyBookinglistScreen(
+          //         // walletAmount: walletAmount.toString(),
+          //       ),
+          //       type: PageTransitionType.rightToLeft,
+          //       duration: Duration(milliseconds: 500),
+          //     ));
+        }
+        if (pos == 15) {
+          // Navigator.push(
+          //     context,
+          //     PageTransition(
+          //       child: CancellationScreen(
+          //         // walletAmount: walletAmount.toString(),
+          //       ),
+          //       type: PageTransitionType.rightToLeft,
+          //       duration: Duration(milliseconds: 500),
+          //     ));
         }
       },
       child: Container(
