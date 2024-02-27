@@ -1,19 +1,23 @@
 import 'dart:convert';
+
 /// response_code : "1"
 /// msg : "Country List"
 /// data : [{"id":"5","name":"India","created_at":"2022-09-28 17:53:21","updated_at":"2022-09-28 17:53:21"}]
 
-CountryModel countryModelFromJson(String str) => CountryModel.fromJson(json.decode(str));
+CountryModel countryModelFromJson(String str) =>
+    CountryModel.fromJson(json.decode(str));
 String countryModelToJson(CountryModel data) => json.encode(data.toJson());
+
 class CountryModel {
   CountryModel({
-      String? responseCode, 
-      String? msg, 
-      List<CountryData>? data,}){
+    String? responseCode,
+    String? msg,
+    List<CountryData>? data,
+  }) {
     _responseCode = responseCode;
     _msg = msg;
     _data = data;
-}
+  }
 
   CountryModel.fromJson(dynamic json) {
     _responseCode = json['response_code'];
@@ -28,13 +32,16 @@ class CountryModel {
   String? _responseCode;
   String? _msg;
   List<CountryData>? _data;
-CountryModel copyWith({  String? responseCode,
-  String? msg,
-  List<CountryData>? data,
-}) => CountryModel(  responseCode: responseCode ?? _responseCode,
-  msg: msg ?? _msg,
-  data: data ?? _data,
-);
+  CountryModel copyWith({
+    String? responseCode,
+    String? msg,
+    List<CountryData>? data,
+  }) =>
+      CountryModel(
+        responseCode: responseCode ?? _responseCode,
+        msg: msg ?? _msg,
+        data: data ?? _data,
+      );
   String? get responseCode => _responseCode;
   String? get msg => _msg;
   List<CountryData>? get data => _data;
@@ -48,7 +55,6 @@ CountryModel copyWith({  String? responseCode,
     }
     return map;
   }
-
 }
 
 /// id : "5"
@@ -58,17 +64,21 @@ CountryModel copyWith({  String? responseCode,
 
 CountryData dataFromJson(String str) => CountryData.fromJson(json.decode(str));
 String dataToJson(CountryData data) => json.encode(data.toJson());
+
 class CountryData {
   CountryData({
-      String? id, 
-      String? name, 
-      String? createdAt, 
-      String? updatedAt,}){
+    String? id,
+    String? name,
+    String? createdAt,
+    String? updatedAt,
+    String? nicename,
+  }) {
     _id = id;
     _name = name;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
-}
+    _nicename = nicename;
+  }
   bool operator ==(dynamic other) =>
       other != null && other is CountryData && this.id == other.id;
 
@@ -80,24 +90,31 @@ class CountryData {
     _name = json['name'];
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
+    _nicename = json['nicename'];
   }
   String? _id;
   String? _name;
   String? _createdAt;
   String? _updatedAt;
-  CountryData copyWith({  String? id,
-  String? name,
-  String? createdAt,
-  String? updatedAt,
-}) => CountryData(  id: id ?? _id,
-  name: name ?? _name,
-  createdAt: createdAt ?? _createdAt,
-  updatedAt: updatedAt ?? _updatedAt,
-);
+  String? _nicename;
+  CountryData copyWith(
+          {String? id,
+          String? name,
+          String? createdAt,
+          String? updatedAt,
+          String? nicename}) =>
+      CountryData(
+        id: id ?? _id,
+        name: name ?? _name,
+        createdAt: createdAt ?? _createdAt,
+        updatedAt: updatedAt ?? _updatedAt,
+        nicename: nicename ?? _nicename,
+      );
   String? get id => _id;
   String? get name => _name;
   String? get createdAt => _createdAt;
   String? get updatedAt => _updatedAt;
+  String? get nicename => _nicename;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -105,7 +122,7 @@ class CountryData {
     map['name'] = _name;
     map['created_at'] = _createdAt;
     map['updated_at'] = _updatedAt;
+    map['nicename'] = _nicename;
     return map;
   }
-
 }

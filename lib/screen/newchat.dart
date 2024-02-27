@@ -84,7 +84,7 @@ class ChatPageState extends State<ChatPage> {
     //String imageUrl = await uploadTask.ref.getDownloadURL();
     var headers = {
       'Authorization':
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjU2NTc2NTMsImlzcyI6ImVzaG9wIiwiZXhwIjoxNjY1NjU5NDUzfQ.C-OFpLdZsFB0vvLM5QJQlAUkGy8KSBHHHu8au7LYunk',
+          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjU2NTc2NTMsImlzcyI6ImVzaG9wIiwiZXhwIjoxNjY1NjU5NDUzfQ.C-OFpLdZsFB0vvLM5QJQlAUkGy8KSBHHHu8au7LYunk',
       'Cookie': 'ci_session=3ddd3c0c14f8a73b4925d7a92d041f2a9bd6162c'
     };
     var request = http.MultipartRequest(
@@ -95,7 +95,7 @@ class ChatPageState extends State<ChatPage> {
     imageFiles == null
         ? SizedBox.shrink()
         : request.files.add(await http.MultipartFile.fromPath(
-        'chat', imageFiles!.path.toString()));
+            'chat', imageFiles!.path.toString()));
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -103,7 +103,7 @@ class ChatPageState extends State<ChatPage> {
     if (response.statusCode == 200) {
       var finalResponse = await response.stream.bytesToString();
       final jsonResponse =
-      UploadImageModel.fromJson(json.decode(finalResponse));
+          UploadImageModel.fromJson(json.decode(finalResponse));
       print(
           "json response here ${jsonResponse.message} and ${jsonResponse.fileName}");
       print(
@@ -231,126 +231,126 @@ class ChatPageState extends State<ChatPage> {
   generateMessages(AsyncSnapshot<QuerySnapshot> snapshot) {
     return snapshot.data!.docs
         .map<Widget>((doc) => Container(
-      margin: const EdgeInsets.symmetric(vertical: 10.0),
-      child: new Row(children: [
-        Expanded(
-          child: new Column(
-            crossAxisAlignment: doc['received'] == false
-                ? CrossAxisAlignment.end
-                : CrossAxisAlignment.start,
-            children: <Widget>[
-              //   doc['sender_id'] != widget.senderId ?
-              //  // generateReceiverLayout(doc)
-              //   Text("this is not a correct sender")
-              // :
-              //   fileName == null || fileName == "" || doc['image_url'] == "" ? SizedBox.shrink() :    doc['id'] == widget.senderId ?
-              //   Container(
-              //       height:90,
-              //       width: 90,
-              //       child: Image.network('https://developmentalphawizz.com/antsnest/uploads/chats/${fileName}')) : SizedBox.shrink(),
-              //
-              doc['id'] == widget.senderId
-                  ? Text(doc['text'].toString(),
-                  // widget.user!.name.toString(),
-                  //documentSnapshot.data['sender_name'],
-                  style: new TextStyle(
-                      fontSize: 14.0,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold))
-                  : Container(height: 0),
-              // Row(
-              //   children: doc.data['sender_id'] != widget.prefs.getString('uid')
-              //       ? generateReceiverLayout(doc)
-              //       : Expanded(
-              //     child: new Column(
-              //       crossAxisAlignment: CrossAxisAlignment.end,
-              //       children: <Widget>[
-              //         new Text("",
-              //             //documentSnapshot.data['text'].toString(),
-              //             // widget.user!.name.toString(),
-              //             //documentSnapshot.data['sender_name'],
-              //             style: new TextStyle(
-              //                 fontSize: 14.0,
-              //                 color: Colors.black,
-              //                 fontWeight: FontWeight.bold)),
-              //         // new Container(
-              //         //   margin: const EdgeInsets.only(top: 5.0),
-              //         //   child: documentSnapshot.data['image_url'] != ''
-              //         //       ? InkWell(
-              //         //     child: new Container(
-              //         //       child: Image.network(
-              //         //         documentSnapshot.data['image_url'],
-              //         //         fit: BoxFit.fitWidth,
-              //         //       ),
-              //         //       height: 150,
-              //         //       width: 150.0,
-              //         //       color: Color.fromRGBO(0, 0, 0, 0.2),
-              //         //       padding: EdgeInsets.all(5),
-              //         //     ),
-              //         //     onTap: () {
-              //         //       // Navigator.of(context).push(
-              //         //       //   MaterialPageRoute(
-              //         //       //     builder: (context) => GalleryPage(
-              //         //       //       imagePath: documentSnapshot.data['image_url'],
-              //         //       //     ),
-              //         //       //   ),
-              //         //       // );
-              //         //     },
-              //         //   )
-              //         //       : new Text(documentSnapshot.data['text']),
-              //         // ),
-              //       ],
-              //     ),
-              //   ),
-              //
-              //   // Text(doc['text'].toString(),
-              //   //     // widget.user!.name.toString(),
-              //   //     //documentSnapshot.data['sender_name'],
-              //   //     style: new TextStyle(
-              //   //         fontSize: 14.0,
-              //   //         color: Colors.black,
-              //   //         fontWeight: FontWeight.bold)),
-              //       // : generateSenderLayout(doc),
-              // )
+              margin: const EdgeInsets.symmetric(vertical: 10.0),
+              child: new Row(children: [
+                Expanded(
+                  child: new Column(
+                    crossAxisAlignment: doc['received'] == false
+                        ? CrossAxisAlignment.end
+                        : CrossAxisAlignment.start,
+                    children: <Widget>[
+                      //   doc['sender_id'] != widget.senderId ?
+                      //  // generateReceiverLayout(doc)
+                      //   Text("this is not a correct sender")
+                      // :
+                      //   fileName == null || fileName == "" || doc['image_url'] == "" ? SizedBox.shrink() :    doc['id'] == widget.senderId ?
+                      //   Container(
+                      //       height:90,
+                      //       width: 90,
+                      //       child: Image.network('https://developmentalphawizz.com/antsnest/uploads/chats/${fileName}')) : SizedBox.shrink(),
+                      //
+                      doc['id'] == widget.senderId
+                          ? Text(doc['text'].toString(),
+                              // widget.user!.name.toString(),
+                              //documentSnapshot.data['sender_name'],
+                              style: new TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold))
+                          : Container(height: 0),
+                      // Row(
+                      //   children: doc.data['sender_id'] != widget.prefs.getString('uid')
+                      //       ? generateReceiverLayout(doc)
+                      //       : Expanded(
+                      //     child: new Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.end,
+                      //       children: <Widget>[
+                      //         new Text("",
+                      //             //documentSnapshot.data['text'].toString(),
+                      //             // widget.user!.name.toString(),
+                      //             //documentSnapshot.data['sender_name'],
+                      //             style: new TextStyle(
+                      //                 fontSize: 14.0,
+                      //                 color: Colors.black,
+                      //                 fontWeight: FontWeight.bold)),
+                      //         // new Container(
+                      //         //   margin: const EdgeInsets.only(top: 5.0),
+                      //         //   child: documentSnapshot.data['image_url'] != ''
+                      //         //       ? InkWell(
+                      //         //     child: new Container(
+                      //         //       child: Image.network(
+                      //         //         documentSnapshot.data['image_url'],
+                      //         //         fit: BoxFit.fitWidth,
+                      //         //       ),
+                      //         //       height: 150,
+                      //         //       width: 150.0,
+                      //         //       color: Color.fromRGBO(0, 0, 0, 0.2),
+                      //         //       padding: EdgeInsets.all(5),
+                      //         //     ),
+                      //         //     onTap: () {
+                      //         //       // Navigator.of(context).push(
+                      //         //       //   MaterialPageRoute(
+                      //         //       //     builder: (context) => GalleryPage(
+                      //         //       //       imagePath: documentSnapshot.data['image_url'],
+                      //         //       //     ),
+                      //         //       //   ),
+                      //         //       // );
+                      //         //     },
+                      //         //   )
+                      //         //       : new Text(documentSnapshot.data['text']),
+                      //         // ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      //
+                      //   // Text(doc['text'].toString(),
+                      //   //     // widget.user!.name.toString(),
+                      //   //     //documentSnapshot.data['sender_name'],
+                      //   //     style: new TextStyle(
+                      //   //         fontSize: 14.0,
+                      //   //         color: Colors.black,
+                      //   //         fontWeight: FontWeight.bold)),
+                      //       // : generateSenderLayout(doc),
+                      // )
 
-              // new Container(
-              //   margin: const EdgeInsets.only(top: 5.0),
-              //   child: documentSnapshot.data['image_url'] != ''
-              //       ? InkWell(
-              //     child: new Container(
-              //       child: Image.network(
-              //         documentSnapshot.data['image_url'],
-              //         fit: BoxFit.fitWidth,
-              //       ),
-              //       height: 150,
-              //       width: 150.0,
-              //       color: Color.fromRGBO(0, 0, 0, 0.2),
-              //       padding: EdgeInsets.all(5),
-              //     ),
-              //     onTap: () {
-              //       // Navigator.of(context).push(
-              //       //   MaterialPageRoute(
-              //       //     builder: (context) => GalleryPage(
-              //       //       imagePath: documentSnapshot.data['image_url'],
-              //       //     ),
-              //       //   ),
-              //       // );
-              //     },
-              //   )
-              //       : new Text(documentSnapshot.data['text']),
-              // ),
-            ],
-          ),
-        ),
-      ]
-        //doc.data['sender_id']
-        // "11" != widget.user!.id.toString()
-        //getString('uid')
-        //     ? generateReceiverLayout(doc)
-        //     :
-        // generateSenderLayout(doc),
-      ),
-    ))
+                      // new Container(
+                      //   margin: const EdgeInsets.only(top: 5.0),
+                      //   child: documentSnapshot.data['image_url'] != ''
+                      //       ? InkWell(
+                      //     child: new Container(
+                      //       child: Image.network(
+                      //         documentSnapshot.data['image_url'],
+                      //         fit: BoxFit.fitWidth,
+                      //       ),
+                      //       height: 150,
+                      //       width: 150.0,
+                      //       color: Color.fromRGBO(0, 0, 0, 0.2),
+                      //       padding: EdgeInsets.all(5),
+                      //     ),
+                      //     onTap: () {
+                      //       // Navigator.of(context).push(
+                      //       //   MaterialPageRoute(
+                      //       //     builder: (context) => GalleryPage(
+                      //       //       imagePath: documentSnapshot.data['image_url'],
+                      //       //     ),
+                      //       //   ),
+                      //       // );
+                      //     },
+                      //   )
+                      //       : new Text(documentSnapshot.data['text']),
+                      // ),
+                    ],
+                  ),
+                ),
+              ]
+                  //doc.data['sender_id']
+                  // "11" != widget.user!.id.toString()
+                  //getString('uid')
+                  //     ? generateReceiverLayout(doc)
+                  //     :
+                  // generateSenderLayout(doc),
+                  ),
+            ))
         .toList();
   }
 
@@ -369,7 +369,7 @@ class ChatPageState extends State<ChatPage> {
               // stream: db.collection("chats").doc(widget.chatId).collection("messages").snapshots(),
               //FirebaseFirestore.instance.collection("chats").doc(widget.chatId).collection('messages').snapshots(),
               stream:
-              chatReference!.orderBy('time', descending: true).snapshots(),
+                  chatReference!.orderBy('time', descending: true).snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 // DocumentSnapshot message =
@@ -381,129 +381,129 @@ class ChatPageState extends State<ChatPage> {
                     children: snapshot.data!.docs.map<Widget>((doc) {
                       return doc['id'] == widget.senderId
                           ? Container(
-                        margin:
-                        const EdgeInsets.symmetric(vertical: 10.0),
-                        child: new Row(children: [
-                          Expanded(
-                            child: new Column(
-                              crossAxisAlignment: doc['received'] == false
-                                  ? CrossAxisAlignment.end
-                                  : CrossAxisAlignment.start,
-                              children: <Widget>[
-                                //   doc['sender_id'] != widget.senderId ?
-                                //  // generateReceiverLayout(doc)
-                                //   Text("this is not a correct sender")
-                                // :
-                                // fileName == null || fileName == "" || doc['image_url'] == "" ? SizedBox.shrink() :    doc['id'] == widget.senderId ?
-                                //         Container(
-                                //             height:90,
-                                //             width: 90,
-                                //             child: Image.network('https://developmentalphawizz.com/antsnest/uploads/chats/${fileName}')) : Container(),
-                                doc['id'] == widget.senderId
-                                    ? Text(doc['text'].toString(),
-                                    // widget.user!.name.toString(),
-                                    //documentSnapshot.data['sender_name'],
-                                    style: new TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold))
-                                    : Container(height: 0),
-                                // Row(
-                                //   children: doc.data['sender_id'] != widget.prefs.getString('uid')
-                                //       ? generateReceiverLayout(doc)
-                                //       : Expanded(
-                                //     child: new Column(
-                                //       crossAxisAlignment: CrossAxisAlignment.end,
-                                //       children: <Widget>[
-                                //         new Text("",
-                                //             //documentSnapshot.data['text'].toString(),
-                                //             // widget.user!.name.toString(),
-                                //             //documentSnapshot.data['sender_name'],
-                                //             style: new TextStyle(
-                                //                 fontSize: 14.0,
-                                //                 color: Colors.black,
-                                //                 fontWeight: FontWeight.bold)),
-                                //         // new Container(
-                                //         //   margin: const EdgeInsets.only(top: 5.0),
-                                //         //   child: documentSnapshot.data['image_url'] != ''
-                                //         //       ? InkWell(
-                                //         //     child: new Container(
-                                //         //       child: Image.network(
-                                //         //         documentSnapshot.data['image_url'],
-                                //         //         fit: BoxFit.fitWidth,
-                                //         //       ),
-                                //         //       height: 150,
-                                //         //       width: 150.0,
-                                //         //       color: Color.fromRGBO(0, 0, 0, 0.2),
-                                //         //       padding: EdgeInsets.all(5),
-                                //         //     ),
-                                //         //     onTap: () {
-                                //         //       // Navigator.of(context).push(
-                                //         //       //   MaterialPageRoute(
-                                //         //       //     builder: (context) => GalleryPage(
-                                //         //       //       imagePath: documentSnapshot.data['image_url'],
-                                //         //       //     ),
-                                //         //       //   ),
-                                //         //       // );
-                                //         //     },
-                                //         //   )
-                                //         //       : new Text(documentSnapshot.data['text']),
-                                //         // ),
-                                //       ],
-                                //     ),
-                                //   ),
-                                //
-                                //   // Text(doc['text'].toString(),
-                                //   //     // widget.user!.name.toString(),
-                                //   //     //documentSnapshot.data['sender_name'],
-                                //   //     style: new TextStyle(
-                                //   //         fontSize: 14.0,
-                                //   //         color: Colors.black,
-                                //   //         fontWeight: FontWeight.bold)),
-                                //       // : generateSenderLayout(doc),
-                                // )
+                              margin:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
+                              child: new Row(children: [
+                                Expanded(
+                                  child: new Column(
+                                    crossAxisAlignment: doc['received'] == false
+                                        ? CrossAxisAlignment.end
+                                        : CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      //   doc['sender_id'] != widget.senderId ?
+                                      //  // generateReceiverLayout(doc)
+                                      //   Text("this is not a correct sender")
+                                      // :
+                                      // fileName == null || fileName == "" || doc['image_url'] == "" ? SizedBox.shrink() :    doc['id'] == widget.senderId ?
+                                      //         Container(
+                                      //             height:90,
+                                      //             width: 90,
+                                      //             child: Image.network('https://developmentalphawizz.com/antsnest/uploads/chats/${fileName}')) : Container(),
+                                      doc['id'] == widget.senderId
+                                          ? Text(doc['text'].toString(),
+                                              // widget.user!.name.toString(),
+                                              //documentSnapshot.data['sender_name'],
+                                              style: new TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold))
+                                          : Container(height: 0),
+                                      // Row(
+                                      //   children: doc.data['sender_id'] != widget.prefs.getString('uid')
+                                      //       ? generateReceiverLayout(doc)
+                                      //       : Expanded(
+                                      //     child: new Column(
+                                      //       crossAxisAlignment: CrossAxisAlignment.end,
+                                      //       children: <Widget>[
+                                      //         new Text("",
+                                      //             //documentSnapshot.data['text'].toString(),
+                                      //             // widget.user!.name.toString(),
+                                      //             //documentSnapshot.data['sender_name'],
+                                      //             style: new TextStyle(
+                                      //                 fontSize: 14.0,
+                                      //                 color: Colors.black,
+                                      //                 fontWeight: FontWeight.bold)),
+                                      //         // new Container(
+                                      //         //   margin: const EdgeInsets.only(top: 5.0),
+                                      //         //   child: documentSnapshot.data['image_url'] != ''
+                                      //         //       ? InkWell(
+                                      //         //     child: new Container(
+                                      //         //       child: Image.network(
+                                      //         //         documentSnapshot.data['image_url'],
+                                      //         //         fit: BoxFit.fitWidth,
+                                      //         //       ),
+                                      //         //       height: 150,
+                                      //         //       width: 150.0,
+                                      //         //       color: Color.fromRGBO(0, 0, 0, 0.2),
+                                      //         //       padding: EdgeInsets.all(5),
+                                      //         //     ),
+                                      //         //     onTap: () {
+                                      //         //       // Navigator.of(context).push(
+                                      //         //       //   MaterialPageRoute(
+                                      //         //       //     builder: (context) => GalleryPage(
+                                      //         //       //       imagePath: documentSnapshot.data['image_url'],
+                                      //         //       //     ),
+                                      //         //       //   ),
+                                      //         //       // );
+                                      //         //     },
+                                      //         //   )
+                                      //         //       : new Text(documentSnapshot.data['text']),
+                                      //         // ),
+                                      //       ],
+                                      //     ),
+                                      //   ),
+                                      //
+                                      //   // Text(doc['text'].toString(),
+                                      //   //     // widget.user!.name.toString(),
+                                      //   //     //documentSnapshot.data['sender_name'],
+                                      //   //     style: new TextStyle(
+                                      //   //         fontSize: 14.0,
+                                      //   //         color: Colors.black,
+                                      //   //         fontWeight: FontWeight.bold)),
+                                      //       // : generateSenderLayout(doc),
+                                      // )
 
-                                // new Container(
-                                //   margin: const EdgeInsets.only(top: 5.0),
-                                //   child: documentSnapshot.data['image_url'] != ''
-                                //       ? InkWell(
-                                //     child: new Container(
-                                //       child: Image.network(
-                                //         documentSnapshot.data['image_url'],
-                                //         fit: BoxFit.fitWidth,
-                                //       ),
-                                //       height: 150,
-                                //       width: 150.0,
-                                //       color: Color.fromRGBO(0, 0, 0, 0.2),
-                                //       padding: EdgeInsets.all(5),
-                                //     ),
-                                //     onTap: () {
-                                //       // Navigator.of(context).push(
-                                //       //   MaterialPageRoute(
-                                //       //     builder: (context) => GalleryPage(
-                                //       //       imagePath: documentSnapshot.data['image_url'],
-                                //       //     ),
-                                //       //   ),
-                                //       // );
-                                //     },
-                                //   )
-                                //       : new Text(documentSnapshot.data['text']),
-                                // ),
-                              ],
-                            ),
-                          ),
-                        ]
-                          //doc.data['sender_id']
-                          // "11" != widget.user!.id.toString()
-                          //getString('uid')
-                          //     ? generateReceiverLayout(doc)
-                          //     :
-                          // generateSenderLayout(doc),
-                        ),
-                      )
+                                      // new Container(
+                                      //   margin: const EdgeInsets.only(top: 5.0),
+                                      //   child: documentSnapshot.data['image_url'] != ''
+                                      //       ? InkWell(
+                                      //     child: new Container(
+                                      //       child: Image.network(
+                                      //         documentSnapshot.data['image_url'],
+                                      //         fit: BoxFit.fitWidth,
+                                      //       ),
+                                      //       height: 150,
+                                      //       width: 150.0,
+                                      //       color: Color.fromRGBO(0, 0, 0, 0.2),
+                                      //       padding: EdgeInsets.all(5),
+                                      //     ),
+                                      //     onTap: () {
+                                      //       // Navigator.of(context).push(
+                                      //       //   MaterialPageRoute(
+                                      //       //     builder: (context) => GalleryPage(
+                                      //       //       imagePath: documentSnapshot.data['image_url'],
+                                      //       //     ),
+                                      //       //   ),
+                                      //       // );
+                                      //     },
+                                      //   )
+                                      //       : new Text(documentSnapshot.data['text']),
+                                      // ),
+                                    ],
+                                  ),
+                                ),
+                              ]
+                                  //doc.data['sender_id']
+                                  // "11" != widget.user!.id.toString()
+                                  //getString('uid')
+                                  //     ? generateReceiverLayout(doc)
+                                  //     :
+                                  // generateSenderLayout(doc),
+                                  ),
+                            )
                           : SizedBox(
-                        height: 0,
-                      );
+                              height: 0,
+                            );
                     }).toList(),
 
                     //   generateMessages(snapshot),
@@ -540,7 +540,7 @@ class ChatPageState extends State<ChatPage> {
     return new IconTheme(
         data: new IconThemeData(
           color: _isWritting
-              ? Theme.of(context).accentColor
+              ? Theme.of(context).primaryColor
               : Theme.of(context).disabledColor,
         ),
         child: new Container(
@@ -603,7 +603,7 @@ class ChatPageState extends State<ChatPage> {
                   },
                   onSubmitted: _sendText,
                   decoration:
-                  new InputDecoration.collapsed(hintText: "Send a message"),
+                      new InputDecoration.collapsed(hintText: "Send a message"),
                 ),
               ),
               new Container(
@@ -624,7 +624,7 @@ class ChatPageState extends State<ChatPage> {
       'name': widget.name,
       'profile_photo': "",
       'image_url':
-      'https://developmentalphawizz.com/antsnest/uploads/chats/${fileName}',
+          'https://developmentalphawizz.com/antsnest/uploads/chats/${fileName}',
       'received': false,
       'time': FieldValue.serverTimestamp(),
     }).then((documentReference) {

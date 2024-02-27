@@ -64,7 +64,6 @@ class _EditProfileScreenState extends State<EditProfileScreen>
   TextEditingController facebookController = TextEditingController();
   TextEditingController serviceInfoController = TextEditingController();
 
-
   /// Payment purpose controllers
 
   TextEditingController payNameController = TextEditingController();
@@ -79,9 +78,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
   TextEditingController payContactController = TextEditingController();
   TextEditingController razorpayController = TextEditingController();
 
-  String? paymentMode,paying;
-
-
+  String? paymentMode, paying;
 
   String? selectedCategory;
   String? selectedSubCategory;
@@ -99,7 +96,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
   List<CityData> cityList = [];
   List<String> selectedCities = [];
   String? selectedCountry, selectedState;
-  String? countryName, stateName,cityName;
+  String? countryName, stateName, cityName;
   List _selectedItems = [];
   String? noOfDays;
   String phoneCode = '+91';
@@ -115,7 +112,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     "9",
     "10",
   ];
-  List <String> subcateid=[];
+  List<String> subcateid = [];
   Future<void> checkAndRequestCameraPermission() async {
     var status = await Permission.camera.status;
 
@@ -135,14 +132,15 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     checkAndRequestCameraPermission();
     getServiceCategory();
 
-
-    print('___________${ widget.response.user!.jsonData!.hrsDay.toString()}__________');
+    print(
+        '___________${widget.response.user!.jsonData!.hrsDay.toString()}__________');
     print('___________${widget.response.user?.subcategoryId}__________');
   }
 
-  ServiceSubCategoryModel?  serviceSubCategory;
+  ServiceSubCategoryModel? serviceSubCategory;
   Future<void> getServicesSubCategory(catId) async {
-    var request = http.MultipartRequest('POST', Uri.parse("${Apipath.BASH_URL}get_categories_list"));
+    var request = http.MultipartRequest(
+        'POST', Uri.parse("${Apipath.BASH_URL}get_categories_list"));
     request.fields.addAll({'p_id': '$catId'});
     print('___________${request.fields}__________');
     http.StreamedResponse response = await request.send();
@@ -151,7 +149,6 @@ class _EditProfileScreenState extends State<EditProfileScreen>
       print('___________${str}__________');
       setState(() {
         serviceSubCategory = ServiceSubCategoryModel.fromJson(json.decode(str));
-
       });
     } else {
       return null;
@@ -192,7 +189,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     final List? results = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return MultiSelect( selectedState: selectedState.toString());
+        return MultiSelect(selectedState: selectedState.toString());
       },
     );
 
@@ -201,7 +198,6 @@ class _EditProfileScreenState extends State<EditProfileScreen>
       setState(() {
         _selectedItems = results;
       });
-
     }
   }
 
@@ -219,11 +215,10 @@ class _EditProfileScreenState extends State<EditProfileScreen>
           return Theme(
             data: ThemeData.light().copyWith(
                 primaryColor: Colors.black, //Head background
-                accentColor: Colors.black,
                 colorScheme:
-                ColorScheme.light(primary: const Color(0xFFEB6C67)),
+                    ColorScheme.light(primary: const Color(0xFFEB6C67)),
                 buttonTheme:
-                ButtonThemeData(textTheme: ButtonTextTheme.accent)),
+                    ButtonThemeData(textTheme: ButtonTextTheme.accent)),
             child: child!,
           );
         });
@@ -245,15 +240,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     return formatted;
   }
 
-  List<String> timeList  = [
-    "Hour",
-    "Days"
-  ];
-  List<String> travelList = [
-    "Local",
-    "Nationwide",
-    "Worldwide"
-  ];
+  List<String> timeList = ["Hour", "Days"];
+  List<String> travelList = ["Local", "Nationwide", "Worldwide"];
   List<String> languageList = [
     "English",
     "Italian",
@@ -276,9 +264,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
   ];
   String? selectedLanguage;
   String? selectedTravel;
-  ServiceCategoryModel?  serviceModel ;
+  ServiceCategoryModel? serviceModel;
   final MultiSelectController multiSelectController = MultiSelectController();
-  List<String> categorylist=[];
+  List<String> categorylist = [];
   Set<String> uniqueValues = Set();
 
   Future<void> getServiceCategory() async {
@@ -336,12 +324,11 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                         BoxShadow(
                             color: AppColor().colorView().withOpacity(0.1),
                             blurRadius: 4,
-                            spreadRadius: 1
-                        )
+                            spreadRadius: 1)
                       ],
                       borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(50.0),
-                          bottomRight: Radius.circular(50.0),
+                        bottomLeft: Radius.circular(50.0),
+                        bottomRight: Radius.circular(50.0),
                       ),
                     ),
                     child: firstSign(context),
@@ -365,37 +352,36 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     width: 100.w,
                     alignment: Alignment.topCenter,
                     padding: EdgeInsets.only(top: 3.h),
-                    decoration: BoxDecoration(
-                      color: AppColor.PrimaryDark
-                    ),
+                    decoration: BoxDecoration(color: AppColor.PrimaryDark),
                     child: Row(
                       children: [
                         Container(
-                            width: 6.38.w,
-                            height: 6.38.w,
-                            alignment: Alignment.centerLeft,
-                            margin: EdgeInsets.only(left: 7.91.w),
-                            child: InkWell(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Image.asset(
-                                  back,
-                                  height: 4.0.h,
-                                  width: 8.w,
-                                ),
+                          width: 6.38.w,
+                          height: 6.38.w,
+                          alignment: Alignment.centerLeft,
+                          margin: EdgeInsets.only(left: 7.91.w),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Image.asset(
+                              back,
+                              height: 4.0.h,
+                              width: 8.w,
                             ),
+                          ),
                         ),
                         SizedBox(
                           width: 2.08.h,
                         ),
                         Container(
                           width: 65.w,
-                          child: text("My Profile",
-                              textColor: Color(0xffffffff),
-                              fontSize: 14.sp,
-                              fontFamily: fontMedium,
-                              isCentered: true,
+                          child: text(
+                            "My Profile",
+                            textColor: Color(0xffffffff),
+                            fontSize: 14.sp,
+                            fontFamily: fontMedium,
+                            isCentered: true,
                           ),
                         ),
                       ],
@@ -416,8 +402,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                                 ? ClipOval(
                                     child: UtilityHlepar.convertetIMG(
                                         // widget.response.path! +
-                                            widget.response.user!.profileImage!
-                                                .toString(),
+                                        widget.response.user!.profileImage!
+                                            .toString(),
                                         fit: BoxFit.cover),
                                   )
                                 : ClipOval(
@@ -451,16 +437,20 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   ),
                   SizedBox(height: 10),
                   Positioned(
-                      top: 7.49.h,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        child: Center(child: Text("Please add time availability to start\n     booking on your service", style: TextStyle(fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: fontMedium,
-                            color: Colors.white),
-                        ),
+                    top: 7.49.h,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: Center(
+                        child: Text(
+                          "Please add time availability to start\n     booking on your service",
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: fontMedium,
+                              color: Colors.white),
                         ),
                       ),
+                    ),
                   ),
                 ],
               ),
@@ -475,13 +465,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     var userid = await MyToken.getUserID();
     String newCityIdsList = _selectedItems.join(",");
     print("sperated city id here now $newCityIdsList");
-    String value= categorylist.map((dynamic value) {
+    String value = categorylist.map((dynamic value) {
       return value.toString();
     }).join(', ');
-    print(value.toString()+"________________________");
-    print(categorylist.isEmpty.toString()+"_______________");
+    print(value.toString() + "________________________");
+    print(categorylist.isEmpty.toString() + "_______________");
     Map<String, String> tojson() => {
-      "id": userid,
+          "id": userid,
           // 'name': userNameController.text,
           // 'email': emailController.text,
           // 'mobile': phoneController.text,
@@ -489,49 +479,51 @@ class _EditProfileScreenState extends State<EditProfileScreen>
           // 'country_id': selectedCountry.toString(),
           // 'state_id': selectedState.toString(),
           // 'city_id': selectedCities.toString(),
-      "mobile": "${phoneController.text}",
-      "name": "${nameController.text}",
-      "email": "${emailController.text}",
-      'country_id': selectedCountry.toString(),
-      'state_id': selectedState.toString(),
-      'city_id': SelectedSignleCity.toString(),
-      "address": addressController.text,
-      "can_travel": selectedTravel.toString(),
-      "service_cities": newCityIdsList.toString(),
-      "website": portfolioController.text,
-      "t_link":twitterController.text,
-      "i_link":instagramController.text,
-      "l_link":linkedInController.text,
-      "f_link":facebookController.text,
-      "provide_services":serviceInfoController.text,
-      "number":noOfDays.toString(),
-      "equipments":equipmentController.text,
-      "birthday": dateFormate.toString(),
-      "provide_services":comfertableServiceController.text,
-      "join_antsnest": whyJoinController.text,
-      "cat":selectedCategory.toString(),
-      "sub_cat":categorylist.isEmpty?subcateid.map((dynamic value) {
-        return value.toString();
-      }).join(', '):categorylist.map((String value) {
-        return value.toString();
-      }).join(', '),
-      "hrs_day":selectedDayHour.toString(),
-      "country_code":"+${phoneCode}",
-      "amount":amountController.text,
-      "language":selectedLanguage.toString(),
-      "payName":payNameController.text,
-      "acc_No":accController.text,
-      "bank_name":bankNameController.text,
-      "bank_address":bankAddressController.text,
-      "ifsc":ifscController.text,
-      "pan_no":panNoController.text,
-      "sort_code":sortCodeController.text,
-      "routing_code":routingController.text,
-      "payEmail":paymailController.text,
-      "payContact":payContactController.text,
-      "payMode":paymentMode.toString(),
-      "paying":paying.toString(),
-      "razorpay_id":razorpayController.text
+          "mobile": "${phoneController.text}",
+          "name": "${nameController.text}",
+          "email": "${emailController.text}",
+          'country_id': selectedCountry.toString(),
+          'state_id': selectedState.toString(),
+          'city_id': SelectedSignleCity.toString(),
+          "address": addressController.text,
+          "can_travel": selectedTravel.toString(),
+          "service_cities": newCityIdsList.toString(),
+          "website": portfolioController.text,
+          "t_link": twitterController.text,
+          "i_link": instagramController.text,
+          "l_link": linkedInController.text,
+          "f_link": facebookController.text,
+          "provide_services": serviceInfoController.text,
+          "number": noOfDays.toString(),
+          "equipments": equipmentController.text,
+          "birthday": dateFormate.toString(),
+          "provide_services": comfertableServiceController.text,
+          "join_antsnest": whyJoinController.text,
+          "cat": selectedCategory.toString(),
+          "sub_cat": categorylist.isEmpty
+              ? subcateid.map((dynamic value) {
+                  return value.toString();
+                }).join(', ')
+              : categorylist.map((String value) {
+                  return value.toString();
+                }).join(', '),
+          "hrs_day": selectedDayHour.toString(),
+          "country_code": "+${phoneCode}",
+          "amount": amountController.text,
+          "language": selectedLanguage.toString(),
+          "payName": payNameController.text,
+          "acc_No": accController.text,
+          "bank_name": bankNameController.text,
+          "bank_address": bankAddressController.text,
+          "ifsc": ifscController.text,
+          "pan_no": panNoController.text,
+          "sort_code": sortCodeController.text,
+          "routing_code": routingController.text,
+          "payEmail": paymailController.text,
+          "payContact": payContactController.text,
+          "payMode": paymentMode.toString(),
+          "paying": paying.toString(),
+          "razorpay_id": razorpayController.text
         };
     print("bbbbb" + tojson().toString());
     var data = await MultipartHelper.requestOneImg(tojson(),
@@ -546,18 +538,20 @@ class _EditProfileScreenState extends State<EditProfileScreen>
   }
 
   void setFromField() async {
-
     List<String> finalList = [];
-        finalList.clear();
-      if(widget.response.user != null || widget.response.user!.jsonData != null || widget.response.user!.jsonData!.serviceCities != null){
-        String servicesCities = widget.response.user!.jsonData!.serviceCities.toString();
-        List<String> finalserviceCity = servicesCities.split(",");
-        print("final cities here now $finalserviceCity");
-        for(var i=0;i< finalserviceCity.length;i++){
-          print("nnnnnnnn ${finalserviceCity[i]}");
-          finalList.add(finalserviceCity[i].toString());
-        }
+    finalList.clear();
+    if (widget.response.user != null ||
+        widget.response.user!.jsonData != null ||
+        widget.response.user!.jsonData!.serviceCities != null) {
+      String servicesCities =
+          widget.response.user!.jsonData!.serviceCities.toString();
+      List<String> finalserviceCity = servicesCities.split(",");
+      print("final cities here now $finalserviceCity");
+      for (var i = 0; i < finalserviceCity.length; i++) {
+        print("nnnnnnnn ${finalserviceCity[i]}");
+        finalList.add(finalserviceCity[i].toString());
       }
+    }
     phoneCode = widget.response.user!.countryCode.toString();
     nameController.text = widget.response.user!.fname.toString();
     userLastNameController.text = widget.response.user!.lname.toString();
@@ -568,47 +562,71 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     selectedCountry = widget.response.user!.countryId.toString();
     selectedState = widget.response.user!.stateId.toString();
     SelectedSignleCity = widget.response.user!.cityId.toString();
-    portfolioController.text = widget.response.user!.jsonData!.website.toString();
+    portfolioController.text =
+        widget.response.user!.jsonData!.website.toString();
     twitterController.text = widget.response.user!.jsonData!.tLink.toString();
     instagramController.text = widget.response.user!.jsonData!.iLink.toString();
     linkedInController.text = widget.response.user!.jsonData!.lLink.toString();
-    equipmentController.text = widget.response.user!.jsonData!.equipments.toString();
+    equipmentController.text =
+        widget.response.user!.jsonData!.equipments.toString();
     dateFormate = widget.response.user!.jsonData!.birthday.toString();
-    facebookController.text  =widget.response.user!.jsonData!.iLink.toString();
-    serviceInfoController.text =  widget.response.user!.jsonData!.provideServices.toString();
-    noOfDays  =widget.response.user!.jsonData!.iLink.toString();
-    comfertableServiceController.text = widget.response.user!.jsonData!.provideServices.toString();
-    whyJoinController.text = widget.response.user!.jsonData!.joinAntsnest.toString();
+    facebookController.text = widget.response.user!.jsonData!.iLink.toString();
+    serviceInfoController.text =
+        widget.response.user!.jsonData!.provideServices.toString();
+    noOfDays = widget.response.user!.jsonData!.iLink.toString();
+    comfertableServiceController.text =
+        widget.response.user!.jsonData!.provideServices.toString();
+    whyJoinController.text =
+        widget.response.user!.jsonData!.joinAntsnest.toString();
     selectedCategory = widget.response.user!.jsonData!.cat.toString();
     selectedSubCategory = widget.response.user!.jsonData!.subCat.toString();
     amountController.text = widget.response.user!.jsonData!.amount.toString();
-    print(widget.response.user!.jsonData!.hrsDay.toString()+"++++++++++++++++");
-    selectedDayHour = widget.response.user!.jsonData!.hrsDay.toString() == "" || widget.response.user!.jsonData!.hrsDay.toString() == "null"||widget.response.user!.jsonData!.hrsDay.toString()=="Hours" ? "Hour" : widget.response.user!.jsonData!.hrsDay.toString();
+    print(
+        widget.response.user!.jsonData!.hrsDay.toString() + "++++++++++++++++");
+    selectedDayHour = widget.response.user!.jsonData!.hrsDay.toString() == "" ||
+            widget.response.user!.jsonData!.hrsDay.toString() == "null" ||
+            widget.response.user!.jsonData!.hrsDay.toString() == "Hours"
+        ? "Hour"
+        : widget.response.user!.jsonData!.hrsDay.toString();
     selectedLanguage = widget.response.user!.jsonData!.language.toString();
-    print("${widget.response.user!.jsonData!.canTravel.toString()}"+"+++++++++++++++");
-    selectedTravel = widget.response.user!.jsonData!.canTravel.toString()=="null"?null:widget.response.user!.jsonData!.canTravel.toString();
+    print("${widget.response.user!.jsonData!.canTravel.toString()}" +
+        "+++++++++++++++");
+    selectedTravel =
+        widget.response.user!.jsonData!.canTravel.toString() == "null"
+            ? null
+            : widget.response.user!.jsonData!.canTravel.toString();
     _selectedItems = finalList;
-
-
 
     /// payment purpose section here
 
-    payNameController.text = widget.response.user!.paymentDetails?.accountHolderName.toString() ?? '';
-    accController.text = widget.response.user!.paymentDetails?.accNo.toString() ?? '';
-    bankNameController.text = widget.response.user!.paymentDetails?.bankName.toString() ?? '';
-    bankAddressController.text = widget.response.user!.paymentDetails?.bankAddr.toString() ?? '';
-    ifscController.text = widget.response.user!.paymentDetails?.ifscCode.toString() ?? '';
-    panNoController.text = widget.response.user!.paymentDetails?.pancardNo.toString() ?? '';
-    sortCodeController.text = widget.response.user!.paymentDetails?.sortCode.toString() ?? '';
-    routingController.text = widget.response.user!.paymentDetails?.routingNumber.toString() ?? '';
-    paymailController.text = widget.response.user!.paymentDetails?.paypalEmailId.toString() ?? '';
-    payContactController.text = widget.response.user!.paymentDetails?.contactNumber.toString() ?? '';
-    razorpayController.text = widget.response.user!.paymentDetails?.razorpayId.toString() ?? '';
+    payNameController.text =
+        widget.response.user!.paymentDetails?.accountHolderName.toString() ??
+            '';
+    accController.text =
+        widget.response.user!.paymentDetails?.accNo.toString() ?? '';
+    bankNameController.text =
+        widget.response.user!.paymentDetails?.bankName.toString() ?? '';
+    bankAddressController.text =
+        widget.response.user!.paymentDetails?.bankAddr.toString() ?? '';
+    ifscController.text =
+        widget.response.user!.paymentDetails?.ifscCode.toString() ?? '';
+    panNoController.text =
+        widget.response.user!.paymentDetails?.pancardNo.toString() ?? '';
+    sortCodeController.text =
+        widget.response.user!.paymentDetails?.sortCode.toString() ?? '';
+    routingController.text =
+        widget.response.user!.paymentDetails?.routingNumber.toString() ?? '';
+    paymailController.text =
+        widget.response.user!.paymentDetails?.paypalEmailId.toString() ?? '';
+    payContactController.text =
+        widget.response.user!.paymentDetails?.contactNumber.toString() ?? '';
+    razorpayController.text =
+        widget.response.user!.paymentDetails?.razorpayId.toString() ?? '';
     paymentMode = widget.response.user!.paymentDetails?.mode.toString();
-    paying = widget.response.user!.paymentDetails?.purpose.toString() ;
+    paying = widget.response.user!.paymentDetails?.purpose.toString();
     getServicesSubCategory(selectedCategory);
     setState(() {});
-   // print("checking birthday ${widget.response.user!.cityId.toString()} and ${widget.response.user!.stateId.toString()}");
+    // print("checking birthday ${widget.response.user!.cityId.toString()} and ${widget.response.user!.stateId.toString()}");
   }
 
   Widget firstSign(BuildContext context) {
@@ -810,15 +828,16 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 SizedBox(
                   height: 0.5.h,
                 ),
-                Row(crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     InkWell(
-                      onTap:(){
+                      onTap: () {
                         showCountryPicker(
                           context: context,
                           showPhoneCode: true,
                           // optional. Shows phone code before the country name.
-                          onSelect: ( Country country) {
+                          onSelect: (Country country) {
                             print('Select country: ${country.countryCode}');
                             setState(() {
                               phoneCode = country.phoneCode.toString();
@@ -854,14 +873,17 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                             color: AppColor().colorTextFour(),
                             fontSize: 10.sp,
                           ),
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
                           decoration: InputDecoration(
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
                                   color: AppColor().colorEdit(),
                                   width: 1.0,
                                   style: BorderStyle.solid),
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
                             ),
                             labelText: 'Mobile Number',
                             labelStyle: TextStyle(
@@ -872,7 +894,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                             counterText: '',
                             fillColor: AppColor().colorEdit(),
                             enabled: true,
-                             filled: true,
+                            filled: true,
                             // prefixIcon: Padding(
                             //   padding: EdgeInsets.all(3.5.w),
                             //   child: Image.asset(
@@ -895,7 +917,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
                                   color: AppColor().colorEdit(), width: 5.0),
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
                             ),
                           ),
                         ),
@@ -988,7 +1011,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                             // ),
                             Expanded(
                               child: Text(
-                               countryName == null|| countryName == 'null' ? 'Select Country' : ' $countryName',
+                                countryName == null || countryName == 'null'
+                                    ? 'Select Country'
+                                    : ' $countryName',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.normal,
@@ -1000,23 +1025,22 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                         ),
                         items: countryList
                             .map((item) => DropdownMenuItem<String>(
-                          value: item.id,
-                          child: Text(
-                            item.name!,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ))
+                                  value: item.id,
+                                  child: Text(
+                                    item.name!,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ))
                             .toList(),
                         value: selectedCountry,
                         onChanged: (value) {
                           setState(() {
                             selectedCountry = value as String;
-
                           });
                         },
                         icon: const Icon(
@@ -1027,15 +1051,14 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                         buttonHeight: 50,
                         buttonWidth: 160,
                         buttonPadding:
-                        const EdgeInsets.only(left: 14, right: 14),
+                            const EdgeInsets.only(left: 14, right: 14),
                         buttonDecoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(14),
                           color: AppColor().colorEdit(),
                         ),
                         buttonElevation: 0,
                         itemHeight: 40,
-                        itemPadding:
-                        const EdgeInsets.only(left: 14, right: 14),
+                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
                         dropdownMaxHeight: 300,
                         dropdownPadding: null,
                         dropdownDecoration: BoxDecoration(
@@ -1050,7 +1073,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 SizedBox(
                   height: 15,
                 ),
-              // STATE
+                // STATE
                 Container(
                     width: 69.99.w,
                     // height: 6.h,
@@ -1059,8 +1082,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     ),
                     child: FutureBuilder(
                         future: getState(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot snapshot) {
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
                           if (snapshot.hasData) {
                             return DropdownButtonHideUnderline(
                               child: DropdownButton2(
@@ -1090,21 +1113,18 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                                   ],
                                 ),
                                 items: stateList
-                                    .map((item) =>
-                                    DropdownMenuItem<String>(
-                                      value: item.id,
-                                      child: Text(
-                                        item.name!,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight:
-                                          FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                        overflow:
-                                        TextOverflow.ellipsis,
-                                      ),
-                                    ))
+                                    .map((item) => DropdownMenuItem<String>(
+                                          value: item.id,
+                                          child: Text(
+                                            item.name!,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ))
                                     .toList(),
                                 value: selectedState,
                                 onChanged: (value) {
@@ -1120,26 +1140,23 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                                 iconSize: 14,
                                 buttonHeight: 50,
                                 buttonWidth: 160,
-                                buttonPadding: const EdgeInsets.only(
-                                    left: 14, right: 14),
+                                buttonPadding:
+                                    const EdgeInsets.only(left: 14, right: 14),
                                 buttonDecoration: BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.circular(14),
+                                  borderRadius: BorderRadius.circular(14),
                                   color: AppColor().colorEdit(),
                                 ),
                                 buttonElevation: 0,
                                 itemHeight: 40,
-                                itemPadding: const EdgeInsets.only(
-                                    left: 14, right: 14),
+                                itemPadding:
+                                    const EdgeInsets.only(left: 14, right: 14),
                                 dropdownMaxHeight: 300,
                                 dropdownPadding: null,
                                 dropdownDecoration: BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.circular(14),
+                                  borderRadius: BorderRadius.circular(14),
                                 ),
                                 dropdownElevation: 8,
-                                scrollbarRadius:
-                                const Radius.circular(40),
+                                scrollbarRadius: const Radius.circular(40),
                                 scrollbarThickness: 6,
                                 scrollbarAlwaysShow: true,
                               ),
@@ -1147,214 +1164,213 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           } else if (snapshot.hasError) {
                             return Icon(Icons.error_outline);
                           } else {
-                            return Center(
-                                child: CircularProgressIndicator());
+                            return Center(child: CircularProgressIndicator());
                           }
                         })),
                 SizedBox(
                   height: 20,
                 ),
-               // CITY
-               //  InkWell(
-               //    onTap: (){
-               //      _showMultiSelect();
-               //    },
-               //    child: Container(
-               //        width: 70.99.w,
-               //        height: 7.26.h,
-               //        decoration: BoxDecoration(
-               //            borderRadius: BorderRadius.circular(10),
-               //            color: AppColor().colorEdit()
-               //        ),
-               //        // boxDecoration(
-               //        //   radius: 10.0,
-               //        // ),
-               //        child: _selectedItems.isEmpty ?
-               //        Padding(
-               //          padding: const EdgeInsets.only(left: 10.0, right: 10),
-               //          child: Row(
-               //            children: [
-               //              Image.asset(
-               //                city,
-               //                width: 6.04.w,
-               //                height: 5.04.w,
-               //                fit: BoxFit.fill,
-               //                color: AppColor.PrimaryDark,
-               //              ),
-               //              Padding(
-               //                padding: EdgeInsets.only(left: 8),
-               //                child: Text(
-               //                  'Select Multiple Cities',
-               //                  style: TextStyle(
-               //                    fontSize: 14,
-               //                    color: Colors.black54,
-               //                    fontWeight: FontWeight.normal,
-               //                  ),
-               //                  overflow: TextOverflow.ellipsis,
-               //                ),
-               //              ),
-               //            ],
-               //          ),
-               //        )
-               //            :  Wrap(
-               //          children: _selectedItems
-               //              .map((item){
-               //            print("okok ${item.id}");
-               //            return Padding(
-               //              padding: const EdgeInsets.only(left: 8.0, right: 8),
-               //              child: Chip(
-               //                label:
-               //                Text(
-               //                    "${item.name}"
-               //                  //item.name
-               //                ),
-               //              ),
-               //            );
-               //          })
-               //              .toList(),
-               //        )
-               //      // FutureBuilder(
-               //      //     future: getCities(),
-               //      //     builder: (BuildContext context,
-               //      //         AsyncSnapshot snapshot) {
-               //      //       if (snapshot.hasData) {
-               //      //         return DropdownButtonHideUnderline(
-               //      //           child: DropdownButton2(
-               //      //             isExpanded: true,
-               //      //             hint: Row(
-               //      //               children: [
-               //      //                 Image.asset(
-               //      //                   city,
-               //      //                   width: 6.04.w,
-               //      //                   height: 5.04.w,
-               //      //                   fit: BoxFit.fill,
-               //      //                   color: AppColor.PrimaryDark,
-               //      //                 ),
-               //      //                 SizedBox(
-               //      //                   width: 4,
-               //      //                 ),
-               //      //                 Expanded(
-               //      //                   child: Text(
-               //      //                     'Select Multiple Cities',
-               //      //                     style: TextStyle(
-               //      //                       fontSize: 14,
-               //      //                       fontWeight: FontWeight.normal,
-               //      //                     ),
-               //      //                     overflow: TextOverflow.ellipsis,
-               //      //                   ),
-               //      //                 ),
-               //      //               ],
-               //      //             ),
-               //      //             items: cityList.map((item) {
-               //      //               return DropdownMenuItem<String>(
-               //      //                 value: item.id,
-               //      //                 enabled: false,
-               //      //                 child: StatefulBuilder(
-               //      //                   builder: (context, menuSetState) {
-               //      //                     final _isSelected =
-               //      //                         selectedCities
-               //      //                             .contains(item);
-               //      //                     print("SLECTED CITY");
-               //      //                     return InkWell(
-               //      //                       onTap: () {
-               //      //                         _isSelected
-               //      //                             ? selectedCities
-               //      //                                 .remove(item.id)
-               //      //                             : selectedCities
-               //      //                                 .add(item.id!);
-               //      //                         setState(() {});
-               //      //                         menuSetState(() {});
-               //      //                       },
-               //      //                       child: Container(
-               //      //                         height: double.infinity,
-               //      //                         padding: const EdgeInsets
-               //      //                                 .symmetric(
-               //      //                             horizontal: 16.0),
-               //      //                         child: Row(
-               //      //                           children: [
-               //      //                             _isSelected
-               //      //                                 ? const Icon(Icons
-               //      //                                     .check_box_outlined)
-               //      //                                 : const Icon(Icons
-               //      //                                     .check_box_outline_blank),
-               //      //                             const SizedBox(
-               //      //                                 width: 16),
-               //      //                             Text(
-               //      //                               item.name!,
-               //      //                               style:
-               //      //                                   const TextStyle(
-               //      //                                 fontSize: 14,
-               //      //                               ),
-               //      //                             ),
-               //      //                           ],
-               //      //                         ),
-               //      //                       ),
-               //      //                     );
-               //      //                   },
-               //      //                 ),
-               //      //               );
-               //      //             }).toList(),
-               //      //             //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
-               //      //             value: selectedCities.isEmpty
-               //      //                 ? null
-               //      //                 : selectedCities.last,
-               //      //             onChanged: (value) {},
-               //      //             buttonHeight: 50,
-               //      //             buttonWidth: 160,
-               //      //             buttonPadding: const EdgeInsets.only(
-               //      //                 left: 14, right: 14),
-               //      //             buttonDecoration: BoxDecoration(
-               //      //               borderRadius:
-               //      //                   BorderRadius.circular(14),
-               //      //               color: Color(0xffF9F9F9),
-               //      //             ),
-               //      //             buttonElevation: 0,
-               //      //             itemHeight: 40,
-               //      //             itemPadding: const EdgeInsets.only(
-               //      //                 left: 14, right: 14),
-               //      //             dropdownMaxHeight: 300,
-               //      //             dropdownPadding: null,
-               //      //             dropdownDecoration: BoxDecoration(
-               //      //               borderRadius:
-               //      //                   BorderRadius.circular(14),
-               //      //             ),
-               //      //             dropdownElevation: 8,
-               //      //             scrollbarRadius:
-               //      //                 const Radius.circular(40),
-               //      //             scrollbarThickness: 6,
-               //      //             scrollbarAlwaysShow: true,
-               //      //             selectedItemBuilder: (context) {
-               //      //               return cityList.map(
-               //      //                 (item) {
-               //      //                   return Container(
-               //      //                     // alignment: AlignmentDirectional.center,
-               //      //                     padding:
-               //      //                         const EdgeInsets.symmetric(
-               //      //                             horizontal: 16.0),
-               //      //                     child: Text(
-               //      //                       selectedCities.join(','),
-               //      //                       style: const TextStyle(
-               //      //                         fontSize: 14,
-               //      //                         overflow:
-               //      //                             TextOverflow.ellipsis,
-               //      //                       ),
-               //      //                       maxLines: 1,
-               //      //                     ),
-               //      //                   );
-               //      //                 },
-               //      //               ).toList();
-               //      //             },
-               //      //           ),
-               //      //         );
-               //      //       } else if (snapshot.hasError) {
-               //      //         return Icon(Icons.error_outline);
-               //      //       } else {
-               //      //         return Center(
-               //      //             child: CircularProgressIndicator());
-               //      //       }
-               //      //     })
-               //    ),
-               //  ),
+                // CITY
+                //  InkWell(
+                //    onTap: (){
+                //      _showMultiSelect();
+                //    },
+                //    child: Container(
+                //        width: 70.99.w,
+                //        height: 7.26.h,
+                //        decoration: BoxDecoration(
+                //            borderRadius: BorderRadius.circular(10),
+                //            color: AppColor().colorEdit()
+                //        ),
+                //        // boxDecoration(
+                //        //   radius: 10.0,
+                //        // ),
+                //        child: _selectedItems.isEmpty ?
+                //        Padding(
+                //          padding: const EdgeInsets.only(left: 10.0, right: 10),
+                //          child: Row(
+                //            children: [
+                //              Image.asset(
+                //                city,
+                //                width: 6.04.w,
+                //                height: 5.04.w,
+                //                fit: BoxFit.fill,
+                //                color: AppColor.PrimaryDark,
+                //              ),
+                //              Padding(
+                //                padding: EdgeInsets.only(left: 8),
+                //                child: Text(
+                //                  'Select Multiple Cities',
+                //                  style: TextStyle(
+                //                    fontSize: 14,
+                //                    color: Colors.black54,
+                //                    fontWeight: FontWeight.normal,
+                //                  ),
+                //                  overflow: TextOverflow.ellipsis,
+                //                ),
+                //              ),
+                //            ],
+                //          ),
+                //        )
+                //            :  Wrap(
+                //          children: _selectedItems
+                //              .map((item){
+                //            print("okok ${item.id}");
+                //            return Padding(
+                //              padding: const EdgeInsets.only(left: 8.0, right: 8),
+                //              child: Chip(
+                //                label:
+                //                Text(
+                //                    "${item.name}"
+                //                  //item.name
+                //                ),
+                //              ),
+                //            );
+                //          })
+                //              .toList(),
+                //        )
+                //      // FutureBuilder(
+                //      //     future: getCities(),
+                //      //     builder: (BuildContext context,
+                //      //         AsyncSnapshot snapshot) {
+                //      //       if (snapshot.hasData) {
+                //      //         return DropdownButtonHideUnderline(
+                //      //           child: DropdownButton2(
+                //      //             isExpanded: true,
+                //      //             hint: Row(
+                //      //               children: [
+                //      //                 Image.asset(
+                //      //                   city,
+                //      //                   width: 6.04.w,
+                //      //                   height: 5.04.w,
+                //      //                   fit: BoxFit.fill,
+                //      //                   color: AppColor.PrimaryDark,
+                //      //                 ),
+                //      //                 SizedBox(
+                //      //                   width: 4,
+                //      //                 ),
+                //      //                 Expanded(
+                //      //                   child: Text(
+                //      //                     'Select Multiple Cities',
+                //      //                     style: TextStyle(
+                //      //                       fontSize: 14,
+                //      //                       fontWeight: FontWeight.normal,
+                //      //                     ),
+                //      //                     overflow: TextOverflow.ellipsis,
+                //      //                   ),
+                //      //                 ),
+                //      //               ],
+                //      //             ),
+                //      //             items: cityList.map((item) {
+                //      //               return DropdownMenuItem<String>(
+                //      //                 value: item.id,
+                //      //                 enabled: false,
+                //      //                 child: StatefulBuilder(
+                //      //                   builder: (context, menuSetState) {
+                //      //                     final _isSelected =
+                //      //                         selectedCities
+                //      //                             .contains(item);
+                //      //                     print("SLECTED CITY");
+                //      //                     return InkWell(
+                //      //                       onTap: () {
+                //      //                         _isSelected
+                //      //                             ? selectedCities
+                //      //                                 .remove(item.id)
+                //      //                             : selectedCities
+                //      //                                 .add(item.id!);
+                //      //                         setState(() {});
+                //      //                         menuSetState(() {});
+                //      //                       },
+                //      //                       child: Container(
+                //      //                         height: double.infinity,
+                //      //                         padding: const EdgeInsets
+                //      //                                 .symmetric(
+                //      //                             horizontal: 16.0),
+                //      //                         child: Row(
+                //      //                           children: [
+                //      //                             _isSelected
+                //      //                                 ? const Icon(Icons
+                //      //                                     .check_box_outlined)
+                //      //                                 : const Icon(Icons
+                //      //                                     .check_box_outline_blank),
+                //      //                             const SizedBox(
+                //      //                                 width: 16),
+                //      //                             Text(
+                //      //                               item.name!,
+                //      //                               style:
+                //      //                                   const TextStyle(
+                //      //                                 fontSize: 14,
+                //      //                               ),
+                //      //                             ),
+                //      //                           ],
+                //      //                         ),
+                //      //                       ),
+                //      //                     );
+                //      //                   },
+                //      //                 ),
+                //      //               );
+                //      //             }).toList(),
+                //      //             //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
+                //      //             value: selectedCities.isEmpty
+                //      //                 ? null
+                //      //                 : selectedCities.last,
+                //      //             onChanged: (value) {},
+                //      //             buttonHeight: 50,
+                //      //             buttonWidth: 160,
+                //      //             buttonPadding: const EdgeInsets.only(
+                //      //                 left: 14, right: 14),
+                //      //             buttonDecoration: BoxDecoration(
+                //      //               borderRadius:
+                //      //                   BorderRadius.circular(14),
+                //      //               color: Color(0xffF9F9F9),
+                //      //             ),
+                //      //             buttonElevation: 0,
+                //      //             itemHeight: 40,
+                //      //             itemPadding: const EdgeInsets.only(
+                //      //                 left: 14, right: 14),
+                //      //             dropdownMaxHeight: 300,
+                //      //             dropdownPadding: null,
+                //      //             dropdownDecoration: BoxDecoration(
+                //      //               borderRadius:
+                //      //                   BorderRadius.circular(14),
+                //      //             ),
+                //      //             dropdownElevation: 8,
+                //      //             scrollbarRadius:
+                //      //                 const Radius.circular(40),
+                //      //             scrollbarThickness: 6,
+                //      //             scrollbarAlwaysShow: true,
+                //      //             selectedItemBuilder: (context) {
+                //      //               return cityList.map(
+                //      //                 (item) {
+                //      //                   return Container(
+                //      //                     // alignment: AlignmentDirectional.center,
+                //      //                     padding:
+                //      //                         const EdgeInsets.symmetric(
+                //      //                             horizontal: 16.0),
+                //      //                     child: Text(
+                //      //                       selectedCities.join(','),
+                //      //                       style: const TextStyle(
+                //      //                         fontSize: 14,
+                //      //                         overflow:
+                //      //                             TextOverflow.ellipsis,
+                //      //                       ),
+                //      //                       maxLines: 1,
+                //      //                     ),
+                //      //                   );
+                //      //                 },
+                //      //               ).toList();
+                //      //             },
+                //      //           ),
+                //      //         );
+                //      //       } else if (snapshot.hasError) {
+                //      //         return Icon(Icons.error_outline);
+                //      //       } else {
+                //      //         return Center(
+                //      //             child: CircularProgressIndicator());
+                //      //       }
+                //      //     })
+                //    ),
+                //  ),
 
                 Container(
                     width: 69.99.w,
@@ -1364,8 +1380,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     ),
                     child: FutureBuilder(
                         future: getCities(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot snapshot) {
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
                           if (snapshot.hasData) {
                             return DropdownButtonHideUnderline(
                               child: DropdownButton2(
@@ -1395,21 +1411,18 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                                   ],
                                 ),
                                 items: cityList
-                                    .map((item) =>
-                                    DropdownMenuItem<String>(
-                                      value: item.id,
-                                      child: Text(
-                                        item.name!,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight:
-                                          FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                        overflow:
-                                        TextOverflow.ellipsis,
-                                      ),
-                                    ))
+                                    .map((item) => DropdownMenuItem<String>(
+                                          value: item.id,
+                                          child: Text(
+                                            item.name!,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ))
                                     .toList(),
                                 value: SelectedSignleCity,
                                 onChanged: (value) {
@@ -1425,26 +1438,23 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                                 iconSize: 14,
                                 buttonHeight: 50,
                                 buttonWidth: 160,
-                                buttonPadding: const EdgeInsets.only(
-                                    left: 14, right: 14),
+                                buttonPadding:
+                                    const EdgeInsets.only(left: 14, right: 14),
                                 buttonDecoration: BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.circular(14),
+                                  borderRadius: BorderRadius.circular(14),
                                   color: AppColor().colorEdit(),
                                 ),
                                 buttonElevation: 0,
                                 itemHeight: 40,
-                                itemPadding: const EdgeInsets.only(
-                                    left: 14, right: 14),
+                                itemPadding:
+                                    const EdgeInsets.only(left: 14, right: 14),
                                 dropdownMaxHeight: 300,
                                 dropdownPadding: null,
                                 dropdownDecoration: BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.circular(14),
+                                  borderRadius: BorderRadius.circular(14),
                                 ),
                                 dropdownElevation: 8,
-                                scrollbarRadius:
-                                const Radius.circular(40),
+                                scrollbarRadius: const Radius.circular(40),
                                 scrollbarThickness: 6,
                                 scrollbarAlwaysShow: true,
                               ),
@@ -1452,8 +1462,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           } else if (snapshot.hasError) {
                             return Icon(Icons.error_outline);
                           } else {
-                            return Center(
-                                child: CircularProgressIndicator());
+                            return Center(child: CircularProgressIndicator());
                           }
                         })),
                 ////////////
@@ -1552,6 +1561,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 SizedBox(
                   height: 15,
                 ),
+
                 ///  portfolio / website
                 Container(
                   height: 55,
@@ -1563,15 +1573,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   child: TextFormField(
                     controller: portfolioController,
                     decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Portfolio / Website",
                       label: Text(
                         "Portfolio / Website",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     // validator: (v) {
@@ -1586,6 +1594,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 SizedBox(
                   height: 15,
                 ),
+
                 /// twitter link
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
@@ -1596,15 +1605,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   child: TextFormField(
                     controller: twitterController,
                     decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Twitter link",
                       label: Text(
                         "Twitter link",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     // validator: (v) {
@@ -1619,6 +1626,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 SizedBox(
                   height: 15,
                 ),
+
                 /// instagram link
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
@@ -1629,15 +1637,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   child: TextFormField(
                     controller: instagramController,
                     decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Instagram link",
                       label: Text(
                         "Instagram link",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     // validator: (v) {
@@ -1661,15 +1667,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   child: TextFormField(
                     controller: facebookController,
                     decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Facebook link",
                       label: Text(
                         "Facebook link",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     // validator: (v) {
@@ -1693,15 +1697,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   child: TextFormField(
                     controller: linkedInController,
                     decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "LinkedIn link",
                       label: Text(
                         "LinkedIn link",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     // validator: (v) {
@@ -1725,15 +1727,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   child: TextFormField(
                     controller: equipmentController,
                     decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Equipment used",
                       label: Text(
                         "Equipment used",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     // validator: (v) {
@@ -1749,7 +1749,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   height: 15,
                 ),
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     _selectDate();
                   },
                   child: Container(
@@ -1757,11 +1757,19 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     margin: EdgeInsets.symmetric(horizontal: 20),
                     width: MediaQuery.of(context).size.width,
                     alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.symmetric(vertical: 6,horizontal: 8),
+                    padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                     decoration: BoxDecoration(
                         color: AppColor().colorEdit(),
                         borderRadius: BorderRadius.circular(12)),
-                    child: dateFormate != null|| dateFormate != "" ? Text("${dateFormate}") : Text("Enter Birthday",style: TextStyle(color: AppColor().colorTextFour().withOpacity(0.7),fontSize: 15),),
+                    child: dateFormate != null || dateFormate != ""
+                        ? Text("${dateFormate}")
+                        : Text(
+                            "Enter Birthday",
+                            style: TextStyle(
+                                color:
+                                    AppColor().colorTextFour().withOpacity(0.7),
+                                fontSize: 15),
+                          ),
                     // TextFormField(
                     //   controller: birthDayController,
                     //   decoration: InputDecoration(
@@ -1798,15 +1806,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   child: TextFormField(
                     controller: comfertableServiceController,
                     decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Enter your comfortable service",
                       label: Text(
                         "Comfortable service",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     validator: (v) {
@@ -1830,15 +1836,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   child: TextFormField(
                     controller: whyJoinController,
                     decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Why want to join antsnest?",
                       label: Text(
                         "Why Antsnest",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     validator: (v) {
@@ -1862,15 +1866,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   child: TextFormField(
                     controller: serviceInfoController,
                     decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Service Info",
                       label: Text(
                         "Service Info",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     validator: (v) {
@@ -1885,80 +1887,82 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 SizedBox(
                   height: 15,
                 ),
-                serviceModel == null ? Center(child: CircularProgressIndicator()) :
-                Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    width: double.infinity,
-                    height: 6.h,
-                    decoration: boxDecoration(
-                      radius: 10.0,
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: Text(
-                          'Select Category',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
-                          overflow: TextOverflow.ellipsis,
+                serviceModel == null
+                    ? Center(child: CircularProgressIndicator())
+                    : Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        width: double.infinity,
+                        height: 6.h,
+                        decoration: boxDecoration(
+                          radius: 10.0,
                         ),
-                        items: serviceModel?.data!
-                            .map((item) => DropdownMenuItem<String>(
-                          value: item.id,
-                          child: Text(
-                            item.cName ?? '',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            isExpanded: true,
+                            hint: Text(
+                              'Select Category',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            overflow: TextOverflow.ellipsis,
+                            items: serviceModel?.data!
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: item.id,
+                                      child: Text(
+                                        item.cName ?? '',
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ))
+                                .toList(),
+                            value: selectedCategory,
+                            // onChanged: (String? value) {
+                            //   setState(() {
+                            //     selectedCategory = value;
+                            //     selectedSubCategory = null ;
+                            //     getServicesSubCategory(selectedCategory);
+                            //     // // serviceName.text = serviceModel.data!
+                            //     //     .firstWhere((element) => element.id == value)
+                            //     //     .cName
+                            //     //     .toString();
+                            //   });
+                            // },
+                            icon: Icon(
+                              Icons.arrow_forward_ios_outlined,
+                              color: Color(0xffEEF1F9),
+                            ),
+                            iconSize: 14,
+                            buttonHeight: 50,
+                            buttonWidth: 160,
+                            buttonPadding:
+                                const EdgeInsets.only(left: 14, right: 14),
+                            buttonDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                              color: AppColor().colorEdit(),
+                              //color: Colors.grey.withOpacity(0.05)
+                            ),
+                            buttonElevation: 0,
+                            itemHeight: 40,
+                            itemPadding:
+                                const EdgeInsets.only(left: 14, right: 14),
+                            dropdownMaxHeight: 300,
+                            dropdownPadding: null,
+                            dropdownDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            dropdownElevation: 8,
+                            scrollbarRadius: const Radius.circular(40),
+                            scrollbarThickness: 6,
+                            scrollbarAlwaysShow: true,
                           ),
-                        )).toList(),
-                        value: selectedCategory,
-                        // onChanged: (String? value) {
-                        //   setState(() {
-                        //     selectedCategory = value;
-                        //     selectedSubCategory = null ;
-                        //     getServicesSubCategory(selectedCategory);
-                        //     // // serviceName.text = serviceModel.data!
-                        //     //     .firstWhere((element) => element.id == value)
-                        //     //     .cName
-                        //     //     .toString();
-                        //   });
-                        // },
-                        icon:  Icon(
-                          Icons.arrow_forward_ios_outlined,
-                          color: Color(0xffEEF1F9),
                         ),
-                        iconSize: 14,
-                        buttonHeight: 50,
-                        buttonWidth: 160,
-                        buttonPadding:
-                        const EdgeInsets.only(left: 14, right: 14),
-                        buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          color: AppColor().colorEdit(),
-                          //color: Colors.grey.withOpacity(0.05)
-                        ),
-                        buttonElevation: 0,
-                        itemHeight: 40,
-                        itemPadding:
-                        const EdgeInsets.only(left: 14, right: 14),
-                        dropdownMaxHeight: 300,
-                        dropdownPadding: null,
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        dropdownElevation: 8,
-                        scrollbarRadius: const Radius.circular(40),
-                        scrollbarThickness: 6,
-                        scrollbarAlwaysShow: true,
-                      ),
-                    ),
-                  /*FutureBuilder(
+                        /*FutureBuilder(
                         future:  getServiceCategory(),
                         builder: (BuildContext context, AsyncSnapshot snapshot) {
                           ServiceCategoryModel serviceModel = snapshot.data;
@@ -2042,162 +2046,172 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                             return Center(child: CircularProgressIndicator());
                           }
                         })*/
-                ),
+                      ),
                 SizedBox(
                   height: 15,
                 ),
-                serviceSubCategory == null ?
-                Center(child: CircularProgressIndicator()): Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    width: double.infinity,
-                    height: 6.h,
-                    decoration: boxDecoration(
-                      radius: 10.0,
-                    ),
-                    child:
-                    // DropdownButtonHideUnderline(
-                    //   child: DropdownButton2(
-                    //     isExpanded: true,
-                    //     hint: Text(
-                    //       'Select Sub Category',
-                    //       style: TextStyle(
-                    //         fontSize: 14,
-                    //         fontWeight: FontWeight.normal,
-                    //       ),
-                    //       overflow: TextOverflow.ellipsis,
-                    //     ),
-                    //     items: serviceSubCategory?.data!
-                    //         .map((item) => DropdownMenuItem<String>(
-                    //       value: item.id,
-                    //       child: Text(
-                    //         item.cName!,
-                    //         style: const TextStyle(
-                    //           fontSize: 14,
-                    //           fontWeight: FontWeight.bold,
-                    //           color: Colors.black,
-                    //         ),
-                    //         overflow: TextOverflow.ellipsis,
-                    //       ),
-                    //     )).toList(),
-                    //     value: selectedSubCategory,
-                    //     // onChanged: (value) {
-                    //     //   setState(() {
-                    //     //     selectedSubCategory = value as String;
-                    //     //     // // serviceName.text = serviceModel.data!
-                    //     //     //     .firstWhere((element) => element.id == value)
-                    //     //     //     .cName
-                    //     //     //     .toString();
-                    //     //
-                    //     //   });
-                    //     //
-                    //     // },
-                    //     icon: const Icon(
-                    //       Icons.arrow_forward_ios_outlined,
-                    //       color: Color(0xffEEF1F9),
-                    //     ),
-                    //     iconSize: 14,
-                    //     buttonHeight: 50,
-                    //     buttonWidth: 160,
-                    //     buttonPadding:
-                    //     const EdgeInsets.only(left: 14, right: 14),
-                    //     buttonDecoration: BoxDecoration(
-                    //       borderRadius: BorderRadius.circular(14),
-                    //       color: AppColor().colorEdit(),
-                    //       //color: Colors.grey.withOpacity(0.05)
-                    //     ),
-                    //     buttonElevation: 0,
-                    //     itemHeight: 40,
-                    //     itemPadding:
-                    //     const EdgeInsets.only(left: 14, right: 14),
-                    //     dropdownMaxHeight: 300,
-                    //     dropdownPadding: null,
-                    //     dropdownDecoration: BoxDecoration(
-                    //       borderRadius: BorderRadius.circular(14),
-                    //     ),
-                    //     dropdownElevation: 8,
-                    //     scrollbarRadius: const Radius.circular(40),
-                    //     scrollbarThickness: 6,
-                    //     scrollbarAlwaysShow: true,
-                    //   ),
-                    // )
-                    MultiSelectDropDown(
-                      hint: "Select Sub Category",
-                      showClearIcon: true,
-                      controller: multiSelectController,
-                      borderColor: Colors.transparent,
+                serviceSubCategory == null
+                    ? Center(child: CircularProgressIndicator())
+                    : Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        width: double.infinity,
+                        height: 6.h,
+                        decoration: boxDecoration(
+                          radius: 10.0,
+                        ),
+                        child:
+                            // DropdownButtonHideUnderline(
+                            //   child: DropdownButton2(
+                            //     isExpanded: true,
+                            //     hint: Text(
+                            //       'Select Sub Category',
+                            //       style: TextStyle(
+                            //         fontSize: 14,
+                            //         fontWeight: FontWeight.normal,
+                            //       ),
+                            //       overflow: TextOverflow.ellipsis,
+                            //     ),
+                            //     items: serviceSubCategory?.data!
+                            //         .map((item) => DropdownMenuItem<String>(
+                            //       value: item.id,
+                            //       child: Text(
+                            //         item.cName!,
+                            //         style: const TextStyle(
+                            //           fontSize: 14,
+                            //           fontWeight: FontWeight.bold,
+                            //           color: Colors.black,
+                            //         ),
+                            //         overflow: TextOverflow.ellipsis,
+                            //       ),
+                            //     )).toList(),
+                            //     value: selectedSubCategory,
+                            //     // onChanged: (value) {
+                            //     //   setState(() {
+                            //     //     selectedSubCategory = value as String;
+                            //     //     // // serviceName.text = serviceModel.data!
+                            //     //     //     .firstWhere((element) => element.id == value)
+                            //     //     //     .cName
+                            //     //     //     .toString();
+                            //     //
+                            //     //   });
+                            //     //
+                            //     // },
+                            //     icon: const Icon(
+                            //       Icons.arrow_forward_ios_outlined,
+                            //       color: Color(0xffEEF1F9),
+                            //     ),
+                            //     iconSize: 14,
+                            //     buttonHeight: 50,
+                            //     buttonWidth: 160,
+                            //     buttonPadding:
+                            //     const EdgeInsets.only(left: 14, right: 14),
+                            //     buttonDecoration: BoxDecoration(
+                            //       borderRadius: BorderRadius.circular(14),
+                            //       color: AppColor().colorEdit(),
+                            //       //color: Colors.grey.withOpacity(0.05)
+                            //     ),
+                            //     buttonElevation: 0,
+                            //     itemHeight: 40,
+                            //     itemPadding:
+                            //     const EdgeInsets.only(left: 14, right: 14),
+                            //     dropdownMaxHeight: 300,
+                            //     dropdownPadding: null,
+                            //     dropdownDecoration: BoxDecoration(
+                            //       borderRadius: BorderRadius.circular(14),
+                            //     ),
+                            //     dropdownElevation: 8,
+                            //     scrollbarRadius: const Radius.circular(40),
+                            //     scrollbarThickness: 6,
+                            //     scrollbarAlwaysShow: true,
+                            //   ),
+                            // )
+                            MultiSelectDropDown(
+                          hint: "Select Sub Category",
+                          showClearIcon: true,
+                          controller: multiSelectController,
+                          borderColor: Colors.transparent,
 
-                      onOptionSelected: (options) {
-                        categorylist.clear();
-                        for (int i = 0; i < options.length; i++) {
-                          String value = options[i].value??"";
+                          onOptionSelected: (options) {
+                            categorylist.clear();
+                            for (int i = 0; i < options.length; i++) {
+                              String value = options[i].value ?? "";
 
-                          // Check if the value is not already in the set
-                          // if (uniqueValues.add(value)) {
-                          //   print(value);
+                              // Check if the value is not already in the set
+                              // if (uniqueValues.add(value)) {
+                              //   print(value);
 
-                          categorylist.add(value);
-                          setState(() {
+                              categorylist.add(value);
+                              setState(() {});
+                              // }
+                            }
 
-                          });
-                          // }
-                        }
+                            // setState(() {
+                            //
+                            // });
+                            debugPrint(categorylist.toString());
+                          },
+                          options: <ValueItem>[
+                            for (int i = 0;
+                                i < serviceSubCategory!.data!.length;
+                                i++) ...[
+                              ValueItem(
+                                label: "${serviceSubCategory!.data![i].cName}",
+                                value: "${serviceSubCategory!.data![i].id}",
+                              )
+                            ]
+                          ],
 
-
-                        // setState(() {
-                        //
-                        // });
-                        debugPrint(categorylist.toString());
-                      },
-                      options: <ValueItem>[
-                        for (int i = 0; i < serviceSubCategory!.data!.length; i++) ...[
-                          ValueItem(
-                            label: "${serviceSubCategory!.data![i].cName}",
-                            value: "${serviceSubCategory!.data![i].id}",
-                          )
-                        ]
-                      ],
-
-                      selectionType: SelectionType.multi,
-                      selectedOptions: [
-                        for (int i = 0; i < serviceSubCategory!.data!.length; i++) ...[
-                          for(int j=0;j<subcateid.length;j++)...[
-                            "${serviceSubCategory!.data![i].id}" == subcateid[j].toString()
-                                ? ValueItem(
-                              label: "${serviceSubCategory!.data![i].cName}",
-                              value: "${serviceSubCategory!.data![i].id}",
-                            )
-                                : ValueItem(label: "")
-                          ]
-
-                        ]
-                      ]..removeWhere((element) => element.label == ""), // Remove null entries
-                      chipConfig: const ChipConfig(wrapType: WrapType.scroll,backgroundColor: AppColor.PrimaryDark,),
-                      dropdownHeight: 300,
-                      optionTextStyle: const TextStyle(fontSize: 16),
-                      selectedOptionIcon: const Icon(Icons.check_circle,color: AppColor.PrimaryDark,),
-                      selectedOptionTextColor: AppColor.PrimaryDark,
-                      // suffixIcon: IconData(),
-                      // selectedItemBuilder: (BuildContext context, ValueItem item,) {
-                      //   // Customize the appearance of the selected item here
-                      //   return Container(
-                      //     padding: EdgeInsets.all(8.0),
-                      //     decoration: BoxDecoration(
-                      //       color: Colors.red, // Set the background color to red
-                      //       borderRadius: BorderRadius.circular(5.0),
-                      //     ),
-                      //     child: Row(
-                      //       mainAxisSize: MainAxisSize.min,
-                      //       children: [
-                      //         Text(item.label),
-                      //         const SizedBox(width: 8.0),
-                      //         Icon(Icons.close, color: Colors.white, size: 18.0),
-                      //       ],
-                      //     ),
-                      //   );
-                      // },
-
-                    ),
-                   /* FutureBuilder(
+                          selectionType: SelectionType.multi,
+                          selectedOptions: [
+                            for (int i = 0;
+                                i < serviceSubCategory!.data!.length;
+                                i++) ...[
+                              for (int j = 0; j < subcateid.length; j++) ...[
+                                "${serviceSubCategory!.data![i].id}" ==
+                                        subcateid[j].toString()
+                                    ? ValueItem(
+                                        label:
+                                            "${serviceSubCategory!.data![i].cName}",
+                                        value:
+                                            "${serviceSubCategory!.data![i].id}",
+                                      )
+                                    : ValueItem(label: "")
+                              ]
+                            ]
+                          ]..removeWhere((element) =>
+                              element.label == ""), // Remove null entries
+                          chipConfig: const ChipConfig(
+                            wrapType: WrapType.scroll,
+                            backgroundColor: AppColor.PrimaryDark,
+                          ),
+                          dropdownHeight: 300,
+                          optionTextStyle: const TextStyle(fontSize: 16),
+                          selectedOptionIcon: const Icon(
+                            Icons.check_circle,
+                            color: AppColor.PrimaryDark,
+                          ),
+                          selectedOptionTextColor: AppColor.PrimaryDark,
+                          // suffixIcon: IconData(),
+                          // selectedItemBuilder: (BuildContext context, ValueItem item,) {
+                          //   // Customize the appearance of the selected item here
+                          //   return Container(
+                          //     padding: EdgeInsets.all(8.0),
+                          //     decoration: BoxDecoration(
+                          //       color: Colors.red, // Set the background color to red
+                          //       borderRadius: BorderRadius.circular(5.0),
+                          //     ),
+                          //     child: Row(
+                          //       mainAxisSize: MainAxisSize.min,
+                          //       children: [
+                          //         Text(item.label),
+                          //         const SizedBox(width: 8.0),
+                          //         Icon(Icons.close, color: Colors.white, size: 18.0),
+                          //       ],
+                          //     ),
+                          //   );
+                          // },
+                        ),
+                        /* FutureBuilder(
                         future: getServicesSubCategory(selectedCategory),
                         builder: (BuildContext context, AsyncSnapshot snapshot) {
                           ServiceSubCategoryModel Model = snapshot.data;
@@ -2276,7 +2290,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           else {
                             return Center(child: CircularProgressIndicator());
                           }
-                        })*/),
+                        })*/
+                      ),
                 SizedBox(
                   height: 15,
                 ),
@@ -2287,19 +2302,16 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       color: AppColor().colorEdit(),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
-
                     controller: amountController,
                     decoration: InputDecoration(
                       counterText: "",
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Enter amount",
                       label: Text(
                         "Amount",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     validator: (v) {
@@ -2322,7 +2334,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   decoration: boxDecoration(
                     radius: 10.0,
                   ),
-                  child:DropdownButtonHideUnderline(
+                  child: DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
                       hint: Text(
@@ -2335,17 +2347,17 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       ),
                       items: timeList
                           .map((String? item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(
-                          item.toString(),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ))
+                                value: item,
+                                child: Text(
+                                  item.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ))
                           .toList(),
                       value: selectedDayHour,
                       onChanged: (value) {
@@ -2355,9 +2367,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           //     .firstWhere((element) => element.id == value)
                           //     .cName
                           //     .toString();
-
                         });
-
                       },
                       icon: const Icon(
                         Icons.arrow_forward_ios_outlined,
@@ -2366,17 +2376,15 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       iconSize: 14,
                       buttonHeight: 50,
                       buttonWidth: 160,
-                      buttonPadding:
-                      const EdgeInsets.only(left: 14, right: 14),
+                      buttonPadding: const EdgeInsets.only(left: 14, right: 14),
                       buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(14),
                         color: AppColor().colorEdit(),
-                         //color: Colors.grey.withOpacity(0.05)
+                        //color: Colors.grey.withOpacity(0.05)
                       ),
                       buttonElevation: 0,
                       itemHeight: 40,
-                      itemPadding:
-                      const EdgeInsets.only(left: 14, right: 14),
+                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
                       dropdownMaxHeight: 300,
                       dropdownPadding: null,
                       dropdownDecoration: BoxDecoration(
@@ -2554,7 +2562,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   decoration: boxDecoration(
                     radius: 10.0,
                   ),
-                  child:DropdownButtonHideUnderline(
+                  child: DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
                       hint: Text(
@@ -2567,19 +2575,19 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       ),
                       items: travelList
                           .map((String? item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(
-                          item.toString(),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ))
+                                value: item,
+                                child: Text(
+                                  item.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ))
                           .toList(),
-                      value:selectedTravel,
+                      value: selectedTravel,
                       onChanged: (value) {
                         setState(() {
                           selectedTravel = value as String;
@@ -2587,9 +2595,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           //     .firstWhere((element) => element.id == value)
                           //     .cName
                           //     .toString();
-
                         });
-
                       },
                       icon: const Icon(
                         Icons.arrow_forward_ios_outlined,
@@ -2598,17 +2604,14 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       iconSize: 14,
                       buttonHeight: 50,
                       buttonWidth: 160,
-                      buttonPadding:
-                      const EdgeInsets.only(left: 14, right: 14),
+                      buttonPadding: const EdgeInsets.only(left: 14, right: 14),
                       buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                           color: AppColor().colorEdit(),
-
+                        borderRadius: BorderRadius.circular(14),
+                        color: AppColor().colorEdit(),
                       ),
                       buttonElevation: 0,
                       itemHeight: 40,
-                      itemPadding:
-                      const EdgeInsets.only(left: 14, right: 14),
+                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
                       dropdownMaxHeight: 300,
                       dropdownPadding: null,
                       dropdownDecoration: BoxDecoration(
@@ -2627,80 +2630,86 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Align(
-                    alignment: Alignment.topLeft,
-                      child: Text('Select City', style: TextStyle(fontWeight: FontWeight.bold),)),
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Select City',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )),
                 ),
-                SizedBox(height: 5,),
+                SizedBox(
+                  height: 5,
+                ),
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     _showMultiSelect();
                   },
                   child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      width: double.infinity,
-                      height: 6.h,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: AppColor().colorEdit(),
-                      ),
-                      // boxDecoration(
-                      //   radius: 10.0,
-                      // ),
-                      child: _selectedItems.isEmpty ?
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              city,
-                              width: 6.04.w,
-                              height: 5.04.w,
-                              fit: BoxFit.fill,
-                              color: AppColor.PrimaryDark,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 8),
-                              child: Text(
-                                'Select Multiple Cities',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.normal,
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    width: double.infinity,
+                    height: 6.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColor().colorEdit(),
+                    ),
+                    // boxDecoration(
+                    //   radius: 10.0,
+                    // ),
+                    child: _selectedItems.isEmpty
+                        ? Padding(
+                            padding:
+                                const EdgeInsets.only(left: 10.0, right: 10),
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  city,
+                                  width: 6.04.w,
+                                  height: 5.04.w,
+                                  fit: BoxFit.fill,
+                                  color: AppColor.PrimaryDark,
                                 ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 8),
+                                  child: Text(
+                                    'Select Multiple Cities',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      )
-                          :
-                          ListView.builder(
+                          )
+                        : ListView.builder(
                             physics: AlwaysScrollableScrollPhysics(),
-                              scrollDirection: Axis.horizontal,
-                              itemCount: _selectedItems.length,
-                              itemBuilder: (c,i){
-                            return Padding(
-                              padding: EdgeInsets.only(right: 5),
-                              child: Chip(label: Text("${_selectedItems[i]}")),
-                            );
-                          }),
-                      // Wrap(
-                      //   children: _selectedItems
-                      //       .map((item){
-                      //
-                      //     return Padding(
-                      //       padding: const EdgeInsets.only(left: 8.0, right: 8),
-                      //       child: Chip(
-                      //         label:
-                      //        Text(
-                      //             "${item}"
-                      //           //item.name
-                      //         ),
-                      //       ),
-                      //     );
-                      //   })
-                      //       .toList(),
-                      // )
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _selectedItems.length,
+                            itemBuilder: (c, i) {
+                              return Padding(
+                                padding: EdgeInsets.only(right: 5),
+                                child:
+                                    Chip(label: Text("${_selectedItems[i]}")),
+                              );
+                            }),
+                    // Wrap(
+                    //   children: _selectedItems
+                    //       .map((item){
+                    //
+                    //     return Padding(
+                    //       padding: const EdgeInsets.only(left: 8.0, right: 8),
+                    //       child: Chip(
+                    //         label:
+                    //        Text(
+                    //             "${item}"
+                    //           //item.name
+                    //         ),
+                    //       ),
+                    //     );
+                    //   })
+                    //       .toList(),
+                    // )
                     ///
                     // FutureBuilder(
                     //     future: getCities(),
@@ -2849,8 +2858,16 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   height: 15,
                 ),
 
-                Text("Payment Purpose",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w600),),
-                SizedBox(height: 10,),
+                Text(
+                  "Payment Purpose",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
 
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
@@ -2859,19 +2876,16 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       color: AppColor().colorEdit(),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
-
                     controller: payNameController,
                     decoration: InputDecoration(
                       counterText: "",
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Enter name",
                       label: Text(
                         "Name",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     validator: (v) {
@@ -2881,10 +2895,11 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       return null;
                     },
                     keyboardType: TextInputType.name,
-
                   ),
                 ),
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   padding: EdgeInsets.symmetric(vertical: 6),
@@ -2892,19 +2907,16 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       color: AppColor().colorEdit(),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
-
                     controller: accController,
                     decoration: InputDecoration(
                       counterText: "",
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Accout Number",
                       label: Text(
                         "Account Number",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     validator: (v) {
@@ -2917,7 +2929,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     maxLength: 12,
                   ),
                 ),
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   padding: EdgeInsets.symmetric(vertical: 6),
@@ -2925,19 +2939,16 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       color: AppColor().colorEdit(),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
-
                     controller: bankNameController,
                     decoration: InputDecoration(
                       counterText: "",
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Bank Name",
                       label: Text(
                         "Bank Name",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     validator: (v) {
@@ -2947,11 +2958,12 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       return null;
                     },
                     keyboardType: TextInputType.name,
-
                   ),
                 ),
 
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   padding: EdgeInsets.symmetric(vertical: 6),
@@ -2959,19 +2971,16 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       color: AppColor().colorEdit(),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
-
                     controller: bankAddressController,
                     decoration: InputDecoration(
                       counterText: "",
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Bank Address",
                       label: Text(
                         "Bank Address",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     validator: (v) {
@@ -2981,11 +2990,12 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       return null;
                     },
                     keyboardType: TextInputType.name,
-
                   ),
                 ),
 
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
 
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
@@ -2994,19 +3004,16 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       color: AppColor().colorEdit(),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
-
                     controller: ifscController,
                     decoration: InputDecoration(
                       counterText: "",
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Ifsc code",
                       label: Text(
                         "Ifsc code",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     validator: (v) {
@@ -3016,10 +3023,11 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       return null;
                     },
                     keyboardType: TextInputType.name,
-
                   ),
                 ),
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
 
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
@@ -3031,15 +3039,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     controller: panNoController,
                     decoration: InputDecoration(
                       counterText: "",
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Pan Number",
                       label: Text(
                         "Pan Number",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     validator: (v) {
@@ -3052,7 +3058,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   ),
                 ),
 
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   padding: EdgeInsets.symmetric(vertical: 6),
@@ -3063,15 +3071,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     controller: sortCodeController,
                     decoration: InputDecoration(
                       counterText: "",
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Sort Code",
                       label: Text(
                         "Sort Code",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     validator: (v) {
@@ -3084,7 +3090,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   ),
                 ),
 
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
 
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
@@ -3096,15 +3104,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     controller: routingController,
                     decoration: InputDecoration(
                       counterText: "",
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Routing No",
                       label: Text(
                         "Routing No",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     validator: (v) {
@@ -3116,7 +3122,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     keyboardType: TextInputType.name,
                   ),
                 ),
-                SizedBox(height:15),
+                SizedBox(height: 15),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   padding: EdgeInsets.symmetric(vertical: 6),
@@ -3124,19 +3130,16 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       color: AppColor().colorEdit(),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
-
                     controller: paymailController,
                     decoration: InputDecoration(
                       counterText: "",
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Email",
                       label: Text(
                         "Email",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     validator: (v) {
@@ -3149,7 +3152,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   ),
                 ),
 
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   padding: EdgeInsets.symmetric(vertical: 6),
@@ -3157,19 +3162,16 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       color: AppColor().colorEdit(),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
-
                     controller: payContactController,
                     decoration: InputDecoration(
                       counterText: "",
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Contact Number",
                       label: Text(
                         "Contact Number",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     validator: (v) {
@@ -3182,7 +3184,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     keyboardType: TextInputType.number,
                   ),
                 ),
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   width: double.infinity,
@@ -3190,7 +3194,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   decoration: boxDecoration(
                     radius: 10.0,
                   ),
-                  child:DropdownButtonHideUnderline(
+                  child: DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
                       hint: Text(
@@ -3201,19 +3205,19 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
-                      items: ['NEFT','RTGS','IMPS','UPI']
+                      items: ['NEFT', 'RTGS', 'IMPS', 'UPI']
                           .map((String? item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(
-                          item.toString(),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ))
+                                value: item,
+                                child: Text(
+                                  item.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ))
                           .toList(),
                       value: paymentMode,
                       onChanged: (value) {
@@ -3223,9 +3227,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           //     .firstWhere((element) => element.id == value)
                           //     .cName
                           //     .toString();
-
                         });
-
                       },
                       icon: const Icon(
                         Icons.arrow_forward_ios_outlined,
@@ -3234,8 +3236,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       iconSize: 14,
                       buttonHeight: 50,
                       buttonWidth: 160,
-                      buttonPadding:
-                      const EdgeInsets.only(left: 14, right: 14),
+                      buttonPadding: const EdgeInsets.only(left: 14, right: 14),
                       buttonDecoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(14),
                         color: AppColor().colorEdit(),
@@ -3243,8 +3244,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       ),
                       buttonElevation: 0,
                       itemHeight: 40,
-                      itemPadding:
-                      const EdgeInsets.only(left: 14, right: 14),
+                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
                       dropdownMaxHeight: 300,
                       dropdownPadding: null,
                       dropdownDecoration: BoxDecoration(
@@ -3257,7 +3257,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     ),
                   ),
                 ),
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   width: double.infinity,
@@ -3265,7 +3267,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   decoration: boxDecoration(
                     radius: 10.0,
                   ),
-                  child:DropdownButtonHideUnderline(
+                  child: DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
                       hint: Text(
@@ -3276,19 +3278,19 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
-                      items: ['Payout','Refund']
+                      items: ['Payout', 'Refund']
                           .map((String? item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(
-                          item.toString(),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ))
+                                value: item,
+                                child: Text(
+                                  item.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ))
                           .toList(),
                       value: paying,
                       onChanged: (value) {
@@ -3298,7 +3300,6 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           //     .firstWhere((element) => element.id == value)
                           //     .cName
                           //     .toString();
-
                         });
                       },
                       icon: const Icon(
@@ -3308,8 +3309,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       iconSize: 14,
                       buttonHeight: 50,
                       buttonWidth: 160,
-                      buttonPadding:
-                      const EdgeInsets.only(left: 14, right: 14),
+                      buttonPadding: const EdgeInsets.only(left: 14, right: 14),
                       buttonDecoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(14),
                         color: AppColor().colorEdit(),
@@ -3317,8 +3317,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       ),
                       buttonElevation: 0,
                       itemHeight: 40,
-                      itemPadding:
-                      const EdgeInsets.only(left: 14, right: 14),
+                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
                       dropdownMaxHeight: 300,
                       dropdownPadding: null,
                       dropdownDecoration: BoxDecoration(
@@ -3331,7 +3330,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     ),
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   padding: EdgeInsets.symmetric(vertical: 6),
@@ -3339,19 +3340,16 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       color: AppColor().colorEdit(),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
-
                     controller: razorpayController,
                     decoration: InputDecoration(
                       counterText: "",
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       hintText: "Razorpay Id",
                       label: Text(
                         "RazorPay Id",
                       ),
                       hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400),
+                          color: Colors.black, fontWeight: FontWeight.w400),
                       border: InputBorder.none,
                     ),
                     validator: (v) {
@@ -3360,10 +3358,11 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       }
                       return null;
                     },
-                     
                   ),
                 ),
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
                 Container(
                     margin: EdgeInsets.only(bottom: 7.h),
                     child: InkWell(
@@ -3372,20 +3371,21 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           setState(() {
                             buttonLogin = true;
                           });
-                          String value= categorylist.map((dynamic value) {
+                          String value = categorylist.map((dynamic value) {
                             return value.toString();
                           }).join(', ');
-                          print(value.toString()+"________________________");
-                          print(categorylist.isEmpty.toString()+"_______________");
+                          print(value.toString() + "________________________");
+                          print(categorylist.isEmpty.toString() +
+                              "_______________");
                           editProfile();
                         }
-
                       },
                       child: UtilityWidget.lodingButton(
                           buttonLogin: buttonLogin, btntext: 'Save'),
                     )),
-                SizedBox(height: 15,),
-
+                SizedBox(
+                  height: 15,
+                ),
               ],
             ),
           ),
@@ -3412,7 +3412,6 @@ class _EditProfileScreenState extends State<EditProfileScreen>
   }
 
   Future getImage(context, ImgSource source, {from}) async {
-
     var image = await ImagePickerGC.pickImage(
         enableCloseButton: true,
         closeIcon: Icon(
@@ -3441,12 +3440,14 @@ class _EditProfileScreenState extends State<EditProfileScreen>
   }
 
   Future getCountries() async {
-    subcateid = widget.response.user?.subcategoryId?.split(', ').map((String value) {
-      return value.toString();
-    }).toList()??[];
-    print(subcateid.toString()+"++++++++++++++");
+    subcateid =
+        widget.response.user?.subcategoryId?.split(', ').map((String value) {
+              return value.toString();
+            }).toList() ??
+            [];
+    print(subcateid.toString() + "++++++++++++++");
     var request =
-    http.Request('GET', Uri.parse('${Apipath.BASH_URL}get_countries'));
+        http.Request('GET', Uri.parse('${Apipath.BASH_URL}get_countries'));
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
@@ -3517,31 +3518,27 @@ class _EditProfileScreenState extends State<EditProfileScreen>
   }
 }
 
-
 class MultiSelect extends StatefulWidget {
   String selectedState;
   MultiSelect({Key? key, required this.selectedState}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _MultiSelectState();
-
 }
 
-
 class _MultiSelectState extends State<MultiSelect> {
-  List <String>_selectedItems = [];
+  List<String> _selectedItems = [];
   // this variable holds the selected items
 
   List<CityData> cityList = [];
-  List<String>  newCityList = [];
+  List<String> newCityList = [];
 
 // This function is triggered when a checkbox is checked or unchecked
   void _itemChange(itemValue, bool isSelected) {
     setState(() {
       if (isSelected) {
         _selectedItems.add(itemValue);
-      }
-      else {
+      } else {
         _selectedItems.remove(itemValue);
       }
     });
@@ -3554,8 +3551,7 @@ class _MultiSelectState extends State<MultiSelect> {
 
 // this function is called when the Submit button is tapped
   void _submit() {
-    List selectedItem = _selectedItems
-        .map((item) => item).toList();
+    List selectedItem = _selectedItems.map((item) => item).toList();
     // var map = {
     //   "itemIds" : selectedItem,
     //   "selectedItems" : _selectedItems
@@ -3565,7 +3561,6 @@ class _MultiSelectState extends State<MultiSelect> {
   }
 
   Future getCities() async {
-
     var request = http.MultipartRequest(
         'POST', Uri.parse('${Apipath.BASH_URL}get_cities'));
     request.fields.addAll({'state_id': '${widget.selectedState}'});
@@ -3590,7 +3585,7 @@ class _MultiSelectState extends State<MultiSelect> {
       if (jsonResponse.responseCode == "1") {
         newCityList.clear();
         print("checking response here now ${jsonResponse.data}");
-        for(var i=0;i<jsonResponse.data!.length;i++){
+        for (var i = 0; i < jsonResponse.data!.length; i++) {
           print("cities data are here now ${jsonResponse.data![i].name}");
           newCityList.add(jsonResponse.data![i].name.toString());
         }
@@ -3603,7 +3598,8 @@ class _MultiSelectState extends State<MultiSelect> {
       print(response.reasonPhrase);
     }
   }
-  bool isEditCities =  false;
+
+  bool isEditCities = false;
   String phoneCode = '+91';
   @override
   void initState() {
@@ -3612,6 +3608,7 @@ class _MultiSelectState extends State<MultiSelect> {
 
     getCities();
   }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -3619,28 +3616,26 @@ class _MultiSelectState extends State<MultiSelect> {
       content: SingleChildScrollView(
         child: ListBody(
           children: newCityList
-              .map((item) =>
-              CheckboxListTile(
-                value: _selectedItems.contains(item),
-                title: Text(item),
-                controlAffinity: ListTileControlAffinity.leading,
-                // onChanged: (isChecked) => _itemChange(item, isChecked!),
-                onChanged: (isChecked){
-                  setState(() {
-                    if (isChecked!) {
-                      setState((){
-                        _selectedItems.add(item);
+              .map((item) => CheckboxListTile(
+                    value: _selectedItems.contains(item),
+                    title: Text(item),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    // onChanged: (isChecked) => _itemChange(item, isChecked!),
+                    onChanged: (isChecked) {
+                      setState(() {
+                        if (isChecked!) {
+                          setState(() {
+                            _selectedItems.add(item);
+                          });
+                        } else {
+                          setState(() {
+                            _selectedItems.remove(item);
+                          });
+                        }
                       });
-                    }
-                    else {
-                      setState((){
-                        _selectedItems.remove(item);
-                      });
-                    }
-                  });
-                },
-              )
-          ).toList(),
+                    },
+                  ))
+              .toList(),
         ),
       ),
       // FutureBuilder(
@@ -3671,18 +3666,17 @@ class _MultiSelectState extends State<MultiSelect> {
       // ),
       actions: [
         TextButton(
-          child:  Text('Cancel',
-            style: TextStyle(color: AppColor().colorPrimary()),),
+          child: Text(
+            'Cancel',
+            style: TextStyle(color: AppColor().colorPrimary()),
+          ),
           onPressed: _cancel,
         ),
         ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              primary: AppColor().colorPrimary()
-          ),
-          child:  Text('Submit'),
-          onPressed: (){
-
-            Navigator.pop(context,_selectedItems);
+          style: ElevatedButton.styleFrom(primary: AppColor().colorPrimary()),
+          child: Text('Submit'),
+          onPressed: () {
+            Navigator.pop(context, _selectedItems);
           }
           //     (){
           //   for(var i = 0 ; i< _selectedItems.length; i++){

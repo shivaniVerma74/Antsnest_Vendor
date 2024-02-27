@@ -1,19 +1,24 @@
 import 'dart:convert';
+
 /// response_code : "0"
 /// msg : "No plan purchased"
-/// data : []
+// data :[]
 
-VerifyUserPlanModel verifyUserPlanModelFromJson(String str) => VerifyUserPlanModel.fromJson(json.decode(str));
-String verifyUserPlanModelToJson(VerifyUserPlanModel data) => json.encode(data.toJson());
+VerifyUserPlanModel verifyUserPlanModelFromJson(String str) =>
+    VerifyUserPlanModel.fromJson(json.decode(str));
+String verifyUserPlanModelToJson(VerifyUserPlanModel data) =>
+    json.encode(data.toJson());
+
 class VerifyUserPlanModel {
   VerifyUserPlanModel({
-      String? responseCode, 
-      String? msg, 
-      List<dynamic>? data,}){
+    String? responseCode,
+    String? msg,
+    List<dynamic>? data,
+  }) {
     _responseCode = responseCode;
     _msg = msg;
     _data = data;
-}
+  }
 
   VerifyUserPlanModel.fromJson(dynamic json) {
     _responseCode = json['response_code'];
@@ -28,13 +33,16 @@ class VerifyUserPlanModel {
   String? _responseCode;
   String? _msg;
   List<dynamic>? _data;
-VerifyUserPlanModel copyWith({  String? responseCode,
-  String? msg,
-  List<dynamic>? data,
-}) => VerifyUserPlanModel(  responseCode: responseCode ?? _responseCode,
-  msg: msg ?? _msg,
-  data: data ?? _data,
-);
+  VerifyUserPlanModel copyWith({
+    String? responseCode,
+    String? msg,
+    List<dynamic>? data,
+  }) =>
+      VerifyUserPlanModel(
+        responseCode: responseCode ?? _responseCode,
+        msg: msg ?? _msg,
+        data: data ?? _data,
+      );
   String? get responseCode => _responseCode;
   String? get msg => _msg;
   List<dynamic>? get data => _data;
@@ -48,5 +56,4 @@ VerifyUserPlanModel copyWith({  String? responseCode,
     }
     return map;
   }
-
 }

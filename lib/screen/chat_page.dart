@@ -109,7 +109,9 @@ class ChatPageState extends State<ChatPage> {
     });
   }
 
-  sendChatMessage(String type,) async {
+  sendChatMessage(
+    String type,
+  ) async {
     var userId = await MyToken.getUserID();
     var headers = {
       'Cookie': 'ci_session=cb5fe5415a2e7a3e28f499c842c30404bfbc8a99'
@@ -123,7 +125,8 @@ class ChatPageState extends State<ChatPage> {
       'message_type': '${type}',
       'booking_id': '${widget.bookingId}',
     });
-    print(Uri.parse('${Apipath.BASH_URL}send_message').toString()+"____________123");
+    print(Uri.parse('${Apipath.BASH_URL}send_message').toString() +
+        "____________123");
 
     if (widget.fromPost == true) {
       request.fields.addAll({
@@ -137,9 +140,9 @@ class ChatPageState extends State<ChatPage> {
         ? null
         : request.files.add(await http.MultipartFile.fromPath(
             'chat', '${imageFiles!.path.toString()}'));
-    print( request.fields.toString()+"____________123");
+    print(request.fields.toString() + "____________123");
     request.headers.addAll(headers);
-    print( request.headers.toString()+"____________123");
+    print(request.headers.toString() + "____________123");
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       textController.clear();
@@ -149,7 +152,7 @@ class ChatPageState extends State<ChatPage> {
         _postsController!.add(res);
         return res;
       });
-      imageFiles=null;
+      imageFiles = null;
       setState(() {});
     } else {
       print(response.reasonPhrase);
@@ -279,6 +282,7 @@ class ChatPageState extends State<ChatPage> {
     timeData = DateFormat("hh:mm:ss a").format(DateTime.now());
     print("timeeeeeeeeee${timeData}");
   }
+
   bool isLink(String input) {
     print("Hello");
     // Define a regular expression pattern for a simple URL
@@ -288,6 +292,7 @@ class ChatPageState extends State<ChatPage> {
     // Check if the input string matches the URL pattern
     return urlPattern.hasMatch(input);
   }
+
   Future<void> _launchUrl(String uri) async {
     if (!await launch(uri)) {
       throw Exception('Could not launch $uri');
@@ -347,132 +352,139 @@ class ChatPageState extends State<ChatPage> {
                                   )),
                             ))
                         : doc.messageType == "file"
-                            ?
-                    InkWell(
-                      onTap: () async {
-                      String   url="https://developmentalphawizz.com/antsnest/uploads/chats/"+"${doc.message}";
-                        if (await canLaunch(url)){
-                        await launch("https://developmentalphawizz.com/antsnest/uploads/chats/"+"${doc.message}",
-                        headers: { "Content-Type":"application/pdf",
-                        "Content-Disposition":"inline"}, );
-                        print("browser url");
+                            ? InkWell(
+                                onTap: () async {
+                                  String url =
+                                      "https://developmentalphawizz.com/antsnest/uploads/chats/" +
+                                          "${doc.message}";
+                                  if (await canLaunch(url)) {
+                                    await launch(
+                                      "https://developmentalphawizz.com/antsnest/uploads/chats/" +
+                                          "${doc.message}",
+                                      headers: {
+                                        "Content-Type": "application/pdf",
+                                        "Content-Disposition": "inline"
+                                      },
+                                    );
+                                    print("browser url");
+                                  } else
+                                    // can't launch url, there is some error
+                                    throw "Could not launch";
 
-                        }
-                        else
-                        // can't launch url, there is some error
-                        throw "Could not launch";
-
-                        // Navigator.push(context,MaterialPageRoute(builder: (context)=>
-                        //
-                           //  PdfViewScreen(linkofpdf: "${doc.message}",)
-                        // ));
-                      },
-                      child: Container(
-                        width: 150,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Open with pdf"),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Icon(Icons.picture_as_pdf)
-                          ],
-                        ),
-                      ),
-                    )
-                    : isLink( "${doc.message}")?
-                InkWell(
-                  onTap: (){
-                    print("Hello");
-                    _launchUrl( "${doc.message}",);
-                  },
-                  child: Container(
-                    // constraints:BoxConstraints(
-                    //   maxWidth:  MediaQuery.of(context).size.width/1.5,
-                    // ),
-                    padding: EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                        color: doc.senderType == "user"
-                            ? Colors.grey.withOpacity(0.8)
-                            : AppColor.PrimaryDark,
-                        borderRadius: BorderRadius.circular(6)),
-                    child: Column(
-                      children: [
-                        Text("$formattedDate",
-                            style: new TextStyle(
-                                fontSize: 10.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold)),
-                        SizedBox(height: 5),
-                        Text(
-                          "${doc.message}",
-                          // widget.user!.name.toString(),
-                          //documentSnapshot.data['sender_name'],
-                          style: new TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          "$timeData",
-                          // widget.user!.name.toString(),
-                          //documentSnapshot.data['sender_name'],
-                          style: new TextStyle(
-                              fontSize: 10,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                ):
-                             Container(
-                                // constraints:BoxConstraints(
-                                //   maxWidth:  MediaQuery.of(context).size.width/1.5,
-                                // ),
-                                padding: EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                    color: doc.senderType == "user"
-                                        ? Colors.grey.withOpacity(0.8)
-                                        : AppColor.PrimaryDark,
-                                    borderRadius: BorderRadius.circular(6)),
-                                child: Column(
-                                  children: [
-                                    Text("$formattedDate",
-                                        style: new TextStyle(
-                                            fontSize: 10.0,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold)),
-                                    SizedBox(height: 5),
-                                    Text(
-                                      "${doc.message}",
-                                      // widget.user!.name.toString(),
-                                      //documentSnapshot.data['sender_name'],
-                                      style: new TextStyle(
-                                          fontSize: 14.0,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(height: 5),
-                                    Text(
-                                      "$timeData",
-                                      // widget.user!.name.toString(),
-                                      //documentSnapshot.data['sender_name'],
-                                      style: new TextStyle(
-                                          fontSize: 10,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
+                                  // Navigator.push(context,MaterialPageRoute(builder: (context)=>
+                                  //
+                                  //  PdfViewScreen(linkofpdf: "${doc.message}",)
+                                  // ));
+                                },
+                                child: Container(
+                                  width: 150,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Open with pdf"),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Icon(Icons.picture_as_pdf)
+                                    ],
+                                  ),
                                 ),
-                              ),
+                              )
+                            : isLink("${doc.message}")
+                                ? InkWell(
+                                    onTap: () {
+                                      print("Hello");
+                                      _launchUrl(
+                                        "${doc.message}",
+                                      );
+                                    },
+                                    child: Container(
+                                      // constraints:BoxConstraints(
+                                      //   maxWidth:  MediaQuery.of(context).size.width/1.5,
+                                      // ),
+                                      padding: EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                          color: doc.senderType == "user"
+                                              ? Colors.grey.withOpacity(0.8)
+                                              : AppColor.PrimaryDark,
+                                          borderRadius:
+                                              BorderRadius.circular(6)),
+                                      child: Column(
+                                        children: [
+                                          Text("$formattedDate",
+                                              style: new TextStyle(
+                                                  fontSize: 10.0,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold)),
+                                          SizedBox(height: 5),
+                                          Text(
+                                            "${doc.message}",
+                                            // widget.user!.name.toString(),
+                                            //documentSnapshot.data['sender_name'],
+                                            style: new TextStyle(
+                                                fontSize: 14.0,
+                                                color: Colors.blue,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Text(
+                                            "$timeData",
+                                            // widget.user!.name.toString(),
+                                            //documentSnapshot.data['sender_name'],
+                                            style: new TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    // constraints:BoxConstraints(
+                                    //   maxWidth:  MediaQuery.of(context).size.width/1.5,
+                                    // ),
+                                    padding: EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                        color: doc.senderType == "user"
+                                            ? Colors.grey.withOpacity(0.8)
+                                            : AppColor.PrimaryDark,
+                                        borderRadius: BorderRadius.circular(6)),
+                                    child: Column(
+                                      children: [
+                                        Text("$formattedDate",
+                                            style: new TextStyle(
+                                                fontSize: 10.0,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold)),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          "${doc.message}",
+                                          // widget.user!.name.toString(),
+                                          //documentSnapshot.data['sender_name'],
+                                          style: new TextStyle(
+                                              fontSize: 14.0,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          "$timeData",
+                                          // widget.user!.name.toString(),
+                                          //documentSnapshot.data['sender_name'],
+                                          style: new TextStyle(
+                                              fontSize: 10,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
               ],
             ),
           ),
@@ -593,12 +605,8 @@ class ChatPageState extends State<ChatPage> {
           color: AppColor.PrimaryDark,
         ),
         onPressed: () {
-           if (
-           textController.text.contains(RegExp(
-          r"@gmail"
-          ))) {
-
-          Fluttertoast.showToast(msg: " Email are not allowed");
+          if (textController.text.contains(RegExp(r"@gmail"))) {
+            Fluttertoast.showToast(msg: " Email are not allowed");
           } else if (textController.text.contains(RegExp(
               r'^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$'))) {
             Fluttertoast.showToast(msg: "Mobile numbers are not allowed");
@@ -621,7 +629,7 @@ class ChatPageState extends State<ChatPage> {
     return new IconTheme(
         data: new IconThemeData(
           color: _isWritting
-              ? Theme.of(context).accentColor
+              ? Theme.of(context).primaryColor
               : Theme.of(context).disabledColor,
         ),
         child: new Container(
@@ -637,9 +645,9 @@ class ChatPageState extends State<ChatPage> {
                     ),
                     onPressed: () async {
                       FilePickerResult? image =
-                      await FilePicker.platform.pickFiles(
+                          await FilePicker.platform.pickFiles(
                         type: FileType.custom,
-                        allowedExtensions: ['jpeg','png'],
+                        allowedExtensions: ['jpeg', 'png'],
                       );
                       // var image = await ImagePicker.
                       // pickImage(
@@ -677,7 +685,6 @@ class ChatPageState extends State<ChatPage> {
                       color: AppColor.PrimaryDark,
                     ),
                     onPressed: () async {
-
                       // var image = await ImagePicker.
                       // pickImage(
                       //     source: ImageSource.gallery);
@@ -712,7 +719,7 @@ class ChatPageState extends State<ChatPage> {
 
                       if (result != null) {
                         File file = File(result.files.single.path!);
-                        imageFiles=file;
+                        imageFiles = file;
                         sendChatMessage("file");
                         getMessage().then((res) async {
                           _postsController!.add(res);

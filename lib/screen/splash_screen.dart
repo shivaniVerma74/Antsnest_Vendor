@@ -223,7 +223,7 @@ class _SplashScreenState extends State<SplashScreen>
                     height: 40,
                   ),
                   SizedBox(
-                      width: 200,
+                      width: 250,
                       child: Image.asset(
                         "images/appnewlogo.png",
                       )),
@@ -244,7 +244,7 @@ class _SplashScreenState extends State<SplashScreen>
                     height: 5,
                   ),
                   Align(
-                    alignment: Alignment.topLeft,
+                    alignment: Alignment.center,
                     child: Text(
                       "Welcome To Antsnest For Professionals! \nShowcase, Connect, Grow.\nReady to succeed? Let's begin.",
                       style: TextStyle(

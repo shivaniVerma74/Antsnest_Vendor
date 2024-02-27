@@ -17,8 +17,8 @@ import 'edit_services.dart';
 import 'newScreens/AddService.dart';
 
 class ManageService extends StatefulWidget {
-  const ManageService({Key? key,this.profileResponse }) : super(key: key);
-final GetProfileResponse? profileResponse ;
+  const ManageService({Key? key, this.profileResponse}) : super(key: key);
+  final GetProfileResponse? profileResponse;
   @override
   State<ManageService> createState() => _ManageServiceState();
 }
@@ -55,7 +55,7 @@ class _ManageServiceState extends State<ManageService> {
     // TODO: implement initState
     super.initState();
 
-    Future.delayed(Duration(milliseconds: 200),(){
+    Future.delayed(Duration(milliseconds: 200), () {
       return getVendorAllServices();
     });
   }
@@ -64,29 +64,25 @@ class _ManageServiceState extends State<ManageService> {
     await Future.delayed(Duration(milliseconds: 1000));
     return getVendorAllServices();
   }
-  activeDeactiveService(String serviceid,String status) async {
+
+  activeDeactiveService(String serviceid, String status) async {
     var headers = {
       'Cookie': 'ci_session=5d20c59aa4198d23adadefd0d956a319531a4aca'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('${Apipath.BASH_URL}vendor_service_status'));
-    request.fields.addAll({
-      'service_id': '${serviceid}',
-      'status': '${status}'
-    });
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('${Apipath.BASH_URL}vendor_service_status'));
+    request.fields
+        .addAll({'service_id': '${serviceid}', 'status': '${status}'});
 
     request.headers.addAll(headers);
     print('_________this${request.fields}_______');
     http.StreamedResponse response = await request.send();
-     var data =jsonDecode("${await response.stream.bytesToString()}");
+    var data = jsonDecode("${await response.stream.bytesToString()}");
     if (response.statusCode == 200) {
-
       Fluttertoast.showToast(msg: "${data["msg"]}");
-
+    } else {
+      print(response.reasonPhrase);
     }
-    else {
-    print(response.reasonPhrase);
-    }
-
   }
 
   @override
@@ -95,18 +91,25 @@ class _ManageServiceState extends State<ManageService> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: AppColor.PrimaryDark,
-        automaticallyImplyLeading: false, 
+        automaticallyImplyLeading: false,
         title: Text("Manage Services"),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => AddServices(profileResponse: widget.profileResponse,))
-
-        ).then((value) {
-          Future.delayed(Duration(milliseconds: 200),(){
-            return getVendorAllServices();
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddServices(
+                        profileResponse: widget.profileResponse,
+                      ))).then((value) {
+            Future.delayed(Duration(milliseconds: 200), () {
+              return getVendorAllServices();
+            });
           });
-        } );
-      },child: Icon(Icons.add),backgroundColor: AppColor.PrimaryDark,),
+        },
+        child: Icon(Icons.add),
+        backgroundColor: AppColor.PrimaryDark,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: RefreshIndicator(
@@ -174,276 +177,360 @@ class _ManageServiceState extends State<ManageService> {
                   SizedBox(
                     height: 2.02.h,
                   ),
-                  vendorServiceModel == null ? Center(child:Image.asset(
-                      "images/icons/loader.gif"),
-                  ) : vendorServiceModel!.restaurants!.length == 0 ? Center(child: Text("No service to show")):ListView.builder(
-                    shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
-                    itemCount: vendorServiceModel!.restaurants!.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.circular(10.0),
-                        ),
-                        margin: EdgeInsets.all(10.0),
-                        child: Column(
-                          children: [
-                            ListTile(
-                              leading: Container(
-                                width: 100,
-                                // height: 200,
-                                child: ClipRRect(
-                                  borderRadius:
-                                  BorderRadius.circular(10.0),
-                                  child: vendorServiceModel!.restaurants![index].logo == "" || vendorServiceModel!.restaurants![index].logo!.isEmpty
-                                      ? Image.asset(
-                                      "images/antsLogo.png")
-                                      : Image.network(
-                                    "${vendorServiceModel!.restaurants![index].logo![0].toString()}",
-                                    fit: BoxFit.cover,
-                                    width: 100,
-                                    height: 200,
+                  vendorServiceModel == null
+                      ? Center(
+                          child: Image.asset(
+                            "images/icons/loader.gif",
+                            // height: 500,
+                          ),
+                        )
+                      : vendorServiceModel!.restaurants!.length == 0
+                          ? Center(child: Text("No service to show"))
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: ClampingScrollPhysics(),
+                              itemCount:
+                                  vendorServiceModel!.restaurants!.length,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                ),
-                              ),
-                              title: Text(
-                                "${vendorServiceModel!.restaurants![index].resName}",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16),
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 8.0,
-                                  ),
-                                  Text(
-                                      "${vendorServiceModel!.restaurants![index].cName}"),
-                                  SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  Text(
-                                      "₹ ${vendorServiceModel!.restaurants![index].price}"),
-                                  SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment
-                                        .spaceBetween,
+                                  margin: EdgeInsets.all(10.0),
+                                  child: Column(
                                     children: [
-                                      // Text.rich(
-                                      //     TextSpan(children: [
-                                      //       WidgetSpan(
-                                      //           child: Icon(
-                                      //             Icons
-                                      //                 .watch_later_outlined,
-                                      //             size: 15,
-                                      //           )),
-                                      //       TextSpan(
-                                      //           text:
-                                      //           " ${vendorModel.restaurants![index].hours}"),
-                                      //     ])),
-                                      Text.rich(
-                                          TextSpan(children: [
-                                            WidgetSpan(
-                                                child: Icon(
-                                                  Icons.star,
-                                                  color: Colors.yellow,
-                                                  size: 15,
-                                                )),
-                                            TextSpan(text:
-                                            " ${vendorServiceModel!.restaurants![index].reviewCount}"),
-                                          ])),
+                                      ListTile(
+                                        leading: Container(
+                                          width: 100,
+                                          // height: 200,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            child: vendorServiceModel!
+                                                            .restaurants![index]
+                                                            .logo ==
+                                                        "" ||
+                                                    vendorServiceModel!
+                                                        .restaurants![index]
+                                                        .logo!
+                                                        .isEmpty
+                                                ? Image.asset(
+                                                    "images/antsLogo.png")
+                                                : Image.network(
+                                                    "${vendorServiceModel!.restaurants![index].logo![0].toString()}",
+                                                    fit: BoxFit.cover,
+                                                    width: 100,
+                                                    height: 200,
+                                                  ),
+                                          ),
+                                        ),
+                                        title: Text(
+                                          "${vendorServiceModel!.restaurants![index].resName}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16),
+                                        ),
+                                        subtitle: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              height: 8.0,
+                                            ),
+                                            Text(
+                                                "${vendorServiceModel!.restaurants![index].cName}"),
+                                            SizedBox(
+                                              height: 5.0,
+                                            ),
+                                            Text(
+                                                "₹ ${vendorServiceModel!.restaurants![index].price}"),
+                                            SizedBox(
+                                              height: 5.0,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                // Text.rich(
+                                                //     TextSpan(children: [
+                                                //       WidgetSpan(
+                                                //           child: Icon(
+                                                //             Icons
+                                                //                 .watch_later_outlined,
+                                                //             size: 15,
+                                                //           )),
+                                                //       TextSpan(
+                                                //           text:
+                                                //           " ${vendorModel.restaurants![index].hours}"),
+                                                //     ])),
+                                                Text.rich(TextSpan(children: [
+                                                  WidgetSpan(
+                                                      child: Icon(
+                                                    Icons.star,
+                                                    color: Colors.yellow,
+                                                    size: 15,
+                                                  )),
+                                                  TextSpan(
+                                                      text:
+                                                          " ${vendorServiceModel!.restaurants![index].reviewCount}"),
+                                                ])),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: 5.0,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(
+                                        indent: 15.0,
+                                        endIndent: 15.0,
+                                        thickness: 1.0,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          TextButton.icon(
+                                            onPressed: () async {
+                                              //print(vendorServiceModel!.restaurants![index].type?.first.service,);
+                                              bool result =
+                                                  await Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder:
+                                                              (context) =>
+                                                                  EditServices(
+                                                                    city: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .cityId,
+                                                                    country: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .countryId,
+                                                                    state: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .stateId,
+                                                                    logo: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .logo,
+                                                                    serviceName: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .resName,
+                                                                    catId: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .catId,
+                                                                    serviceCharge: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .price,
+
+                                                                    addOntype: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .type,
+                                                                    //  adddOnservice: vendorServiceModel!.restaurants![index].type?.first.service??"",
+                                                                    //  hour: vendorServiceModel!.restaurants![index].type!.first.hrly??"",
+                                                                    //  dayHour: vendorServiceModel!.restaurants![index].type!.first.daysHrs??"",
+                                                                    // addOnPrice: vendorServiceModel!.restaurants![index].type!.first.priceA??"",
+                                                                    //   serviceTime: vendorModel.restaurants![index].hours,
+                                                                    subCatId: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .scatId,
+                                                                    serviceId: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .resId,
+                                                                    serviceImage: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .logo,
+                                                                    subName: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .subCat,
+                                                                    serviceDescription: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .resDesc,
+                                                                    childName: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .cName,
+                                                                    currency: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .baseCurrency,
+                                                                    // experts: vendorModel.restaurants![index].experts,
+                                                                  )));
+                                              if (result == true) {
+                                                setState(() {
+                                                  CircularProgressIndicator();
+                                                  getVendorAllServices();
+                                                });
+                                              }
+                                            },
+                                            icon: Icon(Icons.edit_note_outlined,
+                                                size: 18),
+                                            label: Text("Edit Service"),
+                                            style: TextButton.styleFrom(
+                                                primary: Colors.green,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            9),
+                                                    side: BorderSide(
+                                                        color: Colors.green))),
+                                          ),
+                                          TextButton.icon(
+                                            onPressed: () async {
+                                              Alert(
+                                                context: context,
+                                                title: "Delete Service",
+                                                desc:
+                                                    "Are you sure you want to delete service?",
+                                                style: AlertStyle(
+                                                  isCloseButton: false,
+                                                  descStyle: TextStyle(
+                                                      fontFamily: "MuliRegular",
+                                                      fontSize: 15),
+                                                  titleStyle: TextStyle(
+                                                      fontFamily:
+                                                          "MuliRegular"),
+                                                ),
+                                                buttons: [
+                                                  DialogButton(
+                                                    child: Text(
+                                                      "OK",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                          fontFamily:
+                                                              "MuliRegular"),
+                                                    ),
+                                                    onPressed: () async {
+                                                      RemoveServiceModel?
+                                                          removeModel =
+                                                          await removeServices(
+                                                              vendorServiceModel!
+                                                                  .restaurants![
+                                                                      index]
+                                                                  .resId);
+                                                      if (removeModel!
+                                                              .responseCode ==
+                                                          "1") {
+                                                        UtilityHlepar.getToast(
+                                                            "Service Deleted Successfully!");
+                                                        setState(() {
+                                                          CircularProgressIndicator();
+                                                          getVendorAllServices();
+                                                        });
+                                                        Navigator.pop(context);
+                                                      }
+                                                    },
+                                                    color: AppColor.PrimaryDark,
+                                                  ),
+                                                  DialogButton(
+                                                    child: Text(
+                                                      "Cancel",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                          fontFamily:
+                                                              "MuliRegular"),
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.of(context,
+                                                              rootNavigator:
+                                                                  true)
+                                                          .pop();
+                                                    },
+                                                    color: AppColor.PrimaryDark,
+                                                  ),
+                                                ],
+                                              ).show();
+                                            },
+
+                                            // onPressed: () async {
+                                            //   RemoveServiceModel?
+                                            //   removeModel = await removeServices(
+                                            //       vendorServiceModel!
+                                            //           .restaurants![index].resId);
+                                            //   if (removeModel!.responseCode == "1") {
+                                            //     UtilityHlepar.getToast(
+                                            //         "Service Deleted Successfully!");
+                                            //     setState(() {
+                                            //       CircularProgressIndicator();
+                                            //       getVendorAllServices();
+                                            //     });
+                                            //   }
+                                            // },
+                                            icon: Icon(Icons.delete_rounded,
+                                                size: 18),
+                                            label: Text("Delete"),
+                                            style: TextButton.styleFrom(
+                                                primary: AppColor.PrimaryDark,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            9),
+                                                    side: BorderSide(
+                                                        color: AppColor
+                                                            .PrimaryDark))),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            CupertinoSwitch(
+                                              // thumbColor: Colors.red,
+                                              trackColor: Colors.red,
+                                              value: enablelist[index] == "0"
+                                                  ? false
+                                                  : true,
+
+                                              onChanged: (value) async {
+                                                enablelist[index] =
+                                                    value == true ? "1" : "0";
+                                                setState(() {});
+                                                activeDeactiveService(
+                                                    "${vendorServiceModel?.restaurants?[index].resId}",
+                                                    "${enablelist[index]}");
+                                                getVendorAllServices();
+                                              },
+                                            ),
+                                            Row(
+                                              children: [
+                                                Icon(Icons.location_on_rounded),
+                                                Text(
+                                                  "${vendorServiceModel?.restaurants?[index].cityName}",
+                                                  maxLines: 1,
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
                                     ],
                                   ),
-                                  SizedBox(
-                                    height: 5.0,
-                                  ),
-                                ],
-                              ),
+                                );
+                              },
                             ),
-                            Divider(
-                              indent: 15.0,
-                              endIndent: 15.0,
-                              thickness: 1.0,
-                            ),
-                            Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceAround,
-                              children: [
-                                TextButton.icon(
-                                  onPressed: () async{
-                                  //print(vendorServiceModel!.restaurants![index].type?.first.service,);
-                                    bool result = await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => EditServices(
-                                              city: vendorServiceModel!.restaurants![index].cityId,
-                                              country: vendorServiceModel!.restaurants![index].countryId,
-                                              state: vendorServiceModel!.restaurants![index].stateId,
-                                              logo: vendorServiceModel!.restaurants![index].logo,
-                                              serviceName: vendorServiceModel!.restaurants![index].resName,
-                                              catId: vendorServiceModel!.restaurants![index].catId,
-                                              serviceCharge: vendorServiceModel!.restaurants![index].price,
-
-                                              addOntype: vendorServiceModel!.restaurants![index].type,
-                                             //  adddOnservice: vendorServiceModel!.restaurants![index].type?.first.service??"",
-                                             //  hour: vendorServiceModel!.restaurants![index].type!.first.hrly??"",
-                                             //  dayHour: vendorServiceModel!.restaurants![index].type!.first.daysHrs??"",
-                                             // addOnPrice: vendorServiceModel!.restaurants![index].type!.first.priceA??"",
-                                          //   serviceTime: vendorModel.restaurants![index].hours,
-                                              subCatId: vendorServiceModel!.restaurants![index].scatId,
-                                              serviceId: vendorServiceModel!.restaurants![index].resId,
-                                              serviceImage: vendorServiceModel!.restaurants![index].logo,
-                                              subName: vendorServiceModel!.restaurants![index].subCat,
-                                              serviceDescription: vendorServiceModel!.restaurants![index].resDesc,
-                                              childName: vendorServiceModel!.restaurants![index].cName,
-                                              currency: vendorServiceModel!.restaurants![index].baseCurrency,
-                                              // experts: vendorModel.restaurants![index].experts,
-                                            )));
-                                    if(result == true){
-                                      setState(() {
-                                        CircularProgressIndicator();
-                                        getVendorAllServices();
-                                      });
-                                    }
-                                  },
-                                  icon: Icon(
-                                      Icons.edit_note_outlined,
-                                      size: 18),
-                                  label: Text("Edit Service"),
-                                  style: TextButton.styleFrom(
-                                      primary: Colors.green,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(9),
-                                        side: BorderSide(color: Colors.green)
-                                      )
-                                  ),
-                                ),
-                                TextButton.icon(
-                                  onPressed: () async{
-                      Alert (
-                      context: context,
-                      title: "Delete Service",
-                      desc: "Are you sure you want to delete service?",
-                      style: AlertStyle(
-                      isCloseButton: false,
-                      descStyle:
-                      TextStyle(fontFamily: "MuliRegular", fontSize: 15),
-                      titleStyle: TextStyle(fontFamily: "MuliRegular"),
-                      ),
-                      buttons: [
-                      DialogButton(
-                      child: Text(
-                      "OK",
-                      style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: "MuliRegular"),
-                      ),
-                      onPressed: () async {
-                        RemoveServiceModel?
-                        removeModel = await removeServices(
-                            vendorServiceModel!.restaurants![index].resId);
-                        if (removeModel!.responseCode == "1") {
-                          UtilityHlepar.getToast(
-                              "Service Deleted Successfully!");
-                          setState(() {
-                            CircularProgressIndicator();
-                            getVendorAllServices();
-                          });
-                          Navigator.pop(context);
-                        }
-                      },
-                      color: AppColor.PrimaryDark,
-                      ),
-                      DialogButton(
-                      child: Text(
-                         "Cancel",
-                         style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: "MuliRegular"),
-                       ),
-                       onPressed: () {
-                       Navigator.of(context, rootNavigator: true).pop();
-                        },
-                       color: AppColor.PrimaryDark,
-                        ),
-
-
-
-
-                        ],
-                           ).show();
-                       },
-
-                                  // onPressed: () async {
-                                  //   RemoveServiceModel?
-                                  //   removeModel = await removeServices(
-                                  //       vendorServiceModel!
-                                  //           .restaurants![index].resId);
-                                  //   if (removeModel!.responseCode == "1") {
-                                  //     UtilityHlepar.getToast(
-                                  //         "Service Deleted Successfully!");
-                                  //     setState(() {
-                                  //       CircularProgressIndicator();
-                                  //       getVendorAllServices();
-                                  //     });
-                                  //   }
-                                  // },
-                                  icon: Icon(Icons.delete_rounded,
-                                      size: 18),
-                                  label: Text("Delete"),
-                                  style: TextButton.styleFrom(
-                                      primary: AppColor.PrimaryDark,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(9),
-                                          side: BorderSide(color:AppColor.PrimaryDark)
-                                       )
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-
-                                  CupertinoSwitch(
-                                   // thumbColor: Colors.red,
-                                    trackColor: Colors.red,
-                                    value: enablelist[index]=="0"?false:true,
-
-                                    onChanged: (value) async {
-                                       enablelist[index]=value==true?"1":"0";
-                                      setState(() {
-
-                                      });
-                                       activeDeactiveService("${vendorServiceModel?.restaurants?[index].resId}", "${enablelist[index]}");
-                                         getVendorAllServices();
-                                    },
-                                  ),Row(
-                                    children: [
-                                      Icon(Icons.location_on_rounded),
-                                      Text("${vendorServiceModel?.restaurants?[index].cityName}",maxLines: 1,)
-                                    ],
-                                  ),
-
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 10,),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
                   // FutureBuilder(
                   //     future: getVendorAllServices(),
                   //     builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -645,7 +732,7 @@ class _ManageServiceState extends State<ManageService> {
   }
 
   VendorServiceModel? vendorServiceModel;
-  List enablelist=[];
+  List enablelist = [];
 
   Future getVendorAllServices() async {
     // var userId = await MyToken.getUserID();
@@ -664,14 +751,13 @@ class _ManageServiceState extends State<ManageService> {
     // else {
     //   return null;
     // }
-     var userId = await MyToken.getUserID();
+    var userId = await MyToken.getUserID();
     var headers = {
       'Cookie': 'ci_session=a0fad83c35b72f9b6b96e4fc773d876b8d6ca021'
     };
-    var request = http.MultipartRequest('POST', Uri.parse(Apipath.BASH_URL +  'get_cat_res1'));
-    request.fields.addAll({
-      'vid': '${userId}'
-    });
+    var request = http.MultipartRequest(
+        'POST', Uri.parse(Apipath.BASH_URL + 'get_cat_res1'));
+    request.fields.addAll({'vid': '${userId}'});
     print("checking api with parameter here ${request.fields} and $request");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
@@ -679,7 +765,7 @@ class _ManageServiceState extends State<ManageService> {
       var finalResult = await response.stream.bytesToString();
       //return VendorServiceModel.fromJson(json.decode(finalResult));
       final jsonResult = VendorServiceModel.fromJson(json.decode(finalResult));
-      if(jsonResult.restaurants?.isNotEmpty??false) {
+      if (jsonResult.restaurants?.isNotEmpty ?? false) {
         for (int i = 0; i < jsonResult.restaurants!.length; i++) {
           enablelist.add("${jsonResult.restaurants?[i].status}");
           print("${jsonResult.restaurants?[i].status}");
@@ -688,8 +774,7 @@ class _ManageServiceState extends State<ManageService> {
       setState(() {
         vendorServiceModel = jsonResult;
       });
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
   }
@@ -708,7 +793,4 @@ class _ManageServiceState extends State<ManageService> {
       return null;
     }
   }
-
 }
-
-

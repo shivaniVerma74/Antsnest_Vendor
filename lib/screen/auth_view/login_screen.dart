@@ -116,7 +116,36 @@ class _LoginScreenState extends State<LoginScreen>
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       Navigator.pop(context);
-      Fluttertoast.showToast(msg: "${finalStr.message}");
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              backgroundColor: Colors.red,
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    finalStr.message ?? "",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("Ok"),
+                  ),
+
+                  //CircularProgressIndicator(),
+                ],
+              ),
+            );
+          });
+      // Fluttertoast.showToast(msg: "${finalStr.message}");
     }
   }
 
@@ -475,7 +504,8 @@ class _LoginScreenState extends State<LoginScreen>
                       SizedBox(
                         width: 10,
                       ),
-                      SizedBox(width: 30, child: Image.asset("images/x.png")),
+                      SizedBox(
+                          width: 30, child: Image.asset("images/twitter.png")),
                       SizedBox(
                         width: 10,
                       ),
@@ -486,7 +516,7 @@ class _LoginScreenState extends State<LoginScreen>
                   Spacer(),
                   Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 20),
+                      margin: EdgeInsets.only(top: 0),
                       child: InkWell(
                           onTap: () async {
                             setState(() {

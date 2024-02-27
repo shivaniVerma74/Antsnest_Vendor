@@ -8,7 +8,6 @@ import '../api/api_path.dart';
 import '../modal/Terms_condition_model.dart';
 import '../utils/colors.dart';
 
-
 class TermsConditionScreen extends StatefulWidget {
   const TermsConditionScreen({Key? key}) : super(key: key);
 
@@ -29,7 +28,7 @@ class _TermsConditionScreenState extends State<TermsConditionScreen> {
 
   @override
   Widget build(BuildContext context) {
-   // SizeConfig().init(context);
+    // SizeConfig().init(context);
     return Scaffold(
       backgroundColor: AppColor().colorBg1(),
       appBar: AppBar(
@@ -37,9 +36,7 @@ class _TermsConditionScreenState extends State<TermsConditionScreen> {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20)
-            )
-        ),
+                bottomRight: Radius.circular(20))),
         elevation: 2,
         title: Text(
           "Terms & Conditiossn",
@@ -49,7 +46,7 @@ class _TermsConditionScreenState extends State<TermsConditionScreen> {
           ),
         ),
         centerTitle: true,
-        leading:  Padding(
+        leading: Padding(
           padding: const EdgeInsets.all(12),
           child: RawMaterialButton(
             shape: CircleBorder(),
@@ -70,31 +67,36 @@ class _TermsConditionScreenState extends State<TermsConditionScreen> {
       body: SingleChildScrollView(
         child: title != null
             ? Column(
-          children: [
-            Container(
-                margin: EdgeInsets.all(5.0),
-                child: Html(data: title,
-                  defaultTextStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14
-                  ),
-                )
-            ),
-            Container(
-                margin: EdgeInsets.all(5.0),
-                child: Html(data: description)
-            )
-          ],
-        ): Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height / 2,
-            child: Center(child: Image.asset("images/icons/loader.gif"),)),
+                children: [
+                  Container(
+                      margin: EdgeInsets.all(5.0),
+                      child: Html(
+                        data: title,
+                        style: {
+                          'p': Style(
+                            fontWeight: FontWeight.bold,
+                            fontSize: FontSize.medium,
+                          )
+                        },
+                      )),
+                  Container(
+                      margin: EdgeInsets.all(5.0),
+                      child: Html(data: description))
+                ],
+              )
+            : Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height / 2,
+                child: Center(
+                  child: Image.asset("images/icons/loader.gif"),
+                )),
       ),
     );
   }
 
   Future<TermsConditionModel?> getTermsCondition() async {
-    var request = http.Request('GET', Uri.parse('${Apipath.BASH_URL}/pages/terms-conditions'));
+    var request = http.Request(
+        'GET', Uri.parse('${Apipath.BASH_URL}/pages/terms-conditions'));
 
     http.StreamedResponse response = await request.send();
 
@@ -105,7 +107,7 @@ class _TermsConditionScreenState extends State<TermsConditionScreen> {
 
       final jsonResponse = TermsConditionModel.fromJson(json.decode(str));
       print(jsonResponse);
-      if(jsonResponse.status == "1"){
+      if (jsonResponse.status == "1") {
         setState(() {
           title = jsonResponse.setting?.data;
           description = jsonResponse.setting?.description;
@@ -113,10 +115,8 @@ class _TermsConditionScreenState extends State<TermsConditionScreen> {
         });
       }
       return TermsConditionModel.fromJson(json.decode(str));
-    }
-    else {
+    } else {
       return null;
     }
   }
-
 }

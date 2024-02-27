@@ -338,7 +338,7 @@ class _SignUpScreenState extends State<SignUpScreen>
           return Theme(
             data: ThemeData.light().copyWith(
                 primaryColor: Colors.black, //Head background
-                accentColor: Colors.black,
+                //  accentColor: Colors.black,
                 colorScheme:
                     ColorScheme.light(primary: const Color(0xFFEB6C67)),
                 buttonTheme:
@@ -500,6 +500,34 @@ class _SignUpScreenState extends State<SignUpScreen>
       Navigator.of(context).pop();
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => LoginScreen()));
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              backgroundColor: Colors.green,
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(finalStr.message ?? ""),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        "Your form was successfully submitted! We'll review your application and get back to you within 48 hours.",
+                        style: TextStyle(color: Colors.white),
+                      )),
+
+                  //CircularProgressIndicator(),
+                ],
+              ),
+            );
+          });
       const snackBar = SnackBar(
         backgroundColor: Colors.green,
         content: Text(
@@ -741,7 +769,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                     "Full Name",
                                   ),
                                   hintStyle: TextStyle(
-                                      color: Colors.black,
+                                      //     color: Colors.black,
                                       fontWeight: FontWeight.w400),
                                   border: InputBorder.none,
                                 ),
@@ -905,7 +933,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                     color: AppColor().colorPrimary(),
                                   ),
                                   hintStyle: TextStyle(
-                                      color: Colors.black,
+                                      //     color: Colors.black,
                                       fontWeight: FontWeight.w400),
                                   border: InputBorder.none,
                                 ),
@@ -964,7 +992,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                               DropdownMenuItem<String>(
                                                 value: item.id,
                                                 child: Text(
-                                                  item.name!,
+                                                  item.nicename!,
                                                   style: const TextStyle(
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.bold,
@@ -1507,7 +1535,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   hintText: 'Phone Number',
                                   counterText: '',
                                   hintStyle: TextStyle(
-                                      color: Colors.black,
+                                      //     color: Colors.black,
                                       fontWeight: FontWeight.w400),
                                 ),
                                 initialCountryCode: 'IN',
@@ -1680,7 +1708,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   decoration: InputDecoration(
                                     contentPadding:
                                         EdgeInsets.symmetric(horizontal: 10),
-                                    hintText: "Portfolio / Website",
+                                    hintText: "Enter your Portfolio/Website",
                                     label: Text(
                                       "Portfolio / Website",
                                     ),
@@ -1703,6 +1731,14 @@ class _SignUpScreenState extends State<SignUpScreen>
                               height: 15,
                             ),
 
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "(At least One Social Media link is Required*)",
+                                style: TextStyle(color: AppColor.PrimaryDark),
+                              ),
+                            ),
+
                             /// twitter link
                             Material(
                               elevation: 4,
@@ -1723,12 +1759,12 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   decoration: InputDecoration(
                                     contentPadding:
                                         EdgeInsets.symmetric(horizontal: 10),
-                                    hintText: "Twitter link",
+                                    hintText: "https://twitter.com/",
                                     label: Text(
                                       "Twitter link",
                                     ),
                                     hintStyle: TextStyle(
-                                        color: Colors.black,
+                                        // color: Colors.black,
                                         fontWeight: FontWeight.w400),
                                     border: InputBorder.none,
                                   ),
@@ -1761,12 +1797,12 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   decoration: InputDecoration(
                                     contentPadding:
                                         EdgeInsets.symmetric(horizontal: 10),
-                                    hintText: "Instagram link",
+                                    hintText: "https://instagram.com/",
                                     label: Text(
                                       "Instagram link",
                                     ),
                                     hintStyle: TextStyle(
-                                        color: Colors.black,
+                                        // color: Colors.black,
                                         fontWeight: FontWeight.w400),
                                     border: InputBorder.none,
                                   ),
@@ -1797,12 +1833,12 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   decoration: InputDecoration(
                                     contentPadding:
                                         EdgeInsets.symmetric(horizontal: 10),
-                                    hintText: "Facebook link",
+                                    hintText: "https://facebook.com/",
                                     label: Text(
                                       "Facebook link",
                                     ),
                                     hintStyle: TextStyle(
-                                        color: Colors.black,
+                                        // color: Colors.black,
                                         fontWeight: FontWeight.w400),
                                     border: InputBorder.none,
                                   ),
@@ -1833,12 +1869,12 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   decoration: InputDecoration(
                                     contentPadding:
                                         EdgeInsets.symmetric(horizontal: 10),
-                                    hintText: "LinkedIn link",
+                                    hintText: "https://linkedin.com/",
                                     label: Text(
                                       "LinkedIn link",
                                     ),
                                     hintStyle: TextStyle(
-                                        color: Colors.black,
+                                        // color: Colors.black,
                                         fontWeight: FontWeight.w400),
                                     border: InputBorder.none,
                                   ),
@@ -1869,12 +1905,12 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   decoration: InputDecoration(
                                     contentPadding:
                                         EdgeInsets.symmetric(horizontal: 10),
-                                    hintText: "Equipment used (optinal)",
+                                    hintText: "Enter your Equipment Used",
                                     label: Text(
-                                      "Equipment used (optinal)",
+                                      "Equipment used (optional)",
                                     ),
                                     hintStyle: TextStyle(
-                                        color: Colors.black,
+                                        //  color: Colors.black,
                                         fontWeight: FontWeight.w400),
                                     border: InputBorder.none,
                                   ),
@@ -1959,9 +1995,10 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   decoration: InputDecoration(
                                     contentPadding:
                                         EdgeInsets.symmetric(horizontal: 10),
-                                    hintText: "Enter your comfortable service",
+                                    hintText:
+                                        "What kinds of Service do you feel most comfortable doing ?",
                                     label: Text(
-                                      "What kinds of Service do you feel most comfortable doing",
+                                      "What kinds of Service do you feel most comfortable...",
                                     ),
                                     hintStyle: TextStyle(
                                         color: Colors.black,
@@ -1981,42 +2018,42 @@ class _SignUpScreenState extends State<SignUpScreen>
                             SizedBox(
                               height: 15,
                             ),
-                            Material(
-                              elevation: 4,
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(6),
-                              child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 6),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(12)),
-                                child: TextFormField(
-                                  controller: serviceInfoController,
-                                  decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    hintText: "Service Info",
-                                    label: Text(
-                                      "Service Info",
-                                    ),
-                                    hintStyle: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400),
-                                    border: InputBorder.none,
-                                  ),
-                                  validator: (v) {
-                                    if (v!.isEmpty) {
-                                      return "Enter info";
-                                    }
-                                    return null;
-                                  },
-                                  keyboardType: TextInputType.text,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
+                            // Material(
+                            //   elevation: 4,
+                            //   color: Colors.white,
+                            //   borderRadius: BorderRadius.circular(6),
+                            //   child: Container(
+                            //     padding: EdgeInsets.symmetric(vertical: 6),
+                            //     decoration: BoxDecoration(
+                            //         color: Colors.white,
+                            //         borderRadius: BorderRadius.circular(12)),
+                            //     child: TextFormField(
+                            //       controller: serviceInfoController,
+                            //       decoration: InputDecoration(
+                            //         contentPadding:
+                            //             EdgeInsets.symmetric(horizontal: 10),
+                            //         hintText: "Service Info",
+                            //         label: Text(
+                            //           "Service Info",
+                            //         ),
+                            //         hintStyle: TextStyle(
+                            //             color: Colors.black,
+                            //             fontWeight: FontWeight.w400),
+                            //         border: InputBorder.none,
+                            //       ),
+                            //       validator: (v) {
+                            //         if (v!.isEmpty) {
+                            //           return "Enter info";
+                            //         }
+                            //         return null;
+                            //       },
+                            //       keyboardType: TextInputType.text,
+                            //     ),
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: 15,
+                            // ),
                             Material(
                               elevation: 4,
                               color: Colors.white,
@@ -2031,9 +2068,10 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   decoration: InputDecoration(
                                     contentPadding:
                                         EdgeInsets.symmetric(horizontal: 10),
-                                    hintText: "Why want to join antsnest?",
+                                    hintText:
+                                        "Why do you want to join antsnest?",
                                     label: Text(
-                                      "Why Antsnest",
+                                      "Why Antsnest?",
                                     ),
                                     hintStyle: TextStyle(
                                         color: Colors.black,
@@ -2260,6 +2298,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                             SizedBox(
                               height: 15,
                             ),
+
                             Material(
                               elevation: 4,
                               color: Colors.white,
@@ -2275,7 +2314,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                     counterText: "",
                                     contentPadding:
                                         EdgeInsets.symmetric(horizontal: 10),
-                                    hintText: "Enter amount",
+                                    hintText: "Amount per Hour/Day",
                                     label: Text(
                                       "Amount",
                                     ),
@@ -2298,163 +2337,185 @@ class _SignUpScreenState extends State<SignUpScreen>
                             SizedBox(
                               height: 15,
                             ),
-                            Material(
-                              elevation: 4,
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(6),
-                              child: Container(
-                                width: double.infinity,
-                                height: 6.h,
-                                decoration: boxDecoration(
-                                  radius: 10.0,
-                                ),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton2(
-                                    isExpanded: true,
-                                    hint: Text(
-                                      'No of days',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    items: noofDayList
-                                        .map((String? item) =>
-                                            DropdownMenuItem<String>(
-                                              value: item,
-                                              child: Text(
-                                                item.toString(),
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ))
-                                        .toList(),
-                                    value: noOfDays,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        noOfDays = value as String;
-                                        // // serviceName.text = serviceModel.data!
-                                        //     .firstWhere((element) => element.id == value)
-                                        //     .cName
-                                        //     .toString();
-                                      });
-                                      print("CATEGORY ID== $noOfDays");
-                                    },
-                                    icon: const Icon(
-                                      Icons.arrow_forward_ios_outlined,
-                                      color: AppColor.PrimaryDark,
-                                    ),
-                                    iconSize: 14,
-                                    buttonHeight: 50,
-                                    buttonWidth: 160,
-                                    buttonPadding: const EdgeInsets.only(
-                                        left: 14, right: 14),
-                                    buttonDecoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        // color: AppColor().colorEdit(),
-                                        color: Colors.grey.withOpacity(0.05)),
-                                    buttonElevation: 0,
-                                    itemHeight: 40,
-                                    itemPadding: const EdgeInsets.only(
-                                        left: 14, right: 14),
-                                    dropdownMaxHeight: 300,
-                                    dropdownPadding: null,
-                                    dropdownDecoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    dropdownElevation: 8,
-                                    scrollbarRadius: const Radius.circular(40),
-                                    scrollbarThickness: 6,
-                                    scrollbarAlwaysShow: true,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            Align(
+                                alignment: Alignment.topLeft,
+                                child: Text('Select the Hours / Days *')),
                             SizedBox(
-                              height: 15,
+                              height: 5,
                             ),
-                            Material(
-                              elevation: 4,
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(6),
-                              child: Container(
-                                width: double.infinity,
-                                height: 6.h,
-                                decoration: boxDecoration(
-                                  radius: 10.0,
-                                ),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton2(
-                                    isExpanded: true,
-                                    hint: Text(
-                                      'Select Hours / Day',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Material(
+                                  elevation: 4,
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(6),
+                                  child: Container(
+                                    width: 40.w,
+                                    height: 6.h,
+                                    decoration: boxDecoration(
+                                      radius: 10.0,
+                                    ),
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton2(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'No of days',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        items: noofDayList
+                                            .map((String? item) =>
+                                                DropdownMenuItem<String>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item.toString(),
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.black,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value: noOfDays,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            noOfDays = value as String;
+                                            // // serviceName.text = serviceModel.data!
+                                            //     .firstWhere((element) => element.id == value)
+                                            //     .cName
+                                            //     .toString();
+                                          });
+                                          print("CATEGORY ID== $noOfDays");
+                                        },
+                                        icon: const Icon(
+                                          Icons.arrow_forward_ios_outlined,
+                                          color: AppColor.PrimaryDark,
+                                        ),
+                                        iconSize: 14,
+                                        buttonHeight: 50,
+                                        buttonWidth: 160,
+                                        buttonPadding: const EdgeInsets.only(
+                                            left: 14, right: 14),
+                                        buttonDecoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            // color: AppColor().colorEdit(),
+                                            color:
+                                                Colors.grey.withOpacity(0.05)),
+                                        buttonElevation: 0,
+                                        itemHeight: 40,
+                                        itemPadding: const EdgeInsets.only(
+                                            left: 14, right: 14),
+                                        dropdownMaxHeight: 300,
+                                        dropdownPadding: null,
+                                        dropdownDecoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        dropdownElevation: 8,
+                                        scrollbarRadius:
+                                            const Radius.circular(40),
+                                        scrollbarThickness: 6,
+                                        scrollbarAlwaysShow: true,
                                       ),
-                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    items: timeList
-                                        .map((String? item) =>
-                                            DropdownMenuItem<String>(
-                                              value: item,
-                                              child: Text(
-                                                item.toString(),
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ))
-                                        .toList(),
-                                    value: selectedDayHour,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedDayHour = value as String;
-                                        // // serviceName.text = serviceModel.data!
-                                        //     .firstWhere((element) => element.id == value)
-                                        //     .cName
-                                        //     .toString();
-                                      });
-                                      print("CATEGORY ID== $selectedCategory");
-                                    },
-                                    icon: const Icon(
-                                      Icons.arrow_forward_ios_outlined,
-                                      color: AppColor.PrimaryDark,
-                                    ),
-                                    iconSize: 14,
-                                    buttonHeight: 50,
-                                    buttonWidth: 160,
-                                    buttonPadding: const EdgeInsets.only(
-                                        left: 14, right: 14),
-                                    buttonDecoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        // color: AppColor().colorEdit(),
-                                        color: Colors.grey.withOpacity(0.05)),
-                                    buttonElevation: 0,
-                                    itemHeight: 40,
-                                    itemPadding: const EdgeInsets.only(
-                                        left: 14, right: 14),
-                                    dropdownMaxHeight: 300,
-                                    dropdownPadding: null,
-                                    dropdownDecoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    dropdownElevation: 8,
-                                    scrollbarRadius: const Radius.circular(40),
-                                    scrollbarThickness: 6,
-                                    scrollbarAlwaysShow: true,
                                   ),
                                 ),
-                              ),
+                                Material(
+                                  elevation: 4,
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(6),
+                                  child: Container(
+                                    width: 45.w,
+                                    height: 6.h,
+                                    decoration: boxDecoration(
+                                      radius: 10.0,
+                                    ),
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton2(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select Hours / Day',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        items: timeList
+                                            .map((String? item) =>
+                                                DropdownMenuItem<String>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item.toString(),
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.black,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value: selectedDayHour,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedDayHour = value as String;
+                                            // // serviceName.text = serviceModel.data!
+                                            //     .firstWhere((element) => element.id == value)
+                                            //     .cName
+                                            //     .toString();
+                                          });
+                                          print(
+                                              "CATEGORY ID== $selectedCategory");
+                                        },
+                                        icon: const Icon(
+                                          Icons.arrow_forward_ios_outlined,
+                                          color: AppColor.PrimaryDark,
+                                        ),
+                                        iconSize: 14,
+                                        buttonHeight: 50,
+                                        buttonWidth: 160,
+                                        buttonPadding: const EdgeInsets.only(
+                                            left: 14, right: 14),
+                                        buttonDecoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            // color: AppColor().colorEdit(),
+                                            color:
+                                                Colors.grey.withOpacity(0.05)),
+                                        buttonElevation: 0,
+                                        itemHeight: 40,
+                                        itemPadding: const EdgeInsets.only(
+                                            left: 14, right: 14),
+                                        dropdownMaxHeight: 300,
+                                        dropdownPadding: null,
+                                        dropdownDecoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        dropdownElevation: 8,
+                                        scrollbarRadius:
+                                            const Radius.circular(40),
+                                        scrollbarThickness: 6,
+                                        scrollbarAlwaysShow: true,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
+
                             SizedBox(
                               height: 15,
                             ),
@@ -2634,7 +2695,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   child: DropdownButton2(
                                     isExpanded: true,
                                     hint: Text(
-                                      'Travel',
+                                      'Can Travel',
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.normal,
@@ -2699,230 +2760,230 @@ class _SignUpScreenState extends State<SignUpScreen>
                             SizedBox(
                               height: 15,
                             ),
-                            InkWell(
-                              onTap: () {
-                                _showMultiSelect();
-                              },
-                              child: Material(
-                                elevation: 4,
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(6),
-                                child: Container(
-                                    width: double.infinity,
-                                    height: 6.h,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.grey[100]),
-                                    // boxDecoration(
-                                    //   radius: 10.0,
-                                    // ),
-                                    child: _selectedItems.isEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10.0, right: 10),
-                                            child: Row(
-                                              children: [
-                                                Image.asset(
-                                                  city,
-                                                  width: 6.04.w,
-                                                  height: 5.04.w,
-                                                  fit: BoxFit.fill,
-                                                  color: AppColor.PrimaryDark,
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      EdgeInsets.only(left: 8),
-                                                  child: Text(
-                                                    'Select Multiple Cities',
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.black54,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                    ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        : ListView.builder(
-                                            itemCount: _selectedItems.length,
-                                            physics:
-                                                AlwaysScrollableScrollPhysics(),
-                                            scrollDirection: Axis.horizontal,
-                                            itemBuilder: (c, i) {
-                                              return Padding(
-                                                padding:
-                                                    EdgeInsets.only(right: 5),
-                                                child: Chip(
-                                                  label: Text(
-                                                      "${_selectedItems[i].name}"),
-                                                ),
-                                              );
-                                            })
-                                    // Wrap(
-                                    //   children: _selectedItems
-                                    //       .map((item){
-                                    //     print("okok ${item.id}");
-                                    //     return Padding(
-                                    //       padding: const EdgeInsets.only(left: 8.0, right: 8),
-                                    //       child: Chip(
-                                    //         label:
-                                    //         Text(
-                                    //             "${item.name}"
-                                    //           //item.name
-                                    //         ),
-                                    //       ),
-                                    //     );
-                                    //   })
-                                    //       .toList(),
-                                    // )
+                            // InkWell(
+                            //   onTap: () {
+                            //     _showMultiSelect();
+                            //   },
+                            //   child: Material(
+                            //     elevation: 4,
+                            //     color: Colors.white,
+                            //     borderRadius: BorderRadius.circular(6),
+                            //     child: Container(
+                            //         width: double.infinity,
+                            //         height: 6.h,
+                            //         decoration: BoxDecoration(
+                            //             borderRadius: BorderRadius.circular(10),
+                            //             color: Colors.grey[100]),
+                            //         // boxDecoration(
+                            //         //   radius: 10.0,
+                            //         // ),
+                            //         child: _selectedItems.isEmpty
+                            //             ? Padding(
+                            //                 padding: const EdgeInsets.only(
+                            //                     left: 10.0, right: 10),
+                            //                 child: Row(
+                            //                   children: [
+                            //                     Image.asset(
+                            //                       city,
+                            //                       width: 6.04.w,
+                            //                       height: 5.04.w,
+                            //                       fit: BoxFit.fill,
+                            //                       color: AppColor.PrimaryDark,
+                            //                     ),
+                            //                     Padding(
+                            //                       padding:
+                            //                           EdgeInsets.only(left: 8),
+                            //                       child: Text(
+                            //                         'Select Multiple Cities',
+                            //                         style: TextStyle(
+                            //                           fontSize: 14,
+                            //                           color: Colors.black54,
+                            //                           fontWeight:
+                            //                               FontWeight.normal,
+                            //                         ),
+                            //                         overflow:
+                            //                             TextOverflow.ellipsis,
+                            //                       ),
+                            //                     ),
+                            //                   ],
+                            //                 ),
+                            //               )
+                            //             : ListView.builder(
+                            //                 itemCount: _selectedItems.length,
+                            //                 physics:
+                            //                     AlwaysScrollableScrollPhysics(),
+                            //                 scrollDirection: Axis.horizontal,
+                            //                 itemBuilder: (c, i) {
+                            //                   return Padding(
+                            //                     padding:
+                            //                         EdgeInsets.only(right: 5),
+                            //                     child: Chip(
+                            //                       label: Text(
+                            //                           "${_selectedItems[i].name}"),
+                            //                     ),
+                            //                   );
+                            //                 })
+                            //         // Wrap(
+                            //         //   children: _selectedItems
+                            //         //       .map((item){
+                            //         //     print("okok ${item.id}");
+                            //         //     return Padding(
+                            //         //       padding: const EdgeInsets.only(left: 8.0, right: 8),
+                            //         //       child: Chip(
+                            //         //         label:
+                            //         //         Text(
+                            //         //             "${item.name}"
+                            //         //           //item.name
+                            //         //         ),
+                            //         //       ),
+                            //         //     );
+                            //         //   })
+                            //         //       .toList(),
+                            //         // )
 
-                                    // FutureBuilder(
-                                    //     future: getCities(),
-                                    //     builder: (BuildContext context,
-                                    //         AsyncSnapshot snapshot) {
-                                    //       if (snapshot.hasData) {
-                                    //         return DropdownButtonHideUnderline(
-                                    //           child: DropdownButton2(
-                                    //             isExpanded: true,
-                                    //             hint: Row(
-                                    //               children: [
-                                    //                 Image.asset(
-                                    //                   city,
-                                    //                   width: 6.04.w,
-                                    //                   height: 5.04.w,
-                                    //                   fit: BoxFit.fill,
-                                    //                   color: AppColor.PrimaryDark,
-                                    //                 ),
-                                    //                 SizedBox(
-                                    //                   width: 4,
-                                    //                 ),
-                                    //                 Expanded(
-                                    //                   child: Text(
-                                    //                     'Select Multiple Cities',
-                                    //                     style: TextStyle(
-                                    //                       fontSize: 14,
-                                    //                       fontWeight: FontWeight.normal,
-                                    //                     ),
-                                    //                     overflow: TextOverflow.ellipsis,
-                                    //                   ),
-                                    //                 ),
-                                    //               ],
-                                    //             ),
-                                    //             items: cityList.map((item) {
-                                    //               return DropdownMenuItem<String>(
-                                    //                 value: item.id,
-                                    //                 enabled: false,
-                                    //                 child: StatefulBuilder(
-                                    //                   builder: (context, menuSetState) {
-                                    //                     final _isSelected =
-                                    //                         selectedCities
-                                    //                             .contains(item);
-                                    //                     print("SLECTED CITY");
-                                    //                     return InkWell(
-                                    //                       onTap: () {
-                                    //                         _isSelected
-                                    //                             ? selectedCities
-                                    //                                 .remove(item.id)
-                                    //                             : selectedCities
-                                    //                                 .add(item.id!);
-                                    //                         setState(() {});
-                                    //                         menuSetState(() {});
-                                    //                       },
-                                    //                       child: Container(
-                                    //                         height: double.infinity,
-                                    //                         padding: const EdgeInsets
-                                    //                                 .symmetric(
-                                    //                             horizontal: 16.0),
-                                    //                         child: Row(
-                                    //                           children: [
-                                    //                             _isSelected
-                                    //                                 ? const Icon(Icons
-                                    //                                     .check_box_outlined)
-                                    //                                 : const Icon(Icons
-                                    //                                     .check_box_outline_blank),
-                                    //                             const SizedBox(
-                                    //                                 width: 16),
-                                    //                             Text(
-                                    //                               item.name!,
-                                    //                               style:
-                                    //                                   const TextStyle(
-                                    //                                 fontSize: 14,
-                                    //                               ),
-                                    //                             ),
-                                    //                           ],
-                                    //                         ),
-                                    //                       ),
-                                    //                     );
-                                    //                   },
-                                    //                 ),
-                                    //               );
-                                    //             }).toList(),
-                                    //             //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
-                                    //             value: selectedCities.isEmpty
-                                    //                 ? null
-                                    //                 : selectedCities.last,
-                                    //             onChanged: (value) {},
-                                    //             buttonHeight: 50,
-                                    //             buttonWidth: 160,
-                                    //             buttonPadding: const EdgeInsets.only(
-                                    //                 left: 14, right: 14),
-                                    //             buttonDecoration: BoxDecoration(
-                                    //               borderRadius:
-                                    //                   BorderRadius.circular(14),
-                                    //               color: Color(0xffF9F9F9),
-                                    //             ),
-                                    //             buttonElevation: 0,
-                                    //             itemHeight: 40,
-                                    //             itemPadding: const EdgeInsets.only(
-                                    //                 left: 14, right: 14),
-                                    //             dropdownMaxHeight: 300,
-                                    //             dropdownPadding: null,
-                                    //             dropdownDecoration: BoxDecoration(
-                                    //               borderRadius:
-                                    //                   BorderRadius.circular(14),
-                                    //             ),
-                                    //             dropdownElevation: 8,
-                                    //             scrollbarRadius:
-                                    //                 const Radius.circular(40),
-                                    //             scrollbarThickness: 6,
-                                    //             scrollbarAlwaysShow: true,
-                                    //             selectedItemBuilder: (context) {
-                                    //               return cityList.map(
-                                    //                 (item) {
-                                    //                   return Container(
-                                    //                     // alignment: AlignmentDirectional.center,
-                                    //                     padding:
-                                    //                         const EdgeInsets.symmetric(
-                                    //                             horizontal: 16.0),
-                                    //                     child: Text(
-                                    //                       selectedCities.join(','),
-                                    //                       style: const TextStyle(
-                                    //                         fontSize: 14,
-                                    //                         overflow:
-                                    //                             TextOverflow.ellipsis,
-                                    //                       ),
-                                    //                       maxLines: 1,
-                                    //                     ),
-                                    //                   );
-                                    //                 },
-                                    //               ).toList();
-                                    //             },
-                                    //           ),
-                                    //         );
-                                    //       } else if (snapshot.hasError) {
-                                    //         return Icon(Icons.error_outline);
-                                    //       } else {
-                                    //         return Center(
-                                    //             child: CircularProgressIndicator());
-                                    //       }
-                                    //     })
-                                    ),
-                              ),
-                            ),
+                            //         // FutureBuilder(
+                            //         //     future: getCities(),
+                            //         //     builder: (BuildContext context,
+                            //         //         AsyncSnapshot snapshot) {
+                            //         //       if (snapshot.hasData) {
+                            //         //         return DropdownButtonHideUnderline(
+                            //         //           child: DropdownButton2(
+                            //         //             isExpanded: true,
+                            //         //             hint: Row(
+                            //         //               children: [
+                            //         //                 Image.asset(
+                            //         //                   city,
+                            //         //                   width: 6.04.w,
+                            //         //                   height: 5.04.w,
+                            //         //                   fit: BoxFit.fill,
+                            //         //                   color: AppColor.PrimaryDark,
+                            //         //                 ),
+                            //         //                 SizedBox(
+                            //         //                   width: 4,
+                            //         //                 ),
+                            //         //                 Expanded(
+                            //         //                   child: Text(
+                            //         //                     'Select Multiple Cities',
+                            //         //                     style: TextStyle(
+                            //         //                       fontSize: 14,
+                            //         //                       fontWeight: FontWeight.normal,
+                            //         //                     ),
+                            //         //                     overflow: TextOverflow.ellipsis,
+                            //         //                   ),
+                            //         //                 ),
+                            //         //               ],
+                            //         //             ),
+                            //         //             items: cityList.map((item) {
+                            //         //               return DropdownMenuItem<String>(
+                            //         //                 value: item.id,
+                            //         //                 enabled: false,
+                            //         //                 child: StatefulBuilder(
+                            //         //                   builder: (context, menuSetState) {
+                            //         //                     final _isSelected =
+                            //         //                         selectedCities
+                            //         //                             .contains(item);
+                            //         //                     print("SLECTED CITY");
+                            //         //                     return InkWell(
+                            //         //                       onTap: () {
+                            //         //                         _isSelected
+                            //         //                             ? selectedCities
+                            //         //                                 .remove(item.id)
+                            //         //                             : selectedCities
+                            //         //                                 .add(item.id!);
+                            //         //                         setState(() {});
+                            //         //                         menuSetState(() {});
+                            //         //                       },
+                            //         //                       child: Container(
+                            //         //                         height: double.infinity,
+                            //         //                         padding: const EdgeInsets
+                            //         //                                 .symmetric(
+                            //         //                             horizontal: 16.0),
+                            //         //                         child: Row(
+                            //         //                           children: [
+                            //         //                             _isSelected
+                            //         //                                 ? const Icon(Icons
+                            //         //                                     .check_box_outlined)
+                            //         //                                 : const Icon(Icons
+                            //         //                                     .check_box_outline_blank),
+                            //         //                             const SizedBox(
+                            //         //                                 width: 16),
+                            //         //                             Text(
+                            //         //                               item.name!,
+                            //         //                               style:
+                            //         //                                   const TextStyle(
+                            //         //                                 fontSize: 14,
+                            //         //                               ),
+                            //         //                             ),
+                            //         //                           ],
+                            //         //                         ),
+                            //         //                       ),
+                            //         //                     );
+                            //         //                   },
+                            //         //                 ),
+                            //         //               );
+                            //         //             }).toList(),
+                            //         //             //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
+                            //         //             value: selectedCities.isEmpty
+                            //         //                 ? null
+                            //         //                 : selectedCities.last,
+                            //         //             onChanged: (value) {},
+                            //         //             buttonHeight: 50,
+                            //         //             buttonWidth: 160,
+                            //         //             buttonPadding: const EdgeInsets.only(
+                            //         //                 left: 14, right: 14),
+                            //         //             buttonDecoration: BoxDecoration(
+                            //         //               borderRadius:
+                            //         //                   BorderRadius.circular(14),
+                            //         //               color: Color(0xffF9F9F9),
+                            //         //             ),
+                            //         //             buttonElevation: 0,
+                            //         //             itemHeight: 40,
+                            //         //             itemPadding: const EdgeInsets.only(
+                            //         //                 left: 14, right: 14),
+                            //         //             dropdownMaxHeight: 300,
+                            //         //             dropdownPadding: null,
+                            //         //             dropdownDecoration: BoxDecoration(
+                            //         //               borderRadius:
+                            //         //                   BorderRadius.circular(14),
+                            //         //             ),
+                            //         //             dropdownElevation: 8,
+                            //         //             scrollbarRadius:
+                            //         //                 const Radius.circular(40),
+                            //         //             scrollbarThickness: 6,
+                            //         //             scrollbarAlwaysShow: true,
+                            //         //             selectedItemBuilder: (context) {
+                            //         //               return cityList.map(
+                            //         //                 (item) {
+                            //         //                   return Container(
+                            //         //                     // alignment: AlignmentDirectional.center,
+                            //         //                     padding:
+                            //         //                         const EdgeInsets.symmetric(
+                            //         //                             horizontal: 16.0),
+                            //         //                     child: Text(
+                            //         //                       selectedCities.join(','),
+                            //         //                       style: const TextStyle(
+                            //         //                         fontSize: 14,
+                            //         //                         overflow:
+                            //         //                             TextOverflow.ellipsis,
+                            //         //                       ),
+                            //         //                       maxLines: 1,
+                            //         //                     ),
+                            //         //                   );
+                            //         //                 },
+                            //         //               ).toList();
+                            //         //             },
+                            //         //           ),
+                            //         //         );
+                            //         //       } else if (snapshot.hasError) {
+                            //         //         return Icon(Icons.error_outline);
+                            //         //       } else {
+                            //         //         return Center(
+                            //         //             child: CircularProgressIndicator());
+                            //         //       }
+                            //         //     })
+                            //         ),
+                            //   ),
+                            // ),
 
                             termsAndCondition(),
                             SizedBox(

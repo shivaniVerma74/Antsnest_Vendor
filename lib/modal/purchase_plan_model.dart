@@ -1,19 +1,24 @@
 import 'dart:convert';
+
 /// response_code : "1"
 /// msg : "Plan purchased success"
-/// data : []
+// data : []
 
-PurchasePlanModel purchasePlanModelFromJson(String str) => PurchasePlanModel.fromJson(json.decode(str));
-String purchasePlanModelToJson(PurchasePlanModel data) => json.encode(data.toJson());
+PurchasePlanModel purchasePlanModelFromJson(String str) =>
+    PurchasePlanModel.fromJson(json.decode(str));
+String purchasePlanModelToJson(PurchasePlanModel data) =>
+    json.encode(data.toJson());
+
 class PurchasePlanModel {
   PurchasePlanModel({
-      String? responseCode, 
-      String? msg, 
-      List<dynamic>? data,}){
+    String? responseCode,
+    String? msg,
+    List<dynamic>? data,
+  }) {
     _responseCode = responseCode;
     _msg = msg;
     _data = data;
-}
+  }
 
   PurchasePlanModel.fromJson(dynamic json) {
     _responseCode = json['response_code'];
@@ -28,13 +33,16 @@ class PurchasePlanModel {
   String? _responseCode;
   String? _msg;
   List<dynamic>? _data;
-PurchasePlanModel copyWith({  String? responseCode,
-  String? msg,
-  List<dynamic>? data,
-}) => PurchasePlanModel(  responseCode: responseCode ?? _responseCode,
-  msg: msg ?? _msg,
-  data: data ?? _data,
-);
+  PurchasePlanModel copyWith({
+    String? responseCode,
+    String? msg,
+    List<dynamic>? data,
+  }) =>
+      PurchasePlanModel(
+        responseCode: responseCode ?? _responseCode,
+        msg: msg ?? _msg,
+        data: data ?? _data,
+      );
   String? get responseCode => _responseCode;
   String? get msg => _msg;
   List<dynamic>? get data => _data;
@@ -48,5 +56,4 @@ PurchasePlanModel copyWith({  String? responseCode,
     }
     return map;
   }
-
 }
