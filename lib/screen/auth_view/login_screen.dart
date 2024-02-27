@@ -351,15 +351,13 @@ class _LoginScreenState extends State<LoginScreen>
                             },
 
                             decoration: InputDecoration(
-
                               hintText: " Email Id",
 
                               // counterText: '',
                               hintStyle: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14
-                              ),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14),
                               border: InputBorder.none,
                               filled: true,
                               fillColor: Colors.white,
@@ -373,14 +371,16 @@ class _LoginScreenState extends State<LoginScreen>
                                     color: AppColor().colorEdit(),
                                     width: 1.0,
                                     style: BorderStyle.solid),
-                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
                               ),
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                     color: AppColor().colorEdit(),
                                     width: 1.0,
                                     style: BorderStyle.solid),
-                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
                               ),
                             ),
 
@@ -394,18 +394,16 @@ class _LoginScreenState extends State<LoginScreen>
                     height: 40,
                   ),
                   InkWell(
-                    onTap: (){
-                      if(_formKey.currentState!.validate()){
+                    onTap: () {
+                      if (_formKey.currentState!.validate()) {
                         LoginApi();
-                      }
-                      else{
+                      } else {
                         const snackBar = SnackBar(
                           backgroundColor: Colors.green,
                           content: Text('Something went wrong'),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
-
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 12),
@@ -477,9 +475,7 @@ class _LoginScreenState extends State<LoginScreen>
                       SizedBox(
                         width: 10,
                       ),
-                      SizedBox(
-                          width: 30,
-                          child: Image.asset("images/x.png")),
+                      SizedBox(width: 30, child: Image.asset("images/x.png")),
                       SizedBox(
                         width: 10,
                       ),
@@ -488,7 +484,6 @@ class _LoginScreenState extends State<LoginScreen>
                     ],
                   ),
                   Spacer(),
-
                   Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(top: 20),

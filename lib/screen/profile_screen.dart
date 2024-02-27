@@ -31,8 +31,10 @@ import 'CustomerSupport/customer_support_faq.dart';
 import 'ReviewPage.dart';
 import 'auth_view/login_screen.dart';
 import 'availablity.dart';
+import 'cancellation_screen.dart';
 import 'change_password_screen.dart';
 import 'contactUsPage.dart';
+import 'my_booking_list.dart';
 import 'my_wallet.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -581,26 +583,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ));
         }
         if (pos == 14) {
-          // Navigator.push(
-          //     context,
-          //     PageTransition(
-          //       child: MyBookinglistScreen(
-          //         // walletAmount: walletAmount.toString(),
-          //       ),
-          //       type: PageTransitionType.rightToLeft,
-          //       duration: Duration(milliseconds: 500),
-          //     ));
+          Navigator.push(
+              context,
+              PageTransition(
+                child: MyBookinglistScreen(
+                    // walletAmount: walletAmount.toString(),
+                    ),
+                type: PageTransitionType.rightToLeft,
+                duration: Duration(milliseconds: 500),
+              ));
         }
         if (pos == 15) {
-          // Navigator.push(
-          //     context,
-          //     PageTransition(
-          //       child: CancellationScreen(
-          //         // walletAmount: walletAmount.toString(),
-          //       ),
-          //       type: PageTransitionType.rightToLeft,
-          //       duration: Duration(milliseconds: 500),
-          //     ));
+          Navigator.push(
+              context,
+              PageTransition(
+                child: CancellationScreen(
+                    // walletAmount: walletAmount.toString(),
+                    ),
+                type: PageTransitionType.rightToLeft,
+                duration: Duration(milliseconds: 500),
+              ));
         }
       },
       child: Container(

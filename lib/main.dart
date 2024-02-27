@@ -10,7 +10,6 @@ import 'package:sizer/sizer.dart';
 import 'fast_splash.dart';
 
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   changeStatusBarColor(AppColor().colorPrimary());

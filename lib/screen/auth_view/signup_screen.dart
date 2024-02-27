@@ -2,10 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:animated_widgets/animated_widgets.dart';
-import 'package:country_picker/country_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/animation.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -94,7 +91,7 @@ class _SignUpScreenState extends State<SignUpScreen>
   TextEditingController birthDayController = TextEditingController();
   TextEditingController comfertableServiceController = TextEditingController();
   TextEditingController whyJoinController = TextEditingController();
-  TextEditingController serviceInfoController =  TextEditingController();
+  TextEditingController serviceInfoController = TextEditingController();
   TextEditingController facebookLinkController = TextEditingController();
 
   String? noOfDays;
@@ -131,11 +128,7 @@ class _SignUpScreenState extends State<SignUpScreen>
   String roleString = "Role";
   int productIndex = 0;
 
-
-  List<String> timeList  = [
-    "Hour",
-    "Days"
-  ];
+  List<String> timeList = ["Hour", "Days"];
   List<String> languageList = [
     "English",
     "Italian",
@@ -162,6 +155,7 @@ class _SignUpScreenState extends State<SignUpScreen>
     super.dispose();
     _controller.dispose();
   }
+
   List<String> cityIdList = [];
 
   bool status = false;
@@ -176,7 +170,7 @@ class _SignUpScreenState extends State<SignUpScreen>
   List<StateData> stateList = [];
   List<CityData> cityList = [];
   List<String> selectedCities = [];
-  List<bool> isCheck = [] ;
+  List<bool> isCheck = [];
   List _selectedItems = [];
   final MultiSelectController multiSelectController = MultiSelectController();
 
@@ -188,12 +182,9 @@ class _SignUpScreenState extends State<SignUpScreen>
     // getServiceList();
     // getLocation();
   }
+
   String? selectedTravel;
-  List<String> travelList = [
-    "Local",
-    "Nationwide",
-    "Worldwide"
-  ];
+  List<String> travelList = ["Local", "Nationwide", "Worldwide"];
 
   List<String> selectedLanguageList = [];
 
@@ -218,7 +209,9 @@ class _SignUpScreenState extends State<SignUpScreen>
     final List? results = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return MultiSelect( selectedState: selectedState.toString(),);
+        return MultiSelect(
+          selectedState: selectedState.toString(),
+        );
       },
     );
 
@@ -233,7 +226,7 @@ class _SignUpScreenState extends State<SignUpScreen>
 
   int visibleIndex = 1;
   bool isVisible = false;
-  List<String> categorylist=[];
+  List<String> categorylist = [];
   Set<String> uniqueValues = Set();
 
   // citiesDialog(){
@@ -347,9 +340,9 @@ class _SignUpScreenState extends State<SignUpScreen>
                 primaryColor: Colors.black, //Head background
                 accentColor: Colors.black,
                 colorScheme:
-                ColorScheme.light(primary: const Color(0xFFEB6C67)),
+                    ColorScheme.light(primary: const Color(0xFFEB6C67)),
                 buttonTheme:
-                ButtonThemeData(textTheme: ButtonTextTheme.accent)),
+                    ButtonThemeData(textTheme: ButtonTextTheme.accent)),
             child: child!,
           );
         });
@@ -358,7 +351,8 @@ class _SignUpScreenState extends State<SignUpScreen>
         String yourDate = picked.toString();
         _dateValue = convertDateTimeDisplay(yourDate);
         print(_dateValue);
-        dateFormate = DateFormat("dd/MM/yyyy").format(DateTime.parse(_dateValue ?? ""));
+        dateFormate =
+            DateFormat("dd/MM/yyyy").format(DateTime.parse(_dateValue ?? ""));
       });
   }
 
@@ -370,7 +364,7 @@ class _SignUpScreenState extends State<SignUpScreen>
     return formatted;
   }
 
-  checkvisibility(){
+  checkvisibility() {
     setState(() {
       isVisible = !isVisible;
     });
@@ -414,7 +408,7 @@ class _SignUpScreenState extends State<SignUpScreen>
             });
             Navigator.of(context).pop();
           },
-          initialPosition: LatLng(22.719568,75.857727),
+          initialPosition: LatLng(22.719568, 75.857727),
           useCurrentLocation: true,
         ),
       ),
@@ -428,7 +422,7 @@ class _SignUpScreenState extends State<SignUpScreen>
     String cities = cityIdList.join(",");
     print("new cities are here ${cities} andc ${cityList} and ${cityIdList}");
     print("checking here ${cityIdList.length}");
-    for(var i=0;i<_selectedItems.length;i++){
+    for (var i = 0; i < _selectedItems.length; i++) {
       print("check now ${_selectedItems[i].id}");
     }
     showDialog(
@@ -438,7 +432,6 @@ class _SignUpScreenState extends State<SignUpScreen>
             text: "Signing Up,please wait...",
           );
         });
-
 
     var response = await http.post(Uri.parse(VendorRegistration), body: {
       "mobile": "${phoneController.text}",
@@ -451,24 +444,25 @@ class _SignUpScreenState extends State<SignUpScreen>
       "can_travel": selectedTravel.toString(),
       "service_cities": cities.toString(),
       "website": portfolioController.text,
-      "t_link":twitterController.text,
-      "i_link":instagramController.text,
-      "l_link":linkedInController.text,
-      "f_link":facebookLinkController.text,
-      "equipments":equipmentController.text,
-      "country_code":"+$phoneCode",
+      "t_link": twitterController.text,
+      "i_link": instagramController.text,
+      "l_link": linkedInController.text,
+      "f_link": facebookLinkController.text,
+      "equipments": equipmentController.text,
+      "country_code": "+$phoneCode",
       "birthday": dateFormate.toString(),
-      "provide_services":comfertableServiceController.text,
+      "provide_services": comfertableServiceController.text,
       "join_antsnest": whyJoinController.text,
-      "cat":selectedCategory.toString(),
-      "sub_cat":categorylist.map((String value) {
-        return value.toString();
-      }).join(', ')??"",
-      "hrs_day":selectedDayHour.toString(),
-      "amount":amountController.text,
-      "language":langueges.toString(),
-      "number":noOfDays,
-      "provide_services":serviceInfoController.text
+      "cat": selectedCategory.toString(),
+      "sub_cat": categorylist.map((String value) {
+            return value.toString();
+          }).join(', ') ??
+          "",
+      "hrs_day": selectedDayHour.toString(),
+      "amount": amountController.text,
+      "language": langueges.toString(),
+      "number": noOfDays,
+      "provide_services": serviceInfoController.text
     });
 
     var datas = {
@@ -482,21 +476,21 @@ class _SignUpScreenState extends State<SignUpScreen>
       "can_travel": selectedTravel.toString(),
       "service_cities": cityIdList.toString(),
       "website": portfolioController.text,
-      "t_link":twitterController.text,
-      "i_link":instagramController.text,
-      "f_link":facebookLinkController.text,
-      "l_link":linkedInController.text,
-      "equipments":equipmentController.text,
+      "t_link": twitterController.text,
+      "i_link": instagramController.text,
+      "f_link": facebookLinkController.text,
+      "l_link": linkedInController.text,
+      "equipments": equipmentController.text,
       "birthday": dateFormate.toString(),
-      "provide_services":comfertableServiceController.text,
+      "provide_services": comfertableServiceController.text,
       "join_antsnest": whyJoinController.text,
-      "cat":selectedCategory.toString(),
-      "sub_cat":selectedSubCategory.toString(),
-      "hrs_day":selectedDayHour.toString(),
-      "amount":amountController.text,
-      "language":selectedLanguage.toString(),
-      "number":noOfDays,
-      "provide_services":serviceInfoController.text
+      "cat": selectedCategory.toString(),
+      "sub_cat": selectedSubCategory.toString(),
+      "hrs_day": selectedDayHour.toString(),
+      "amount": amountController.text,
+      "language": selectedLanguage.toString(),
+      "number": noOfDays,
+      "provide_services": serviceInfoController.text
     };
     print("sign up parameter ${datas}");
     print("response of sign up api ${response.body}");
@@ -508,14 +502,14 @@ class _SignUpScreenState extends State<SignUpScreen>
           context, MaterialPageRoute(builder: (context) => LoginScreen()));
       const snackBar = SnackBar(
         backgroundColor: Colors.green,
-        content: Text("Your form was successfully submitted! We'll review your application and get back to you within 48 hours."),
+        content: Text(
+            "Your form was successfully submitted! We'll review your application and get back to you within 48 hours."),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       Navigator.of(context).pop();
       Fluttertoast.showToast(msg: "${finalStr.message}");
     }
-
   }
 
   Future<ServiceCategoryModel?> getServiceCategory() async {
@@ -550,7 +544,7 @@ class _SignUpScreenState extends State<SignUpScreen>
 
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
-      var finalResult =  ServiceSubCategoryModel.fromJson(json.decode(str));
+      var finalResult = ServiceSubCategoryModel.fromJson(json.decode(str));
       setState(() {
         serviceSubCategoryModel = finalResult;
       });
@@ -559,12 +553,13 @@ class _SignUpScreenState extends State<SignUpScreen>
     }
   }
 
-  openLanguageList(){
+  openLanguageList() {
     return showDialog(
         barrierDismissible: false,
-        context: context, builder: (context){
-      return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -573,7 +568,11 @@ class _SignUpScreenState extends State<SignUpScreen>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Select Multiple Language",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
+                      Text(
+                        "Select Multiple Language",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 16),
+                      ),
                       // InkWell(
                       //     onTap: (){
                       //       Navigator.pop(context);
@@ -584,53 +583,64 @@ class _SignUpScreenState extends State<SignUpScreen>
                       //     child: Icon(Icons.clear,))
                     ],
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Container(
-                    height: MediaQuery.of(context).size.height/2,
+                    height: MediaQuery.of(context).size.height / 2,
                     //height: 500,
                     width: 300,
                     child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
                         itemCount: languageList.length,
-                        itemBuilder: (context,i){
+                        itemBuilder: (context, i) {
                           return Padding(
                             padding: EdgeInsets.symmetric(vertical: 5),
                             child: InkWell(
-                              onTap: (){
-                                if(selectedLanguageList.contains(languageList[i].toString())){
-
-                                 setState(() {
-                                    selectedLanguageList.remove(languageList[i]);
-                                 });
-                                  print("removed language list ${selectedLanguageList}");
-                                }
-                                else{
-
+                              onTap: () {
+                                if (selectedLanguageList
+                                    .contains(languageList[i].toString())) {
+                                  setState(() {
+                                    selectedLanguageList
+                                        .remove(languageList[i]);
+                                  });
+                                  print(
+                                      "removed language list ${selectedLanguageList}");
+                                } else {
                                   setState(() {
                                     selectedLanguageList.add(languageList[i]);
                                   });
-                                  print("added language list ${selectedLanguageList}");
+                                  print(
+                                      "added language list ${selectedLanguageList}");
                                 }
                               },
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    height:15,
+                                    height: 15,
                                     width: 15,
                                     padding: EdgeInsets.all(2),
                                     decoration: BoxDecoration(
                                         color: Colors.transparent,
-                                        border: Border.all(color: AppColor.PrimaryDark),
-                                        borderRadius:BorderRadius.circular(100)
-                                    ),child: Container(
-                                    decoration: BoxDecoration(
-                                        color: selectedLanguageList.contains(languageList[i]) ?   AppColor().colorPrimary() : Colors.transparent,
-                                        borderRadius:BorderRadius.circular(100)
+                                        border: Border.all(
+                                            color: AppColor.PrimaryDark),
+                                        borderRadius:
+                                            BorderRadius.circular(100)),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: selectedLanguageList
+                                                  .contains(languageList[i])
+                                              ? AppColor().colorPrimary()
+                                              : Colors.transparent,
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
                                     ),
-                                  ),),
-                                  SizedBox(width: 8,),
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
                                   Text("${languageList[i]}"),
                                 ],
                               ),
@@ -640,18 +650,23 @@ class _SignUpScreenState extends State<SignUpScreen>
                   ),
                   Align(
                       alignment: Alignment.bottomRight,
-                      child: MaterialButton(onPressed: (){
-                        setState((){
-
-                        });
-                        Navigator.pop(context);
-                      },child: Text("Ok",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500),),color: AppColor.PrimaryDark,))
+                      child: MaterialButton(
+                        onPressed: () {
+                          setState(() {});
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "Ok",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w500),
+                        ),
+                        color: AppColor.PrimaryDark,
+                      ))
                 ],
               ),
             );
-          }
-      );
-    });
+          });
+        });
   }
 
   @override
@@ -662,145 +677,149 @@ class _SignUpScreenState extends State<SignUpScreen>
       padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-              "images/loging_baground.png",
-            ),
-            fit: BoxFit.cover,
-          )),
+        image: AssetImage(
+          "images/loging_baground.png",
+        ),
+        fit: BoxFit.cover,
+      )),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(
-          child:
-          SingleChildScrollView(
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-               visibleIndex==2?SizedBox.shrink(): Column(
-                  children: [
-                    SizedBox(
-                      height: 50,
-                    ),
-                    text(
-                      "Sign Up",
-                      textColor: Colors.black,
-                      fontSize: 25.sp,
-                      // fontFamily: fontRegular,
-                      fontFamily: fontBold,
-                    ),
-                    text(
-                      "By signing up, you agree to receive emails\nfrom AntsNest.",
-                      textColor: Colors.black,
-                      fontSize: 12.sp,
-                      // fontFamily: fontRegular,
-                      fontFamily: fontRegular,
-                    ),
-                  ],
-                ),
+                visibleIndex == 2
+                    ? SizedBox.shrink()
+                    : Column(
+                        children: [
+                          SizedBox(
+                            height: 50,
+                          ),
+                          text(
+                            "Sign Up",
+                            textColor: Colors.black,
+                            fontSize: 25.sp,
+                            // fontFamily: fontRegular,
+                            fontFamily: fontBold,
+                          ),
+                          text(
+                            "By signing up, you agree to receive emails\nfrom AntsNest.",
+                            textColor: Colors.black,
+                            fontSize: 12.sp,
+                            // fontFamily: fontRegular,
+                            fontFamily: fontRegular,
+                          ),
+                        ],
+                      ),
                 Form(
                   key: _formKey,
-                  child: visibleIndex == 1 ?
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    // padding: EdgeInsets.symmetric(horizontal: 10,vertical: 12),
-                    // physics: ClampingScrollPhysics(),
-                    children: [
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: TextFormField(
-                          controller: fullNameController,
-                          decoration: InputDecoration(
-                            contentPadding:
-                            EdgeInsets.symmetric(horizontal: 10),
-                            hintText: "Full Name",
-                            prefixIcon: Icon(Icons.person,color: AppColor().colorPrimary(),),
-                            label: Text(
-                              "Full Name",
+                  child: visibleIndex == 1
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          // padding: EdgeInsets.symmetric(horizontal: 10,vertical: 12),
+                          // physics: ClampingScrollPhysics(),
+                          children: [
+                            SizedBox(
+                              height: 15,
                             ),
-                            hintStyle: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400),
-                            border: InputBorder.none,
-                          ),
-                          validator: (v) {
-                            if (v!.isEmpty) {
-                              return "Enter your name";
-                            }
-                            return null;
-                          },
-                          keyboardType: TextInputType.text,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      // Container(
-                      //   padding: EdgeInsets.symmetric(vertical: 6),
-                      //   decoration: BoxDecoration(
-                      //       color: Color(0xffF9F9F9),
-                      //       borderRadius: BorderRadius.circular(12)),
-                      //   child: TextFormField(
-                      //     controller: nameController,
-                      //     decoration: InputDecoration(
-                      //       contentPadding:
-                      //       EdgeInsets.symmetric(horizontal: 10),
-                      //       hintText: "First name",
-                      //       label: Text(
-                      //         "First name",
-                      //       ),
-                      //       hintStyle: TextStyle(
-                      //           color: Colors.black,
-                      //           fontWeight: FontWeight.w400),
-                      //       border: InputBorder.none,
-                      //     ),
-                      //     validator: (v) {
-                      //       if (v!.isEmpty) {
-                      //         return "Enter first name";
-                      //       }
-                      //       return null;
-                      //     },
-                      //     keyboardType: TextInputType.text,
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   height: 15,
-                      // ),
-                      // Container(
-                      //   padding: EdgeInsets.symmetric(vertical: 6),
-                      //   decoration: BoxDecoration(
-                      //       color: Color(0xffF9F9F9),
-                      //       borderRadius: BorderRadius.circular(12)),
-                      //   child: TextFormField(
-                      //     controller: lastController,
-                      //     decoration: InputDecoration(
-                      //       contentPadding:
-                      //       EdgeInsets.symmetric(horizontal: 10),
-                      //       hintText: "Last name",
-                      //       label: Text(
-                      //         "Last name",
-                      //       ),
-                      //       hintStyle: TextStyle(
-                      //           color: Colors.black,
-                      //           fontWeight: FontWeight.w400),
-                      //       border: InputBorder.none,
-                      //     ),
-                      //     validator: (v) {
-                      //       if (v!.isEmpty) {
-                      //         return "Enter last name";
-                      //       }
-                      //       return null;
-                      //     },
-                      //     keyboardType: TextInputType.text,
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   height: 15,
-                      // ),
-                      /*Row(
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: TextFormField(
+                                controller: fullNameController,
+                                decoration: InputDecoration(
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 10),
+                                  hintText: "Enter your Full Name",
+                                  prefixIcon: Icon(
+                                    Icons.person,
+                                    color: AppColor().colorPrimary(),
+                                  ),
+                                  label: Text(
+                                    "Full Name",
+                                  ),
+                                  hintStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400),
+                                  border: InputBorder.none,
+                                ),
+                                validator: (v) {
+                                  if (v!.isEmpty) {
+                                    return "Enter your Full Name";
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.text,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            // Container(
+                            //   padding: EdgeInsets.symmetric(vertical: 6),
+                            //   decoration: BoxDecoration(
+                            //       color: Color(0xffF9F9F9),
+                            //       borderRadius: BorderRadius.circular(12)),
+                            //   child: TextFormField(
+                            //     controller: nameController,
+                            //     decoration: InputDecoration(
+                            //       contentPadding:
+                            //       EdgeInsets.symmetric(horizontal: 10),
+                            //       hintText: "First name",
+                            //       label: Text(
+                            //         "First name",
+                            //       ),
+                            //       hintStyle: TextStyle(
+                            //           color: Colors.black,
+                            //           fontWeight: FontWeight.w400),
+                            //       border: InputBorder.none,
+                            //     ),
+                            //     validator: (v) {
+                            //       if (v!.isEmpty) {
+                            //         return "Enter first name";
+                            //       }
+                            //       return null;
+                            //     },
+                            //     keyboardType: TextInputType.text,
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: 15,
+                            // ),
+                            // Container(
+                            //   padding: EdgeInsets.symmetric(vertical: 6),
+                            //   decoration: BoxDecoration(
+                            //       color: Color(0xffF9F9F9),
+                            //       borderRadius: BorderRadius.circular(12)),
+                            //   child: TextFormField(
+                            //     controller: lastController,
+                            //     decoration: InputDecoration(
+                            //       contentPadding:
+                            //       EdgeInsets.symmetric(horizontal: 10),
+                            //       hintText: "Last name",
+                            //       label: Text(
+                            //         "Last name",
+                            //       ),
+                            //       hintStyle: TextStyle(
+                            //           color: Colors.black,
+                            //           fontWeight: FontWeight.w400),
+                            //       border: InputBorder.none,
+                            //     ),
+                            //     validator: (v) {
+                            //       if (v!.isEmpty) {
+                            //         return "Enter last name";
+                            //       }
+                            //       return null;
+                            //     },
+                            //     keyboardType: TextInputType.text,
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: 15,
+                            // ),
+                            /*Row(
                                 children: [
                                   InkWell(
                                     onTap: (){
@@ -868,2342 +887,2432 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   ),
                                 ],
                               ),*/
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: IntlPhoneField(
-                          controller: phoneController,
-                          flagsButtonPadding: const EdgeInsets.all(8),
-                          dropdownIconPosition: IconPosition.trailing,
-                          decoration:  InputDecoration(
-                            label: Text('Phone Number',style: TextStyle()),
-
-
-                            focusColor: AppColor.PrimaryDark,
-                            border: InputBorder.none,
-                            hintText: 'Phone Number',
-                            counterText: '',
-                            hintStyle: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          initialCountryCode: 'IN',
-                          validator: (v) {
-                            if (v!.number.isEmpty || v.number.length != 10) {
-                              return "Enter mobile number";
-                            }
-                            return null;
-                          },
-
-                          onChanged: (phone) {
-                            print(phone.completeNumber);
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: TextFormField(
-                          controller: emailController,
-                          decoration: InputDecoration(
-                            contentPadding:
-                            EdgeInsets.symmetric(horizontal: 10),
-                            hintText: "Email",
-                            label: Text(
-                              "Email",
-                            ),
-                            prefixIcon: Icon(Icons.email,color: AppColor().colorPrimary(),),
-                            hintStyle: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400),
-                            border: InputBorder.none,
-                          ),
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (v) {
-                            if (!v!.contains('@')) {
-                              return "Enter valid email";
-                            }
-                            // return false;
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: TextFormField(
-                          controller: addressController,
-                          keyboardType: TextInputType.streetAddress,
-                          validator: FormValidation.checkEmptyValidator,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(top: 15 ),
-                            hintText: "User Address",
-                            prefixIcon: Icon(
-                              Icons.location_on_outlined,
-                              color: AppColor().colorPrimary(),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 5,),
-                      Container(
-                        width: 69.99.w,
-                        child: InkWell(
-                          onTap: () {
-                            getLocation();
-                          },
-                          child: Row(
-                            children: [
-                              Icon(Icons.my_location_outlined,
-                                color: Color(0xff666666),size: 18,),
-                              SizedBox(width: 10,),
-                              Text(
-                                "Use My Current Location",
-                                style: TextStyle(
-                                  color: Color(0xff666666),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      //COUNTRY
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          width: double.infinity,
-                            height: 6.h,
-                            decoration: boxDecoration(
-                              radius: 6.0,
+                            Material(
+                              elevation: 4,
                               color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: TextFormField(
+                                controller: emailController,
+                                decoration: InputDecoration(
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 10),
+                                  hintText: "Enter your Email Address",
+                                  label: Text(
+                                    "Email",
+                                  ),
+                                  prefixIcon: Icon(
+                                    Icons.email,
+                                    color: AppColor().colorPrimary(),
+                                  ),
+                                  hintStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400),
+                                  border: InputBorder.none,
+                                ),
+                                keyboardType: TextInputType.emailAddress,
+                                validator: (v) {
+                                  if (!v!.contains('@')) {
+                                    return "Enter valid email";
+                                  }
+                                  // return false;
+                                },
+                              ),
                             ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton2(
-
-                                isExpanded: true,
-                                hint: Row(
-                                  children: [
-                                    Image.asset(
-                                      country,
-                                      width: 6.04.w,
-                                      height: 5.04.w,
-                                      fit: BoxFit.fill,
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                  width: double.infinity,
+                                  height: 6.h,
+                                  decoration: boxDecoration(
+                                    radius: 6.0,
+                                    color: Colors.white,
+                                  ),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton2(
+                                      isExpanded: true,
+                                      hint: Row(
+                                        children: [
+                                          Image.asset(
+                                            country,
+                                            width: 6.04.w,
+                                            height: 5.04.w,
+                                            fit: BoxFit.fill,
+                                            color: AppColor.PrimaryDark,
+                                          ),
+                                          SizedBox(
+                                            width: 4,
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              'Select Country',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      items: countryList
+                                          .map((item) =>
+                                              DropdownMenuItem<String>(
+                                                value: item.id,
+                                                child: Text(
+                                                  item.name!,
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ))
+                                          .toList(),
+                                      value: selectedCountry,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedCountry = value as String;
+                                          print("selectedCategory=>" +
+                                              selectedCountry.toString());
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.arrow_forward_ios_outlined,
+                                        color: AppColor.PrimaryDark,
+                                      ),
+                                      iconSize: 14,
+                                      buttonHeight: 50,
+                                      buttonWidth: 160,
+                                      buttonPadding: const EdgeInsets.only(
+                                          left: 14, right: 14),
+                                      buttonDecoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14),
+                                        color: Color(0xffF9F9F9),
+                                      ),
+                                      buttonElevation: 0,
+                                      itemHeight: 40,
+                                      itemPadding: const EdgeInsets.only(
+                                          left: 14, right: 14),
+                                      dropdownMaxHeight: 300,
+                                      dropdownPadding: null,
+                                      dropdownDecoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
+                                      dropdownElevation: 8,
+                                      scrollbarRadius:
+                                          const Radius.circular(40),
+                                      scrollbarThickness: 6,
+                                      scrollbarAlwaysShow: true,
+                                    ),
+                                  )),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            //STATE
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                  width: double.infinity,
+                                  height: 6.h,
+                                  decoration: boxDecoration(
+                                    radius: 10.0,
+                                  ),
+                                  child: FutureBuilder(
+                                      future: getState(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot snapshot) {
+                                        if (snapshot.hasData) {
+                                          return DropdownButtonHideUnderline(
+                                            child: DropdownButton2(
+                                              isExpanded: true,
+                                              hint: Row(
+                                                children: [
+                                                  Image.asset(
+                                                    city,
+                                                    width: 6.04.w,
+                                                    height: 5.04.w,
+                                                    fit: BoxFit.fill,
+                                                    color: AppColor.PrimaryDark,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 4,
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Select State',
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              items: stateList
+                                                  .map((item) =>
+                                                      DropdownMenuItem<String>(
+                                                        value: item.id,
+                                                        child: Text(
+                                                          item.name!,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors.black,
+                                                          ),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ))
+                                                  .toList(),
+                                              value: selectedState,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  selectedState =
+                                                      value as String;
+                                                  print("selected State===>" +
+                                                      selectedState.toString());
+                                                  getCities();
+                                                });
+                                              },
+                                              icon: const Icon(
+                                                Icons
+                                                    .arrow_forward_ios_outlined,
+                                                color: AppColor.PrimaryDark,
+                                              ),
+                                              iconSize: 14,
+                                              buttonHeight: 50,
+                                              buttonWidth: 160,
+                                              buttonPadding:
+                                                  const EdgeInsets.only(
+                                                      left: 14, right: 14),
+                                              buttonDecoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(14),
+                                                color: Color(0xffF9F9F9),
+                                              ),
+                                              buttonElevation: 0,
+                                              itemHeight: 40,
+                                              itemPadding:
+                                                  const EdgeInsets.only(
+                                                      left: 14, right: 14),
+                                              dropdownMaxHeight: 300,
+                                              dropdownPadding: null,
+                                              dropdownDecoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(14),
+                                              ),
+                                              dropdownElevation: 8,
+                                              scrollbarRadius:
+                                                  const Radius.circular(40),
+                                              scrollbarThickness: 6,
+                                              scrollbarAlwaysShow: true,
+                                            ),
+                                          );
+                                        } else if (snapshot.hasError) {
+                                          return Icon(Icons.error_outline);
+                                        } else {
+                                          return Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        }
+                                      })),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                width: double.infinity,
+                                height: 6.h,
+                                decoration: boxDecoration(
+                                  radius: 10.0,
+                                  color: Colors.white,
+                                ),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                    isExpanded: true,
+                                    hint: Row(
+                                      children: [
+                                        Image.asset(
+                                          city,
+                                          width: 6.04.w,
+                                          height: 5.04.w,
+                                          fit: BoxFit.fill,
+                                          color: AppColor.PrimaryDark,
+                                        ),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            'Select City',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    items: cityList
+                                        .map((item) => DropdownMenuItem<String>(
+                                              value: item.id,
+                                              child: Text(
+                                                item.name!,
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ))
+                                        .toList(),
+                                    value: SelectedSignleCity,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        SelectedSignleCity = value as String;
+                                        print("selected State===>" +
+                                            SelectedSignleCity.toString());
+                                      });
+                                    },
+                                    icon: const Icon(
+                                      Icons.arrow_forward_ios_outlined,
                                       color: AppColor.PrimaryDark,
                                     ),
-                                    SizedBox(
-                                      width: 4,
+                                    iconSize: 14,
+                                    buttonHeight: 50,
+                                    buttonWidth: 160,
+                                    buttonPadding: const EdgeInsets.only(
+                                        left: 14, right: 14),
+                                    buttonDecoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14),
+                                      color: AppColor()
+                                          .colorTextFour()
+                                          .withOpacity(0.02),
                                     ),
-                                    Expanded(
-                                      child: Text(
-                                        'Select Country',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
+                                    buttonElevation: 0,
+                                    itemHeight: 40,
+                                    itemPadding: const EdgeInsets.only(
+                                        left: 14, right: 14),
+                                    dropdownMaxHeight: 300,
+                                    dropdownPadding: null,
+                                    dropdownDecoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14),
                                     ),
-                                  ],
-                                ),
-                                items: countryList
-                                    .map((item) => DropdownMenuItem<String>(
-                                  value: item.id,
-                                  child: Text(
-                                    item.name!,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
+                                    dropdownElevation: 8,
+                                    scrollbarRadius: const Radius.circular(40),
+                                    scrollbarThickness: 6,
+                                    scrollbarAlwaysShow: true,
                                   ),
-                                ))
-                                    .toList(),
-                                value: selectedCountry,
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedCountry = value as String;
-                                    print("selectedCategory=>" +
-                                        selectedCountry.toString());
-                                  });
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_forward_ios_outlined,
-                                  color: AppColor.PrimaryDark,
                                 ),
-                                iconSize: 14,
-                                buttonHeight: 50,
-                                buttonWidth: 160,
-                                buttonPadding:
-                                const EdgeInsets.only(left: 14, right: 14),
-                                buttonDecoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(14),
-                                  color: Color(0xffF9F9F9),
-                                ),
-                                buttonElevation: 0,
-                                itemHeight: 40,
-                                itemPadding:
-                                const EdgeInsets.only(left: 14, right: 14),
-                                dropdownMaxHeight: 300,
-                                dropdownPadding: null,
-                                dropdownDecoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                                dropdownElevation: 8,
-                                scrollbarRadius: const Radius.circular(40),
-                                scrollbarThickness: 6,
-                                scrollbarAlwaysShow: true,
                               ),
-                            )),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      //STATE
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                            width: double.infinity,
-                            height: 6.h,
-                            decoration: boxDecoration(
-                              radius: 10.0,
                             ),
-                            child: FutureBuilder(
-                                future: getState(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot snapshot) {
-                                  if (snapshot.hasData) {
-                                    return DropdownButtonHideUnderline(
-                                      child: DropdownButton2(
-                                        isExpanded: true,
-                                        hint: Row(
-                                          children: [
-                                            Image.asset(
-                                              city,
-                                              width: 6.04.w,
-                                              height: 5.04.w,
-                                              fit: BoxFit.fill,
-                                              color: AppColor.PrimaryDark,
-                                            ),
-                                            SizedBox(
-                                              width: 4,
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                'Select State',
+                            SizedBox(
+                              height: 2.5.h,
+                            ),
+//Adress field is here
+                            // Material(
+                            //   elevation: 4,
+                            //   color: Colors.white,
+                            //   borderRadius: BorderRadius.circular(6),
+                            //   child: TextFormField(
+                            //     controller: addressController,
+                            //     keyboardType: TextInputType.streetAddress,
+                            //     validator: FormValidation.checkEmptyValidator,
+                            //     decoration: InputDecoration(
+                            //       border: InputBorder.none,
+                            //       contentPadding: EdgeInsets.only(top: 15),
+                            //       hintText: "User Address",
+                            //       prefixIcon: Icon(
+                            //         Icons.location_on_outlined,
+                            //         color: AppColor().colorPrimary(),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: 5,
+                            // ),
+                            // Container(
+                            //   width: 69.99.w,
+                            //   child: InkWell(
+                            //     onTap: () {
+                            //       getLocation();
+                            //     },
+                            //     child: Row(
+                            //       children: [
+                            //         Icon(
+                            //           Icons.my_location_outlined,
+                            //           color: Color(0xff666666),
+                            //           size: 18,
+                            //         ),
+                            //         SizedBox(
+                            //           width: 10,
+                            //         ),
+                            //         Text(
+                            //           "Use My Current Location",
+                            //           style: TextStyle(
+                            //             color: Color(0xff666666),
+                            //             fontSize: 12,
+                            //             fontWeight: FontWeight.bold,
+                            //           ),
+                            //         )
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: 15,
+                            // ),
+                            //COUNTRY
+                            // CITY
+                            // _selectedItems.isEmpty ?
+                            // InkWell(
+                            //      onTap: (){
+                            //        _showMultiSelect();
+                            //      },
+                            //      child: Container(
+                            //          width: double.infinity,
+                            //          height: 6.h,
+                            //          decoration: BoxDecoration(
+                            //              borderRadius: BorderRadius.circular(10),
+                            //              color: Colors.grey[100]
+                            //          ),
+                            //          // boxDecoration(
+                            //          //   radius: 10.0,
+                            //          // ),
+                            //          child: _selectedItems.isEmpty ?
+                            //          Padding(
+                            //            padding: const EdgeInsets.only(left: 10.0, right: 10),
+                            //            child: Row(
+                            //              children: [
+                            //                Image.asset(
+                            //                  city,
+                            //                  width: 6.04.w,
+                            //                  height: 5.04.w,
+                            //                  fit: BoxFit.fill,
+                            //                  color: AppColor.PrimaryDark,
+                            //                ),
+                            //                Padding(
+                            //                  padding: EdgeInsets.only(left: 8),
+                            //                  child: Text(
+                            //                    'Select Multiple Cities',
+                            //                    style: TextStyle(
+                            //                      fontSize: 14,
+                            //                      color: Colors.black54,
+                            //                      fontWeight: FontWeight.normal,
+                            //                    ),
+                            //                    overflow: TextOverflow.ellipsis,
+                            //                  ),
+                            //                ),
+                            //              ],
+                            //            ),
+                            //          )
+                            //              :  Wrap(
+                            //            children: _selectedItems
+                            //                .map((item){
+                            //              print("okok ${item.id}");
+                            //              return Padding(
+                            //                padding: const EdgeInsets.only(left: 8.0, right: 8),
+                            //                child: Chip(
+                            //                  label:
+                            //                  Text(
+                            //                      "${item.name}"
+                            //                    //item.name
+                            //                  ),
+                            //                ),
+                            //              );
+                            //            })
+                            //                .toList(),
+                            //          )
+                            //        // FutureBuilder(
+                            //        //     future: getCities(),
+                            //        //     builder: (BuildContext context,
+                            //        //         AsyncSnapshot snapshot) {
+                            //        //       if (snapshot.hasData) {
+                            //        //         return DropdownButtonHideUnderline(
+                            //        //           child: DropdownButton2(
+                            //        //             isExpanded: true,
+                            //        //             hint: Row(
+                            //        //               children: [
+                            //        //                 Image.asset(
+                            //        //                   city,
+                            //        //                   width: 6.04.w,
+                            //        //                   height: 5.04.w,
+                            //        //                   fit: BoxFit.fill,
+                            //        //                   color: AppColor.PrimaryDark,
+                            //        //                 ),
+                            //        //                 SizedBox(
+                            //        //                   width: 4,
+                            //        //                 ),
+                            //        //                 Expanded(
+                            //        //                   child: Text(
+                            //        //                     'Select Multiple Cities',
+                            //        //                     style: TextStyle(
+                            //        //                       fontSize: 14,
+                            //        //                       fontWeight: FontWeight.normal,
+                            //        //                     ),
+                            //        //                     overflow: TextOverflow.ellipsis,
+                            //        //                   ),
+                            //        //                 ),
+                            //        //               ],
+                            //        //             ),
+                            //        //             items: cityList.map((item) {
+                            //        //               return DropdownMenuItem<String>(
+                            //        //                 value: item.id,
+                            //        //                 enabled: false,
+                            //        //                 child: StatefulBuilder(
+                            //        //                   builder: (context, menuSetState) {
+                            //        //                     final _isSelected =
+                            //        //                         selectedCities
+                            //        //                             .contains(item);
+                            //        //                     print("SLECTED CITY");
+                            //        //                     return InkWell(
+                            //        //                       onTap: () {
+                            //        //                         _isSelected
+                            //        //                             ? selectedCities
+                            //        //                                 .remove(item.id)
+                            //        //                             : selectedCities
+                            //        //                                 .add(item.id!);
+                            //        //                         setState(() {});
+                            //        //                         menuSetState(() {});
+                            //        //                       },
+                            //        //                       child: Container(
+                            //        //                         height: double.infinity,
+                            //        //                         padding: const EdgeInsets
+                            //        //                                 .symmetric(
+                            //        //                             horizontal: 16.0),
+                            //        //                         child: Row(
+                            //        //                           children: [
+                            //        //                             _isSelected
+                            //        //                                 ? const Icon(Icons
+                            //        //                                     .check_box_outlined)
+                            //        //                                 : const Icon(Icons
+                            //        //                                     .check_box_outline_blank),
+                            //        //                             const SizedBox(
+                            //        //                                 width: 16),
+                            //        //                             Text(
+                            //        //                               item.name!,
+                            //        //                               style:
+                            //        //                                   const TextStyle(
+                            //        //                                 fontSize: 14,
+                            //        //                               ),
+                            //        //                             ),
+                            //        //                           ],
+                            //        //                         ),
+                            //        //                       ),
+                            //        //                     );
+                            //        //                   },
+                            //        //                 ),
+                            //        //               );
+                            //        //             }).toList(),
+                            //        //             //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
+                            //        //             value: selectedCities.isEmpty
+                            //        //                 ? null
+                            //        //                 : selectedCities.last,
+                            //        //             onChanged: (value) {},
+                            //        //             buttonHeight: 50,
+                            //        //             buttonWidth: 160,
+                            //        //             buttonPadding: const EdgeInsets.only(
+                            //        //                 left: 14, right: 14),
+                            //        //             buttonDecoration: BoxDecoration(
+                            //        //               borderRadius:
+                            //        //                   BorderRadius.circular(14),
+                            //        //               color: Color(0xffF9F9F9),
+                            //        //             ),
+                            //        //             buttonElevation: 0,
+                            //        //             itemHeight: 40,
+                            //        //             itemPadding: const EdgeInsets.only(
+                            //        //                 left: 14, right: 14),
+                            //        //             dropdownMaxHeight: 300,
+                            //        //             dropdownPadding: null,
+                            //        //             dropdownDecoration: BoxDecoration(
+                            //        //               borderRadius:
+                            //        //                   BorderRadius.circular(14),
+                            //        //             ),
+                            //        //             dropdownElevation: 8,
+                            //        //             scrollbarRadius:
+                            //        //                 const Radius.circular(40),
+                            //        //             scrollbarThickness: 6,
+                            //        //             scrollbarAlwaysShow: true,
+                            //        //             selectedItemBuilder: (context) {
+                            //        //               return cityList.map(
+                            //        //                 (item) {
+                            //        //                   return Container(
+                            //        //                     // alignment: AlignmentDirectional.center,
+                            //        //                     padding:
+                            //        //                         const EdgeInsets.symmetric(
+                            //        //                             horizontal: 16.0),
+                            //        //                     child: Text(
+                            //        //                       selectedCities.join(','),
+                            //        //                       style: const TextStyle(
+                            //        //                         fontSize: 14,
+                            //        //                         overflow:
+                            //        //                             TextOverflow.ellipsis,
+                            //        //                       ),
+                            //        //                       maxLines: 1,
+                            //        //                     ),
+                            //        //                   );
+                            //        //                 },
+                            //        //               ).toList();
+                            //        //             },
+                            //        //           ),
+                            //        //         );
+                            //        //       } else if (snapshot.hasError) {
+                            //        //         return Icon(Icons.error_outline);
+                            //        //       } else {
+                            //        //         return Center(
+                            //        //             child: CircularProgressIndicator());
+                            //        //       }
+                            //        //     })
+                            //      ),
+                            //    ),
+                            //    SizedBox(
+                            //      height: 20,
+                            //    ),
+
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: IntlPhoneField(
+                                controller: phoneController,
+                                flagsButtonPadding: const EdgeInsets.all(8),
+                                dropdownIconPosition: IconPosition.trailing,
+                                decoration: InputDecoration(
+                                  label:
+                                      Text('Phone Number', style: TextStyle()),
+                                  focusColor: AppColor.PrimaryDark,
+                                  border: InputBorder.none,
+                                  hintText: 'Phone Number',
+                                  counterText: '',
+                                  hintStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                initialCountryCode: 'IN',
+                                validator: (v) {
+                                  if (v!.number.isEmpty ||
+                                      v.number.length != 10) {
+                                    return "Enter mobile number";
+                                  }
+                                  return null;
+                                },
+                                onChanged: (phone) {
+                                  print(phone.completeNumber);
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+
+                            InkWell(
+                              onTap: () {
+                                if (_formKey.currentState!.validate()) {
+                                  if (selectedCountry == null) {
+                                    Fluttertoast.showToast(
+                                        msg: "please select country");
+                                  } else if (selectedState == null) {
+                                    Fluttertoast.showToast(
+                                        msg: "please select state");
+                                  } else if (SelectedSignleCity == null) {
+                                    Fluttertoast.showToast(
+                                        msg: "please select city");
+                                  } else if (phoneController.text.isEmpty ||
+                                      phoneController.text.length != 10) {
+                                    Fluttertoast.showToast(
+                                        msg: "please add valid mobile no");
+                                  } else {
+                                    setState(() {
+                                      visibleIndex = 2;
+                                    });
+                                  }
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "please fill all fields");
+                                }
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                height: 45,
+                                alignment: Alignment.center,
+                                //width: MediaQuery.of(context).size.width/2,
+                                decoration: BoxDecoration(
+                                  color: AppColor.PrimaryDark,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  "Next",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17),
+                                ),
+                              ),
+                            ),
+
+                            /// sign up button
+                            // InkWell(
+                            //   onTap: () {
+                            //     cityIdList.clear();
+                            //     print("ok nowoooo ${cityIdList.length}");
+                            //     for(var i=0;i<_selectedItems.length;i++){
+                            //       print("check now ${_selectedItems[i].id}");
+                            //       cityIdList.add(_selectedItems[i].id);
+                            //     }
+                            //     print("yes ${cityIdList.length}");
+                            //     if (_formKey.currentState!.validate()) {
+                            //       signUpFunction();
+                            //     } else {}
+                            //   },
+                            //   child: Container(
+                            //     height: 45,
+                            //     alignment: Alignment.center,
+                            //     width: MediaQuery.of(context).size.width,
+                            //     decoration: BoxDecoration(
+                            //       color: AppColor.PrimaryDark,
+                            //       borderRadius: BorderRadius.circular(8),
+                            //     ),
+                            //     child: Text(
+                            //       "SignUp",
+                            //       style: TextStyle(
+                            //           color: Colors.white,
+                            //           fontWeight: FontWeight.w500,
+                            //           fontSize: 17),
+                            //     ),
+                            //   ),
+                            // ),
+
+                            Container(
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.only(
+                                top: 30,
+                              ),
+                              child: InkWell(
+                                onTap: () async {
+                                  setState(() {
+                                    edit = true;
+                                  });
+                                  await Future.delayed(
+                                      Duration(milliseconds: 200));
+                                  setState(() {
+                                    edit = false;
+                                  });
+                                  Navigator.pop(context);
+                                },
+                                child: ScaleAnimatedWidget.tween(
+                                  enabled: edit,
+                                  duration: Duration(milliseconds: 200),
+                                  scaleDisabled: 1.0,
+                                  scaleEnabled: 0.8,
+                                  child: RichText(
+                                    text: new TextSpan(
+                                      text: "Already Have An Account? ",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12.sp,
+                                        fontFamily: fontBold,
+                                      ),
+                                      children: <TextSpan>[
+                                        new TextSpan(
+                                          text: 'Login',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12.sp,
+                                            fontFamily: fontBold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Column(
+                          mainAxisSize: MainAxisSize.min,
+                          // padding: EdgeInsets.symmetric(horizontal: 10,vertical: 12),
+                          // physics: ClampingScrollPhysics(),
+                          children: [
+                            SizedBox(
+                              height: 15,
+                            ),
+
+                            ///  portfolio / website
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: TextFormField(
+                                  controller: portfolioController,
+                                  validator: (v) {
+                                    if (v!.isEmpty) {
+                                      return "Portfolio / website is required";
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    hintText: "Portfolio / Website",
+                                    label: Text(
+                                      "Portfolio / Website",
+                                    ),
+                                    hintStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                    border: InputBorder.none,
+                                  ),
+                                  // validator: (v) {
+                                  //   if (v!.isEmpty) {
+                                  //     return "Enter valid value";
+                                  //   }
+                                  //   return null;
+                                  // },
+                                  keyboardType: TextInputType.text,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+
+                            /// twitter link
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: TextFormField(
+                                  controller: twitterController,
+                                  // validator: (v){
+                                  //   if(v!.isEmpty){
+                                  //     return "Twitter is required";
+                                  //   }
+                                  // },
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    hintText: "Twitter link",
+                                    label: Text(
+                                      "Twitter link",
+                                    ),
+                                    hintStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                    border: InputBorder.none,
+                                  ),
+                                  // validator: (v) {
+                                  //   if (v!.isEmpty) {
+                                  //     return "Enter valid value";
+                                  //   }
+                                  //   return null;
+                                  // },
+                                  keyboardType: TextInputType.text,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+
+                            /// instagram link
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: TextFormField(
+                                  controller: instagramController,
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    hintText: "Instagram link",
+                                    label: Text(
+                                      "Instagram link",
+                                    ),
+                                    hintStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                    border: InputBorder.none,
+                                  ),
+                                  // validator: (v) {
+                                  //   if (v!.isEmpty) {
+                                  //     return "";
+                                  //   }
+                                  //   return null;
+                                  // },
+                                  keyboardType: TextInputType.text,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: TextFormField(
+                                  controller: facebookLinkController,
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    hintText: "Facebook link",
+                                    label: Text(
+                                      "Facebook link",
+                                    ),
+                                    hintStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                    border: InputBorder.none,
+                                  ),
+                                  // validator: (v) {
+                                  //   if (v!.isEmpty) {
+                                  //     return "";
+                                  //   }
+                                  //   return null;
+                                  // },
+                                  keyboardType: TextInputType.text,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: TextFormField(
+                                  controller: linkedInController,
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    hintText: "LinkedIn link",
+                                    label: Text(
+                                      "LinkedIn link",
+                                    ),
+                                    hintStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                    border: InputBorder.none,
+                                  ),
+                                  // validator: (v) {
+                                  //   if (v!.isEmpty) {
+                                  //     return "Enter linkedIn link";
+                                  //   }
+                                  //   return null;
+                                  //},
+                                  keyboardType: TextInputType.text,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: TextFormField(
+                                  controller: equipmentController,
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    hintText: "Equipment used (optinal)",
+                                    label: Text(
+                                      "Equipment used (optinal)",
+                                    ),
+                                    hintStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                    border: InputBorder.none,
+                                  ),
+                                  /*validator: (v) {
+                                      if (v!.isEmpty) {
+                                        return "Enter equipment";
+                                      }
+                                      return null;
+                                    },*/
+                                  keyboardType: TextInputType.text,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                _selectDate();
+                              },
+                              child: Material(
+                                elevation: 4,
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(6),
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 6.h,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 2.h),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12)),
+                                  child: _dateValue.length > 0
+                                      ? Text("${dateFormate}")
+                                      : Text(
+                                          "When is your birthday?",
+                                          style: TextStyle(
+                                              color: AppColor()
+                                                  .colorTextFour()
+                                                  .withOpacity(0.7),
+                                              fontSize: 15),
+                                        ),
+                                  // TextFormField(
+                                  //   controller: birthDayController,
+                                  //   decoration: InputDecoration(
+                                  //     contentPadding:
+                                  //     EdgeInsets.symmetric(horizontal: 10),
+                                  //     hintText: "dd/mm/yyyy",
+                                  //     label: Text(
+                                  //       "Enter Birthday",
+                                  //     ),
+                                  //     hintStyle: TextStyle(
+                                  //         color: Colors.black,
+                                  //         fontWeight: FontWeight.w400),
+                                  //     border: InputBorder.none,
+                                  //   ),
+                                  //   validator: (v) {
+                                  //     if (v!.isEmpty) {
+                                  //       return "Enter your birthday";
+                                  //     }
+                                  //     return null;
+                                  //   },
+                                  //   keyboardType: TextInputType.text,
+                                  // ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: TextFormField(
+                                  controller: comfertableServiceController,
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    hintText: "Enter your comfortable service",
+                                    label: Text(
+                                      "What kinds of Service do you feel most comfortable doing",
+                                    ),
+                                    hintStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                    border: InputBorder.none,
+                                  ),
+                                  validator: (v) {
+                                    if (v!.isEmpty) {
+                                      return "Enter service";
+                                    }
+                                    return null;
+                                  },
+                                  keyboardType: TextInputType.text,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: TextFormField(
+                                  controller: serviceInfoController,
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    hintText: "Service Info",
+                                    label: Text(
+                                      "Service Info",
+                                    ),
+                                    hintStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                    border: InputBorder.none,
+                                  ),
+                                  validator: (v) {
+                                    if (v!.isEmpty) {
+                                      return "Enter info";
+                                    }
+                                    return null;
+                                  },
+                                  keyboardType: TextInputType.text,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                    color: Color(0xffF9F9F9),
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: TextFormField(
+                                  controller: whyJoinController,
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    hintText: "Why want to join antsnest?",
+                                    label: Text(
+                                      "Why Antsnest",
+                                    ),
+                                    hintStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                    border: InputBorder.none,
+                                  ),
+                                  validator: (v) {
+                                    if (v!.isEmpty) {
+                                      return "Enter reason";
+                                    }
+                                    return null;
+                                  },
+                                  keyboardType: TextInputType.text,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                  width: double.infinity,
+                                  height: 6.h,
+                                  decoration: boxDecoration(
+                                    radius: 10.0,
+                                  ),
+                                  child: FutureBuilder(
+                                      future: getServiceCategory(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot snapshot) {
+                                        ServiceCategoryModel serviceModel =
+                                            snapshot.data;
+                                        if (snapshot.hasData) {
+                                          return DropdownButtonHideUnderline(
+                                            child: DropdownButton2(
+                                              isExpanded: true,
+                                              hint: Text(
+                                                'Select Category',
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.normal,
                                                 ),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        items: stateList
-                                            .map((item) =>
-                                            DropdownMenuItem<String>(
-                                              value: item.id,
-                                              child: Text(
-                                                item.name!,
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight:
-                                                  FontWeight.bold,
-                                                  color: Colors.black,
-                                                ),
-                                                overflow:
-                                                TextOverflow.ellipsis,
+                                              items: serviceModel.data!
+                                                  .map((item) =>
+                                                      DropdownMenuItem<String>(
+                                                        value: item.id,
+                                                        child: Text(
+                                                          item.cName!,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors.black,
+                                                          ),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ))
+                                                  .toList(),
+                                              value: selectedCategory,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  selectedCategory =
+                                                      value as String;
+                                                  // // serviceName.text = serviceModel.data!
+                                                  //     .firstWhere((element) => element.id == value)
+                                                  //     .cName
+                                                  //     .toString();
+                                                });
+                                                categorylist.clear();
+                                                getServicesSubCategory(
+                                                    selectedCategory);
+                                                print(
+                                                    "CATEGORY ID issssss== $selectedCategory");
+                                              },
+                                              icon: const Icon(
+                                                Icons
+                                                    .arrow_forward_ios_outlined,
+                                                color: AppColor.PrimaryDark,
                                               ),
-                                            ))
-                                            .toList(),
-                                        value: selectedState,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedState = value as String;
-                                            print("selected State===>" +
-                                                selectedState.toString());
-                                            getCities();
-                                          });
-                                        },
-                                        icon: const Icon(
-                                          Icons.arrow_forward_ios_outlined,
-                                          color: AppColor.PrimaryDark,
-                                        ),
-                                        iconSize: 14,
-                                        buttonHeight: 50,
-                                        buttonWidth: 160,
-                                        buttonPadding: const EdgeInsets.only(
-                                            left: 14, right: 14),
-                                        buttonDecoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(14),
-                                          color: Color(0xffF9F9F9),
-                                        ),
-                                        buttonElevation: 0,
-                                        itemHeight: 40,
-                                        itemPadding: const EdgeInsets.only(
-                                            left: 14, right: 14),
-                                        dropdownMaxHeight: 300,
-                                        dropdownPadding: null,
-                                        dropdownDecoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(14),
-                                        ),
-                                        dropdownElevation: 8,
-                                        scrollbarRadius:
-                                        const Radius.circular(40),
-                                        scrollbarThickness: 6,
-                                        scrollbarAlwaysShow: true,
+                                              iconSize: 14,
+                                              buttonHeight: 50,
+                                              buttonWidth: 160,
+                                              buttonPadding:
+                                                  const EdgeInsets.only(
+                                                      left: 14, right: 14),
+                                              buttonDecoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(14),
+                                                  // color: AppColor().colorEdit(),
+                                                  color: Colors.grey
+                                                      .withOpacity(0.05)),
+                                              buttonElevation: 0,
+                                              itemHeight: 40,
+                                              itemPadding:
+                                                  const EdgeInsets.only(
+                                                      left: 14, right: 14),
+                                              dropdownMaxHeight: 300,
+                                              dropdownPadding: null,
+                                              dropdownDecoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(14),
+                                              ),
+                                              dropdownElevation: 8,
+                                              scrollbarRadius:
+                                                  const Radius.circular(40),
+                                              scrollbarThickness: 6,
+                                              scrollbarAlwaysShow: true,
+                                            ),
+                                          );
+                                        } else if (snapshot.hasError) {
+                                          print("ERROR===" +
+                                              snapshot.error.toString());
+                                          return Icon(Icons.error_outline);
+                                        } else {
+                                          return Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        }
+                                      })),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            serviceSubCategoryModel == null
+                                ? SizedBox()
+                                : Material(
+                                    elevation: 4,
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(6),
+                                    child: MultiSelectDropDown(
+                                      hint: "Select Sub Category",
+                                      showClearIcon: true,
+                                      controller: multiSelectController,
+                                      borderColor: Colors.transparent,
+
+                                      onOptionSelected: (options) {
+                                        categorylist.clear();
+                                        for (int i = 0;
+                                            i < options.length;
+                                            i++) {
+                                          String value = options[i].value ?? "";
+
+                                          // Check if the value is not already in the set
+                                          // if (uniqueValues.add(value)) {
+                                          //   print(value);
+
+                                          categorylist.add(value);
+                                          setState(() {});
+                                          // }
+                                        }
+
+                                        // setState(() {
+                                        //
+                                        // });
+                                        debugPrint(categorylist.toString());
+                                      },
+                                      options: <ValueItem>[
+                                        for (int i = 0;
+                                            i <
+                                                serviceSubCategoryModel!
+                                                    .data!.length;
+                                            i++) ...[
+                                          ValueItem(
+                                            label:
+                                                "${serviceSubCategoryModel!.data![i].cName}",
+                                            value:
+                                                "${serviceSubCategoryModel!.data![i].id}",
+                                          )
+                                        ]
+                                      ],
+
+                                      selectionType: SelectionType.multi,
+                                      // selectedOptions: [
+                                      //   for (int i = 0; i < serviceSubCategoryModel!.data!.length; i++) ...[
+                                      //     "${subCategory!.data![i].id}" == widget.profileResponse?.user?.jsonData?.subCat.toString()
+                                      //         ? ValueItem(
+                                      //       label: "${subCategory!.data![i].cName}",
+                                      //       value: "${subCategory!.data![i].id}",
+                                      //     )
+                                      //         : ValueItem(label: "")
+                                      //   ]
+                                      // ]..removeWhere((element) => element.label == ""), // Remove null entries
+                                      chipConfig: const ChipConfig(
+                                        wrapType: WrapType.scroll,
+                                        backgroundColor: AppColor.PrimaryDark,
                                       ),
-                                    );
-                                  } else if (snapshot.hasError) {
-                                    return Icon(Icons.error_outline);
-                                  } else {
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  }
-                                })),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      // CITY
-                      // _selectedItems.isEmpty ?
-                      // InkWell(
-                      //      onTap: (){
-                      //        _showMultiSelect();
-                      //      },
-                      //      child: Container(
-                      //          width: double.infinity,
-                      //          height: 6.h,
-                      //          decoration: BoxDecoration(
-                      //              borderRadius: BorderRadius.circular(10),
-                      //              color: Colors.grey[100]
-                      //          ),
-                      //          // boxDecoration(
-                      //          //   radius: 10.0,
-                      //          // ),
-                      //          child: _selectedItems.isEmpty ?
-                      //          Padding(
-                      //            padding: const EdgeInsets.only(left: 10.0, right: 10),
-                      //            child: Row(
-                      //              children: [
-                      //                Image.asset(
-                      //                  city,
-                      //                  width: 6.04.w,
-                      //                  height: 5.04.w,
-                      //                  fit: BoxFit.fill,
-                      //                  color: AppColor.PrimaryDark,
-                      //                ),
-                      //                Padding(
-                      //                  padding: EdgeInsets.only(left: 8),
-                      //                  child: Text(
-                      //                    'Select Multiple Cities',
-                      //                    style: TextStyle(
-                      //                      fontSize: 14,
-                      //                      color: Colors.black54,
-                      //                      fontWeight: FontWeight.normal,
-                      //                    ),
-                      //                    overflow: TextOverflow.ellipsis,
-                      //                  ),
-                      //                ),
-                      //              ],
-                      //            ),
-                      //          )
-                      //              :  Wrap(
-                      //            children: _selectedItems
-                      //                .map((item){
-                      //              print("okok ${item.id}");
-                      //              return Padding(
-                      //                padding: const EdgeInsets.only(left: 8.0, right: 8),
-                      //                child: Chip(
-                      //                  label:
-                      //                  Text(
-                      //                      "${item.name}"
-                      //                    //item.name
-                      //                  ),
-                      //                ),
-                      //              );
-                      //            })
-                      //                .toList(),
-                      //          )
-                      //        // FutureBuilder(
-                      //        //     future: getCities(),
-                      //        //     builder: (BuildContext context,
-                      //        //         AsyncSnapshot snapshot) {
-                      //        //       if (snapshot.hasData) {
-                      //        //         return DropdownButtonHideUnderline(
-                      //        //           child: DropdownButton2(
-                      //        //             isExpanded: true,
-                      //        //             hint: Row(
-                      //        //               children: [
-                      //        //                 Image.asset(
-                      //        //                   city,
-                      //        //                   width: 6.04.w,
-                      //        //                   height: 5.04.w,
-                      //        //                   fit: BoxFit.fill,
-                      //        //                   color: AppColor.PrimaryDark,
-                      //        //                 ),
-                      //        //                 SizedBox(
-                      //        //                   width: 4,
-                      //        //                 ),
-                      //        //                 Expanded(
-                      //        //                   child: Text(
-                      //        //                     'Select Multiple Cities',
-                      //        //                     style: TextStyle(
-                      //        //                       fontSize: 14,
-                      //        //                       fontWeight: FontWeight.normal,
-                      //        //                     ),
-                      //        //                     overflow: TextOverflow.ellipsis,
-                      //        //                   ),
-                      //        //                 ),
-                      //        //               ],
-                      //        //             ),
-                      //        //             items: cityList.map((item) {
-                      //        //               return DropdownMenuItem<String>(
-                      //        //                 value: item.id,
-                      //        //                 enabled: false,
-                      //        //                 child: StatefulBuilder(
-                      //        //                   builder: (context, menuSetState) {
-                      //        //                     final _isSelected =
-                      //        //                         selectedCities
-                      //        //                             .contains(item);
-                      //        //                     print("SLECTED CITY");
-                      //        //                     return InkWell(
-                      //        //                       onTap: () {
-                      //        //                         _isSelected
-                      //        //                             ? selectedCities
-                      //        //                                 .remove(item.id)
-                      //        //                             : selectedCities
-                      //        //                                 .add(item.id!);
-                      //        //                         setState(() {});
-                      //        //                         menuSetState(() {});
-                      //        //                       },
-                      //        //                       child: Container(
-                      //        //                         height: double.infinity,
-                      //        //                         padding: const EdgeInsets
-                      //        //                                 .symmetric(
-                      //        //                             horizontal: 16.0),
-                      //        //                         child: Row(
-                      //        //                           children: [
-                      //        //                             _isSelected
-                      //        //                                 ? const Icon(Icons
-                      //        //                                     .check_box_outlined)
-                      //        //                                 : const Icon(Icons
-                      //        //                                     .check_box_outline_blank),
-                      //        //                             const SizedBox(
-                      //        //                                 width: 16),
-                      //        //                             Text(
-                      //        //                               item.name!,
-                      //        //                               style:
-                      //        //                                   const TextStyle(
-                      //        //                                 fontSize: 14,
-                      //        //                               ),
-                      //        //                             ),
-                      //        //                           ],
-                      //        //                         ),
-                      //        //                       ),
-                      //        //                     );
-                      //        //                   },
-                      //        //                 ),
-                      //        //               );
-                      //        //             }).toList(),
-                      //        //             //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
-                      //        //             value: selectedCities.isEmpty
-                      //        //                 ? null
-                      //        //                 : selectedCities.last,
-                      //        //             onChanged: (value) {},
-                      //        //             buttonHeight: 50,
-                      //        //             buttonWidth: 160,
-                      //        //             buttonPadding: const EdgeInsets.only(
-                      //        //                 left: 14, right: 14),
-                      //        //             buttonDecoration: BoxDecoration(
-                      //        //               borderRadius:
-                      //        //                   BorderRadius.circular(14),
-                      //        //               color: Color(0xffF9F9F9),
-                      //        //             ),
-                      //        //             buttonElevation: 0,
-                      //        //             itemHeight: 40,
-                      //        //             itemPadding: const EdgeInsets.only(
-                      //        //                 left: 14, right: 14),
-                      //        //             dropdownMaxHeight: 300,
-                      //        //             dropdownPadding: null,
-                      //        //             dropdownDecoration: BoxDecoration(
-                      //        //               borderRadius:
-                      //        //                   BorderRadius.circular(14),
-                      //        //             ),
-                      //        //             dropdownElevation: 8,
-                      //        //             scrollbarRadius:
-                      //        //                 const Radius.circular(40),
-                      //        //             scrollbarThickness: 6,
-                      //        //             scrollbarAlwaysShow: true,
-                      //        //             selectedItemBuilder: (context) {
-                      //        //               return cityList.map(
-                      //        //                 (item) {
-                      //        //                   return Container(
-                      //        //                     // alignment: AlignmentDirectional.center,
-                      //        //                     padding:
-                      //        //                         const EdgeInsets.symmetric(
-                      //        //                             horizontal: 16.0),
-                      //        //                     child: Text(
-                      //        //                       selectedCities.join(','),
-                      //        //                       style: const TextStyle(
-                      //        //                         fontSize: 14,
-                      //        //                         overflow:
-                      //        //                             TextOverflow.ellipsis,
-                      //        //                       ),
-                      //        //                       maxLines: 1,
-                      //        //                     ),
-                      //        //                   );
-                      //        //                 },
-                      //        //               ).toList();
-                      //        //             },
-                      //        //           ),
-                      //        //         );
-                      //        //       } else if (snapshot.hasError) {
-                      //        //         return Icon(Icons.error_outline);
-                      //        //       } else {
-                      //        //         return Center(
-                      //        //             child: CircularProgressIndicator());
-                      //        //       }
-                      //        //     })
-                      //      ),
-                      //    ),
-                      //    SizedBox(
-                      //      height: 20,
-                      //    ),
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          width: double.infinity,
-                          height: 6.h,
-                          decoration: boxDecoration(
-                            radius: 10.0,
-                            color: Colors.white,
-                          ),
-                          child:DropdownButtonHideUnderline(
-                            child: DropdownButton2(
-                              isExpanded: true,
-                              hint: Row(
-                                children: [
-                                  Image.asset(
-                                    city,
-                                    width: 6.04.w,
-                                    height: 5.04.w,
-                                    fit: BoxFit.fill,
-                                    color: AppColor.PrimaryDark,
+                                      dropdownHeight: 300,
+                                      optionTextStyle:
+                                          const TextStyle(fontSize: 16),
+                                      selectedOptionIcon: const Icon(
+                                        Icons.check_circle,
+                                        color: AppColor.PrimaryDark,
+                                      ),
+                                      selectedOptionTextColor:
+                                          AppColor.PrimaryDark,
+                                      // suffixIcon: IconData(),
+                                      // selectedItemBuilder: (BuildContext context, ValueItem item,) {
+                                      //   // Customize the appearance of the selected item here
+                                      //   return Container(
+                                      //     padding: EdgeInsets.all(8.0),
+                                      //     decoration: BoxDecoration(
+                                      //       color: Colors.red, // Set the background color to red
+                                      //       borderRadius: BorderRadius.circular(5.0),
+                                      //     ),
+                                      //     child: Row(
+                                      //       mainAxisSize: MainAxisSize.min,
+                                      //       children: [
+                                      //         Text(item.label),
+                                      //         const SizedBox(width: 8.0),
+                                      //         Icon(Icons.close, color: Colors.white, size: 18.0),
+                                      //       ],
+                                      //     ),
+                                      //   );
+                                      // },
+                                    ),
                                   ),
-                                  SizedBox(
-                                    width: 4,
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                    color: Color(0xffF9F9F9),
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: TextFormField(
+                                  controller: amountController,
+                                  decoration: InputDecoration(
+                                    counterText: "",
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    hintText: "Enter amount",
+                                    label: Text(
+                                      "Amount",
+                                    ),
+                                    hintStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                    border: InputBorder.none,
                                   ),
-                                  Expanded(
-                                    child: Text(
-                                      'Select City',
+                                  validator: (v) {
+                                    if (v!.isEmpty) {
+                                      return "Enter amount";
+                                    }
+                                    return null;
+                                  },
+                                  keyboardType: TextInputType.number,
+                                  maxLength: 10,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                width: double.infinity,
+                                height: 6.h,
+                                decoration: boxDecoration(
+                                  radius: 10.0,
+                                ),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                    isExpanded: true,
+                                    hint: Text(
+                                      'No of days',
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.normal,
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                  ),
-                                ],
-                              ),
-                              items: cityList
-                                  .map((item) =>
-                                  DropdownMenuItem<String>(
-                                    value: item.id,
-                                    child: Text(
-                                      item.name!,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight:
-                                        FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                      overflow:
-                                      TextOverflow.ellipsis,
-                                    ),
-                                  ))
-                                  .toList(),
-                              value: SelectedSignleCity,
-                              onChanged: (value) {
-                                setState(() {
-                                  SelectedSignleCity = value as String;
-                                  print("selected State===>" +
-                                      SelectedSignleCity.toString());
-                                });
-                              },
-                              icon: const Icon(
-                                Icons.arrow_forward_ios_outlined,
-                                color: AppColor.PrimaryDark,
-                              ),
-                              iconSize: 14,
-                              buttonHeight: 50,
-                              buttonWidth: 160,
-                              buttonPadding: const EdgeInsets.only(
-                                  left: 14, right: 14),
-                              buttonDecoration: BoxDecoration(
-                                borderRadius:
-                                BorderRadius.circular(14),
-                                color:AppColor().colorTextFour().withOpacity(0.02),
-                              ),
-                              buttonElevation: 0,
-                              itemHeight: 40,
-                              itemPadding: const EdgeInsets.only(
-                                  left: 14, right: 14),
-                              dropdownMaxHeight: 300,
-                              dropdownPadding: null,
-                              dropdownDecoration: BoxDecoration(
-                                borderRadius:
-                                BorderRadius.circular(14),
-                              ),
-                              dropdownElevation: 8,
-                              scrollbarRadius:
-                              const Radius.circular(40),
-                              scrollbarThickness: 6,
-                              scrollbarAlwaysShow: true,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 2.5.h,
-                      ),
-                      InkWell(
-                        onTap: (){
-                          if(_formKey.currentState!.validate()){
-                            if(selectedCountry == null){
-                              Fluttertoast.showToast(msg: "please select country");
-                            }else if(selectedState== null){
-                              Fluttertoast.showToast(msg: "please select state");
-                            }else if(SelectedSignleCity== null){
-                              Fluttertoast.showToast(msg: "please select city");
-                            } else if (phoneController.text.isEmpty || phoneController.text.length != 10) {
-                              Fluttertoast.showToast(msg: "please add valid mobile no");
-                            }else {
-                              setState(() {
-                                visibleIndex = 2;
-                              });
-                            }
-                          }else{
-                            Fluttertoast.showToast(msg: "please fill all fields");
-                          }
-                        },
-                        child: Container(
-                          width:double.infinity,
-                          height: 45,
-                          alignment: Alignment.center,
-                          //width: MediaQuery.of(context).size.width/2,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            "Next",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 17),
-                          ),
-                        ),
-                      ),
-                      /// sign up button
-                      // InkWell(
-                      //   onTap: () {
-                      //     cityIdList.clear();
-                      //     print("ok nowoooo ${cityIdList.length}");
-                      //     for(var i=0;i<_selectedItems.length;i++){
-                      //       print("check now ${_selectedItems[i].id}");
-                      //       cityIdList.add(_selectedItems[i].id);
-                      //     }
-                      //     print("yes ${cityIdList.length}");
-                      //     if (_formKey.currentState!.validate()) {
-                      //       signUpFunction();
-                      //     } else {}
-                      //   },
-                      //   child: Container(
-                      //     height: 45,
-                      //     alignment: Alignment.center,
-                      //     width: MediaQuery.of(context).size.width,
-                      //     decoration: BoxDecoration(
-                      //       color: AppColor.PrimaryDark,
-                      //       borderRadius: BorderRadius.circular(8),
-                      //     ),
-                      //     child: Text(
-                      //       "SignUp",
-                      //       style: TextStyle(
-                      //           color: Colors.white,
-                      //           fontWeight: FontWeight.w500,
-                      //           fontSize: 17),
-                      //     ),
-                      //   ),
-                      // ),
-
-                      Container(
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.only(
-                          top: 30,
-                        ),
-                        child: InkWell(
-                          onTap: () async {
-                            setState(() {
-                              edit = true;
-                            });
-                            await Future.delayed(Duration(milliseconds: 200));
-                            setState(() {
-                              edit = false;
-                            });
-                            Navigator.pop(context);
-                          },
-                          child: ScaleAnimatedWidget.tween(
-                            enabled: edit,
-                            duration: Duration(milliseconds: 200),
-                            scaleDisabled: 1.0,
-                            scaleEnabled: 0.8,
-                            child: RichText(
-                              text: new TextSpan(
-                                text: "Already Have An Account? ",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12.sp,
-                                  fontFamily: fontBold,
-                                ),
-                                children: <TextSpan>[
-                                  new TextSpan(
-                                    text: 'Login',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12.sp,
-                                      fontFamily: fontBold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ) :
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    // padding: EdgeInsets.symmetric(horizontal: 10,vertical: 12),
-                    // physics: ClampingScrollPhysics(),
-                    children: [
-                      SizedBox(
-                        height: 15,
-                      ),
-                      ///  portfolio / website
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: TextFormField(
-                            controller: portfolioController,
-                            validator: (v){
-                              if(v!.isEmpty){
-                                return "Portfolio / website is required";
-                              }
-                            },
-                            decoration: InputDecoration(
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10),
-                              hintText: "Portfolio / Website",
-                              label: Text(
-                                "Portfolio / Website",
-                              ),
-                              hintStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                              border: InputBorder.none,
-                            ),
-                            // validator: (v) {
-                            //   if (v!.isEmpty) {
-                            //     return "Enter valid value";
-                            //   }
-                            //   return null;
-                            // },
-                            keyboardType: TextInputType.text,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      /// twitter link
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: TextFormField(
-                            controller: twitterController,
-                            // validator: (v){
-                            //   if(v!.isEmpty){
-                            //     return "Twitter is required";
-                            //   }
-                            // },
-                            decoration: InputDecoration(
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10),
-                              hintText: "Twitter link",
-                              label: Text(
-                                "Twitter link",
-                              ),
-                              hintStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                              border: InputBorder.none,
-                            ),
-                            // validator: (v) {
-                            //   if (v!.isEmpty) {
-                            //     return "Enter valid value";
-                            //   }
-                            //   return null;
-                            // },
-                            keyboardType: TextInputType.text,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      /// instagram link
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: TextFormField(
-                            controller: instagramController,
-                            decoration: InputDecoration(
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10),
-                              hintText: "Instagram link",
-                              label: Text(
-                                "Instagram link",
-                              ),
-                              hintStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                              border: InputBorder.none,
-                            ),
-                            // validator: (v) {
-                            //   if (v!.isEmpty) {
-                            //     return "";
-                            //   }
-                            //   return null;
-                            // },
-                            keyboardType: TextInputType.text,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: TextFormField(
-                            controller: facebookLinkController,
-                            decoration: InputDecoration(
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10),
-                              hintText: "Facebook link",
-                              label: Text(
-                                "Facebook link",
-                              ),
-                              hintStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                              border: InputBorder.none,
-                            ),
-                            // validator: (v) {
-                            //   if (v!.isEmpty) {
-                            //     return "";
-                            //   }
-                            //   return null;
-                            // },
-                            keyboardType: TextInputType.text,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: TextFormField(
-                            controller: linkedInController,
-                            decoration: InputDecoration(
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10),
-                              hintText: "LinkedIn link",
-                              label: Text(
-                                "LinkedIn link",
-                              ),
-                              hintStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                              border: InputBorder.none,
-                            ),
-                            // validator: (v) {
-                            //   if (v!.isEmpty) {
-                            //     return "Enter linkedIn link";
-                            //   }
-                            //   return null;
-                            //},
-                            keyboardType: TextInputType.text,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: TextFormField(
-                            controller: equipmentController,
-                            decoration: InputDecoration(
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10),
-                              hintText: "Equipment used (optinal)",
-                              label: Text(
-                                "Equipment used (optinal)",
-                              ),
-                              hintStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                              border: InputBorder.none,
-                            ),
-                            /*validator: (v) {
-                                      if (v!.isEmpty) {
-                                        return "Enter equipment";
-                                      }
-                                      return null;
-                                    },*/
-                            keyboardType: TextInputType.text,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      InkWell(
-                        onTap: (){
-                          _selectDate();
-                        },
-                        child:Material(
-                          elevation: 4,
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                          child: Container(
-                            width: double.infinity,
-                            height: 6.h,
-                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 2.h),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12)),
-                            child: _dateValue.length > 0 ? Text("${dateFormate}") : Text("When is your birthday?",style: TextStyle(color: AppColor().colorTextFour().withOpacity(0.7),fontSize: 15),),
-                            // TextFormField(
-                            //   controller: birthDayController,
-                            //   decoration: InputDecoration(
-                            //     contentPadding:
-                            //     EdgeInsets.symmetric(horizontal: 10),
-                            //     hintText: "dd/mm/yyyy",
-                            //     label: Text(
-                            //       "Enter Birthday",
-                            //     ),
-                            //     hintStyle: TextStyle(
-                            //         color: Colors.black,
-                            //         fontWeight: FontWeight.w400),
-                            //     border: InputBorder.none,
-                            //   ),
-                            //   validator: (v) {
-                            //     if (v!.isEmpty) {
-                            //       return "Enter your birthday";
-                            //     }
-                            //     return null;
-                            //   },
-                            //   keyboardType: TextInputType.text,
-                            // ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: TextFormField(
-                            controller: comfertableServiceController,
-                            decoration: InputDecoration(
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10),
-                              hintText: "Enter your comfortable service",
-                              label: Text(
-                                "What kinds of Service do you feel most comfortable doing",
-                              ),
-                              hintStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                              border: InputBorder.none,
-                            ),
-                            validator: (v) {
-                              if (v!.isEmpty) {
-                                return "Enter service";
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.text,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: TextFormField(
-                            controller: serviceInfoController,
-                            decoration: InputDecoration(
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10),
-                              hintText: "Service Info",
-                              label: Text(
-                                "Service Info",
-                              ),
-                              hintStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                              border: InputBorder.none,
-                            ),
-                            validator: (v) {
-                              if (v!.isEmpty) {
-                                return "Enter info";
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.text,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                              color: Color(0xffF9F9F9),
-                              borderRadius: BorderRadius.circular(12)),
-                          child: TextFormField(
-                            controller: whyJoinController,
-                            decoration: InputDecoration(
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10),
-                              hintText: "Why want to join antsnest?",
-                              label: Text(
-                                "Why Antsnest",
-                              ),
-                              hintStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                              border: InputBorder.none,
-                            ),
-                            validator: (v) {
-                              if (v!.isEmpty) {
-                                return "Enter reason";
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.text,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                            width: double.infinity,
-                            height: 6.h,
-                            decoration: boxDecoration(
-                              radius: 10.0,
-                            ),
-                            child: FutureBuilder(
-                                future: getServiceCategory(),
-                                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                                  ServiceCategoryModel serviceModel = snapshot.data;
-                                  if (snapshot.hasData) {
-                                    return DropdownButtonHideUnderline(
-                                      child: DropdownButton2(
-                                        isExpanded: true,
-                                        hint: Text(
-                                          'Select Category',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        items: serviceModel.data!
-                                            .map((item) => DropdownMenuItem<String>(
-                                          value: item.id,
-                                          child: Text(
-                                            item.cName!,
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ))
-                                            .toList(),
-                                        value: selectedCategory,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedCategory = value as String;
-                                            // // serviceName.text = serviceModel.data!
-                                            //     .firstWhere((element) => element.id == value)
-                                            //     .cName
-                                            //     .toString();
-
-                                          });
-                                          categorylist.clear();
-                                          getServicesSubCategory(selectedCategory);
-                                          print("CATEGORY ID issssss== $selectedCategory");
-                                        },
-                                        icon: const Icon(
-                                          Icons.arrow_forward_ios_outlined,
-                                          color: AppColor.PrimaryDark,
-                                        ),
-                                        iconSize: 14,
-                                        buttonHeight: 50,
-                                        buttonWidth: 160,
-                                        buttonPadding:
-                                        const EdgeInsets.only(left: 14, right: 14),
-                                        buttonDecoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(14),
-                                            // color: AppColor().colorEdit(),
-                                            color: Colors.grey.withOpacity(0.05)
-                                        ),
-                                        buttonElevation: 0,
-                                        itemHeight: 40,
-                                        itemPadding:
-                                        const EdgeInsets.only(left: 14, right: 14),
-                                        dropdownMaxHeight: 300,
-                                        dropdownPadding: null,
-                                        dropdownDecoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                        ),
-                                        dropdownElevation: 8,
-                                        scrollbarRadius: const Radius.circular(40),
-                                        scrollbarThickness: 6,
-                                        scrollbarAlwaysShow: true,
-                                      ),
-                                    );
-                                  }
-                                  else if (snapshot.hasError) {
-                                    print("ERROR===" + snapshot.error.toString());
-                                    return Icon(Icons.error_outline);
-                                  }
-                                  else {
-                                    return Center(child: CircularProgressIndicator());
-                                  }
-                                })),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      serviceSubCategoryModel == null   ? SizedBox()  :
-
-
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child:
-                        MultiSelectDropDown(
-                          hint: "Select Sub Category",
-                          showClearIcon: true,
-                          controller: multiSelectController,
-                          borderColor: Colors.transparent,
-
-                          onOptionSelected: (options) {
-                            categorylist.clear();
-                            for (int i = 0; i < options.length; i++) {
-                              String value = options[i].value??"";
-
-                              // Check if the value is not already in the set
-                              // if (uniqueValues.add(value)) {
-                              //   print(value);
-
-                                categorylist.add(value);
-                                setState(() {
-
-                                });
-                             // }
-                            }
-
-
-                            // setState(() {
-                            //
-                            // });
-                            debugPrint(categorylist.toString());
-                          },
-                          options: <ValueItem>[
-                            for (int i = 0; i < serviceSubCategoryModel!.data!.length; i++) ...[
-                              ValueItem(
-                                label: "${serviceSubCategoryModel!.data![i].cName}",
-                                value: "${serviceSubCategoryModel!.data![i].id}",
-                              )
-                            ]
-                          ],
-
-                          selectionType: SelectionType.multi,
-                          // selectedOptions: [
-                          //   for (int i = 0; i < serviceSubCategoryModel!.data!.length; i++) ...[
-                          //     "${subCategory!.data![i].id}" == widget.profileResponse?.user?.jsonData?.subCat.toString()
-                          //         ? ValueItem(
-                          //       label: "${subCategory!.data![i].cName}",
-                          //       value: "${subCategory!.data![i].id}",
-                          //     )
-                          //         : ValueItem(label: "")
-                          //   ]
-                          // ]..removeWhere((element) => element.label == ""), // Remove null entries
-                          chipConfig: const ChipConfig(wrapType: WrapType.scroll,backgroundColor: AppColor.PrimaryDark,),
-                          dropdownHeight: 300,
-                          optionTextStyle: const TextStyle(fontSize: 16),
-                          selectedOptionIcon: const Icon(Icons.check_circle,color: AppColor.PrimaryDark,),
-                          selectedOptionTextColor: AppColor.PrimaryDark,
-                          // suffixIcon: IconData(),
-                          // selectedItemBuilder: (BuildContext context, ValueItem item,) {
-                          //   // Customize the appearance of the selected item here
-                          //   return Container(
-                          //     padding: EdgeInsets.all(8.0),
-                          //     decoration: BoxDecoration(
-                          //       color: Colors.red, // Set the background color to red
-                          //       borderRadius: BorderRadius.circular(5.0),
-                          //     ),
-                          //     child: Row(
-                          //       mainAxisSize: MainAxisSize.min,
-                          //       children: [
-                          //         Text(item.label),
-                          //         const SizedBox(width: 8.0),
-                          //         Icon(Icons.close, color: Colors.white, size: 18.0),
-                          //       ],
-                          //     ),
-                          //   );
-                          // },
-
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                              color: Color(0xffF9F9F9),
-                              borderRadius: BorderRadius.circular(12)),
-                          child: TextFormField(
-
-                            controller: amountController,
-                            decoration: InputDecoration(
-                              counterText: "",
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10),
-                              hintText: "Enter amount",
-                              label: Text(
-                                "Amount",
-                              ),
-                              hintStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                              border: InputBorder.none,
-                            ),
-                            validator: (v) {
-                              if (v!.isEmpty) {
-                                return "Enter amount";
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.number,
-                            maxLength: 10,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          width: double.infinity,
-                          height: 6.h,
-                          decoration: boxDecoration(
-                            radius: 10.0,
-                          ),
-                          child:DropdownButtonHideUnderline(
-                            child: DropdownButton2(
-                              isExpanded: true,
-                              hint: Text(
-                                'No of days',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              items: noofDayList
-                                  .map((String? item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ))
-                                  .toList(),
-                              value: noOfDays,
-                              onChanged: (value) {
-                                setState(() {
-                                  noOfDays = value as String;
-                                  // // serviceName.text = serviceModel.data!
-                                  //     .firstWhere((element) => element.id == value)
-                                  //     .cName
-                                  //     .toString();
-
-                                });
-                                print("CATEGORY ID== $noOfDays");
-                              },
-                              icon: const Icon(
-                                Icons.arrow_forward_ios_outlined,
-                                color: AppColor.PrimaryDark,
-                              ),
-                              iconSize: 14,
-                              buttonHeight: 50,
-                              buttonWidth: 160,
-                              buttonPadding:
-                              const EdgeInsets.only(left: 14, right: 14),
-                              buttonDecoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(14),
-                                  // color: AppColor().colorEdit(),
-                                  color: Colors.grey.withOpacity(0.05)
-                              ),
-                              buttonElevation: 0,
-                              itemHeight: 40,
-                              itemPadding:
-                              const EdgeInsets.only(left: 14, right: 14),
-                              dropdownMaxHeight: 300,
-                              dropdownPadding: null,
-                              dropdownDecoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              dropdownElevation: 8,
-                              scrollbarRadius: const Radius.circular(40),
-                              scrollbarThickness: 6,
-                              scrollbarAlwaysShow: true,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          width: double.infinity,
-                          height: 6.h,
-                          decoration: boxDecoration(
-                            radius: 10.0,
-                          ),
-                          child:DropdownButtonHideUnderline(
-                            child: DropdownButton2(
-                              isExpanded: true,
-                              hint: Text(
-                                'Select Hours / Day',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              items: timeList
-                                  .map((String? item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ))
-                                  .toList(),
-                              value: selectedDayHour,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedDayHour = value as String;
-                                  // // serviceName.text = serviceModel.data!
-                                  //     .firstWhere((element) => element.id == value)
-                                  //     .cName
-                                  //     .toString();
-
-                                });
-                                print("CATEGORY ID== $selectedCategory");
-                              },
-                              icon: const Icon(
-                                Icons.arrow_forward_ios_outlined,
-                                color: AppColor.PrimaryDark,
-                              ),
-                              iconSize: 14,
-                              buttonHeight: 50,
-                              buttonWidth: 160,
-                              buttonPadding:
-                              const EdgeInsets.only(left: 14, right: 14),
-                              buttonDecoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(14),
-                                  // color: AppColor().colorEdit(),
-                                  color: Colors.grey.withOpacity(0.05)
-                              ),
-                              buttonElevation: 0,
-                              itemHeight: 40,
-                              itemPadding:
-                              const EdgeInsets.only(left: 14, right: 14),
-                              dropdownMaxHeight: 300,
-                              dropdownPadding: null,
-                              dropdownDecoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              dropdownElevation: 8,
-                              scrollbarRadius: const Radius.circular(40),
-                              scrollbarThickness: 6,
-                              scrollbarAlwaysShow: true,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-
-                      InkWell(
-                        onTap: ()async{
-                          await openLanguageList();
-                          setState(() {
-
-                          });
-                        },
-                        child: Material(
-                          elevation: 4,
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                          child: Container(
-                              width: double.infinity,
-                              height: 6.h,
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                color: Colors.grey.withOpacity(0.05),
-                              ),
-                              child:selectedLanguageList.isEmpty ? Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text("Language(S) Spoken",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ),
-                              ) :  ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: AlwaysScrollableScrollPhysics(),
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: selectedLanguageList.length,
-                                  itemBuilder: (c,i){
-                                    return Container(
-
-                                        alignment: Alignment.center,
-                                        // decoration: BoxDecoration(
-                                        //   borderRadius: BorderRadius.circular(12),
-                                        //   border: Border.all(color: Colors.grey)
-                                        // ),
-                                        child: Padding(
-                                          padding:  EdgeInsets.only(right: 5),
-                                          child: selectedLanguageList.length > 1 ? Text("${selectedLanguageList[i]} ,") : Text("${selectedLanguageList[i]}"),
-                                        ));
-                                  })
-                            // Padding(
-                            //   padding: const EdgeInsets.only(left: 10.0, right: 10),
-                            //   child: Row(
-                            //     children: [
-                            //       Padding(
-                            //         padding: EdgeInsets.only(left: 8),
-                            //         child:
-                            //        selectedLanguageList.isEmpty ?  Text(
-                            //           'Language(S) Spoken',
-                            //           style: TextStyle(
-                            //             fontSize: 14,
-                            //             color: Colors.black54,
-                            //             fontWeight: FontWeight.normal,
-                            //           ),
-                            //           overflow: TextOverflow.ellipsis,
-                            //         ) : Text("${selectedLanguageList.toString()}"),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
-
-
-
-
-                            // ListView.builder(
-                            //     shrinkWrap: true,
-                            //     itemCount: languageList.length,
-                            //     itemBuilder: (context,i){
-                            //   return Container(
-                            //     child: Text("${languageList[i]}"),
-                            //   );
-                            // }),
-                            // DropdownButtonHideUnderline(
-                            //   child: DropdownButton2(
-                            //     isExpanded: true,
-                            //     hint: Text(
-                            //       'Language(S) Spoken',
-                            //       style: TextStyle(
-                            //         fontSize: 14,
-                            //         fontWeight: FontWeight.normal,
-                            //       ),
-                            //       overflow: TextOverflow.ellipsis,
-                            //     ),
-                            //     items: languageList
-                            //         .map((String? item) => DropdownMenuItem<String>(
-                            //       value: item,
-                            //       child: Text(
-                            //         item.toString(),
-                            //         style: const TextStyle(
-                            //           fontSize: 14,
-                            //           fontWeight: FontWeight.bold,
-                            //           color: Colors.black,
-                            //         ),
-                            //         overflow: TextOverflow.ellipsis,
-                            //       ),
-                            //     ))
-                            //         .toList(),
-                            //     value: selectedLanguage,
-                            //     onChanged: (value) {
-                            //       setState(() {
-                            //         selectedLanguage = value as String;
-                            //         // // serviceName.text = serviceModel.data!
-                            //         //     .firstWhere((element) => element.id == value)
-                            //         //     .cName
-                            //         //     .toString();
-                            //
-                            //       });
-                            //       print("CATEGORY ID== $selectedCategory");
-                            //     },
-                            //     icon: const Icon(
-                            //       Icons.arrow_forward_ios_outlined,
-                            //       color: AppColor.PrimaryDark,
-                            //     ),
-                            //     iconSize: 14,
-                            //     buttonHeight: 50,
-                            //     buttonWidth: 160,
-                            //     buttonPadding:
-                            //     const EdgeInsets.only(left: 14, right: 14),
-                            //     buttonDecoration: BoxDecoration(
-                            //         borderRadius: BorderRadius.circular(14),
-                            //         // color: AppColor().colorEdit(),
-                            //         color: Colors.grey.withOpacity(0.05)
-                            //     ),
-                            //     buttonElevation: 0,
-                            //     itemHeight: 40,
-                            //     itemPadding:
-                            //     const EdgeInsets.only(left: 14, right: 14),
-                            //     dropdownMaxHeight: 300,
-                            //     dropdownPadding: null,
-                            //     dropdownDecoration: BoxDecoration(
-                            //       borderRadius: BorderRadius.circular(14),
-                            //     ),
-                            //     dropdownElevation: 8,
-                            //     scrollbarRadius: const Radius.circular(40),
-                            //     scrollbarThickness: 6,
-                            //     scrollbarAlwaysShow: true,
-                            //   ),
-                            // ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-
-                      Material(
-                        elevation: 4,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        child: Container(
-                          width: double.infinity,
-                          height: 6.h,
-                          decoration: boxDecoration(
-                            radius: 10.0,
-                          ),
-                          child:DropdownButtonHideUnderline(
-                            child: DropdownButton2(
-                              isExpanded: true,
-                              hint: Text(
-                                'Travel',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              items: travelList
-                                  .map((String? item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ))
-                                  .toList(),
-                              value:selectedTravel,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedTravel = value as String;
-                                  // // serviceName.text = serviceModel.data!
-                                  //     .firstWhere((element) => element.id == value)
-                                  //     .cName
-                                  //     .toString();
-
-                                });
-
-                              },
-                              icon: const Icon(
-                                Icons.arrow_forward_ios_outlined,
-                                color: AppColor.PrimaryDark,
-                              ),
-                              iconSize: 14,
-                              buttonHeight: 50,
-                              buttonWidth: 160,
-                              buttonPadding:
-                              const EdgeInsets.only(left: 14, right: 14),
-                              buttonDecoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(14),
-                                  // color: AppColor().colorEdit(),
-                                  color: Colors.grey.withOpacity(0.05)
-                              ),
-                              buttonElevation: 0,
-                              itemHeight: 40,
-                              itemPadding:
-                              const EdgeInsets.only(left: 14, right: 14),
-                              dropdownMaxHeight: 300,
-                              dropdownPadding: null,
-                              dropdownDecoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              dropdownElevation: 8,
-                              scrollbarRadius: const Radius.circular(40),
-                              scrollbarThickness: 6,
-                              scrollbarAlwaysShow: true,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      InkWell(
-                        onTap: (){
-                          _showMultiSelect();
-                        },
-                        child: Material(
-                          elevation: 4,
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                          child: Container(
-                              width: double.infinity,
-                              height: 6.h,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.grey[100]
-                              ),
-                              // boxDecoration(
-                              //   radius: 10.0,
-                              // ),
-                              child: _selectedItems.isEmpty ?
-                              Padding(
-                                padding: const EdgeInsets.only(left: 10.0, right: 10),
-                                child: Row(
-                                  children: [
-                                    Image.asset(
-                                      city,
-                                      width: 6.04.w,
-                                      height: 5.04.w,
-                                      fit: BoxFit.fill,
+                                    items: noofDayList
+                                        .map((String? item) =>
+                                            DropdownMenuItem<String>(
+                                              value: item,
+                                              child: Text(
+                                                item.toString(),
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ))
+                                        .toList(),
+                                    value: noOfDays,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        noOfDays = value as String;
+                                        // // serviceName.text = serviceModel.data!
+                                        //     .firstWhere((element) => element.id == value)
+                                        //     .cName
+                                        //     .toString();
+                                      });
+                                      print("CATEGORY ID== $noOfDays");
+                                    },
+                                    icon: const Icon(
+                                      Icons.arrow_forward_ios_outlined,
                                       color: AppColor.PrimaryDark,
                                     ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 8),
+                                    iconSize: 14,
+                                    buttonHeight: 50,
+                                    buttonWidth: 160,
+                                    buttonPadding: const EdgeInsets.only(
+                                        left: 14, right: 14),
+                                    buttonDecoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14),
+                                        // color: AppColor().colorEdit(),
+                                        color: Colors.grey.withOpacity(0.05)),
+                                    buttonElevation: 0,
+                                    itemHeight: 40,
+                                    itemPadding: const EdgeInsets.only(
+                                        left: 14, right: 14),
+                                    dropdownMaxHeight: 300,
+                                    dropdownPadding: null,
+                                    dropdownDecoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    dropdownElevation: 8,
+                                    scrollbarRadius: const Radius.circular(40),
+                                    scrollbarThickness: 6,
+                                    scrollbarAlwaysShow: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                width: double.infinity,
+                                height: 6.h,
+                                decoration: boxDecoration(
+                                  radius: 10.0,
+                                ),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                    isExpanded: true,
+                                    hint: Text(
+                                      'Select Hours / Day',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    items: timeList
+                                        .map((String? item) =>
+                                            DropdownMenuItem<String>(
+                                              value: item,
+                                              child: Text(
+                                                item.toString(),
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ))
+                                        .toList(),
+                                    value: selectedDayHour,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedDayHour = value as String;
+                                        // // serviceName.text = serviceModel.data!
+                                        //     .firstWhere((element) => element.id == value)
+                                        //     .cName
+                                        //     .toString();
+                                      });
+                                      print("CATEGORY ID== $selectedCategory");
+                                    },
+                                    icon: const Icon(
+                                      Icons.arrow_forward_ios_outlined,
+                                      color: AppColor.PrimaryDark,
+                                    ),
+                                    iconSize: 14,
+                                    buttonHeight: 50,
+                                    buttonWidth: 160,
+                                    buttonPadding: const EdgeInsets.only(
+                                        left: 14, right: 14),
+                                    buttonDecoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14),
+                                        // color: AppColor().colorEdit(),
+                                        color: Colors.grey.withOpacity(0.05)),
+                                    buttonElevation: 0,
+                                    itemHeight: 40,
+                                    itemPadding: const EdgeInsets.only(
+                                        left: 14, right: 14),
+                                    dropdownMaxHeight: 300,
+                                    dropdownPadding: null,
+                                    dropdownDecoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    dropdownElevation: 8,
+                                    scrollbarRadius: const Radius.circular(40),
+                                    scrollbarThickness: 6,
+                                    scrollbarAlwaysShow: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+
+                            InkWell(
+                              onTap: () async {
+                                await openLanguageList();
+                                setState(() {});
+                              },
+                              child: Material(
+                                elevation: 4,
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(6),
+                                child: Container(
+                                    width: double.infinity,
+                                    height: 6.h,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 5),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      color: Colors.grey.withOpacity(0.05),
+                                    ),
+                                    child: selectedLanguageList.isEmpty
+                                        ? Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                "Language(S) Spoken",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.black54,
+                                                  fontWeight: FontWeight.normal,
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : ListView.builder(
+                                            shrinkWrap: true,
+                                            physics:
+                                                AlwaysScrollableScrollPhysics(),
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount:
+                                                selectedLanguageList.length,
+                                            itemBuilder: (c, i) {
+                                              return Container(
+                                                  alignment: Alignment.center,
+                                                  // decoration: BoxDecoration(
+                                                  //   borderRadius: BorderRadius.circular(12),
+                                                  //   border: Border.all(color: Colors.grey)
+                                                  // ),
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 5),
+                                                    child: selectedLanguageList
+                                                                .length >
+                                                            1
+                                                        ? Text(
+                                                            "${selectedLanguageList[i]} ,")
+                                                        : Text(
+                                                            "${selectedLanguageList[i]}"),
+                                                  ));
+                                            })
+                                    // Padding(
+                                    //   padding: const EdgeInsets.only(left: 10.0, right: 10),
+                                    //   child: Row(
+                                    //     children: [
+                                    //       Padding(
+                                    //         padding: EdgeInsets.only(left: 8),
+                                    //         child:
+                                    //        selectedLanguageList.isEmpty ?  Text(
+                                    //           'Language(S) Spoken',
+                                    //           style: TextStyle(
+                                    //             fontSize: 14,
+                                    //             color: Colors.black54,
+                                    //             fontWeight: FontWeight.normal,
+                                    //           ),
+                                    //           overflow: TextOverflow.ellipsis,
+                                    //         ) : Text("${selectedLanguageList.toString()}"),
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // ),
+
+                                    // ListView.builder(
+                                    //     shrinkWrap: true,
+                                    //     itemCount: languageList.length,
+                                    //     itemBuilder: (context,i){
+                                    //   return Container(
+                                    //     child: Text("${languageList[i]}"),
+                                    //   );
+                                    // }),
+                                    // DropdownButtonHideUnderline(
+                                    //   child: DropdownButton2(
+                                    //     isExpanded: true,
+                                    //     hint: Text(
+                                    //       'Language(S) Spoken',
+                                    //       style: TextStyle(
+                                    //         fontSize: 14,
+                                    //         fontWeight: FontWeight.normal,
+                                    //       ),
+                                    //       overflow: TextOverflow.ellipsis,
+                                    //     ),
+                                    //     items: languageList
+                                    //         .map((String? item) => DropdownMenuItem<String>(
+                                    //       value: item,
+                                    //       child: Text(
+                                    //         item.toString(),
+                                    //         style: const TextStyle(
+                                    //           fontSize: 14,
+                                    //           fontWeight: FontWeight.bold,
+                                    //           color: Colors.black,
+                                    //         ),
+                                    //         overflow: TextOverflow.ellipsis,
+                                    //       ),
+                                    //     ))
+                                    //         .toList(),
+                                    //     value: selectedLanguage,
+                                    //     onChanged: (value) {
+                                    //       setState(() {
+                                    //         selectedLanguage = value as String;
+                                    //         // // serviceName.text = serviceModel.data!
+                                    //         //     .firstWhere((element) => element.id == value)
+                                    //         //     .cName
+                                    //         //     .toString();
+                                    //
+                                    //       });
+                                    //       print("CATEGORY ID== $selectedCategory");
+                                    //     },
+                                    //     icon: const Icon(
+                                    //       Icons.arrow_forward_ios_outlined,
+                                    //       color: AppColor.PrimaryDark,
+                                    //     ),
+                                    //     iconSize: 14,
+                                    //     buttonHeight: 50,
+                                    //     buttonWidth: 160,
+                                    //     buttonPadding:
+                                    //     const EdgeInsets.only(left: 14, right: 14),
+                                    //     buttonDecoration: BoxDecoration(
+                                    //         borderRadius: BorderRadius.circular(14),
+                                    //         // color: AppColor().colorEdit(),
+                                    //         color: Colors.grey.withOpacity(0.05)
+                                    //     ),
+                                    //     buttonElevation: 0,
+                                    //     itemHeight: 40,
+                                    //     itemPadding:
+                                    //     const EdgeInsets.only(left: 14, right: 14),
+                                    //     dropdownMaxHeight: 300,
+                                    //     dropdownPadding: null,
+                                    //     dropdownDecoration: BoxDecoration(
+                                    //       borderRadius: BorderRadius.circular(14),
+                                    //     ),
+                                    //     dropdownElevation: 8,
+                                    //     scrollbarRadius: const Radius.circular(40),
+                                    //     scrollbarThickness: 6,
+                                    //     scrollbarAlwaysShow: true,
+                                    //   ),
+                                    // ),
+                                    ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+
+                            Material(
+                              elevation: 4,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                width: double.infinity,
+                                height: 6.h,
+                                decoration: boxDecoration(
+                                  radius: 10.0,
+                                ),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                    isExpanded: true,
+                                    hint: Text(
+                                      'Travel',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    items: travelList
+                                        .map((String? item) =>
+                                            DropdownMenuItem<String>(
+                                              value: item,
+                                              child: Text(
+                                                item.toString(),
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ))
+                                        .toList(),
+                                    value: selectedTravel,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedTravel = value as String;
+                                        // // serviceName.text = serviceModel.data!
+                                        //     .firstWhere((element) => element.id == value)
+                                        //     .cName
+                                        //     .toString();
+                                      });
+                                    },
+                                    icon: const Icon(
+                                      Icons.arrow_forward_ios_outlined,
+                                      color: AppColor.PrimaryDark,
+                                    ),
+                                    iconSize: 14,
+                                    buttonHeight: 50,
+                                    buttonWidth: 160,
+                                    buttonPadding: const EdgeInsets.only(
+                                        left: 14, right: 14),
+                                    buttonDecoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14),
+                                        // color: AppColor().colorEdit(),
+                                        color: Colors.grey.withOpacity(0.05)),
+                                    buttonElevation: 0,
+                                    itemHeight: 40,
+                                    itemPadding: const EdgeInsets.only(
+                                        left: 14, right: 14),
+                                    dropdownMaxHeight: 300,
+                                    dropdownPadding: null,
+                                    dropdownDecoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    dropdownElevation: 8,
+                                    scrollbarRadius: const Radius.circular(40),
+                                    scrollbarThickness: 6,
+                                    scrollbarAlwaysShow: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                _showMultiSelect();
+                              },
+                              child: Material(
+                                elevation: 4,
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(6),
+                                child: Container(
+                                    width: double.infinity,
+                                    height: 6.h,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.grey[100]),
+                                    // boxDecoration(
+                                    //   radius: 10.0,
+                                    // ),
+                                    child: _selectedItems.isEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10.0, right: 10),
+                                            child: Row(
+                                              children: [
+                                                Image.asset(
+                                                  city,
+                                                  width: 6.04.w,
+                                                  height: 5.04.w,
+                                                  fit: BoxFit.fill,
+                                                  color: AppColor.PrimaryDark,
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      EdgeInsets.only(left: 8),
+                                                  child: Text(
+                                                    'Select Multiple Cities',
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.black54,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : ListView.builder(
+                                            itemCount: _selectedItems.length,
+                                            physics:
+                                                AlwaysScrollableScrollPhysics(),
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (c, i) {
+                                              return Padding(
+                                                padding:
+                                                    EdgeInsets.only(right: 5),
+                                                child: Chip(
+                                                  label: Text(
+                                                      "${_selectedItems[i].name}"),
+                                                ),
+                                              );
+                                            })
+                                    // Wrap(
+                                    //   children: _selectedItems
+                                    //       .map((item){
+                                    //     print("okok ${item.id}");
+                                    //     return Padding(
+                                    //       padding: const EdgeInsets.only(left: 8.0, right: 8),
+                                    //       child: Chip(
+                                    //         label:
+                                    //         Text(
+                                    //             "${item.name}"
+                                    //           //item.name
+                                    //         ),
+                                    //       ),
+                                    //     );
+                                    //   })
+                                    //       .toList(),
+                                    // )
+
+                                    // FutureBuilder(
+                                    //     future: getCities(),
+                                    //     builder: (BuildContext context,
+                                    //         AsyncSnapshot snapshot) {
+                                    //       if (snapshot.hasData) {
+                                    //         return DropdownButtonHideUnderline(
+                                    //           child: DropdownButton2(
+                                    //             isExpanded: true,
+                                    //             hint: Row(
+                                    //               children: [
+                                    //                 Image.asset(
+                                    //                   city,
+                                    //                   width: 6.04.w,
+                                    //                   height: 5.04.w,
+                                    //                   fit: BoxFit.fill,
+                                    //                   color: AppColor.PrimaryDark,
+                                    //                 ),
+                                    //                 SizedBox(
+                                    //                   width: 4,
+                                    //                 ),
+                                    //                 Expanded(
+                                    //                   child: Text(
+                                    //                     'Select Multiple Cities',
+                                    //                     style: TextStyle(
+                                    //                       fontSize: 14,
+                                    //                       fontWeight: FontWeight.normal,
+                                    //                     ),
+                                    //                     overflow: TextOverflow.ellipsis,
+                                    //                   ),
+                                    //                 ),
+                                    //               ],
+                                    //             ),
+                                    //             items: cityList.map((item) {
+                                    //               return DropdownMenuItem<String>(
+                                    //                 value: item.id,
+                                    //                 enabled: false,
+                                    //                 child: StatefulBuilder(
+                                    //                   builder: (context, menuSetState) {
+                                    //                     final _isSelected =
+                                    //                         selectedCities
+                                    //                             .contains(item);
+                                    //                     print("SLECTED CITY");
+                                    //                     return InkWell(
+                                    //                       onTap: () {
+                                    //                         _isSelected
+                                    //                             ? selectedCities
+                                    //                                 .remove(item.id)
+                                    //                             : selectedCities
+                                    //                                 .add(item.id!);
+                                    //                         setState(() {});
+                                    //                         menuSetState(() {});
+                                    //                       },
+                                    //                       child: Container(
+                                    //                         height: double.infinity,
+                                    //                         padding: const EdgeInsets
+                                    //                                 .symmetric(
+                                    //                             horizontal: 16.0),
+                                    //                         child: Row(
+                                    //                           children: [
+                                    //                             _isSelected
+                                    //                                 ? const Icon(Icons
+                                    //                                     .check_box_outlined)
+                                    //                                 : const Icon(Icons
+                                    //                                     .check_box_outline_blank),
+                                    //                             const SizedBox(
+                                    //                                 width: 16),
+                                    //                             Text(
+                                    //                               item.name!,
+                                    //                               style:
+                                    //                                   const TextStyle(
+                                    //                                 fontSize: 14,
+                                    //                               ),
+                                    //                             ),
+                                    //                           ],
+                                    //                         ),
+                                    //                       ),
+                                    //                     );
+                                    //                   },
+                                    //                 ),
+                                    //               );
+                                    //             }).toList(),
+                                    //             //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
+                                    //             value: selectedCities.isEmpty
+                                    //                 ? null
+                                    //                 : selectedCities.last,
+                                    //             onChanged: (value) {},
+                                    //             buttonHeight: 50,
+                                    //             buttonWidth: 160,
+                                    //             buttonPadding: const EdgeInsets.only(
+                                    //                 left: 14, right: 14),
+                                    //             buttonDecoration: BoxDecoration(
+                                    //               borderRadius:
+                                    //                   BorderRadius.circular(14),
+                                    //               color: Color(0xffF9F9F9),
+                                    //             ),
+                                    //             buttonElevation: 0,
+                                    //             itemHeight: 40,
+                                    //             itemPadding: const EdgeInsets.only(
+                                    //                 left: 14, right: 14),
+                                    //             dropdownMaxHeight: 300,
+                                    //             dropdownPadding: null,
+                                    //             dropdownDecoration: BoxDecoration(
+                                    //               borderRadius:
+                                    //                   BorderRadius.circular(14),
+                                    //             ),
+                                    //             dropdownElevation: 8,
+                                    //             scrollbarRadius:
+                                    //                 const Radius.circular(40),
+                                    //             scrollbarThickness: 6,
+                                    //             scrollbarAlwaysShow: true,
+                                    //             selectedItemBuilder: (context) {
+                                    //               return cityList.map(
+                                    //                 (item) {
+                                    //                   return Container(
+                                    //                     // alignment: AlignmentDirectional.center,
+                                    //                     padding:
+                                    //                         const EdgeInsets.symmetric(
+                                    //                             horizontal: 16.0),
+                                    //                     child: Text(
+                                    //                       selectedCities.join(','),
+                                    //                       style: const TextStyle(
+                                    //                         fontSize: 14,
+                                    //                         overflow:
+                                    //                             TextOverflow.ellipsis,
+                                    //                       ),
+                                    //                       maxLines: 1,
+                                    //                     ),
+                                    //                   );
+                                    //                 },
+                                    //               ).toList();
+                                    //             },
+                                    //           ),
+                                    //         );
+                                    //       } else if (snapshot.hasError) {
+                                    //         return Icon(Icons.error_outline);
+                                    //       } else {
+                                    //         return Center(
+                                    //             child: CircularProgressIndicator());
+                                    //       }
+                                    //     })
+                                    ),
+                              ),
+                            ),
+
+                            termsAndCondition(),
+                            SizedBox(
+                              height: 30,
+                            ),
+
+                            // Container(
+                            //   padding: EdgeInsets.symmetric(vertical: 6),
+                            //   decoration: BoxDecoration(
+                            //       color: Color(0xffF9F9F9),
+                            //       borderRadius: BorderRadius.circular(12)),
+                            //   child: TextFormField(
+                            //     controller: mobileController,
+                            //     maxLength: 10,
+                            //     decoration: InputDecoration(
+                            //       counterText: "",
+                            //       contentPadding:
+                            //       EdgeInsets.symmetric(horizontal: 10),
+                            //       hintText: "Mobile",
+                            //       label: Text(
+                            //         "Mobile",
+                            //       ),
+                            //       hintStyle: TextStyle(
+                            //           color: Colors.black,
+                            //           fontWeight: FontWeight.w400),
+                            //       border: InputBorder.none,
+                            //     ),
+                            //     keyboardType: TextInputType.number,
+                            //     validator: (v) {
+                            //       if (v!.isEmpty || v.length != 10) {
+                            //         return "Enter mobile nuber";
+                            //       }
+                            //       return null;
+                            //     },
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: 15,
+                            // ),
+                            // Container(
+                            //   padding: EdgeInsets.symmetric(vertical: 6),
+                            //   decoration: BoxDecoration(
+                            //       color: Color(0xffF9F9F9),
+                            //       borderRadius: BorderRadius.circular(12)),
+                            //   child: TextFormField(
+                            //     controller: emailController,
+                            //     decoration: InputDecoration(
+                            //       contentPadding:
+                            //       EdgeInsets.symmetric(horizontal: 10),
+                            //       hintText: "Email",
+                            //       label: Text(
+                            //         "Email",
+                            //       ),
+                            //       hintStyle: TextStyle(
+                            //           color: Colors.black,
+                            //           fontWeight: FontWeight.w400),
+                            //       border: InputBorder.none,
+                            //     ),
+                            //     keyboardType: TextInputType.emailAddress,
+                            //     validator: (v) {
+                            //       if (!v!.contains('@')) {
+                            //         return "Enter valid email";
+                            //       }
+                            //       return null;
+                            //     },
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: 15,
+                            // ),
+                            // Container(
+                            //   padding: EdgeInsets.symmetric(vertical: 6),
+                            //   decoration: BoxDecoration(
+                            //       color: Color(0xffF9F9F9),
+                            //       borderRadius: BorderRadius.circular(12)),
+                            //   child: TextFormField(
+                            //     controller: addressController,
+                            //     keyboardType: TextInputType.streetAddress,
+                            //     validator: FormValidation.checkEmptyValidator,
+                            //     decoration: InputDecoration(
+                            //       border: InputBorder.none,
+                            //       contentPadding: EdgeInsets.zero,
+                            //       hintText: "User Address",
+                            //       prefixIcon: Icon(
+                            //         Icons.location_on_outlined,
+                            //         color: Colors.grey,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            // Container(
+                            //   width: 69.99.w,
+                            //   child: InkWell(
+                            //     onTap: () {
+                            //       getLocation();
+                            //     },
+                            //     child: Row(
+                            //       children: [
+                            //         Icon(Icons.my_location_outlined,
+                            //             color: Color(0xff666666)),
+                            //         Text(
+                            //           "Use My Current Location",
+                            //           style: TextStyle(
+                            //             color: Color(0xff666666),
+                            //             fontSize: 12,
+                            //             fontWeight: FontWeight.bold,
+                            //           ),
+                            //         )
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: 15,
+                            // ),
+                            // //COUNTRY
+                            // Container(
+                            //     width: double.infinity,
+                            //     height: 6.h,
+                            //     decoration: boxDecoration(
+                            //       radius: 10.0,
+                            //     ),
+                            //     child: DropdownButtonHideUnderline(
+                            //       child: DropdownButton2(
+                            //         isExpanded: true,
+                            //         hint: Row(
+                            //           children: [
+                            //             Image.asset(
+                            //               country,
+                            //               width: 6.04.w,
+                            //               height: 5.04.w,
+                            //               fit: BoxFit.fill,
+                            //               color: AppColor.PrimaryDark,
+                            //             ),
+                            //             SizedBox(
+                            //               width: 4,
+                            //             ),
+                            //             Expanded(
+                            //               child: Text(
+                            //                 'Select Country',
+                            //                 style: TextStyle(
+                            //                   fontSize: 14,
+                            //                   fontWeight: FontWeight.normal,
+                            //                 ),
+                            //                 overflow: TextOverflow.ellipsis,
+                            //               ),
+                            //             ),
+                            //           ],
+                            //         ),
+                            //         items: countryList
+                            //             .map((item) => DropdownMenuItem<String>(
+                            //           value: item.id,
+                            //           child: Text(
+                            //             item.name!,
+                            //             style: const TextStyle(
+                            //               fontSize: 14,
+                            //               fontWeight: FontWeight.bold,
+                            //               color: Colors.black,
+                            //             ),
+                            //             overflow: TextOverflow.ellipsis,
+                            //           ),
+                            //         ))
+                            //             .toList(),
+                            //         value: selectedCountry,
+                            //         onChanged: (value) {
+                            //           setState(() {
+                            //             selectedCountry = value as String;
+                            //             print("selectedCategory=>" +
+                            //                 selectedCountry.toString());
+                            //           });
+                            //         },
+                            //         icon: const Icon(
+                            //           Icons.arrow_forward_ios_outlined,
+                            //           color: AppColor.PrimaryDark,
+                            //         ),
+                            //         iconSize: 14,
+                            //         buttonHeight: 50,
+                            //         buttonWidth: 160,
+                            //         buttonPadding:
+                            //         const EdgeInsets.only(left: 14, right: 14),
+                            //         buttonDecoration: BoxDecoration(
+                            //           borderRadius: BorderRadius.circular(14),
+                            //           color: Color(0xffF9F9F9),
+                            //         ),
+                            //         buttonElevation: 0,
+                            //         itemHeight: 40,
+                            //         itemPadding:
+                            //         const EdgeInsets.only(left: 14, right: 14),
+                            //         dropdownMaxHeight: 300,
+                            //         dropdownPadding: null,
+                            //         dropdownDecoration: BoxDecoration(
+                            //           borderRadius: BorderRadius.circular(14),
+                            //         ),
+                            //         dropdownElevation: 8,
+                            //         scrollbarRadius: const Radius.circular(40),
+                            //         scrollbarThickness: 6,
+                            //         scrollbarAlwaysShow: true,
+                            //       ),
+                            //     )),
+                            // SizedBox(
+                            //   height: 15,
+                            // ),
+                            //STATE
+
+                            // _selectedItems.isEmpty ?
+
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        visibleIndex = 1;
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 45,
+                                      alignment: Alignment.center,
+                                      width:
+                                          MediaQuery.of(context).size.width / 2,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
                                       child: Text(
-                                        'Select Multiple Cities',
+                                        "Previous",
                                         style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 17),
                                       ),
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              )
-                                  :
-                              ListView.builder(
-                                  itemCount: _selectedItems.length,
-                                  physics: AlwaysScrollableScrollPhysics(),
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (c,i){
-                                    return Padding(
-                                      padding: EdgeInsets.only(right: 5),
-                                      child: Chip(label:Text("${_selectedItems[i].name}"),),
-                                    );
-                                  })
-                            // Wrap(
-                            //   children: _selectedItems
-                            //       .map((item){
-                            //     print("okok ${item.id}");
-                            //     return Padding(
-                            //       padding: const EdgeInsets.only(left: 8.0, right: 8),
-                            //       child: Chip(
-                            //         label:
-                            //         Text(
-                            //             "${item.name}"
-                            //           //item.name
-                            //         ),
-                            //       ),
-                            //     );
-                            //   })
-                            //       .toList(),
-                            // )
-
-                            // FutureBuilder(
-                            //     future: getCities(),
-                            //     builder: (BuildContext context,
-                            //         AsyncSnapshot snapshot) {
-                            //       if (snapshot.hasData) {
-                            //         return DropdownButtonHideUnderline(
-                            //           child: DropdownButton2(
-                            //             isExpanded: true,
-                            //             hint: Row(
-                            //               children: [
-                            //                 Image.asset(
-                            //                   city,
-                            //                   width: 6.04.w,
-                            //                   height: 5.04.w,
-                            //                   fit: BoxFit.fill,
-                            //                   color: AppColor.PrimaryDark,
-                            //                 ),
-                            //                 SizedBox(
-                            //                   width: 4,
-                            //                 ),
-                            //                 Expanded(
-                            //                   child: Text(
-                            //                     'Select Multiple Cities',
-                            //                     style: TextStyle(
-                            //                       fontSize: 14,
-                            //                       fontWeight: FontWeight.normal,
-                            //                     ),
-                            //                     overflow: TextOverflow.ellipsis,
-                            //                   ),
-                            //                 ),
-                            //               ],
-                            //             ),
-                            //             items: cityList.map((item) {
-                            //               return DropdownMenuItem<String>(
-                            //                 value: item.id,
-                            //                 enabled: false,
-                            //                 child: StatefulBuilder(
-                            //                   builder: (context, menuSetState) {
-                            //                     final _isSelected =
-                            //                         selectedCities
-                            //                             .contains(item);
-                            //                     print("SLECTED CITY");
-                            //                     return InkWell(
-                            //                       onTap: () {
-                            //                         _isSelected
-                            //                             ? selectedCities
-                            //                                 .remove(item.id)
-                            //                             : selectedCities
-                            //                                 .add(item.id!);
-                            //                         setState(() {});
-                            //                         menuSetState(() {});
-                            //                       },
-                            //                       child: Container(
-                            //                         height: double.infinity,
-                            //                         padding: const EdgeInsets
-                            //                                 .symmetric(
-                            //                             horizontal: 16.0),
-                            //                         child: Row(
-                            //                           children: [
-                            //                             _isSelected
-                            //                                 ? const Icon(Icons
-                            //                                     .check_box_outlined)
-                            //                                 : const Icon(Icons
-                            //                                     .check_box_outline_blank),
-                            //                             const SizedBox(
-                            //                                 width: 16),
-                            //                             Text(
-                            //                               item.name!,
-                            //                               style:
-                            //                                   const TextStyle(
-                            //                                 fontSize: 14,
-                            //                               ),
-                            //                             ),
-                            //                           ],
-                            //                         ),
-                            //                       ),
-                            //                     );
-                            //                   },
-                            //                 ),
-                            //               );
-                            //             }).toList(),
-                            //             //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
-                            //             value: selectedCities.isEmpty
-                            //                 ? null
-                            //                 : selectedCities.last,
-                            //             onChanged: (value) {},
-                            //             buttonHeight: 50,
-                            //             buttonWidth: 160,
-                            //             buttonPadding: const EdgeInsets.only(
-                            //                 left: 14, right: 14),
-                            //             buttonDecoration: BoxDecoration(
-                            //               borderRadius:
-                            //                   BorderRadius.circular(14),
-                            //               color: Color(0xffF9F9F9),
-                            //             ),
-                            //             buttonElevation: 0,
-                            //             itemHeight: 40,
-                            //             itemPadding: const EdgeInsets.only(
-                            //                 left: 14, right: 14),
-                            //             dropdownMaxHeight: 300,
-                            //             dropdownPadding: null,
-                            //             dropdownDecoration: BoxDecoration(
-                            //               borderRadius:
-                            //                   BorderRadius.circular(14),
-                            //             ),
-                            //             dropdownElevation: 8,
-                            //             scrollbarRadius:
-                            //                 const Radius.circular(40),
-                            //             scrollbarThickness: 6,
-                            //             scrollbarAlwaysShow: true,
-                            //             selectedItemBuilder: (context) {
-                            //               return cityList.map(
-                            //                 (item) {
-                            //                   return Container(
-                            //                     // alignment: AlignmentDirectional.center,
-                            //                     padding:
-                            //                         const EdgeInsets.symmetric(
-                            //                             horizontal: 16.0),
-                            //                     child: Text(
-                            //                       selectedCities.join(','),
-                            //                       style: const TextStyle(
-                            //                         fontSize: 14,
-                            //                         overflow:
-                            //                             TextOverflow.ellipsis,
-                            //                       ),
-                            //                       maxLines: 1,
-                            //                     ),
-                            //                   );
-                            //                 },
-                            //               ).toList();
-                            //             },
-                            //           ),
-                            //         );
-                            //       } else if (snapshot.hasError) {
-                            //         return Icon(Icons.error_outline);
-                            //       } else {
-                            //         return Center(
-                            //             child: CircularProgressIndicator());
-                            //       }
-                            //     })
-                          ),
-                        ),
-                      ),
-
-                      termsAndCondition(),
-                      SizedBox(height: 30,),
-
-
-                      // Container(
-                      //   padding: EdgeInsets.symmetric(vertical: 6),
-                      //   decoration: BoxDecoration(
-                      //       color: Color(0xffF9F9F9),
-                      //       borderRadius: BorderRadius.circular(12)),
-                      //   child: TextFormField(
-                      //     controller: mobileController,
-                      //     maxLength: 10,
-                      //     decoration: InputDecoration(
-                      //       counterText: "",
-                      //       contentPadding:
-                      //       EdgeInsets.symmetric(horizontal: 10),
-                      //       hintText: "Mobile",
-                      //       label: Text(
-                      //         "Mobile",
-                      //       ),
-                      //       hintStyle: TextStyle(
-                      //           color: Colors.black,
-                      //           fontWeight: FontWeight.w400),
-                      //       border: InputBorder.none,
-                      //     ),
-                      //     keyboardType: TextInputType.number,
-                      //     validator: (v) {
-                      //       if (v!.isEmpty || v.length != 10) {
-                      //         return "Enter mobile nuber";
-                      //       }
-                      //       return null;
-                      //     },
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   height: 15,
-                      // ),
-                      // Container(
-                      //   padding: EdgeInsets.symmetric(vertical: 6),
-                      //   decoration: BoxDecoration(
-                      //       color: Color(0xffF9F9F9),
-                      //       borderRadius: BorderRadius.circular(12)),
-                      //   child: TextFormField(
-                      //     controller: emailController,
-                      //     decoration: InputDecoration(
-                      //       contentPadding:
-                      //       EdgeInsets.symmetric(horizontal: 10),
-                      //       hintText: "Email",
-                      //       label: Text(
-                      //         "Email",
-                      //       ),
-                      //       hintStyle: TextStyle(
-                      //           color: Colors.black,
-                      //           fontWeight: FontWeight.w400),
-                      //       border: InputBorder.none,
-                      //     ),
-                      //     keyboardType: TextInputType.emailAddress,
-                      //     validator: (v) {
-                      //       if (!v!.contains('@')) {
-                      //         return "Enter valid email";
-                      //       }
-                      //       return null;
-                      //     },
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   height: 15,
-                      // ),
-                      // Container(
-                      //   padding: EdgeInsets.symmetric(vertical: 6),
-                      //   decoration: BoxDecoration(
-                      //       color: Color(0xffF9F9F9),
-                      //       borderRadius: BorderRadius.circular(12)),
-                      //   child: TextFormField(
-                      //     controller: addressController,
-                      //     keyboardType: TextInputType.streetAddress,
-                      //     validator: FormValidation.checkEmptyValidator,
-                      //     decoration: InputDecoration(
-                      //       border: InputBorder.none,
-                      //       contentPadding: EdgeInsets.zero,
-                      //       hintText: "User Address",
-                      //       prefixIcon: Icon(
-                      //         Icons.location_on_outlined,
-                      //         color: Colors.grey,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                      // Container(
-                      //   width: 69.99.w,
-                      //   child: InkWell(
-                      //     onTap: () {
-                      //       getLocation();
-                      //     },
-                      //     child: Row(
-                      //       children: [
-                      //         Icon(Icons.my_location_outlined,
-                      //             color: Color(0xff666666)),
-                      //         Text(
-                      //           "Use My Current Location",
-                      //           style: TextStyle(
-                      //             color: Color(0xff666666),
-                      //             fontSize: 12,
-                      //             fontWeight: FontWeight.bold,
-                      //           ),
-                      //         )
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   height: 15,
-                      // ),
-                      // //COUNTRY
-                      // Container(
-                      //     width: double.infinity,
-                      //     height: 6.h,
-                      //     decoration: boxDecoration(
-                      //       radius: 10.0,
-                      //     ),
-                      //     child: DropdownButtonHideUnderline(
-                      //       child: DropdownButton2(
-                      //         isExpanded: true,
-                      //         hint: Row(
-                      //           children: [
-                      //             Image.asset(
-                      //               country,
-                      //               width: 6.04.w,
-                      //               height: 5.04.w,
-                      //               fit: BoxFit.fill,
-                      //               color: AppColor.PrimaryDark,
-                      //             ),
-                      //             SizedBox(
-                      //               width: 4,
-                      //             ),
-                      //             Expanded(
-                      //               child: Text(
-                      //                 'Select Country',
-                      //                 style: TextStyle(
-                      //                   fontSize: 14,
-                      //                   fontWeight: FontWeight.normal,
-                      //                 ),
-                      //                 overflow: TextOverflow.ellipsis,
-                      //               ),
-                      //             ),
-                      //           ],
-                      //         ),
-                      //         items: countryList
-                      //             .map((item) => DropdownMenuItem<String>(
-                      //           value: item.id,
-                      //           child: Text(
-                      //             item.name!,
-                      //             style: const TextStyle(
-                      //               fontSize: 14,
-                      //               fontWeight: FontWeight.bold,
-                      //               color: Colors.black,
-                      //             ),
-                      //             overflow: TextOverflow.ellipsis,
-                      //           ),
-                      //         ))
-                      //             .toList(),
-                      //         value: selectedCountry,
-                      //         onChanged: (value) {
-                      //           setState(() {
-                      //             selectedCountry = value as String;
-                      //             print("selectedCategory=>" +
-                      //                 selectedCountry.toString());
-                      //           });
-                      //         },
-                      //         icon: const Icon(
-                      //           Icons.arrow_forward_ios_outlined,
-                      //           color: AppColor.PrimaryDark,
-                      //         ),
-                      //         iconSize: 14,
-                      //         buttonHeight: 50,
-                      //         buttonWidth: 160,
-                      //         buttonPadding:
-                      //         const EdgeInsets.only(left: 14, right: 14),
-                      //         buttonDecoration: BoxDecoration(
-                      //           borderRadius: BorderRadius.circular(14),
-                      //           color: Color(0xffF9F9F9),
-                      //         ),
-                      //         buttonElevation: 0,
-                      //         itemHeight: 40,
-                      //         itemPadding:
-                      //         const EdgeInsets.only(left: 14, right: 14),
-                      //         dropdownMaxHeight: 300,
-                      //         dropdownPadding: null,
-                      //         dropdownDecoration: BoxDecoration(
-                      //           borderRadius: BorderRadius.circular(14),
-                      //         ),
-                      //         dropdownElevation: 8,
-                      //         scrollbarRadius: const Radius.circular(40),
-                      //         scrollbarThickness: 6,
-                      //         scrollbarAlwaysShow: true,
-                      //       ),
-                      //     )),
-                      // SizedBox(
-                      //   height: 15,
-                      // ),
-                      //STATE
-
-
-                      // _selectedItems.isEmpty ?
-
-
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap:(){
-                                setState(() {
-                                  visibleIndex = 1;
-                                });
-                              },
-                              child: Container(
-                                height: 45,
-                                alignment: Alignment.center,
-                                width: MediaQuery.of(context).size.width/2,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
+                                SizedBox(
+                                  width: 20,
                                 ),
-                                child: Text(
-                                  "Previous",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 17),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 20,),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                cityIdList.clear();
-                                print("ok nowoooo ${cityIdList.length}");
-                                for(var i=0;i<_selectedItems.length;i++){
-                                  print("check now ${_selectedItems[i].id}");
-                                  cityIdList.add(_selectedItems[i].name);
-                                }
-                                print("yes ${cityIdList.length}");
-                                if (_formKey.currentState!.validate()) {
-                                  if(dateFormate == null){
-                                    showSnackBar(context, 'please enter date of birth');
-                                  }else if (selectedCategory == null){
-                                    showSnackBar(context, 'please select category');
-                                  }else if(noOfDays == null){
-                                    showSnackBar(context, 'please select days');
-                                  }else if(selectedDayHour== null) {
-                                    showSnackBar(context, 'please select hours');
-                                  }else if(twitterController.text.isEmpty && instagramController.text.isEmpty && facebookLinkController.text.isEmpty && linkedInController.text.isEmpty){
-                                    showSnackBar(context, 'At least One Social Media link is Required');
-                                  }else if(!_isChecked){
-                                    showSnackBar(context, 'please check terms & condition');
-                                  }else {
-                                    signUpFunction();
-                                  }
-                                } else {
-                                  var snackBar = SnackBar(
-                                    content: Text('Details are required'),
-                                  );
-                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                }
-                              },
-                              child: Container(
-                                height: 45,
-                                alignment: Alignment.center,
-                                width: MediaQuery.of(context).size.width/2,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  "Sign up",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 17),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-
-                      /// sign up button
-                      // InkWell(
-                      //   onTap: () {
-                      //     cityIdList.clear();
-                      //     print("ok nowoooo ${cityIdList.length}");
-                      //     for(var i=0;i<_selectedItems.length;i++){
-                      //       print("check now ${_selectedItems[i].id}");
-                      //       cityIdList.add(_selectedItems[i].id);
-                      //     }
-                      //     print("yes ${cityIdList.length}");
-                      //     if (_formKey.currentState!.validate()) {
-                      //       signUpFunction();
-                      //     } else {}
-                      //   },
-                      //   child: Container(
-                      //     height: 45,
-                      //     alignment: Alignment.center,
-                      //     width: MediaQuery.of(context).size.width,
-                      //     decoration: BoxDecoration(
-                      //       color: AppColor.PrimaryDark,
-                      //       borderRadius: BorderRadius.circular(8),
-                      //     ),
-                      //     child: Text(
-                      //       "SignUp",
-                      //       style: TextStyle(
-                      //           color: Colors.white,
-                      //           fontWeight: FontWeight.w500,
-                      //           fontSize: 17),
-                      //     ),
-                      //   ),
-                      // ),
-
-                      Container(
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.only(
-                          top: 30,
-                        ),
-                        child: InkWell(
-                          onTap: () async {
-                            setState(() {
-                              edit = true;
-                            });
-                            await Future.delayed(Duration(milliseconds: 200));
-                            setState(() {
-                              edit = false;
-                            });
-                            Navigator.pop(context);
-                          },
-                          child: ScaleAnimatedWidget.tween(
-                            enabled: edit,
-                            duration: Duration(milliseconds: 200),
-                            scaleDisabled: 1.0,
-                            scaleEnabled: 0.8,
-                            child: RichText(
-                              text: new TextSpan(
-                                text: "Already Have An Account? ",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 13.sp,
-                                  fontFamily: fontBold,
-                                ),
-                                children: <TextSpan>[
-                                  new TextSpan(
-                                    text: 'Login',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 13.sp,
-                                      fontFamily: fontBold,
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      cityIdList.clear();
+                                      print("ok nowoooo ${cityIdList.length}");
+                                      for (var i = 0;
+                                          i < _selectedItems.length;
+                                          i++) {
+                                        print(
+                                            "check now ${_selectedItems[i].id}");
+                                        cityIdList.add(_selectedItems[i].name);
+                                      }
+                                      print("yes ${cityIdList.length}");
+                                      if (_formKey.currentState!.validate()) {
+                                        if (dateFormate == null) {
+                                          showSnackBar(context,
+                                              'please enter date of birth');
+                                        } else if (selectedCategory == null) {
+                                          showSnackBar(context,
+                                              'please select category');
+                                        } else if (noOfDays == null) {
+                                          showSnackBar(
+                                              context, 'please select days');
+                                        } else if (selectedDayHour == null) {
+                                          showSnackBar(
+                                              context, 'please select hours');
+                                        } else if (twitterController
+                                                .text.isEmpty &&
+                                            instagramController.text.isEmpty &&
+                                            facebookLinkController
+                                                .text.isEmpty &&
+                                            linkedInController.text.isEmpty) {
+                                          showSnackBar(context,
+                                              'At least One Social Media link is Required');
+                                        } else if (!_isChecked) {
+                                          showSnackBar(context,
+                                              'please check terms & condition');
+                                        } else {
+                                          signUpFunction();
+                                        }
+                                      } else {
+                                        var snackBar = SnackBar(
+                                          content: Text('Details are required'),
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      }
+                                    },
+                                    child: Container(
+                                      height: 45,
+                                      alignment: Alignment.center,
+                                      width:
+                                          MediaQuery.of(context).size.width / 2,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Text(
+                                        "Sign up",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 17),
+                                      ),
                                     ),
                                   ),
-                                ],
+                                ),
+                              ],
+                            ),
+
+                            /// sign up button
+                            // InkWell(
+                            //   onTap: () {
+                            //     cityIdList.clear();
+                            //     print("ok nowoooo ${cityIdList.length}");
+                            //     for(var i=0;i<_selectedItems.length;i++){
+                            //       print("check now ${_selectedItems[i].id}");
+                            //       cityIdList.add(_selectedItems[i].id);
+                            //     }
+                            //     print("yes ${cityIdList.length}");
+                            //     if (_formKey.currentState!.validate()) {
+                            //       signUpFunction();
+                            //     } else {}
+                            //   },
+                            //   child: Container(
+                            //     height: 45,
+                            //     alignment: Alignment.center,
+                            //     width: MediaQuery.of(context).size.width,
+                            //     decoration: BoxDecoration(
+                            //       color: AppColor.PrimaryDark,
+                            //       borderRadius: BorderRadius.circular(8),
+                            //     ),
+                            //     child: Text(
+                            //       "SignUp",
+                            //       style: TextStyle(
+                            //           color: Colors.white,
+                            //           fontWeight: FontWeight.w500,
+                            //           fontSize: 17),
+                            //     ),
+                            //   ),
+                            // ),
+
+                            Container(
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.only(
+                                top: 30,
+                              ),
+                              child: InkWell(
+                                onTap: () async {
+                                  setState(() {
+                                    edit = true;
+                                  });
+                                  await Future.delayed(
+                                      Duration(milliseconds: 200));
+                                  setState(() {
+                                    edit = false;
+                                  });
+                                  Navigator.pop(context);
+                                },
+                                child: ScaleAnimatedWidget.tween(
+                                  enabled: edit,
+                                  duration: Duration(milliseconds: 200),
+                                  scaleDisabled: 1.0,
+                                  scaleEnabled: 0.8,
+                                  child: RichText(
+                                    text: new TextSpan(
+                                      text: "Already Have An Account? ",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13.sp,
+                                        fontFamily: fontBold,
+                                      ),
+                                      children: <TextSpan>[
+                                        new TextSpan(
+                                          text: 'Login',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 13.sp,
+                                            fontFamily: fontBold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                      ),
-
-                    ],
-                  ),
                 ),
                 SizedBox(
                   height: 30,
@@ -3215,9 +3324,10 @@ class _SignUpScreenState extends State<SignUpScreen>
       ),
     );
   }
+
   bool _isChecked = false;
 
-  Widget termsAndCondition () {
+  Widget termsAndCondition() {
     return Align(
       alignment: Alignment.topLeft,
       child: Row(
@@ -3238,19 +3348,21 @@ class _SignUpScreenState extends State<SignUpScreen>
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('I agree to Antsnest' ,style: TextStyle( fontSize: 12)),
+              Text('I agree to Antsnest', style: TextStyle(fontSize: 12)),
               RichText(
                 softWrap: false,
                 text: TextSpan(
-
                   children: [
                     TextSpan(
                       text: 'Privacy Policy',
                       style: TextStyle(color: Colors.black, fontSize: 12),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => PrivacyPolicyScreen(),));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PrivacyPolicyScreen(),
+                              ));
 
                           // Handle the Privacy Policy click action here.
                         },
@@ -3265,7 +3377,11 @@ class _SignUpScreenState extends State<SignUpScreen>
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           // Handle the Terms and Conditions click action here.
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => TermsConditionScreen(),));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TermsConditionScreen(),
+                              ));
                         },
                     ),
                     TextSpan(
@@ -3275,12 +3391,12 @@ class _SignUpScreenState extends State<SignUpScreen>
                   ],
                 ),
               ),
-            ],)
+            ],
+          )
         ],
       ),
     );
   }
-
 
   Widget firstSign(BuildContext context) {
     return Form(
@@ -3340,13 +3456,13 @@ class _SignUpScreenState extends State<SignUpScreen>
                       ),
                       suffixIcon: phoneController.text.length == 10
                           ? Container(
-                          width: 10.w,
-                          alignment: Alignment.center,
-                          child: FaIcon(
-                            FontAwesomeIcons.check,
-                            color: AppColor().colorPrimary(),
-                            size: 10.sp,
-                          ))
+                              width: 10.w,
+                              alignment: Alignment.center,
+                              child: FaIcon(
+                                FontAwesomeIcons.check,
+                                color: AppColor().colorPrimary(),
+                                size: 10.sp,
+                              ))
                           : SizedBox(),
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
@@ -3354,7 +3470,6 @@ class _SignUpScreenState extends State<SignUpScreen>
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       ),
                     ),
-
                   ),
                 ),
                 SizedBox(
@@ -3403,13 +3518,13 @@ class _SignUpScreenState extends State<SignUpScreen>
                       ),
                       suffixIcon: phoneController.text.length == 10
                           ? Container(
-                          width: 10.w,
-                          alignment: Alignment.center,
-                          child: FaIcon(
-                            FontAwesomeIcons.check,
-                            color: AppColor().colorPrimary(),
-                            size: 10.sp,
-                          ))
+                              width: 10.w,
+                              alignment: Alignment.center,
+                              child: FaIcon(
+                                FontAwesomeIcons.check,
+                                color: AppColor().colorPrimary(),
+                                size: 10.sp,
+                              ))
                           : SizedBox(),
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
@@ -3465,13 +3580,13 @@ class _SignUpScreenState extends State<SignUpScreen>
                       ),
                       suffixIcon: phoneController.text.length == 10
                           ? Container(
-                          width: 10.w,
-                          alignment: Alignment.center,
-                          child: FaIcon(
-                            FontAwesomeIcons.check,
-                            color: AppColor().colorPrimary(),
-                            size: 10.sp,
-                          ))
+                              width: 10.w,
+                              alignment: Alignment.center,
+                              child: FaIcon(
+                                FontAwesomeIcons.check,
+                                color: AppColor().colorPrimary(),
+                                size: 10.sp,
+                              ))
                           : SizedBox(),
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
@@ -3529,13 +3644,13 @@ class _SignUpScreenState extends State<SignUpScreen>
                       ),
                       suffixIcon: phoneController.text.length == 10
                           ? Container(
-                          width: 10.w,
-                          alignment: Alignment.center,
-                          child: FaIcon(
-                            FontAwesomeIcons.check,
-                            color: AppColor().colorPrimary(),
-                            size: 10.sp,
-                          ))
+                              width: 10.w,
+                              alignment: Alignment.center,
+                              child: FaIcon(
+                                FontAwesomeIcons.check,
+                                color: AppColor().colorPrimary(),
+                                size: 10.sp,
+                              ))
                           : SizedBox(),
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
@@ -3658,13 +3773,13 @@ class _SignUpScreenState extends State<SignUpScreen>
                       ),
                       suffixIcon: phoneController.text.length == 10
                           ? Container(
-                          width: 10.w,
-                          alignment: Alignment.center,
-                          child: FaIcon(
-                            FontAwesomeIcons.check,
-                            color: AppColor().colorPrimary(),
-                            size: 10.sp,
-                          ))
+                              width: 10.w,
+                              alignment: Alignment.center,
+                              child: FaIcon(
+                                FontAwesomeIcons.check,
+                                color: AppColor().colorPrimary(),
+                                size: 10.sp,
+                              ))
                           : SizedBox(),
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
@@ -3719,13 +3834,13 @@ class _SignUpScreenState extends State<SignUpScreen>
                       ),
                       suffixIcon: phoneController.text.length == 10
                           ? Container(
-                          width: 10.w,
-                          alignment: Alignment.center,
-                          child: FaIcon(
-                            FontAwesomeIcons.check,
-                            color: AppColor().colorPrimary(),
-                            size: 10.sp,
-                          ))
+                              width: 10.w,
+                              alignment: Alignment.center,
+                              child: FaIcon(
+                                FontAwesomeIcons.check,
+                                color: AppColor().colorPrimary(),
+                                size: 10.sp,
+                              ))
                           : SizedBox(),
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
@@ -3801,7 +3916,6 @@ class _SignUpScreenState extends State<SignUpScreen>
             ),
           ),
           SizedBox(height: 16),
-
           Center(
             child: InkWell(
               onTap: () async {
@@ -3897,13 +4011,13 @@ class _SignUpScreenState extends State<SignUpScreen>
                         ),
                         suffixIcon: signPhoneController.text.length == 10
                             ? Container(
-                            width: 10.w,
-                            alignment: Alignment.center,
-                            child: FaIcon(
-                              FontAwesomeIcons.check,
-                              color: AppColor().colorPrimary(),
-                              size: 10.sp,
-                            ))
+                                width: 10.w,
+                                alignment: Alignment.center,
+                                child: FaIcon(
+                                  FontAwesomeIcons.check,
+                                  color: AppColor().colorPrimary(),
+                                  size: 10.sp,
+                                ))
                             : SizedBox(),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
@@ -3959,13 +4073,13 @@ class _SignUpScreenState extends State<SignUpScreen>
                         ),
                         suffixIcon: signPhoneController.text.length == 10
                             ? Container(
-                            width: 10.w,
-                            alignment: Alignment.center,
-                            child: FaIcon(
-                              FontAwesomeIcons.check,
-                              color: AppColor().colorPrimary(),
-                              size: 10.sp,
-                            ))
+                                width: 10.w,
+                                alignment: Alignment.center,
+                                child: FaIcon(
+                                  FontAwesomeIcons.check,
+                                  color: AppColor().colorPrimary(),
+                                  size: 10.sp,
+                                ))
                             : SizedBox(),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
@@ -4021,13 +4135,13 @@ class _SignUpScreenState extends State<SignUpScreen>
                         ),
                         suffixIcon: signPhoneController.text.length == 10
                             ? Container(
-                            width: 10.w,
-                            alignment: Alignment.center,
-                            child: FaIcon(
-                              FontAwesomeIcons.check,
-                              color: AppColor().colorPrimary(),
-                              size: 10.sp,
-                            ))
+                                width: 10.w,
+                                alignment: Alignment.center,
+                                child: FaIcon(
+                                  FontAwesomeIcons.check,
+                                  color: AppColor().colorPrimary(),
+                                  size: 10.sp,
+                                ))
                             : SizedBox(),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
@@ -4083,13 +4197,13 @@ class _SignUpScreenState extends State<SignUpScreen>
                         ),
                         suffixIcon: signPhoneController.text.length == 10
                             ? Container(
-                            width: 10.w,
-                            alignment: Alignment.center,
-                            child: FaIcon(
-                              FontAwesomeIcons.check,
-                              color: AppColor().colorPrimary(),
-                              size: 10.sp,
-                            ))
+                                width: 10.w,
+                                alignment: Alignment.center,
+                                child: FaIcon(
+                                  FontAwesomeIcons.check,
+                                  color: AppColor().colorPrimary(),
+                                  size: 10.sp,
+                                ))
                             : SizedBox(),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
@@ -4140,13 +4254,13 @@ class _SignUpScreenState extends State<SignUpScreen>
                         ),
                         suffixIcon: phoneController.text.length == 10
                             ? Container(
-                            width: 10.w,
-                            alignment: Alignment.center,
-                            child: FaIcon(
-                              FontAwesomeIcons.check,
-                              color: AppColor().colorPrimary(),
-                              size: 10.sp,
-                            ))
+                                width: 10.w,
+                                alignment: Alignment.center,
+                                child: FaIcon(
+                                  FontAwesomeIcons.check,
+                                  color: AppColor().colorPrimary(),
+                                  size: 10.sp,
+                                ))
                             : SizedBox(),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
@@ -4204,14 +4318,14 @@ class _SignUpScreenState extends State<SignUpScreen>
                         ),
                         suffixIcon: phoneController.text.length == 10
                             ? Container(
-                          width: 10.w,
-                          alignment: Alignment.center,
-                          child: FaIcon(
-                            FontAwesomeIcons.check,
-                            color: AppColor().colorPrimary(),
-                            size: 10.sp,
-                          ),
-                        )
+                                width: 10.w,
+                                alignment: Alignment.center,
+                                child: FaIcon(
+                                  FontAwesomeIcons.check,
+                                  color: AppColor().colorPrimary(),
+                                  size: 10.sp,
+                                ),
+                              )
                             : SizedBox(),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
@@ -4839,11 +4953,9 @@ class _SignUpScreenState extends State<SignUpScreen>
     });
   }*/
 
-
-
   Future getCountries() async {
     var request =
-    http.Request('GET', Uri.parse('${Apipath.BASH_URL}get_countries'));
+        http.Request('GET', Uri.parse('${Apipath.BASH_URL}get_countries'));
     http.StreamedResponse response = await request.send();
     print(request);
     if (response.statusCode == 200) {
@@ -4905,7 +5017,6 @@ class _SignUpScreenState extends State<SignUpScreen>
       print(boolList.length);*/
       final jsonResponse = CityModel.fromJson(json.decode(str));
 
-
       if (jsonResponse.responseCode == "1") {
         setState(() {
           cityList = jsonResponse.data!;
@@ -4928,7 +5039,6 @@ class _SignUpScreenState extends State<SignUpScreen>
               return DropdownButtonHideUnderline(
                 child: DropdownButton2(
                   isExpanded: true,
-
                   hint: Row(
                     children: [
                       Image.asset(
@@ -5064,7 +5174,6 @@ class _SignUpScreenState extends State<SignUpScreen>
   productListWidget() {
     return Container(
       width: 69.99.w,
-
       child: FutureBuilder(
           future: getServiceCategory(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -5210,19 +5319,16 @@ showSnackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
-
 class MultiSelect extends StatefulWidget {
   String selectedState;
   MultiSelect({Key? key, required this.selectedState}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _MultiSelectState();
-
 }
 
-
 class _MultiSelectState extends State<MultiSelect> {
-  List <CityData>_selectedItems = [];
+  List<CityData> _selectedItems = [];
   // this variable holds the selected items
 
   List<CityData> cityList = [];
@@ -5232,8 +5338,7 @@ class _MultiSelectState extends State<MultiSelect> {
     setState(() {
       if (isSelected) {
         _selectedItems.add(itemValue);
-      }
-      else {
+      } else {
         _selectedItems.remove(itemValue);
       }
     });
@@ -5246,8 +5351,7 @@ class _MultiSelectState extends State<MultiSelect> {
 
 // this function is called when the Submit button is tapped
   void _submit() {
-    List selectedItem = _selectedItems
-        .map((item) => item.id).toList();
+    List selectedItem = _selectedItems.map((item) => item.id).toList();
     // var map = {
     //   "itemIds" : selectedItem,
     //   "selectedItems" : _selectedItems
@@ -5298,6 +5402,7 @@ class _MultiSelectState extends State<MultiSelect> {
 
     getCities();
   }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -5305,35 +5410,32 @@ class _MultiSelectState extends State<MultiSelect> {
       content: SingleChildScrollView(
         child: ListBody(
           children: cityList
-              .map((item) =>
-              CheckboxListTile(
-                value: _selectedItems.contains(item),
-                title: Text(item.name!),
-                controlAffinity: ListTileControlAffinity.leading,
-                // onChanged: (isChecked) => _itemChange(item, isChecked!),
-                onChanged: (isChecked){
-                  setState(() {
-                    if (isChecked!) {
-                      setState((){
-                        _selectedItems.add(item);
+              .map((item) => CheckboxListTile(
+                    value: _selectedItems.contains(item),
+                    title: Text(item.name!),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    // onChanged: (isChecked) => _itemChange(item, isChecked!),
+                    onChanged: (isChecked) {
+                      setState(() {
+                        if (isChecked!) {
+                          setState(() {
+                            _selectedItems.add(item);
+                          });
+                          print("length of item list ${_selectedItems.length}");
+                          for (var i = 0; i < _selectedItems.length; i++) {
+                            print(
+                                "ok now final  ${_selectedItems[i].id} and  ${_selectedItems[i].name}");
+                          }
+                        } else {
+                          setState(() {
+                            _selectedItems.remove(item);
+                          });
+                          print("ok now data ${_selectedItems}");
+                        }
                       });
-                      print("length of item list ${_selectedItems.length}");
-                      for(var i=0;i< _selectedItems.length;i++){
-                        print("ok now final  ${_selectedItems[i].id} and  ${_selectedItems[i].name}");
-                      }
-
-                    }
-                    else {
-
-                      setState((){
-                        _selectedItems.remove(item);
-                      });
-                      print("ok now data ${_selectedItems}");
-                    }
-                  });
-                },
-              )
-          ).toList(),
+                    },
+                  ))
+              .toList(),
         ),
       ),
       // FutureBuilder(
@@ -5364,18 +5466,17 @@ class _MultiSelectState extends State<MultiSelect> {
       // ),
       actions: [
         TextButton(
-          child:  Text('Cancel',
-            style: TextStyle(color: AppColor().colorPrimary()),),
+          child: Text(
+            'Cancel',
+            style: TextStyle(color: AppColor().colorPrimary()),
+          ),
           onPressed: _cancel,
         ),
         ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              primary: AppColor().colorPrimary()
-          ),
-          child:  Text('Submit'),
-          onPressed: (){
-
-            Navigator.pop(context,_selectedItems);
+          style: ElevatedButton.styleFrom(primary: AppColor().colorPrimary()),
+          child: Text('Submit'),
+          onPressed: () {
+            Navigator.pop(context, _selectedItems);
           }
           //     (){
           //   for(var i = 0 ; i< _selectedItems.length; i++){
