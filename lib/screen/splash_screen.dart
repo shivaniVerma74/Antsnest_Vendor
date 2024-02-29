@@ -231,7 +231,7 @@ class _SplashScreenState extends State<SplashScreen>
                     height: 40,
                   ),
                   Align(
-                    alignment: Alignment.topLeft,
+                    alignment: Alignment.center,
                     child: text(
                       "Get started",
                       textColor: Colors.black,
@@ -253,7 +253,7 @@ class _SplashScreenState extends State<SplashScreen>
                           height: 1.5,
                           fontWeight: FontWeight.w500,
                           fontFamily: "Regular"),
-                      textAlign: TextAlign.start,
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   Spacer(),

@@ -59,6 +59,7 @@ class _SignUpScreenState extends State<SignUpScreen>
     with TickerProviderStateMixin {
   int tabController = 1;
   String? selectedLanguage;
+  Map<String, List<SubData>> customMap = {};
 
   late AnimationController _controller;
   TextEditingController nameController = new TextEditingController();
@@ -326,6 +327,7 @@ class _SignUpScreenState extends State<SignUpScreen>
   // }
   String phoneCode = '+91';
   var dateFormate;
+  bool dobError = false;
   String _dateValue = '';
   Future _selectDate() async {
     DateTime? picked = await showDatePicker(
@@ -561,7 +563,8 @@ class _SignUpScreenState extends State<SignUpScreen>
 
   ServiceSubCategoryModel? serviceSubCategoryModel;
 
-  Future<ServiceSubCategoryModel?> getServicesSubCategory(catId) async {
+  Future<ServiceSubCategoryModel?> getServicesSubCategory(
+      catId, String serviceName) async {
     var request = http.MultipartRequest(
         'POST', Uri.parse("${Apipath.BASH_URL}get_categories_list"));
 
@@ -577,8 +580,18 @@ class _SignUpScreenState extends State<SignUpScreen>
       setState(() {
         serviceSubCategoryModel = finalResult;
       });
+      addData(serviceName, serviceSubCategoryModel!.data!);
+      //customMap.addEntries(serviceName, serviceSubCategoryModel.data!);
     } else {
       return null;
+    }
+  }
+
+  void addData(String key, List<SubData> newData) {
+    if (customMap.containsKey(key)) {
+      customMap[key]!.addAll(newData);
+    } else {
+      customMap[key] = newData;
     }
   }
 
@@ -647,26 +660,33 @@ class _SignUpScreenState extends State<SignUpScreen>
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    height: 15,
-                                    width: 15,
-                                    padding: EdgeInsets.all(2),
-                                    decoration: BoxDecoration(
-                                        color: Colors.transparent,
-                                        border: Border.all(
-                                            color: AppColor.PrimaryDark),
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: selectedLanguageList
-                                                  .contains(languageList[i])
-                                              ? AppColor().colorPrimary()
-                                              : Colors.transparent,
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                    ),
-                                  ),
+                                  selectedLanguageList.contains(languageList[i])
+                                      ? Icon(Icons.check_box,
+                                          size: 20, color: AppColor.PrimaryDark)
+                                      : Icon(Icons.check_box_outline_blank,
+                                          size: 20,
+                                          color: AppColor.PrimaryDark),
+                                  // Container(
+                                  //     height: 15,
+                                  //     width: 15,
+                                  //     padding: EdgeInsets.all(2),
+                                  //     decoration: BoxDecoration(
+                                  //         color: Colors.transparent,
+                                  //         border: Border.all(
+                                  //             color: AppColor.PrimaryDark),
+                                  //         borderRadius:
+                                  //             BorderRadius.circular(0)),
+                                  //     child: Container(
+                                  //       decoration: BoxDecoration(
+                                  //           color: selectedLanguageList
+                                  //                   .contains(
+                                  //                       languageList[i])
+                                  //               ? AppColor().colorPrimary()
+                                  //               : Colors.transparent,
+                                  //           borderRadius:
+                                  //               BorderRadius.circular(2)),
+                                  //     ),
+                                  //   ),
                                   SizedBox(
                                     width: 8,
                                   ),
@@ -1945,7 +1965,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(12)),
                                   child: _dateValue.length > 0
-                                      ? Text("${dateFormate}")
+                                      ? Text("$dateFormate")
                                       : Text(
                                           "When is your birthday?",
                                           style: TextStyle(
@@ -1979,6 +1999,16 @@ class _SignUpScreenState extends State<SignUpScreen>
                                 ),
                               ),
                             ),
+                            !dobError
+                                ? Container()
+                                : Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      'Enter your date of birth',
+                                      style: TextStyle(
+                                          color: AppColor.PrimaryDark),
+                                    ),
+                                  ),
                             SizedBox(
                               height: 15,
                             ),
@@ -2140,17 +2170,25 @@ class _SignUpScreenState extends State<SignUpScreen>
                                                   .toList(),
                                               value: selectedCategory,
                                               onChanged: (value) {
+                                                var serviceName = "";
+
                                                 setState(() {
+                                                  var serviceName = "";
                                                   selectedCategory =
                                                       value as String;
-                                                  // // serviceName.text = serviceModel.data!
-                                                  //     .firstWhere((element) => element.id == value)
-                                                  //     .cName
-                                                  //     .toString();
                                                 });
                                                 categorylist.clear();
+                                                print(selectedCategory);
+                                                serviceName = serviceModel.data!
+                                                    .firstWhere((element) =>
+                                                        element.id == value)
+                                                    .cName
+                                                    .toString();
+                                                print(serviceName.toString());
+
                                                 getServicesSubCategory(
-                                                    selectedCategory);
+                                                    selectedCategory,
+                                                    serviceName);
                                                 print(
                                                     "CATEGORY ID issssss== $selectedCategory");
                                               },
@@ -2304,15 +2342,23 @@ class _SignUpScreenState extends State<SignUpScreen>
                             //       showDialog(
                             //         context: context,
                             //         builder: (BuildContext context) {
-                            //           return FruitSelectionDialog();
+                            //           return FruitSelectionDialog(customMap: customMap,);
                             //         },
                             //       ).then((selectedFruits) {
                             //         if (selectedFruits != null) {
                             //           print('Selected fruits: $selectedFruits');
                             //         }
+                            //         customMap.forEach((key, value) {
+                            //           print('Key: $key');
+                            //           value.forEach((element) {
+                            //             print(
+                            //                 'Id: ${element.id}, Name: ${element.cName}');
+                            //           });
+                            //         });
                             //       });
                             //     },
                             //     child: Text("SELECT SUB CATEGORY")),
+
                             Material(
                               elevation: 4,
                               color: Colors.white,
@@ -3242,6 +3288,9 @@ class _SignUpScreenState extends State<SignUpScreen>
                                 Expanded(
                                   child: InkWell(
                                     onTap: () {
+                                      setState(() {
+                                        dobError = false;
+                                      });
                                       cityIdList.clear();
                                       print("ok nowoooo ${cityIdList.length}");
                                       for (var i = 0;
@@ -3254,6 +3303,8 @@ class _SignUpScreenState extends State<SignUpScreen>
                                       print("yes ${cityIdList.length}");
                                       if (_formKey.currentState!.validate()) {
                                         if (dateFormate == null) {
+                                          dobError = true;
+                                          setState(() {});
                                           showSnackBar(context,
                                               'please enter date of birth');
                                         } else if (selectedCategory == null) {
@@ -5382,8 +5433,13 @@ class _SignUpScreenState extends State<SignUpScreen>
   setTokenData(userid, context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(TokenString.userid, userid);
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => BottomBar()), (route) => false);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (context) => BottomBar(
+                  index: 0,
+                )),
+        (route) => false);
   }
 }
 

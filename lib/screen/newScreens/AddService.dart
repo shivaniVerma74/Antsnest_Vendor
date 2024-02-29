@@ -1313,7 +1313,7 @@
 //                     AddServicesModel addModel = await addServices(param);
 //                     if (addModel.responseCode == "1") {
 //                       Navigator.pushReplacement(context,
-//                           MaterialPageRoute(builder: (context) => BottomBar()));
+//                           MaterialPageRoute(builder: (context) => BottomBar(index: 1,)));
 //                       UtilityHlepar.getToast(addModel.message);
 //                     } else {
 //                       UtilityHlepar.getToast(addModel.message);
@@ -1823,13 +1823,13 @@ class _AddServicesState extends State<AddServices> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomSheet: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-            height: 50,
-            width: double.maxFinite,
-            child: isPlanAvailable == "0" ? SizedBox() : bottomButton()),
-      ),
+      // bottomSheet: Padding(
+      //   padding: const EdgeInsets.all(8.0),
+      //   child: Container(
+      //       height: 50,
+      //       width: double.maxFinite,
+      //       child: isPlanAvailable == "0" ? SizedBox() : bottomButton()),
+      // ),
       appBar: AppBar(
         backgroundColor: AppColor.PrimaryDark,
         title: Text(
@@ -2008,7 +2008,13 @@ class _AddServicesState extends State<AddServices> {
             print("ADD SERVICE PARAM=====" + param.toString());
             AddServicesModel addModel = await addServices(param);
             if (addModel.responseCode == "1") {
-              Navigator.pop(context);
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => BottomBar(
+                            index: 1,
+                          )),
+                  (route) => false);
               UtilityHlepar.getToast('Service added successfully');
             } else {
               UtilityHlepar.getToast(addModel.message);
@@ -3385,7 +3391,7 @@ class _AddServicesState extends State<AddServices> {
 
           Container(
             margin: EdgeInsets.only(bottom: 10),
-            padding: EdgeInsets.symmetric(horizontal: 40),
+            padding: EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -3433,7 +3439,7 @@ class _AddServicesState extends State<AddServices> {
                           child: Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(12.0),
                                 child: Column(
                                   children: [
                                     Row(
@@ -3454,7 +3460,7 @@ class _AddServicesState extends State<AddServices> {
                                               child: DropdownButton2(
                                                 isExpanded: true,
                                                 hint: Text(
-                                                  'Select Hours / Day',
+                                                  'Add on service',
                                                   style: TextStyle(
                                                     fontSize: 14,
                                                     fontWeight:
@@ -3711,8 +3717,15 @@ class _AddServicesState extends State<AddServices> {
           ),
 
           SizedBox(
-            height: 8.h,
+            height: 1.h,
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+                height: 50,
+                width: double.maxFinite,
+                child: isPlanAvailable == "0" ? SizedBox() : bottomButton()),
+          )
         ],
       ),
     );

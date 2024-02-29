@@ -45,7 +45,11 @@ class _FastsplashState extends State<Fastsplash> {
       body: AnimatedSplashScreen(
         splash: 'images/splash_one.png',
         backgroundColor: AppColor.PrimaryDark,
-        nextScreen: uid == null || uid == "" ? SplashScreen() : BottomBar(),
+        nextScreen: uid == null || uid == ""
+            ? SplashScreen()
+            : BottomBar(
+                index: 0,
+              ),
         splashIconSize: 190.sp,
         duration: 350,
         splashTransition: SplashTransition.slideTransition,

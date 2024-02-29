@@ -182,7 +182,9 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => BottomBar()));
+                                            builder: (context) => BottomBar(
+                                                  index: 0,
+                                                )));
                                   },
                                   child: Image.asset(
                                     back,
@@ -1404,7 +1406,10 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
     if (statusResponse.responseCode == ToastString.responseCode) {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => BottomBar()),
+          MaterialPageRoute(
+              builder: (context) => BottomBar(
+                    index: 0,
+                  )),
           (route) => false);
     }
   }

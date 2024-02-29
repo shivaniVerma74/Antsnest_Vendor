@@ -19,9 +19,9 @@ import '../utils/widget.dart';
 import 'bottom_bar.dart';
 
 class OtpScreen extends StatefulWidget {
-   String? otp;
+  String? otp;
   final String? mobile;
-  OtpScreen({this.otp,this.mobile});
+  OtpScreen({this.otp, this.mobile});
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -33,45 +33,62 @@ class _OtpScreenState extends State<OtpScreen> {
   String? enteredOtp;
   String? otp;
 
-  LoginApi()async{
-    showDialog(context: context, builder: (context){
-      return CustomLoader(text: "Login, please wait...",);
+  LoginApi() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CustomLoader(
+            text: "Login, please wait...",
+          );
+        });
+    print({
+      "mobile========": widget.mobile,
     });
-    print({"mobile========":widget.mobile,});
-    var response = await  http.post(Uri.parse(VendorLogin),
-        body: {"mobile":widget.mobile,});
+    var response = await http.post(Uri.parse(VendorLogin), body: {
+      "mobile": widget.mobile,
+    });
     print("checking response here ${response.body}");
     final finalStr = LoginModel.fromJson(jsonDecode(response.body));
-    if(finalStr.status == "success"){
+    if (finalStr.status == "success") {
       Navigator.of(context).pop();
       setState(() {
         otp = finalStr.otp.toString();
-        widget.otp  = otp;
+        widget.otp = otp;
       });
       print("otp here ${otp}");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => OtpScreen(otp: otp,mobile: widget.mobile,) ));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => OtpScreen(
+                    otp: otp,
+                    mobile: widget.mobile,
+                  )));
       const snackBar = SnackBar(
         backgroundColor: Colors.green,
         content: Text('Otp Send Successfully'),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-    else {
+    } else {
       Navigator.pop(context);
       Fluttertoast.showToast(msg: "${finalStr.message}");
     }
   }
 
-  verifyUser()async{
+  verifyUser() async {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
-    showDialog(context: context, builder: (context){
-      return CustomLoader(text: "Verifying user, please wait...",);
-    });
-    var response = await http.post(Uri.parse(VerifyUser),body: {"mobile":"${widget.mobile}","otp": widget.otp});
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CustomLoader(
+            text: "Verifying user, please wait...",
+          );
+        });
+    var response = await http.post(Uri.parse(VerifyUser),
+        body: {"mobile": "${widget.mobile}", "otp": widget.otp});
     print("response of  verify user ${response.body}");
     var finalStr = VerifyUserModel.fromJson(json.decode(response.body));
     String? msg = VerifyUserModel.fromJson(json.decode(response.body)).message;
-    if(finalStr.status == "success"){
+    if (finalStr.status == "success") {
       setState(() {
         userid = finalStr.userId;
       });
@@ -82,12 +99,17 @@ class _OtpScreenState extends State<OtpScreen> {
       // String? uid = prefs.getString("vendorId");
       // print("checking vendor id here ${uid}");
       Navigator.of(context).pop();
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BottomBar()), (route) => false);
-    }
-    else{
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BottomBar(
+                    index: 0,
+                  )),
+          (route) => false);
+    } else {
       Navigator.of(context).pop();
-     const snackBar = SnackBar(
-        content: Text('Invalid otp') ,
+      const snackBar = SnackBar(
+        content: Text('Invalid otp'),
       );
 
 // Find the ScaffoldMessenger in the widget tree
@@ -96,14 +118,13 @@ class _OtpScreenState extends State<OtpScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     print("okkk ${widget.mobile}");
     return Scaffold(
       backgroundColor: AppColor().colorBg2(),
       body: SafeArea(
-        child:SingleChildScrollView(
+        child: SingleChildScrollView(
           child: AnimatedContainer(
             duration: Duration(milliseconds: 1000),
             curve: Curves.easeInOut,
@@ -128,8 +149,9 @@ class _OtpScreenState extends State<OtpScreen> {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       color: AppColor.PrimaryDark,
-                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(18),bottomRight: Radius.circular(18))
-                  ),
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(18),
+                          bottomRight: Radius.circular(18))),
                   child: Center(
                     child: Column(
                       children: [
@@ -157,12 +179,11 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12,vertical: 15),
-                  margin: EdgeInsets.only(top: 20.h,left: 25,right: 25),
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+                  margin: EdgeInsets.only(top: 20.h, left: 25, right: 25),
                   decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(20)
-                  ),
+                      borderRadius: BorderRadius.circular(20)),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -172,9 +193,15 @@ class _OtpScreenState extends State<OtpScreen> {
                       //   child: Text("Verify OTP",style: TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.w500),),
                       // ),
                       Padding(
-                        padding: EdgeInsets.only(top: 10,bottom: 20),
-                        child: Text("We have send you a code of 4 digit on your email ",textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.grey ,fontSize: 14,fontWeight: FontWeight.w400),),
+                        padding: EdgeInsets.only(top: 10, bottom: 20),
+                        child: Text(
+                          "We have send you a code of 4 digit on your email ",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400),
+                        ),
                       ),
                       OTPTextField(
                         controller: otpController,
@@ -188,8 +215,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         outlineBorderRadius: 15,
                         otpFieldStyle: OtpFieldStyle(
                             backgroundColor: Color(0xffFFFFFF),
-                            disabledBorderColor: Colors.white
-                        ),
+                            disabledBorderColor: Colors.white),
                         style: TextStyle(fontSize: 17, height: 2.2),
                         onChanged: (pin) {
                           print("checking pin here ${pin}");
@@ -199,9 +225,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             setState(() {
                               enteredOtp = pin;
                             });
-                          } else {
-
-                          }
+                          } else {}
                         },
                       ),
                       // Container(
@@ -220,10 +244,12 @@ class _OtpScreenState extends State<OtpScreen> {
                       //       ),
                       //       keyboardType: TextInputType.number,
                       //     )),
-                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 20,
+                      ),
                       InkWell(
-                        onTap: (){
-                          if(widget.otp == enteredOtp){
+                        onTap: () {
+                          if (widget.otp == enteredOtp) {
                             verifyUser();
                           } else {
                             UtilityHlepar.getToast("Please Enter Correct OTP");
@@ -231,24 +257,39 @@ class _OtpScreenState extends State<OtpScreen> {
                         },
                         child: Container(
                           height: 45,
-                          width: MediaQuery.of(context).size.width/2,
+                          width: MediaQuery.of(context).size.width / 2,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: AppColor.PrimaryDark,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Text("Verify OTP",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 17),),),
+                          child: Text(
+                            "Verify OTP",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 17),
+                          ),
+                        ),
                       ),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       InkWell(
-                          onTap: (){
+                          onTap: () {
                             LoginApi();
                           },
-                          child: Text("Resend Otp",style: TextStyle(decoration: TextDecoration.underline),)),
+                          child: Text(
+                            "Resend Otp",
+                            style:
+                                TextStyle(decoration: TextDecoration.underline),
+                          )),
                     ],
                   ),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 // Text("${widget.otp}")
               ],
             ),

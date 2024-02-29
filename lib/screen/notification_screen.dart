@@ -33,26 +33,28 @@ class _NotificationScreenState extends State<NotificationScreen> {
     getNotification();
     getReadNotification();
   }
+
   late VendorOrderModel orderResponse;
 
-  getNewOders(i,String bookinId) async {
-
+  getNewOders(i, String bookinId) async {
     var userid = await MyToken.getUserID();
-    GetNewOrderRequest request = GetNewOrderRequest(userId: userid,bookingId:bookinId );
+    GetNewOrderRequest request =
+        GetNewOrderRequest(userId: userid, bookingId: bookinId);
     orderResponse = await HomeApiHelper.getNewOrder(request);
     if (orderResponse.responseCode == ToastString.responseCode) {
-
       gotOderInfo(orderResponse, i);
-    } else {
-    }
+    } else {}
   }
+
   gotOderInfo(response, i) async {
     await Navigator.push(
-      context, MaterialPageRoute(builder: (context) => ServiceScreenDetails(orderResponse: response, i: i)),
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              ServiceScreenDetails(orderResponse: response, i: i)),
     );
-   // await getVendorBooking("");
+    // await getVendorBooking("");
   }
-
 
   @override
   void dispose() {
@@ -67,7 +69,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: Text("Notification",),
+        title: Text(
+          "Notification",
+        ),
         centerTitle: true,
         backgroundColor: AppColor.PrimaryDark,
       ),
@@ -112,7 +116,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 //                   Navigator.pushReplacement(
                 //                       context,
                 //                       MaterialPageRoute(
-                //                           builder: (context) => BottomBar()));
+                //                           builder: (context) => BottomBar(index: 1,)));
                 //                 },
                 //                 child: Image.asset(
                 //                   back,
@@ -141,15 +145,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Container(
-                          height: MediaQuery.of(context).size.height/1.5,
+                          height: MediaQuery.of(context).size.height / 1.5,
                           child: Center(child: Text(snapshot.error.toString())),
                         );
                       } else if (snapshot.connectionState ==
                           ConnectionState.waiting) {
                         // return LodingAllPage();
                         return Container(
-                            height: MediaQuery.of(context).size.height/1.5,
-                            child: Center(child: Image.asset("images/icons/loader.gif"),));
+                            height: MediaQuery.of(context).size.height / 1.5,
+                            child: Center(
+                              child: Image.asset("images/icons/loader.gif"),
+                            ));
                       }
                       return Container(
                         margin: EdgeInsets.only(top: 1.87.h),
@@ -160,7 +166,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             itemBuilder: (context, i) {
                               return InkWell(
                                 onTap: () async {
-                                  getNewOders(0,"${snapshot.data!.notifications?[i].dataId}");
+                                  getNewOders(0,
+                                      "${snapshot.data!.notifications?[i].dataId}");
                                 },
                                 child: Container(
                                     height: 11.40.h,
@@ -200,8 +207,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                               Container(
                                                 child: text(
                                                     snapshot
-                                                        .data!.notifications![i].title!,
-                                                    textColor: Color(0xff191919),
+                                                        .data!
+                                                        .notifications![i]
+                                                        .title!,
+                                                    textColor:
+                                                        Color(0xff191919),
                                                     fontSize: 11.5.sp,
                                                     fontFamily: fontBold,
                                                     overFlow: true),
@@ -212,7 +222,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                               Container(
                                                 child: text(
                                                   snapshot
-                                                      .data!.notifications![i].message!,
+                                                      .data!
+                                                      .notifications![i]
+                                                      .message!,
                                                   textColor: Color(0xff2a2a2a),
                                                   fontSize: 7.sp,
                                                   overFlow: true,
@@ -236,20 +248,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
       ),
     );
   }
-getReadNotification() async {
-  String userid = await MyToken.getUserID();
-  var responsData = await ApiService.postAPI(
-      path: Apipath.readnotification, parameters: {"user_id":"${userid}"});
 
-  print(responsData.body);
-  print(responsData.statusCode);
-}
+  getReadNotification() async {
+    String userid = await MyToken.getUserID();
+    var responsData = await ApiService.postAPI(
+        path: Apipath.readnotification, parameters: {"user_id": "${userid}"});
+
+    print(responsData.body);
+    print(responsData.statusCode);
+  }
+
   late NotificationResponse response;
   getNotification() async {
     String userid = await MyToken.getUserID();
 
     try {
-
       NotificationRequest request = NotificationRequest(userid: userid);
       response = await HomeApiHelper.getNotification(request);
       print(response.notifications?.length);

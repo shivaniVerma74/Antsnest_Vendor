@@ -1,6 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:fixerking/screen/push_notification_service.dart';
 import 'package:fixerking/utils/colors.dart';
 import 'package:fixerking/utils/fcm_helper.dart';
 import 'package:fixerking/utils/widget.dart';
