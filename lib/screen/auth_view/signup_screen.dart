@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:fixerking/screen/auth_view/subCategoryScreen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -2298,7 +2299,20 @@ class _SignUpScreenState extends State<SignUpScreen>
                             SizedBox(
                               height: 15,
                             ),
-
+                            // GestureDetector(
+                            //     onTap: () {
+                            //       showDialog(
+                            //         context: context,
+                            //         builder: (BuildContext context) {
+                            //           return FruitSelectionDialog();
+                            //         },
+                            //       ).then((selectedFruits) {
+                            //         if (selectedFruits != null) {
+                            //           print('Selected fruits: $selectedFruits');
+                            //         }
+                            //       });
+                            //     },
+                            //     child: Text("SELECT SUB CATEGORY")),
                             Material(
                               elevation: 4,
                               color: Colors.white,

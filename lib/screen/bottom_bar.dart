@@ -95,7 +95,6 @@ class _BottomBarState extends State<BottomBar> {
                   AssetImage(home),
                 ),
                 label: "Home"),
-
             BottomNavigationBarItem(
                 icon: ImageIcon(AssetImage(addIcon)), label: "Manage Service"),
             BottomNavigationBarItem(

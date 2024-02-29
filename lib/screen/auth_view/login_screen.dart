@@ -63,6 +63,10 @@ class _LoginScreenState extends State<LoginScreen>
     setState(() {
       token = fcmToken.toString();
     });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      token = prefs.getString(TokenString.fcmToken) ?? "";
+    });
     print("FCM ID=== $token");
   }
 

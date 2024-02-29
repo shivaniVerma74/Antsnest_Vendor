@@ -1594,14 +1594,13 @@ import 'package:http/http.dart' as http;
 class AddServices extends StatefulWidget {
   const AddServices({Key? key, this.profileResponse}) : super(key: key);
 
-  final GetProfileResponse? profileResponse  ;
+  final GetProfileResponse? profileResponse;
 
   @override
   State<AddServices> createState() => _AddServicesState();
 }
 
 class _AddServicesState extends State<AddServices> {
-
   TextEditingController onpenTime = new TextEditingController();
   TextEditingController imageC = new TextEditingController();
   TextEditingController closeTime = new TextEditingController();
@@ -1624,7 +1623,7 @@ class _AddServicesState extends State<AddServices> {
   String? selectedCategory, selectSubCategory, selectChildCategory, selectModel;
   dynamic selectedCategory11;
   //String ?selectedSubCategory11;
-  List<String> categorylist=[];
+  List<String> categorylist = [];
   Set<String> uniqueValues = Set();
   double perMinServiceCharge = 0.0;
   String? visitingCharge;
@@ -1665,7 +1664,6 @@ class _AddServicesState extends State<AddServices> {
   List<TextEditingController> addonHourDayPriceControllerList = [];
 
   List<String> hourDayList = ["Hour", "Day"];
-
 
   Future getState() async {
     var request = http.MultipartRequest(
@@ -1824,12 +1822,13 @@ class _AddServicesState extends State<AddServices> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       bottomSheet: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-            height: 50, width: double.maxFinite, child: isPlanAvailable == "0" ? SizedBox() :bottomButton()),
+            height: 50,
+            width: double.maxFinite,
+            child: isPlanAvailable == "0" ? SizedBox() : bottomButton()),
       ),
       appBar: AppBar(
         backgroundColor: AppColor.PrimaryDark,
@@ -1896,8 +1895,8 @@ class _AddServicesState extends State<AddServices> {
                     ),
                   )
                 : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Column(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Column(
                       children: [
                         // Container(
                         //   height: 9.92.h,
@@ -1941,7 +1940,7 @@ class _AddServicesState extends State<AddServices> {
                         secondSign(context),
                       ],
                     ),
-                ),
+                  ),
           ),
         ),
       ),
@@ -1951,19 +1950,20 @@ class _AddServicesState extends State<AddServices> {
   Widget bottomButton() {
     return InkWell(
       onTap: () async {
-
         var userId = await MyToken.getUserID();
-        print(  selectedCategory11.id );
+        print(selectedCategory11.id);
         print(serviceName.text.isNotEmpty);
+        if (descriptionController.text.trim().toString().length < 100) {
+          return UtilityHlepar.getToast(
+              "Description must be of at least 100 characters.");
+        }
 
         if (serviceName.text.isNotEmpty &&
-             selectedCategory11.id != "null" &&
+            selectedCategory11.id != "null" &&
             selectedCurrency != "" &&
             serviceCharge.text.isNotEmpty) {
-          if (
-          selectedCategory11.id.isNotEmpty &&
-              categorylist.isNotEmpty||subcateid.isNotEmpty &&
-              serviceCharge.text.isNotEmpty) {
+          if (selectedCategory11.id.isNotEmpty && categorylist.isNotEmpty ||
+              subcateid.isNotEmpty && serviceCharge.text.isNotEmpty) {
             setState(() {
               buttonLogin = true;
             });
@@ -1973,7 +1973,7 @@ class _AddServicesState extends State<AddServices> {
                   addonHourDayPriceControllerList[i].text.isNotEmpty &&
                   selectedServiceTypeList[i] != null &&
                   selectedServiceHourList[i] != null) {
-                  addonList.add(jsonEncode({
+                addonList.add(jsonEncode({
                   "service": selectedServiceTypeList[i],
                   "price_a": addonServicePriceControllerList[i].text,
                   "hrly": selectedServiceHourList[i],
@@ -1985,13 +1985,15 @@ class _AddServicesState extends State<AddServices> {
             Map<String, String> param = {
               'name': '${serviceName.text.toString()}',
               'description': '${descriptionController.text}',
-              'cat_id': selectedCategory11.id??'',
-              'scat_id': categorylist.isEmpty?subcateid.map((dynamic value) {
-                return value.toString();
-              }).join(', '): categorylist.map((String value) {
-                return value.toString();
-              }).join(', '),
-             // categorylist.toString().toJ??'',
+              'cat_id': selectedCategory11.id ?? '',
+              'scat_id': categorylist.isEmpty
+                  ? subcateid.map((dynamic value) {
+                      return value.toString();
+                    }).join(', ')
+                  : categorylist.map((String value) {
+                      return value.toString();
+                    }).join(', '),
+              // categorylist.toString().toJ??'',
               'vid': '$userId',
               'price': '${serviceCharge.text.toString()}',
               'country_id': "${selectedCountry.toString()}",
@@ -2010,17 +2012,12 @@ class _AddServicesState extends State<AddServices> {
               UtilityHlepar.getToast('Service added successfully');
             } else {
               UtilityHlepar.getToast(addModel.message);
-
             }
-
-          }
-          else if (selectedCategory11.id.toString()=="null") {
+          } else if (selectedCategory11.id.toString() == "null") {
             UtilityHlepar.getToast(ToastString.msgSelectServiceType);
-          }
-          else if (categorylist.isEmpty) {
+          } else if (categorylist.isEmpty) {
             UtilityHlepar.getToast(ToastString.msgSelectServiceSubType);
-          }
-          else if (serviceCharge.text.isEmpty) {
+          } else if (serviceCharge.text.isEmpty) {
             UtilityHlepar.getToast(ToastString.msgServiceCharge);
           } else if (servicePic == null) {
             UtilityHlepar.getToast("Service Image Required");
@@ -2029,7 +2026,8 @@ class _AddServicesState extends State<AddServices> {
           UtilityHlepar.getToast("PLease select fields");
         }
       },
-      child: UtilityWidget.lodingButton(buttonLogin: buttonLogin, btntext: 'Submit'),
+      child: UtilityWidget.lodingButton(
+          buttonLogin: buttonLogin, btntext: 'Submit'),
     );
   }
 
@@ -2586,78 +2584,79 @@ class _AddServicesState extends State<AddServices> {
                 borderRadius: BorderRadius.circular(14.0)),
             color: AppColor().colorEdit(),
             child: Container(
-                width: double.infinity,
-                decoration: boxDecoration(
-                  radius: 14.0,
-                  bgColor: AppColor().colorEdit(),
+              width: double.infinity,
+              decoration: boxDecoration(
+                radius: 14.0,
+                bgColor: AppColor().colorEdit(),
+              ),
+              child: TextFormField(
+                controller: serviceOfferedController,
+                maxLines: 3,
+                keyboardType: TextInputType.text,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  hintText: "Service Offered give in ( , )",
+                  border: InputBorder.none,
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
+                  // prefixIcon: Icon(
+                  //   Icons.miscellaneous_services,
+                  //   color: AppColor.PrimaryDark,
+                  // ),
                 ),
-                child: TextFormField(
-                  controller: serviceOfferedController,
-                  maxLines: 3,
-                  keyboardType: TextInputType.text,
-                  textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(
-                    hintText: "Service Offered give in ( , )",
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
-                    // prefixIcon: Icon(
-                    //   Icons.miscellaneous_services,
-                    //   color: AppColor.PrimaryDark,
-                    // ),
-                  ),
-                ),
+              ),
             ),
           ),
           SizedBox(
             height: 2.5.h,
           ),
           // SERVICE CATEGORY
-          serviceModel == null ? Center(child: CircularProgressIndicator()) :
-          // Card(
-          //   elevation: 0,
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(14.0),
-          //   ),
-          //   color: AppColor().colorEdit(),
-          //   child: Container(
-          //       width: double.infinity,
-          //       height: 6.h,
-          //       decoration: boxDecoration(
-          //         radius: 14.0,
-          //         bgColor: AppColor().colorEdit(),
-          //       ),
-          //       child: TextFormField(
-          //         keyboardType: TextInputType.text,
-          //         controller: serviceCategory,
-          //         style: const TextStyle(
-          //           fontSize: 14,
-          //           fontWeight: FontWeight.bold,
-          //           color: Colors.black,
-          //           overflow: TextOverflow.ellipsis,
-          //
-          //         ),
-          //         readOnly: true,
-          //         //inputFormatters: [LengthLimitingTextInputFormatter(5)],
-          //         textAlignVertical: TextAlignVertical.center,
-          //         decoration: InputDecoration(
-          //
-          //           hintText: "Service Category",
-          //           border: InputBorder.none,
-          //           contentPadding:
-          //           EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
-          //           /*prefixIcon: Icon(
-          //             Icons.credit_card_outlined,
-          //             color: AppColor.PrimaryDark,
-          //           ),*/
-          //         ),
-          //       )),
-          // ),
+          serviceModel == null
+              ? Center(child: CircularProgressIndicator())
+              :
+              // Card(
+              //   elevation: 0,
+              //   shape: RoundedRectangleBorder(
+              //     borderRadius: BorderRadius.circular(14.0),
+              //   ),
+              //   color: AppColor().colorEdit(),
+              //   child: Container(
+              //       width: double.infinity,
+              //       height: 6.h,
+              //       decoration: boxDecoration(
+              //         radius: 14.0,
+              //         bgColor: AppColor().colorEdit(),
+              //       ),
+              //       child: TextFormField(
+              //         keyboardType: TextInputType.text,
+              //         controller: serviceCategory,
+              //         style: const TextStyle(
+              //           fontSize: 14,
+              //           fontWeight: FontWeight.bold,
+              //           color: Colors.black,
+              //           overflow: TextOverflow.ellipsis,
+              //
+              //         ),
+              //         readOnly: true,
+              //         //inputFormatters: [LengthLimitingTextInputFormatter(5)],
+              //         textAlignVertical: TextAlignVertical.center,
+              //         decoration: InputDecoration(
+              //
+              //           hintText: "Service Category",
+              //           border: InputBorder.none,
+              //           contentPadding:
+              //           EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
+              //           /*prefixIcon: Icon(
+              //             Icons.credit_card_outlined,
+              //             color: AppColor.PrimaryDark,
+              //           ),*/
+              //         ),
+              //       )),
+              // ),
 
-
-
-          SizedBox(
-            height: 2.5.h,
-          ),
+              SizedBox(
+                  height: 2.5.h,
+                ),
           /*Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
               width: double.infinity,
@@ -2731,98 +2730,94 @@ class _AddServicesState extends State<AddServices> {
            )*/
 
           Container(
-              width: double.infinity,
-              height: 6.h,
-              decoration: boxDecoration(
-                radius: 10.0,
-              ),
-              child:
-              DropdownButtonHideUnderline(
-                child: DropdownButton2<dynamic>(
-                  isExpanded: true,
-                  hint: Row(
-                    children: [
-                      Image.asset(
-                        service,
-                        width: 6.04.w,
-                        height: 5.04.w,
-                        fit: BoxFit.fill,
-                        color: AppColor.PrimaryDark,
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Expanded(
-                        child: Text(
-                          'Select Category',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  items: serviceModel?.data!
-                      .map((item) => DropdownMenuItem<dynamic>(
-                    value: item,
-                    child: Text(
-                      item.cName!,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+            width: double.infinity,
+            height: 6.h,
+            decoration: boxDecoration(
+              radius: 10.0,
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton2<dynamic>(
+                isExpanded: true,
+                hint: Row(
+                  children: [
+                    Image.asset(
+                      service,
+                      width: 6.04.w,
+                      height: 5.04.w,
+                      fit: BoxFit.fill,
+                      color: AppColor.PrimaryDark,
                     ),
-                  ))
-                      .toList(),
-                  value: selectedCategory11,
-                  // onChanged: (value) {
-                  //   setState(() {
-                  //     selectedCategory11 = value;
-                  //     // // serviceName.text = serviceModel.data!
-                  //     //     .firstWhere((element) => element.id == value)
-                  //     //     .cName
-                  //     //     .toString();
-                  //     print("selectedCategory=>" +
-                  //         selectedCategory.toString() +
-                  //         "serviceName" +
-                  //         serviceName.text);
-                  //     getServicesSubCategory(selectedCategory11?.id);
-                  //   });
-                  //   print("CATEGORY ID== $selectedCategory");
-                  // },
-                  // icon: const Icon(
-                  //   Icons.arrow_forward_ios_outlined,
-                  //   color: AppColor.PrimaryDark,
-                  // ),
-                  iconSize: 0,
-                  buttonHeight: 50,
-                  buttonWidth: 160,
-                  buttonPadding:
-                  const EdgeInsets.only(left: 14, right: 14),
-                  buttonDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: AppColor().colorEdit(),
-                  ),
-                  buttonElevation: 0,
-                  itemHeight: 40,
-                  itemPadding:
-                  const EdgeInsets.only(left: 14, right: 14),
-                  dropdownMaxHeight: 300,
-                  dropdownPadding: null,
-                  dropdownDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  dropdownElevation: 8,
-                  scrollbarRadius: const Radius.circular(40),
-                  scrollbarThickness: 6,
-                  scrollbarAlwaysShow: true,
+                    SizedBox(
+                      width: 4,
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Select Category',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
-
-          ),
+                items: serviceModel?.data!
+                    .map((item) => DropdownMenuItem<dynamic>(
+                          value: item,
+                          child: Text(
+                            item.cName!,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ))
+                    .toList(),
+                value: selectedCategory11,
+                // onChanged: (value) {
+                //   setState(() {
+                //     selectedCategory11 = value;
+                //     // // serviceName.text = serviceModel.data!
+                //     //     .firstWhere((element) => element.id == value)
+                //     //     .cName
+                //     //     .toString();
+                //     print("selectedCategory=>" +
+                //         selectedCategory.toString() +
+                //         "serviceName" +
+                //         serviceName.text);
+                //     getServicesSubCategory(selectedCategory11?.id);
+                //   });
+                //   print("CATEGORY ID== $selectedCategory");
+                // },
+                // icon: const Icon(
+                //   Icons.arrow_forward_ios_outlined,
+                //   color: AppColor.PrimaryDark,
+                // ),
+                iconSize: 0,
+                buttonHeight: 50,
+                buttonWidth: 160,
+                buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+                buttonDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  color: AppColor().colorEdit(),
+                ),
+                buttonElevation: 0,
+                itemHeight: 40,
+                itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                dropdownMaxHeight: 300,
+                dropdownPadding: null,
+                dropdownDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                dropdownElevation: 8,
+                scrollbarRadius: const Radius.circular(40),
+                scrollbarThickness: 6,
+                scrollbarAlwaysShow: true,
+              ),
+            ),
           ),
 
           // selectedCategory == "" || selectedCategory == null
@@ -2871,90 +2866,92 @@ class _AddServicesState extends State<AddServices> {
           //   ),
           // ),
 
-          subCategory?.data==null?SizedBox.shrink():
+          subCategory?.data == null
+              ? SizedBox.shrink()
+              : Column(
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    MultiSelectDropDown(
+                      hint: "Select Sub Category",
+                      showClearIcon: true,
+                      controller: _controller,
+                      onOptionSelected: (options) {
+                        for (int i = 0; i < options.length; i++) {
+                          String value = options[i].value ?? "";
 
-          Column(
-            children: [
-              SizedBox(height: 20,),
-              MultiSelectDropDown(
-                hint: "Select Sub Category",
-                showClearIcon: true,
-                controller: _controller,
-                onOptionSelected: (options) {
+                          // Check if the value is not already in the set
+                          if (uniqueValues.add(value)) {
+                            print(value);
 
-                  for (int i = 0; i < options.length; i++) {
-                    String value = options[i].value??"";
+                            categorylist.add(value);
+                            setState(() {});
+                          }
+                        }
+                        debugPrint(categorylist.toString() + "+++++++++++++");
 
-                    // Check if the value is not already in the set
-                    if (uniqueValues.add(value)) {
-                      print(value);
+                        // setState(() {
+                        //
+                        // });
+                      },
+                      options: <ValueItem>[
+                        for (int i = 0; i < subCategory!.data!.length; i++) ...[
+                          ValueItem(
+                            label: "${subCategory!.data![i].cName}",
+                            value: "${subCategory!.data![i].id}",
+                          )
+                        ]
+                      ],
 
-                      categorylist.add(value);
-                      setState(() {
-
-                      });
-                    }
-                  }
-                  debugPrint(categorylist.toString()+"+++++++++++++");
-
-                  // setState(() {
-                  //
-                  // });
-
-                },
-                options: <ValueItem>[
-                  for (int i = 0; i < subCategory!.data!.length; i++) ...[
-                    ValueItem(
-                      label: "${subCategory!.data![i].cName}",
-                      value: "${subCategory!.data![i].id}",
-                    )
-                  ]
-                ],
-
-                selectionType: SelectionType.multi,
-                selectedOptions: [
-                  for (int i = 0; i < subCategory!.data!.length; i++) ...[
-
-                     for(int j=0;j<subcateid.length;j++)...[
-
-                    "${subCategory!.data![i].id}" == subcateid[j].toString()
-                        ? ValueItem(
-                      label: "${subCategory!.data![i].cName}",
-                      value: "${subCategory!.data![i].id}",
-                    )
-                        : ValueItem(label: "")
-  ]
-                  ]
-                ]..removeWhere((element) => element.label == ""), // Remove null entries
-                chipConfig: const ChipConfig(wrapType: WrapType.scroll,backgroundColor: AppColor.PrimaryDark,),
-                dropdownHeight: 300,
-                optionTextStyle: const TextStyle(fontSize: 16),
-                selectedOptionIcon: const Icon(Icons.check_circle,color: AppColor.PrimaryDark,),
-                  selectedOptionTextColor: AppColor.PrimaryDark,
-               // suffixIcon: IconData(),
-                  // selectedItemBuilder: (BuildContext context, ValueItem item,) {
-                  //   // Customize the appearance of the selected item here
-                  //   return Container(
-                  //     padding: EdgeInsets.all(8.0),
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.red, // Set the background color to red
-                  //       borderRadius: BorderRadius.circular(5.0),
-                  //     ),
-                  //     child: Row(
-                  //       mainAxisSize: MainAxisSize.min,
-                  //       children: [
-                  //         Text(item.label),
-                  //         const SizedBox(width: 8.0),
-                  //         Icon(Icons.close, color: Colors.white, size: 18.0),
-                  //       ],
-                  //     ),
-                  //   );
-                  // },
-
-              ),
-
-            ],
-          ),
+                      selectionType: SelectionType.multi,
+                      selectedOptions: [
+                        for (int i = 0; i < subCategory!.data!.length; i++) ...[
+                          for (int j = 0; j < subcateid.length; j++) ...[
+                            "${subCategory!.data![i].id}" ==
+                                    subcateid[j].toString()
+                                ? ValueItem(
+                                    label: "${subCategory!.data![i].cName}",
+                                    value: "${subCategory!.data![i].id}",
+                                  )
+                                : ValueItem(label: "")
+                          ]
+                        ]
+                      ]..removeWhere((element) =>
+                          element.label == ""), // Remove null entries
+                      chipConfig: const ChipConfig(
+                        wrapType: WrapType.scroll,
+                        backgroundColor: AppColor.PrimaryDark,
+                      ),
+                      dropdownHeight: 300,
+                      optionTextStyle: const TextStyle(fontSize: 16),
+                      selectedOptionIcon: const Icon(
+                        Icons.check_circle,
+                        color: AppColor.PrimaryDark,
+                      ),
+                      selectedOptionTextColor: AppColor.PrimaryDark,
+                      // suffixIcon: IconData(),
+                      // selectedItemBuilder: (BuildContext context, ValueItem item,) {
+                      //   // Customize the appearance of the selected item here
+                      //   return Container(
+                      //     padding: EdgeInsets.all(8.0),
+                      //     decoration: BoxDecoration(
+                      //       color: Colors.red, // Set the background color to red
+                      //       borderRadius: BorderRadius.circular(5.0),
+                      //     ),
+                      //     child: Row(
+                      //       mainAxisSize: MainAxisSize.min,
+                      //       children: [
+                      //         Text(item.label),
+                      //         const SizedBox(width: 8.0),
+                      //         Icon(Icons.close, color: Colors.white, size: 18.0),
+                      //       ],
+                      //     ),
+                      //   );
+                      // },
+                    ),
+                  ],
+                ),
           // Container(
           //         width: double.infinity,
           //         height: 6.h,
@@ -3059,27 +3056,29 @@ class _AddServicesState extends State<AddServices> {
                 borderRadius: BorderRadius.circular(14.0)),
             color: AppColor().colorEdit(),
             child: Container(
-                width: double.infinity,
-                height: 6.h,
-                decoration: boxDecoration(
-                  radius: 14.0,
-                  bgColor: AppColor().colorEdit(),
-                ),
-                child: TextFormField(
-                  controller: descriptionController,
-                  // maxLines: 2,
-                  keyboardType: TextInputType.multiline,
-                  textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(
-                    hintText: "Service Description",
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
-                    prefixIcon: Icon(
-                      Icons.description,
-                      color: AppColor.PrimaryDark,
-                    ),
+              width: double.infinity,
+              height: 6.h,
+              decoration: boxDecoration(
+                radius: 14.0,
+                bgColor: AppColor().colorEdit(),
+              ),
+              child: TextFormField(
+                controller: descriptionController,
+                // maxLines: 2,
+
+                keyboardType: TextInputType.multiline,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  hintText: "Service Description",
+                  border: InputBorder.none,
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
+                  prefixIcon: Icon(
+                    Icons.description,
+                    color: AppColor.PrimaryDark,
                   ),
                 ),
+              ),
             ),
           ),
           SizedBox(
@@ -3424,8 +3423,7 @@ class _AddServicesState extends State<AddServices> {
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: addonList2.length,
                   itemBuilder: (context, index) {
-                    return
-                      Stack(
+                    return Stack(
                       children: [
                         Card(
                           elevation: 0,
@@ -3439,15 +3437,19 @@ class _AddServicesState extends State<AddServices> {
                                 child: Column(
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
                                           flex: 2,
                                           child: Container(
-                                            margin: EdgeInsets.symmetric(horizontal: 10),
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 10),
                                             width: double.infinity,
                                             height: 6.h,
-                                            decoration: boxDecoration(radius: 10.0, color: AppColor().colorEdit()),
+                                            decoration: boxDecoration(
+                                                radius: 10.0,
+                                                color: AppColor().colorEdit()),
                                             child: DropdownButtonHideUnderline(
                                               child: DropdownButton2(
                                                 isExpanded: true,
@@ -3458,7 +3460,8 @@ class _AddServicesState extends State<AddServices> {
                                                     fontWeight:
                                                         FontWeight.normal,
                                                   ),
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
                                                 items: addonServiceList
                                                     .map((String? item) =>
@@ -3467,16 +3470,23 @@ class _AddServicesState extends State<AddServices> {
                                                           value: item,
                                                           child: Text(
                                                             item.toString(),
-                                                            style: const TextStyle(
+                                                            style:
+                                                                const TextStyle(
                                                               fontSize: 14,
-                                                              fontWeight: FontWeight.bold,
-                                                              color: Colors.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  Colors.black,
                                                             ),
-                                                            overflow: TextOverflow.ellipsis,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
                                                           ),
                                                         ))
                                                     .toList(),
-                                                value: selectedServiceTypeList[index],
+                                                value: selectedServiceTypeList[
+                                                    index],
                                                 onChanged: (value) {
                                                   setState(() {
                                                     selectedServiceTypeList[
@@ -3489,7 +3499,8 @@ class _AddServicesState extends State<AddServices> {
                                                   });
                                                 },
                                                 icon: const Icon(
-                                                  Icons.arrow_forward_ios_outlined,
+                                                  Icons
+                                                      .arrow_forward_ios_outlined,
                                                   color: AppColor.PrimaryDark,
                                                 ),
                                                 iconSize: 14,
@@ -3506,14 +3517,19 @@ class _AddServicesState extends State<AddServices> {
                                                 ),
                                                 buttonElevation: 0,
                                                 itemHeight: 40,
-                                                itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                                                itemPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 14, right: 14),
                                                 dropdownMaxHeight: 300,
                                                 dropdownPadding: null,
                                                 dropdownDecoration:
-                                                    BoxDecoration(borderRadius: BorderRadius.circular(14),
+                                                    BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(14),
                                                 ),
                                                 dropdownElevation: 8,
-                                                scrollbarRadius: const Radius.circular(40),
+                                                scrollbarRadius:
+                                                    const Radius.circular(40),
                                                 scrollbarThickness: 6,
                                                 scrollbarAlwaysShow: true,
                                               ),
@@ -3525,12 +3541,17 @@ class _AddServicesState extends State<AddServices> {
                                           child: SizedBox(
                                             height: 6.h,
                                             child: TextField(
-                                              controller: addonServicePriceControllerList[index],
-                                              keyboardType: TextInputType.number,
+                                              controller:
+                                                  addonServicePriceControllerList[
+                                                      index],
+                                              keyboardType:
+                                                  TextInputType.number,
                                               decoration: InputDecoration(
-                                                  hintText: "I will charge",
-                                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10),
-                                                  ),
+                                                hintText: "I will charge",
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -3547,7 +3568,8 @@ class _AddServicesState extends State<AddServices> {
                                         Expanded(
                                           flex: 2,
                                           child: Container(
-                                            margin: EdgeInsets.symmetric(horizontal: 10),
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 10),
                                             width: double.infinity,
                                             height: 6.h,
                                             decoration: boxDecoration(
@@ -3573,12 +3595,18 @@ class _AddServicesState extends State<AddServices> {
                                                           value: item,
                                                           child: Text(
                                                             item.toString(),
-                                                            style: const TextStyle(
+                                                            style:
+                                                                const TextStyle(
                                                               fontSize: 14,
-                                                              fontWeight: FontWeight.bold,
-                                                              color: Colors.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  Colors.black,
                                                             ),
-                                                            overflow: TextOverflow.ellipsis,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
                                                           ),
                                                         ))
                                                     .toList(),
@@ -3587,7 +3615,9 @@ class _AddServicesState extends State<AddServices> {
                                                 onChanged: (value) {
                                                   setState(() {
                                                     //selectedServiceHour = value as String;
-                                                    selectedServiceHourList[index] = value as String;
+                                                    selectedServiceHourList[
+                                                            index] =
+                                                        value as String;
                                                     // // serviceName.text = serviceModel.data!
                                                     //     .firstWhere((element) => element.id == value)
                                                     //     .cName
@@ -3595,25 +3625,33 @@ class _AddServicesState extends State<AddServices> {
                                                   });
                                                 },
                                                 icon: const Icon(
-                                                  Icons.arrow_forward_ios_outlined,
+                                                  Icons
+                                                      .arrow_forward_ios_outlined,
                                                   color: AppColor.PrimaryDark,
                                                 ),
                                                 iconSize: 14,
                                                 buttonHeight: 50,
                                                 buttonWidth: 160,
-                                                buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+                                                buttonPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 14, right: 14),
                                                 buttonDecoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(14),
+                                                  borderRadius:
+                                                      BorderRadius.circular(14),
                                                   color: AppColor().colorBg1(),
                                                   //color: Colors.grey.withOpacity(0.05)
                                                 ),
                                                 buttonElevation: 0,
                                                 itemHeight: 40,
-                                                itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                                                itemPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 14, right: 14),
                                                 dropdownMaxHeight: 300,
                                                 dropdownPadding: null,
-                                                dropdownDecoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(14),
+                                                dropdownDecoration:
+                                                    BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(14),
                                                 ),
                                                 dropdownElevation: 8,
                                                 scrollbarRadius:
@@ -3680,7 +3718,7 @@ class _AddServicesState extends State<AddServices> {
     );
   }
 
-  ServiceCategoryModel?  serviceModel;
+  ServiceCategoryModel? serviceModel;
 
   var selectedTime = TimeOfDay.now();
 
@@ -3757,15 +3795,16 @@ class _AddServicesState extends State<AddServices> {
     }
   }
 
-  List <String> subcateid=[];
+  List<String> subcateid = [];
   Future<void> getServiceCategories() async {
     // var userId = await MyToken.getUserID();
-    String stringRepresentation = "${widget.profileResponse?.user?.subcategoryId}";
-    print(stringRepresentation.toString()+"_________");
+    String stringRepresentation =
+        "${widget.profileResponse?.user?.subcategoryId}";
+    print(stringRepresentation.toString() + "_________");
     subcateid = stringRepresentation.split(', ').map((String value) {
       return value.toString();
     }).toList();
-    print(categorylist.toString()+"_________");
+    print(categorylist.toString() + "_________");
     var request = http.MultipartRequest(
         'POST',
         Uri.parse(
@@ -3775,11 +3814,12 @@ class _AddServicesState extends State<AddServices> {
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
       serviceModel = ServiceCategoryModel.fromJson(jsonDecode(str));
-      print('____________${widget.profileResponse?.user?.jsonData?.cat.toString()}');
+      print(
+          '____________${widget.profileResponse?.user?.jsonData?.cat.toString()}');
       setState(() {
-        selectedCategory11=serviceModel?.data?.firstWhere((item) {
-
-          if(item.id.toString() == widget.profileResponse?.user?.jsonData?.cat.toString()){
+        selectedCategory11 = serviceModel?.data?.firstWhere((item) {
+          if (item.id.toString() ==
+              widget.profileResponse?.user?.jsonData?.cat.toString()) {
             return true;
           }
           return false;
@@ -3787,9 +3827,7 @@ class _AddServicesState extends State<AddServices> {
         print(selectedCategory11.cName);
 
         getServicesSubCategory(selectedCategory11.id);
-
       });
-
 
       // serviceModel?.data?.forEach((element) {
       //
@@ -3803,13 +3841,12 @@ class _AddServicesState extends State<AddServices> {
       //     selectedCategory = '' ;
       //   }
       // });
-
     } else {
       return null;
     }
   }
 
-  ServiceSubCategoryModel? subCategory ;
+  ServiceSubCategoryModel? subCategory;
   Future<void> getServicesSubCategory(catId) async {
     var request = http.MultipartRequest(
         'POST', Uri.parse("${Apipath.BASH_URL}get_categories_list"));
@@ -3826,12 +3863,12 @@ class _AddServicesState extends State<AddServices> {
       subCategory = ServiceSubCategoryModel.fromJson(json.decode(str));
 
       subCategory?.data?.forEach((element) {
-        if(element.id.toString() == widget.profileResponse?.user?.jsonData?.subCat.toString()){
-          serviceSubCategory.text = element.cName ?? '' ;
+        if (element.id.toString() ==
+            widget.profileResponse?.user?.jsonData?.subCat.toString()) {
+          serviceSubCategory.text = element.cName ?? '';
         }
       });
-      setState(() {
-      });
+      setState(() {});
     } else {
       return null;
     }
@@ -3850,7 +3887,7 @@ class _AddServicesState extends State<AddServices> {
     //   }
     // }
     // request.files.addAll(newList);
-    if(imagePathList != null) {
+    if (imagePathList != null) {
       for (var i = 0; i < imagePathList.length; i++) {
         imagePathList == null
             ? null
@@ -3962,6 +3999,4 @@ class _AddServicesState extends State<AddServices> {
       }*/
     }
   }
-
-
 }

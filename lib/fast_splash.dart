@@ -26,9 +26,9 @@ class _FastsplashState extends State<Fastsplash> {
     super.initState();
     getToken();
     checkingLogin();
-    PushNotificationService notificationService =
-        new PushNotificationService(context: context);
-    notificationService.initialise();
+    // PushNotificationService notificationService =
+    //     new PushNotificationService(context: context);
+    //  notificationService.initialise();
   }
 
   getToken() async {
