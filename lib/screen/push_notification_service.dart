@@ -1,11 +1,11 @@
-import 'dart:io';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../main.dart';
+// import 'dart:io';
+// import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:http/http.dart' as http;
+// import 'package:path_provider/path_provider.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+// import '../main.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -17,10 +17,10 @@ Future<void> backgroundMessage(RemoteMessage message) async {
 
 String fcmToken = "";
 
-class PushNotificationService {
-  late BuildContext context;
+// class PushNotificationService {
+//   late BuildContext context;
 
-  PushNotificationService({required this.context});
+//   PushNotificationService({required this.context});
 
   Future initialise() async {
     iOSPermission();
@@ -62,53 +62,53 @@ class PushNotificationService {
       }
       /* if (type == "ticket_status") {
 
-      } else if (type == "ticket_message") {
+//       } else if (type == "ticket_message") {
 
-          if (image != null && image != 'null' && image != '') {
-            generateImageNotication(title, body, image, type, id);
-          } else {
-            generateSimpleNotication(title, body, type, id);
-          }
-      } else if (image != null && image != 'null' && image != '') {
-        generateImageNotication(title, body, image, type, id);
-      } else {
-        generateSimpleNotication(title, body, type, id);
-      }*/
-    });
+//           if (image != null && image != 'null' && image != '') {
+//             generateImageNotication(title, body, image, type, id);
+//           } else {
+//             generateSimpleNotication(title, body, type, id);
+//           }
+//       } else if (image != null && image != 'null' && image != '') {
+//         generateImageNotication(title, body, image, type, id);
+//       } else {
+//         generateSimpleNotication(title, body, type, id);
+//       }*/
+//     });
 
-    messaging.getInitialMessage().then((RemoteMessage? message) async {
-      await Future.delayed(Duration.zero);
-    });
+//     messaging.getInitialMessage().then((RemoteMessage? message) async {
+//       await Future.delayed(Duration.zero);
+//     });
 
-    FirebaseMessaging.onBackgroundMessage(backgroundMessage);
+//     FirebaseMessaging.onBackgroundMessage(backgroundMessage);
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
     });
   }
 
-  void iOSPermission() async {
-    await messaging.setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-  }
-}
+//   void iOSPermission() async {
+//     await messaging.setForegroundNotificationPresentationOptions(
+//       alert: true,
+//       badge: true,
+//       sound: true,
+//     );
+//   }
+// }
 
-Future<dynamic> myForgroundMessageHandler(RemoteMessage message) async {
-  return Future<void>.value();
-}
+// Future<dynamic> myForgroundMessageHandler(RemoteMessage message) async {
+//   return Future<void>.value();
+// }
 
-Future<String> _downloadAndSaveImage(String url, String fileName) async {
-  var directory = await getApplicationDocumentsDirectory();
-  var filePath = '${directory.path}/$fileName';
-  var response = await http.get(Uri.parse(url));
+// Future<String> _downloadAndSaveImage(String url, String fileName) async {
+//   var directory = await getApplicationDocumentsDirectory();
+//   var filePath = '${directory.path}/$fileName';
+//   var response = await http.get(Uri.parse(url));
 
-  var file = File(filePath);
-  await file.writeAsBytes(response.bodyBytes);
-  return filePath;
-}
+//   var file = File(filePath);
+//   await file.writeAsBytes(response.bodyBytes);
+//   return filePath;
+// }
 
 Future<void> generateImageNotication(
     String title, String msg, String image, String type, String id) async {
@@ -144,8 +144,8 @@ Future<void> generateSimpleNotication(
       ticker: 'ticker');
   var iosDetail = DarwinNotificationDetails();
 
-  var platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics, iOS: iosDetail);
-  await flutterLocalNotificationsPlugin
-      .show(0, title, msg, platformChannelSpecifics, payload: type + "," + id);
-}
+//   var platformChannelSpecifics = NotificationDetails(
+//       android: androidPlatformChannelSpecifics, iOS: iosDetail);
+//   await flutterLocalNotificationsPlugin
+//       .show(0, title, msg, platformChannelSpecifics, payload: type + "," + id);
+// }

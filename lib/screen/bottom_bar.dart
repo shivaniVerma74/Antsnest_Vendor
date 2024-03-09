@@ -21,7 +21,8 @@ import 'manage_Service.dart';
 import 'notification_screen.dart';
 
 class BottomBar extends StatefulWidget {
-  const BottomBar({Key? key}) : super(key: key);
+  final int index;
+  const BottomBar({Key? key, required this.index}) : super(key: key);
 
   @override
   _BottomBarState createState() => _BottomBarState();
@@ -43,6 +44,7 @@ class _BottomBarState extends State<BottomBar> {
     super.initState();
     getProfile();
     getNotification();
+    selectedIndex = widget.index;
   }
 
   void _onItemTapped(int index) {
@@ -95,7 +97,6 @@ class _BottomBarState extends State<BottomBar> {
                   AssetImage(home),
                 ),
                 label: "Home"),
-
             BottomNavigationBarItem(
                 icon: ImageIcon(AssetImage(addIcon)), label: "Manage Service"),
             BottomNavigationBarItem(

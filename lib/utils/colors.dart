@@ -6,8 +6,13 @@ class AppColor {
   Color colorPrimary() {
     return Color(0xffEB6C67);
   }
-  Color colorSecondary(){
+
+  Color colorSecondary() {
     return Color(0xff3A3C3C);
+  }
+
+  static Color colorPinkSecondary() {
+    return Color(0xfff5b5be);
   }
 
   Color colorPrimaryDark() {

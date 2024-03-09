@@ -63,6 +63,10 @@ class _LoginScreenState extends State<LoginScreen>
     setState(() {
       token = fcmToken.toString();
     });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      token = prefs.getString(TokenString.fcmToken) ?? "";
+    });
     print("FCM ID=== $token");
   }
 
@@ -372,12 +376,14 @@ class _LoginScreenState extends State<LoginScreen>
                           child: TextFormField(
                             controller: phoneController,
                             // maxLength: 10,
-                            validator: (v) {
-                              if (v!.isEmpty) {
-                                return "Please enter Email";
-                              }
-                              return null;
-                            },
+                            validator: FormValidation.emailVeledetion,
+
+                            // validator: (v) {
+                            //   if (v!.isEmpty) {
+                            //     return "Please enter Email";
+                            //   }
+                            //   return null;
+                            // },
 
                             decoration: InputDecoration(
                               hintText: " Email Id",
@@ -731,6 +737,8 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   void loginWithPhone() async {
+    print("THIS API");
+
     late LoginPhoneResponse response;
     PhoneLoginRequest request = PhoneLoginRequest(
         number: phoneController.text,
@@ -765,7 +773,12 @@ class _LoginScreenState extends State<LoginScreen>
   setTokenData(userid, context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(TokenString.userid, userid);
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => BottomBar()), (route) => false);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (context) => BottomBar(
+                  index: 0,
+                )),
+        (route) => false);
   }
 }

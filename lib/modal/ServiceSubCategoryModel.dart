@@ -1,19 +1,24 @@
 import 'dart:convert';
+
 /// response_code : "1"
 /// msg : "Categories Found"
 /// data : [{"id":"33","c_name":"wedding photo shoot","c_name_a":"","icon":"632ecd2e7222b.jpeg","img":"632ecd2e71abf.jpeg","type":"vip","p_id":"13"},{"id":"34","c_name":"birthday photo shoot","c_name_a":"","icon":"6331835fa7710.png","img":"6331835fa6619.png","type":"vip","p_id":"13"}]
 
-ServiceSubCategoryModel serviceSubCategoryModelFromJson(String str) => ServiceSubCategoryModel.fromJson(json.decode(str));
-String serviceSubCategoryModelToJson(ServiceSubCategoryModel data) => json.encode(data.toJson());
+ServiceSubCategoryModel serviceSubCategoryModelFromJson(String str) =>
+    ServiceSubCategoryModel.fromJson(json.decode(str));
+String serviceSubCategoryModelToJson(ServiceSubCategoryModel data) =>
+    json.encode(data.toJson());
+
 class ServiceSubCategoryModel {
   ServiceSubCategoryModel({
-      String? responseCode, 
-      String? msg, 
-      List<Data>? data,}){
+    String? responseCode,
+    String? msg,
+    List<SubData>? data,
+  }) {
     _responseCode = responseCode;
     _msg = msg;
     _data = data;
-}
+  }
 
   ServiceSubCategoryModel.fromJson(dynamic json) {
     _responseCode = json['response_code'];
@@ -21,23 +26,26 @@ class ServiceSubCategoryModel {
     if (json['data'] != null) {
       _data = [];
       json['data'].forEach((v) {
-        _data?.add(Data.fromJson(v));
+        _data?.add(SubData.fromJson(v));
       });
     }
   }
   String? _responseCode;
   String? _msg;
-  List<Data>? _data;
-ServiceSubCategoryModel copyWith({  String? responseCode,
-  String? msg,
-  List<Data>? data,
-}) => ServiceSubCategoryModel(  responseCode: responseCode ?? _responseCode,
-  msg: msg ?? _msg,
-  data: data ?? _data,
-);
+  List<SubData>? _data;
+  ServiceSubCategoryModel copyWith({
+    String? responseCode,
+    String? msg,
+    List<SubData>? data,
+  }) =>
+      ServiceSubCategoryModel(
+        responseCode: responseCode ?? _responseCode,
+        msg: msg ?? _msg,
+        data: data ?? _data,
+      );
   String? get responseCode => _responseCode;
   String? get msg => _msg;
-  List<Data>? get data => _data;
+  List<SubData>? get data => _data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -48,7 +56,6 @@ ServiceSubCategoryModel copyWith({  String? responseCode,
     }
     return map;
   }
-
 }
 
 /// id : "33"
@@ -59,17 +66,19 @@ ServiceSubCategoryModel copyWith({  String? responseCode,
 /// type : "vip"
 /// p_id : "13"
 
-Data dataFromJson(String str) => Data.fromJson(json.decode(str));
-String dataToJson(Data data) => json.encode(data.toJson());
-class Data {
-  Data({
-      String? id, 
-      String? cName, 
-      String? cNameA, 
-      String? icon, 
-      String? img, 
-      String? type, 
-      String? pId,}){
+SubData dataFromJson(String str) => SubData.fromJson(json.decode(str));
+String dataToJson(SubData data) => json.encode(data.toJson());
+
+class SubData {
+  SubData({
+    String? id,
+    String? cName,
+    String? cNameA,
+    String? icon,
+    String? img,
+    String? type,
+    String? pId,
+  }) {
     _id = id;
     _cName = cName;
     _cNameA = cNameA;
@@ -77,9 +86,9 @@ class Data {
     _img = img;
     _type = type;
     _pId = pId;
-}
+  }
 
-  Data.fromJson(dynamic json) {
+  SubData.fromJson(dynamic json) {
     _id = json['id'];
     _cName = json['c_name'];
     _cNameA = json['c_name_a'];
@@ -95,21 +104,24 @@ class Data {
   String? _img;
   String? _type;
   String? _pId;
-Data copyWith({  String? id,
-  String? cName,
-  String? cNameA,
-  String? icon,
-  String? img,
-  String? type,
-  String? pId,
-}) => Data(  id: id ?? _id,
-  cName: cName ?? _cName,
-  cNameA: cNameA ?? _cNameA,
-  icon: icon ?? _icon,
-  img: img ?? _img,
-  type: type ?? _type,
-  pId: pId ?? _pId,
-);
+  SubData copyWith({
+    String? id,
+    String? cName,
+    String? cNameA,
+    String? icon,
+    String? img,
+    String? type,
+    String? pId,
+  }) =>
+      SubData(
+        id: id ?? _id,
+        cName: cName ?? _cName,
+        cNameA: cNameA ?? _cNameA,
+        icon: icon ?? _icon,
+        img: img ?? _img,
+        type: type ?? _type,
+        pId: pId ?? _pId,
+      );
   String? get id => _id;
   String? get cName => _cName;
   String? get cNameA => _cNameA;
@@ -129,5 +141,4 @@ Data copyWith({  String? id,
     map['p_id'] = _pId;
     return map;
   }
-
 }

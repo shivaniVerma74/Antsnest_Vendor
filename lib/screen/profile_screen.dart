@@ -121,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 //                   Navigator.pushReplacement(
                 //                       context,
                 //                       MaterialPageRoute(
-                //                           builder: (context) => BottomBar()));
+                //                           builder: (context) => BottomBar(index: 1,)));
                 //                 },
                 //                 child: Image.asset(
                 //                   back,
@@ -305,9 +305,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 tabItem(context, 9, "images/avail.png", "Availability"),
                 tabItem(context, 10, payment, "Payment History"),
                 tabItem(context, 12, "images/privacy.png", "Privacy Policy "),
-                tabItem(
-                    context, 15, "images/privacy.png", "Cancellation Policy "),
-                tabItem(context, 13, "images/terms.png", "Terms & Condition "),
+                tabItem(context, 15, "images/resignation.png",
+                    "Cancellation Policy "),
+                tabItem(context, 13, "images/terms-and-conditions.png",
+                    "Terms & Condition "),
                 // tabItem(context, 3, changePass, "Change Password"),
                 tabItem(context, 4, support, "Contact Us"),
 
