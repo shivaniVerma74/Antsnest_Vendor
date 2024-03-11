@@ -10,7 +10,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:sizer/sizer.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../api/api_path.dart';
 import '../modal/New models/GetChatModel.dart';
@@ -57,7 +56,7 @@ class ChatPageState extends State<ChatPage> {
     loadMessage();
     super.initState();
     convertDateTimeDispla();
-    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => getMessage());
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => loadMessage());
     // chatReference =
     //     db.collection("chats").doc(userID).collection('messages');
   }
@@ -102,11 +101,18 @@ class ChatPageState extends State<ChatPage> {
     }
   }
 
+  bool isFirstTym = true;
+
   loadMessage() async {
     getMessage().then((res) async {
       _postsController!.add(res);
       return res;
     });
+    print(isFirstTym.toString() + "FIRST TYM");
+    if (isFirstTym) {
+      _scrollDown();
+      isFirstTym = false;
+    }
   }
 
   sendChatMessage(
@@ -400,7 +406,7 @@ class ChatPageState extends State<ChatPage> {
                                     onTap: () {
                                       print("Hello");
                                       _launchUrl(
-                                        "${doc.message}",
+                                        "https://${doc.message}",
                                       );
                                     },
                                     child: Container(
@@ -578,6 +584,7 @@ class ChatPageState extends State<ChatPage> {
                 if (!snapshot.hasData) return new Text("No Chat");
                 return Expanded(
                   child: ListView(
+                    controller: _controller,
                     reverse: false,
                     children: generateMessages(snapshot),
                   ),
@@ -598,6 +605,106 @@ class ChatPageState extends State<ChatPage> {
     );
   }
 
+  void showWarningDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+            side: BorderSide(color: AppColor.PrimaryDark, width: 5),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.cancel_outlined,
+                  size: 50,
+                  color: AppColor.PrimaryDark,
+                ),
+                SizedBox(
+                    height:
+                        10), // Provides spacing between the icon and the text.
+                Text(
+                  "Warning",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    color: AppColor.PrimaryDark,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                    height:
+                        20), // Provides spacing between the warning text and the message.
+                Text(
+                  "We advise not sharing your contact number on AntsNest as it may violate our Terms of Service and lead to suspension of your account. To stay safe, always book services through AntsNest.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 20),
+                Align(
+                    alignment: Alignment.center,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: AppColor.PrimaryDark.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(3),
+                            border: Border.all(color: AppColor.PrimaryDark)),
+                        child: Text(
+                          "OK",
+                          style: TextStyle(
+                              color: AppColor.PrimaryDark,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )),
+                // ElevatedButton(
+                //   onPressed: () => Navigator.of(context).pop(),
+                //   child: Text('OK'),
+                //   style: ElevatedButton.styleFrom(
+                //     primary: Colors.red, // Button color
+                //   ),
+                // ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  bool containsNoEmailOrPhoneNumber(String text) {
+    // Regex pattern for a simple email validation
+    final emailRegex = RegExp(
+      r'[a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[a-zA-Z]+',
+    );
+
+    // Regex pattern for a simple phone number validation
+    // Adjust the regex according to the phone number formats you need to detect
+    final phoneRegex = RegExp(
+      r'\+?\d[\d -]{8,12}\d',
+    );
+
+    // Check if the text does not match either regex
+    return !emailRegex.hasMatch(text) && !phoneRegex.hasMatch(text);
+  }
+
+  final ScrollController _controller = ScrollController();
+
+  void _scrollDown() {
+    _controller.jumpTo(_controller.position.maxScrollExtent);
+  }
+
   IconButton getDefaultSendButton() {
     return new IconButton(
         icon: new Icon(
@@ -605,22 +712,43 @@ class ChatPageState extends State<ChatPage> {
           color: AppColor.PrimaryDark,
         ),
         onPressed: () {
-          if (textController.text.contains(RegExp(r"@gmail"))) {
-            Fluttertoast.showToast(msg: " Email are not allowed");
-          } else if (textController.text.contains(RegExp(
-              r'^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$'))) {
-            Fluttertoast.showToast(msg: "Mobile numbers are not allowed");
+          if (textController.text.isEmpty) {
+            print('Text is empty');
+            Fluttertoast.showToast(msg: "Please enter text");
+          } else if (!containsNoEmailOrPhoneNumber(textController.text)) {
+            showWarningDialog(context);
           } else {
+            _scrollDown();
             setState(() {
-              sendChatMessage("text");
-              getMessage().then((res) async {
-                _postsController!.add(res);
-                return res;
-              });
+              setState(() {
+                sendChatMessage("text");
+                getMessage().then((res) async {
+                  _postsController!.add(res);
+                  return res;
+                });
 
-              // textValue = "";
-              // textController.clear();
-            });
+                _scrollDown();
+              });
+            }
+
+                // if (textController.text.contains(RegExp(r"@gmail"))) {
+                //   Fluttertoast.showToast(msg: " Email are not allowed");
+                // } else if (textController.text.contains(RegExp(
+                //     r'^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$'))) {
+                //   Fluttertoast.showToast(msg: "Mobile numbers are not allowed");
+                // } else {
+                //   setState(() {
+                //     sendChatMessage("text");
+                //     getMessage().then((res) async {
+                //       _postsController!.add(res);
+                //       return res;
+                //     });
+
+                //     // textValue = "";
+                //     // textController.clear();
+                //   });
+                );
+            _scrollDown();
           }
         });
   }
@@ -756,6 +884,7 @@ class ChatPageState extends State<ChatPage> {
                       setState(() {
                         textValue = v;
                       });
+                      _scrollDown();
                       if (v.length > 5 && v is int) {
                         print("sdfssfs ${v}");
                         //return "Number can't be send";

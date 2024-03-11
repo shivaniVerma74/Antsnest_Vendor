@@ -87,9 +87,9 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
       print("final response here $jsonResponse");
       print("finalll resultttt noww ${finalResult}");
       setState(() {
-        Fluttertoast.showToast(
-            msg:
-                "${jsonResponse['message']} and OTP is ${jsonResponse['otp']}");
+        // Fluttertoast.showToast(
+        //     msg:
+        //         "${jsonResponse['message']} and OTP is ${jsonResponse['otp']}");
         setState(() {
           if (nameOfService == "endS") {
             isConfirmButtonShow = true;
@@ -1273,8 +1273,8 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                                     CompleteBookingModel cmplteModel =
                                         await completeBooking();
                                     if (cmplteModel.responseCode == "1") {
-                                      UtilityHlepar.getToast(
-                                          "${cmplteModel.msg}");
+                                      // UtilityHlepar.getToast(
+                                      //     "${cmplteModel.msg}");
                                       Navigator.pop(context, true);
                                     }
                                   } else {

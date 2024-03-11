@@ -4,7 +4,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
@@ -74,13 +73,13 @@ class EditServices extends StatefulWidget {
       this.serviceImage,
       this.subName,
       this.childName,
-        this.addOntype,
+      this.addOntype,
       this.experts,
-        this.adddOnservice,
-        this.addOnPrice,
-        this.hour,
-        this.dayHour,
-        this.service,
+      this.adddOnservice,
+      this.addOnPrice,
+      this.hour,
+      this.dayHour,
+      this.service,
       this.serviceDescription})
       : super(key: key);
 
@@ -131,21 +130,24 @@ class _EditServicesState extends State<EditServices> {
   List<CityData> cityList = [];
   List<CountryData> countryList = [];
   List<StateData> stateList = [];
-  List<String> categorylist=[];
+  List<String> categorylist = [];
   Set<String> uniqueValues = Set();
-  List <dynamic> subcateid=[];
+  List<dynamic> subcateid = [];
 
-
-  void addOnOperation({ String ?charges, String ?houranddays,String ?serviceType,String ?serviceHour}) {
-   print(serviceHour.toString()+"++++++++++");
-    selectedServiceTypeList.add(serviceType??selectedServiceType);
-    selectedServiceHourList.add(serviceHour??selectedServiceHour);
-    addonServicePriceControllerList.add(TextEditingController(text: "${charges??""}"));
-    addonHourDayPriceControllerList.add(TextEditingController(text: "${houranddays??""}"));
+  void addOnOperation(
+      {String? charges,
+      String? houranddays,
+      String? serviceType,
+      String? serviceHour}) {
+    print(serviceHour.toString() + "++++++++++");
+    selectedServiceTypeList.add(serviceType ?? selectedServiceType);
+    selectedServiceHourList.add(serviceHour ?? selectedServiceHour);
+    addonServicePriceControllerList
+        .add(TextEditingController(text: "${charges ?? ""}"));
+    addonHourDayPriceControllerList
+        .add(TextEditingController(text: "${houranddays ?? ""}"));
     addonList2.add({"service": '', "price_a": '', "hrly": '', "days_hrs": ''});
   }
-
-
 
   Future getState() async {
     print("ok now working");
@@ -159,22 +161,23 @@ class _EditServicesState extends State<EditServices> {
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
       final jsonResponse = StateModel.fromJson(json.decode(str));
-        List stateIdList = [];
+      List stateIdList = [];
       if (jsonResponse.responseCode == "1") {
         setState(() {
           stateList = jsonResponse.data!;
         });
         print("state list here ${stateList.length}");
-        for(var i=0;i<stateList.length;i++){
+        for (var i = 0; i < stateList.length; i++) {
           print("checking id list here ${stateList[i].id}");
           stateIdList.add(stateList[i].id);
         }
         print("checking state widget ${widget.state}");
-        if(stateIdList.contains(widget.state)){
-          selectedState=stateList.firstWhere((item) => item.id == widget.state);
+        if (stateIdList.contains(widget.state)) {
+          selectedState =
+              stateList.firstWhere((item) => item.id == widget.state);
 
           setState(() {
-           // selectedState = widget.state;
+            // selectedState = widget.state;
           });
           // print("selected state $selectedState");
           getCities();
@@ -187,12 +190,11 @@ class _EditServicesState extends State<EditServices> {
   }
 
   Future getCountries() async {
-
     print("checking country id ${widget.country}");
     print("checking country id ${widget.city}");
     print("checking country id ${widget.state}");
     var request =
-    http.Request('GET', Uri.parse('${Apipath.BASH_URL}get_countries'));
+        http.Request('GET', Uri.parse('${Apipath.BASH_URL}get_countries'));
     http.StreamedResponse response = await request.send();
     print(request);
     if (response.statusCode == 200) {
@@ -203,21 +205,21 @@ class _EditServicesState extends State<EditServices> {
         setState(() {
           countryList = jsonResponse.data!;
         });
-        List countryIdList= [];
-        selectedCountry=countryList.firstWhere((item) => item.id == widget.country);
+        List countryIdList = [];
+        selectedCountry =
+            countryList.firstWhere((item) => item.id == widget.country);
 
         //selectedCountry=countryList.firstWhere((item) => item.id == widget.country);
 
-        for(var i=0;i<countryList.length;i++){
+        for (var i = 0; i < countryList.length; i++) {
           countryIdList.add(countryList[i].id);
         }
-        if(countryIdList.contains(widget.country)){
-         setState(() {
-
-           //selectedCountry = widget.country;
-         });
-         print("selected country $selectedCountry");
-         getState();
+        if (countryIdList.contains(widget.country)) {
+          setState(() {
+            //selectedCountry = widget.country;
+          });
+          print("selected country $selectedCountry");
+          getState();
         }
       }
       return CountryModel.fromJson(json.decode(str));
@@ -228,8 +230,7 @@ class _EditServicesState extends State<EditServices> {
 
   Future getCities() async {
     var request = http.MultipartRequest(
-        'POST', Uri.parse('${Apipath.BASH_URL}get_cities'
-    ));
+        'POST', Uri.parse('${Apipath.BASH_URL}get_cities'));
     request.fields.addAll({'state_id': '${selectedState.id}'});
     print(request);
     print(request.fields);
@@ -255,13 +256,14 @@ class _EditServicesState extends State<EditServices> {
         setState(() {
           cityList = jsonResponse.data!;
         });
-        for(var i=0;i<cityList.length;i++){
+        for (var i = 0; i < cityList.length; i++) {
           cityIdList.add(cityList[i].id);
         }
-        if(cityIdList.contains(widget.city)){
+        if (cityIdList.contains(widget.city)) {
           setState(() {
-          //  selectedCity = widget.city;
-            selectedCity=cityList.firstWhere((item) => item.id == widget.city);
+            //  selectedCity = widget.city;
+            selectedCity =
+                cityList.firstWhere((item) => item.id == widget.city);
           });
         }
       }
@@ -276,26 +278,31 @@ class _EditServicesState extends State<EditServices> {
     // TODO: implement initState
     super.initState();
     categorylist.clear();
-    for(int i=0;i<widget.addOntype.length;i++){
-      addOnOperation(charges:widget.addOntype[i].priceA ,houranddays: widget.addOntype[i].daysHrs,serviceHour:widget.addOntype[i].hrly,serviceType: widget.addOntype[i].service );
+    for (int i = 0; i < widget.addOntype.length; i++) {
+      addOnOperation(
+          charges: widget.addOntype[i].priceA,
+          houranddays: widget.addOntype[i].daysHrs,
+          serviceHour: widget.addOntype[i].hrly,
+          serviceType: widget.addOntype[i].service);
     }
 
     // onpenTime = new TextEditingController(text: widget.serviceTime);
 
     serviceCharge = new TextEditingController(text: widget.serviceCharge);
     serviceName = new TextEditingController(text: widget.serviceName);
-    descriptionController = new TextEditingController(text: widget.serviceDescription);
+    descriptionController =
+        new TextEditingController(text: widget.serviceDescription);
     // expertsC = new TextEditingController(text: widget.experts);
     servicePic = widget.serviceImage;
     selectedCategory = widget.catId;
     selectSubCategory = widget.subCatId;
     //selectedCurrency = widget.currency.toString();
 
-    print("${widget.country}"+"_______________________");
-    print("${widget.state}"+"_______________________");
-    print("${widget.city}"+"_______________________");
-    print("${widget.currency}"+"_______________________");
-    print("${widget.subCatId}"+"_______________________");
+    print("${widget.country}" + "_______________________");
+    print("${widget.state}" + "_______________________");
+    print("${widget.city}" + "_______________________");
+    print("${widget.currency}" + "_______________________");
+    print("${widget.subCatId}" + "_______________________");
     subcateid = widget.subCatId.split(', ').map((String value) {
       return value.toString();
     }).toList();
@@ -303,18 +310,19 @@ class _EditServicesState extends State<EditServices> {
     getCountries();
     getServicesSubCategory(widget.catId);
 
-    Future.delayed(Duration(milliseconds: 200),() {
+    Future.delayed(Duration(milliseconds: 200), () {
       return getCurrency();
     });
   }
 
   CurrencyModel? currencyModel;
 
-  getCurrency()async{
+  getCurrency() async {
     var headers = {
       'Cookie': 'ci_session=739ff0b92429e4e79523e8467bd7b6590cf83d2b'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('${Apipath.BASH_URL}get_currency'));
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('${Apipath.BASH_URL}get_currency'));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -324,32 +332,28 @@ class _EditServicesState extends State<EditServices> {
       setState(() {
         currencyModel = jsonResult;
       });
-      print(widget.currency.toString()+"++++++++++++++++++++");
-      selectedCurrency=currencyModel?.data?.firstWhere((item) {
-        print(item.symbol.toString()+"++++++++++++++++++++");
+      print(widget.currency.toString() + "++++++++++++++++++++");
+      selectedCurrency = currencyModel?.data?.firstWhere((item) {
+        print(item.symbol.toString() + "++++++++++++++++++++");
 
-        if(item.symbol == widget.currency.toString()){
+        if (item.symbol == widget.currency.toString()) {
           return true;
         }
         return false;
       });
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
-
-
-
-
   }
 
+  getUpdate() {
+    selectedCountry =
+        countryList.firstWhere((item) => item.id == widget.country);
+  }
 
-getUpdate(){
-    selectedCountry=countryList.firstWhere((item) => item.id == widget.country);
-}
   @override
   Widget build(BuildContext context) {
-      print("${widget.addOntype.length}");
+    print("${widget.addOntype.length}");
 
     print("checking city here now ${widget.city} and ${widget.state}");
     return SafeArea(
@@ -463,28 +467,28 @@ getUpdate(){
                 borderRadius: BorderRadius.circular(14.0)),
             color: AppColor().colorEdit(),
             child: Container(
-                width: double.infinity,
-                height: 6.h,
-                decoration: boxDecoration(
-                  radius: 14.0,
-                  bgColor: AppColor().colorEdit(),
-                ),
-                child: TextFormField(
-                  controller: serviceName,
-                  maxLines: 1,
-                  keyboardType: TextInputType.text,
-                  textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(
-                    hintText: "Service Name",
-                    border: InputBorder.none,
-                    contentPadding:
-                    EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
-                    prefixIcon: Icon(
-                      Icons.miscellaneous_services,
-                      color: AppColor.PrimaryDark,
-                    ),
+              width: double.infinity,
+              height: 6.h,
+              decoration: boxDecoration(
+                radius: 14.0,
+                bgColor: AppColor().colorEdit(),
+              ),
+              child: TextFormField(
+                controller: serviceName,
+                maxLines: 1,
+                keyboardType: TextInputType.text,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  hintText: "Service Name",
+                  border: InputBorder.none,
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
+                  prefixIcon: Icon(
+                    Icons.miscellaneous_services,
+                    color: AppColor.PrimaryDark,
                   ),
                 ),
+              ),
             ),
           ),
           SizedBox(
@@ -495,10 +499,9 @@ getUpdate(){
               height: 6.h,
               decoration: boxDecoration(
                 radius: 10.0,
-                color:  AppColor().colorEdit(),
+                color: AppColor().colorEdit(),
               ),
-              child:
-              DropdownButtonHideUnderline(
+              child: DropdownButtonHideUnderline(
                 child: DropdownButton2<dynamic>(
                   isExpanded: true,
                   hint: Row(
@@ -525,25 +528,26 @@ getUpdate(){
                       ),
                     ],
                   ),
-                  items: countryList.map((item) => DropdownMenuItem<dynamic>(
-                    value: item,
-                    child: Text(
-                      item.name!,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )).toList(),
-                  value: selectedCountry ,
-                      //== null ? widget.country : selectedCountry,
+                  items: countryList
+                      .map((item) => DropdownMenuItem<dynamic>(
+                            value: item,
+                            child: Text(
+                              item.name!,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ))
+                      .toList(),
+                  value: selectedCountry,
+                  //== null ? widget.country : selectedCountry,
                   onChanged: (value) {
                     setState(() {
                       selectedCountry = value;
-                      print("selectedCategory=>" +
-                          selectedCountry.toString());
+                      print("selectedCategory=>" + selectedCountry.toString());
                       getState();
                     });
                   },
@@ -554,16 +558,14 @@ getUpdate(){
                   iconSize: 14,
                   buttonHeight: 50,
                   buttonWidth: 160,
-                  buttonPadding:
-                  const EdgeInsets.only(left: 14, right: 14),
+                  buttonPadding: const EdgeInsets.only(left: 14, right: 14),
                   buttonDecoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(14),
                     color: AppColor().colorEdit(),
                   ),
                   buttonElevation: 0,
                   itemHeight: 40,
-                  itemPadding:
-                  const EdgeInsets.only(left: 14, right: 14),
+                  itemPadding: const EdgeInsets.only(left: 14, right: 14),
                   dropdownMaxHeight: 300,
                   dropdownPadding: null,
                   dropdownDecoration: BoxDecoration(
@@ -583,9 +585,9 @@ getUpdate(){
             height: 6.h,
             decoration: boxDecoration(
               radius: 10.0,
-              color:AppColor().colorEdit(),
+              color: AppColor().colorEdit(),
             ),
-            child:DropdownButtonHideUnderline(
+            child: DropdownButtonHideUnderline(
               child: DropdownButton2<dynamic>(
                 isExpanded: true,
                 hint: Row(
@@ -613,28 +615,27 @@ getUpdate(){
                   ],
                 ),
                 items: stateList
-                    .map((item) =>
-                    DropdownMenuItem<dynamic>(
-                      value: item,
-                      child: Text(
-                        item.name!,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight:
-                          FontWeight.bold,
-                          color: Colors.black,
+                    .map(
+                      (item) => DropdownMenuItem<dynamic>(
+                        value: item,
+                        child: Text(
+                          item.name!,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                ).toList(),
-                value: selectedState ,
-                    // == null ? widget.state : selectedState,
+                    )
+                    .toList(),
+                value: selectedState,
+                // == null ? widget.state : selectedState,
                 onChanged: (value) {
                   setState(() {
                     selectedState = value;
-                    print("selected State===>" +
-                        selectedState.toString());
+                    print("selected State===>" + selectedState.toString());
                   });
                   getCities();
                 },
@@ -645,26 +646,21 @@ getUpdate(){
                 iconSize: 14,
                 buttonHeight: 50,
                 buttonWidth: 160,
-                buttonPadding: const EdgeInsets.only(
-                    left: 14, right: 14),
+                buttonPadding: const EdgeInsets.only(left: 14, right: 14),
                 buttonDecoration: BoxDecoration(
-                  borderRadius:
-                  BorderRadius.circular(14),
-                  color:AppColor().colorEdit(),
+                  borderRadius: BorderRadius.circular(14),
+                  color: AppColor().colorEdit(),
                 ),
                 buttonElevation: 0,
                 itemHeight: 40,
-                itemPadding: const EdgeInsets.only(
-                    left: 14, right: 14),
+                itemPadding: const EdgeInsets.only(left: 14, right: 14),
                 dropdownMaxHeight: 300,
                 dropdownPadding: null,
                 dropdownDecoration: BoxDecoration(
-                  borderRadius:
-                  BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(14),
                 ),
                 dropdownElevation: 8,
-                scrollbarRadius:
-                const Radius.circular(40),
+                scrollbarRadius: const Radius.circular(40),
                 scrollbarThickness: 6,
                 scrollbarAlwaysShow: true,
               ),
@@ -707,23 +703,25 @@ getUpdate(){
                     ),
                   ],
                 ),
-                items: cityList.map((item) => DropdownMenuItem<dynamic>(
-                  value: item,
-                  child: Text(
-                    item.name!,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )).toList(),
+                items: cityList
+                    .map((item) => DropdownMenuItem<dynamic>(
+                          value: item,
+                          child: Text(
+                            item.name!,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ))
+                    .toList(),
                 value: selectedCity,
-                 //== null ? widget.city : selectedCity,
+                //== null ? widget.city : selectedCity,
                 onChanged: (value) {
                   setState(() {
-                    selectedCity = value ;
+                    selectedCity = value;
                     print("selected State===>" + selectedCity.toString());
                   });
                 },
@@ -758,280 +756,287 @@ getUpdate(){
           SizedBox(
             height: 2.5.h,
           ),
-           currencyModel == null ? SizedBox() : Container(
-              width: double.infinity,
-              height: 6.h,
-              decoration: boxDecoration(
-                radius: 10.0,
-                color:  AppColor().colorEdit(),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton2<dynamic>(
-                  isExpanded: true,
-                  hint: Row(
-                    children: [
-                      Image.asset(
-                        country,
-                        width: 6.04.w,
-                        height: 5.04.w,
-                        fit: BoxFit.fill,
-                        color: AppColor.PrimaryDark,
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Expanded(
-                        child: Text(
-                          'Select Currency',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  items: currencyModel!.data!
-                      .map((item) => DropdownMenuItem<dynamic>(
-                    value: item,
-                    child: Text(
-                      item.symbol.toString(),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )).toList(),
-                  value: selectedCurrency ,
-                      // ==
-                      //  null ? widget.currency : selectedCurrency,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedCurrency = value;
-                      print("selectedCategory=>" + selectedCurrency.toString());
-                      getState();
-                    });
-                  },
-                  icon: const Icon(
-                    Icons.arrow_forward_ios_outlined,
-                    color: AppColor.PrimaryDark,
-                  ),
-                  iconSize: 14,
-                  buttonHeight: 50,
-                  buttonWidth: 160,
-                  buttonPadding:
-                  const EdgeInsets.only(left: 14, right: 14),
-                  buttonDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
+          currencyModel == null
+              ? SizedBox()
+              : Container(
+                  width: double.infinity,
+                  height: 6.h,
+                  decoration: boxDecoration(
+                    radius: 10.0,
                     color: AppColor().colorEdit(),
                   ),
-                  buttonElevation: 0,
-                  itemHeight: 40,
-                  itemPadding:
-                  const EdgeInsets.only(left: 14, right: 14),
-                  dropdownMaxHeight: 300,
-                  dropdownPadding: null,
-                  dropdownDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  dropdownElevation: 8,
-                  scrollbarRadius: const Radius.circular(40),
-                  scrollbarThickness: 6,
-                  scrollbarAlwaysShow: true,
-                ),
-              )),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton2<dynamic>(
+                      isExpanded: true,
+                      hint: Row(
+                        children: [
+                          Image.asset(
+                            country,
+                            width: 6.04.w,
+                            height: 5.04.w,
+                            fit: BoxFit.fill,
+                            color: AppColor.PrimaryDark,
+                          ),
+                          SizedBox(
+                            width: 4,
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Select Currency',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      items: currencyModel!.data!
+                          .map((item) => DropdownMenuItem<dynamic>(
+                                value: item,
+                                child: Text(
+                                  item.symbol.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ))
+                          .toList(),
+                      value: selectedCurrency,
+                      // ==
+                      //  null ? widget.currency : selectedCurrency,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedCurrency = value;
+                          print("selectedCategory=>" +
+                              selectedCurrency.toString());
+                          getState();
+                        });
+                      },
+                      icon: const Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        color: AppColor.PrimaryDark,
+                      ),
+                      iconSize: 14,
+                      buttonHeight: 50,
+                      buttonWidth: 160,
+                      buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+                      buttonDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        color: AppColor().colorEdit(),
+                      ),
+                      buttonElevation: 0,
+                      itemHeight: 40,
+                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                      dropdownMaxHeight: 300,
+                      dropdownPadding: null,
+                      dropdownDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      dropdownElevation: 8,
+                      scrollbarRadius: const Radius.circular(40),
+                      scrollbarThickness: 6,
+                      scrollbarAlwaysShow: true,
+                    ),
+                  )),
           SizedBox(
             height: 2.5.h,
           ),
 
           // SERVICE CATEGORY
           Container(
-              width: double.infinity,
-              height: 6.h,
-              decoration: boxDecoration(
-                radius: 10.0,
-              ),
-              child: FutureBuilder(
-                  future: getServiceCategory(),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    ServiceCategoryModel serviceModel = snapshot.data;
-                    if (snapshot.hasData) {
-                      return
-                        DropdownButtonHideUnderline(
-                        child: DropdownButton2(
-                          isExpanded: true,
-                          hint: Row(
-                            children: [
-                              Image.asset(
-                                service,
-                                width: 6.04.w,
-                                height: 5.04.w,
-                                fit: BoxFit.fill,
-                                color: AppColor.PrimaryDark,
-                              ),
-                              SizedBox(
-                                width: 4,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  'Select Category',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
+            width: double.infinity,
+            height: 6.h,
+            decoration: boxDecoration(
+              radius: 10.0,
+            ),
+            child: FutureBuilder(
+              future: getServiceCategory(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                ServiceCategoryModel serviceModel = snapshot.data;
+                if (snapshot.hasData) {
+                  return DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      isExpanded: true,
+                      hint: Row(
+                        children: [
+                          Image.asset(
+                            service,
+                            width: 6.04.w,
+                            height: 5.04.w,
+                            fit: BoxFit.fill,
+                            color: AppColor.PrimaryDark,
                           ),
-                          items: serviceModel.data?.map((item) => DropdownMenuItem<String>(
-                            value: item.id,
+                          SizedBox(
+                            width: 4,
+                          ),
+                          Expanded(
                             child: Text(
-                              item.cName!,
-                              style: const TextStyle(
+                              'Select Category',
+                              style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                fontWeight: FontWeight.normal,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          ).toList(),
-                          value: selectedCategory,
-                          // icon:  Icon(
-                          //   Icons.arrow_forward_ios_outlined,
-                          //   color: AppColor.PrimaryDark,
-                          // ),
-                          // onChanged: (value) {
-                          //   setState(() {
-                          //     selectedCategory = value as String;
-                          //     // // serviceName.text = serviceModel.data!
-                          //     //     .firstWhere((element) => element.id == value)
-                          //     //     .cName
-                          //     //     .toString();
-                          //     print("selectedCategory=>" + selectedCategory.toString() + "serviceName" + serviceName.text);
-                          //   });
-                          //   categorylist.clear();
-                          //   getServicesSubCategory(selectedCategory);
-                          //   print("CATEGORY ID== $selectedCategory");
-                          // },
+                        ],
+                      ),
+                      items: serviceModel.data
+                          ?.map(
+                            (item) => DropdownMenuItem<String>(
+                              value: item.id,
+                              child: Text(
+                                item.cName!,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      value: selectedCategory,
+                      // icon:  Icon(
+                      //   Icons.arrow_forward_ios_outlined,
+                      //   color: AppColor.PrimaryDark,
+                      // ),
+                      // onChanged: (value) {
+                      //   setState(() {
+                      //     selectedCategory = value as String;
+                      //     // // serviceName.text = serviceModel.data!
+                      //     //     .firstWhere((element) => element.id == value)
+                      //     //     .cName
+                      //     //     .toString();
+                      //     print("selectedCategory=>" + selectedCategory.toString() + "serviceName" + serviceName.text);
+                      //   });
+                      //   categorylist.clear();
+                      //   getServicesSubCategory(selectedCategory);
+                      //   print("CATEGORY ID== $selectedCategory");
+                      // },
 
-                          iconSize: 0,
-                          buttonHeight: 50,
-                          buttonWidth: 160,
-                          buttonPadding:
-                          const EdgeInsets.only(left: 14, right: 14),
-                          buttonDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                            color: AppColor().colorEdit(),
-                          ),
-                          buttonElevation: 0,
-                          itemHeight: 40,
-                          itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                          dropdownMaxHeight: 300,
-                          dropdownPadding: null,
-                          dropdownDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          dropdownElevation: 8,
-                          scrollbarRadius: const Radius.circular(40),
-                          scrollbarThickness: 6,
-                          scrollbarAlwaysShow: true,
-                        ),
-                      );
-                    }
-                    else if (snapshot.hasError) {
-                      print("ERROR===" + snapshot.error.toString());
-                      return Icon(Icons.error_outline);
-                    }
-                    else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  },
-              ),
-          ),
-          SizedBox(height: 2.5.h,),
-
-          SizedBox(height: 20,),
-          subCategory?.data==null?SizedBox.shrink():
-          MultiSelectDropDown(
-            hint: "Select Sub Category",
-           // alwaysShowOptionIcon: true,
-
-            showClearIcon: true,
-            controller: _controller,
-            onOptionSelected: (options) {
-
-              for (int i = 0; i < options.length; i++) {
-                String value = options[i].value??"";
-
-                // Check if the value is not already in the set
-                if (uniqueValues.add(value)) {
-                  // If the value is added to the set (i.e., it's unique), add it to the list
-                  categorylist.add(value);
+                      iconSize: 0,
+                      buttonHeight: 50,
+                      buttonWidth: 160,
+                      buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+                      buttonDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        color: AppColor().colorEdit(),
+                      ),
+                      buttonElevation: 0,
+                      itemHeight: 40,
+                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                      dropdownMaxHeight: 300,
+                      dropdownPadding: null,
+                      dropdownDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      dropdownElevation: 8,
+                      scrollbarRadius: const Radius.circular(40),
+                      scrollbarThickness: 6,
+                      scrollbarAlwaysShow: true,
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  print("ERROR===" + snapshot.error.toString());
+                  return Icon(Icons.error_outline);
+                } else {
+                  return Center(child: CircularProgressIndicator());
                 }
-              }
-
-
-              // setState(() {
-              //
-              // });
-              debugPrint(categorylist.toString());
-            },
-            options: <ValueItem>[
-              for (int i = 0; i < subCategory!.data!.length; i++) ...[
-                ValueItem(
-                  label: "${subCategory!.data![i].cName}",
-                  value: "${subCategory!.data![i].id}",
-                )
-              ]
-            ],
-
-            selectionType: SelectionType.multi,
-            selectedOptions: [
-              for (int i = 0; i < subCategory!.data!.length; i++) ...[
-                for(int j=0;j<subcateid.length;j++)...[
-                  "${subCategory!.data![i].id}" == subcateid[j].toString()
-                      ? ValueItem(
-                    label: "${subCategory!.data![i].cName}",
-                    value: "${subCategory!.data![i].id}",
-                  )
-                      : ValueItem(label: "")
-                ]
-
-              ]
-            ]..removeWhere((element) => element.label == ""), // Remove null entries
-            chipConfig: const ChipConfig(wrapType: WrapType.scroll,backgroundColor: AppColor.PrimaryDark,
-
+              },
             ),
-            dropdownHeight: 300,
-            optionTextStyle: const TextStyle(fontSize: 16),
-            selectedOptionIcon: const Icon(Icons.check_circle,color: AppColor.PrimaryDark,),
-            selectedOptionTextColor: AppColor.PrimaryDark,
-            // suffixIcon: IconData(),
-            // selectedItemBuilder: (BuildContext context, ValueItem item,) {
-            //   // Customize the appearance of the selected item here
-            //   return Container(
-            //     padding: EdgeInsets.all(8.0),
-            //     decoration: BoxDecoration(
-            //       color: Colors.red, // Set the background color to red
-            //       borderRadius: BorderRadius.circular(5.0),
-            //     ),
-            //     child: Row(
-            //       mainAxisSize: MainAxisSize.min,
-            //       children: [
-            //         Text(item.label),
-            //         const SizedBox(width: 8.0),
-            //         Icon(Icons.close, color: Colors.white, size: 18.0),
-            //       ],
-            //     ),
-            //   );
-            // },
-
           ),
+          SizedBox(
+            height: 2.5.h,
+          ),
+
+          SizedBox(
+            height: 20,
+          ),
+          subCategory?.data == null
+              ? SizedBox.shrink()
+              : MultiSelectDropDown(
+                  hint: "Select Sub Category",
+                  // alwaysShowOptionIcon: true,
+
+                  clearIcon: const Icon(Icons.cancel),
+                  controller: _controller,
+                  onOptionSelected: (options) {
+                    for (int i = 0; i < options.length; i++) {
+                      String value = options[i].value ?? "";
+
+                      // Check if the value is not already in the set
+                      if (uniqueValues.add(value)) {
+                        // If the value is added to the set (i.e., it's unique), add it to the list
+                        categorylist.add(value);
+                      }
+                    }
+
+                    // setState(() {
+                    //
+                    // });
+                    debugPrint(categorylist.toString());
+                  },
+                  options: <ValueItem>[
+                    for (int i = 0; i < subCategory!.data!.length; i++) ...[
+                      ValueItem(
+                        label: "${subCategory!.data![i].cName}",
+                        value: "${subCategory!.data![i].id}",
+                      )
+                    ]
+                  ],
+
+                  selectionType: SelectionType.multi,
+                  selectedOptions: [
+                    for (int i = 0; i < subCategory!.data!.length; i++) ...[
+                      for (int j = 0; j < subcateid.length; j++) ...[
+                        "${subCategory!.data![i].id}" == subcateid[j].toString()
+                            ? ValueItem(
+                                label: "${subCategory!.data![i].cName}",
+                                value: "${subCategory!.data![i].id}",
+                              )
+                            : ValueItem(label: "", value: "")
+                      ]
+                    ]
+                  ]..removeWhere(
+                      (element) => element.label == ""), // Remove null entries
+                  chipConfig: const ChipConfig(
+                    wrapType: WrapType.scroll,
+                    backgroundColor: AppColor.PrimaryDark,
+                  ),
+                  dropdownHeight: 300,
+                  optionTextStyle: const TextStyle(fontSize: 16),
+                  selectedOptionIcon: const Icon(
+                    Icons.check_circle,
+                    color: AppColor.PrimaryDark,
+                  ),
+                  selectedOptionTextColor: AppColor.PrimaryDark,
+                  // suffixIcon: IconData(),
+                  // selectedItemBuilder: (BuildContext context, ValueItem item,) {
+                  //   // Customize the appearance of the selected item here
+                  //   return Container(
+                  //     padding: EdgeInsets.all(8.0),
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.red, // Set the background color to red
+                  //       borderRadius: BorderRadius.circular(5.0),
+                  //     ),
+                  //     child: Row(
+                  //       mainAxisSize: MainAxisSize.min,
+                  //       children: [
+                  //         Text(item.label),
+                  //         const SizedBox(width: 8.0),
+                  //         Icon(Icons.close, color: Colors.white, size: 18.0),
+                  //       ],
+                  //     ),
+                  //   );
+                  // },
+                ),
           // SERVICE SUBCATEGORY
           // Container(
           //     width: double.infinity,
@@ -1154,7 +1159,7 @@ getUpdate(){
                     hintText: "Service Description",
                     border: InputBorder.none,
                     contentPadding:
-                    EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
+                        EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
                     prefixIcon: Icon(
                       Icons.description,
                       color: AppColor.PrimaryDark,
@@ -1166,7 +1171,7 @@ getUpdate(){
             height: 2.5.h,
           ),
 
-         /* //SERVICE EXPERTS
+          /* //SERVICE EXPERTS
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
@@ -1224,7 +1229,7 @@ getUpdate(){
                     hintText: "Service Charges",
                     border: InputBorder.none,
                     contentPadding:
-                    EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
+                        EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
                     prefixIcon: Icon(
                       Icons.credit_card_outlined,
                       color: AppColor.PrimaryDark,
@@ -1236,7 +1241,7 @@ getUpdate(){
             height: 2.5.h,
           ),
 
-         /* // Service TIME
+          /* // Service TIME
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
@@ -1289,72 +1294,75 @@ getUpdate(){
                   radius: 14.0,
                   bgColor: AppColor().colorEdit(),
                 ),
-                child:
-                servicePic != null
+                child: servicePic != null
                     ? Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.image,
-                        color: AppColor.PrimaryDark,
-                      ),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.65,
-                        child: ListView.builder(
-                            shrinkWrap:  true,
-                            itemCount: widget.logo.length,
-                            itemBuilder: (c,i){
-                          return Text(
-                            "${widget.logo[i]}",
-                            overflow: TextOverflow.ellipsis,
-                          );
-                        })
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          // crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.image,
+                              color: AppColor.PrimaryDark,
+                            ),
+                            SizedBox(
+                              width: 6,
+                            ),
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.65,
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: widget.logo.length,
+                                    itemBuilder: (c, i) {
+                                      return Text(
+                                        "${widget.logo[i]}",
+                                        overflow: TextOverflow.ellipsis,
+                                      );
+                                    }))
+                          ],
+                        ),
                       )
-                    ],
-                  ),
-                )
                     : Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.image,
-                        color: AppColor.PrimaryDark,
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.image,
+                              color: AppColor.PrimaryDark,
+                            ),
+                            SizedBox(
+                              width: 6,
+                            ),
+                            Text("Upload service image"),
+                          ],
+                        ),
                       ),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      Text("Upload service image"),
-                    ],
-                  ),
-                ),
               ),
             ),
           ),
-          widget.logo == null || widget.logo == "" ? SizedBox.shrink() : Container(
-            height: 90,
-            width: MediaQuery.of(context).size.width,
-            child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: widget.logo.length,
-                itemBuilder: (c,i){
-              return Container(
-                height: 90,
-                width: 100,
-                margin: EdgeInsets.only(left: 25),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6),
-                  child: Image.network("${widget.logo[i]}",fit: BoxFit.fill,),
+          widget.logo == null || widget.logo == ""
+              ? SizedBox.shrink()
+              : Container(
+                  height: 90,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: widget.logo.length,
+                      itemBuilder: (c, i) {
+                        return Container(
+                          height: 90,
+                          width: 100,
+                          margin: EdgeInsets.only(left: 25),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(6),
+                            child: Image.network(
+                              "${widget.logo[i]}",
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        );
+                      }),
                 ),
-              );
-            }),
-          ),
 
           //  Container(
           //   padding: EdgeInsets.symmetric(horizontal: 30),
@@ -1495,97 +1503,7 @@ getUpdate(){
                                   children: [
                                     Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          flex: 2,
-                                          child: Container(
-                                            margin: EdgeInsets.symmetric(horizontal: 10),
-                                            width: double.infinity,
-                                            height: 6.h,
-                                            decoration: boxDecoration(radius: 10.0, color: AppColor().colorEdit()),
-                                            child: DropdownButtonHideUnderline(
-                                              child: DropdownButton2(
-                                                isExpanded: true,
-                                                hint: Text(
-                                                  'Select Hours / Day',
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                    FontWeight.normal,
-                                                  ),
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                                items: addonServiceList.map((String? item) =>
-                                                    DropdownMenuItem<String>(
-                                                      value: item,
-                                                      child: Text(
-                                                        item.toString(),
-                                                        style: const TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight: FontWeight.bold,
-                                                          color: Colors.black,
-                                                        ),
-                                                        overflow: TextOverflow.ellipsis,
-                                                      ),
-                                                    ),
-                                                ).toList(),
-                                                value: selectedServiceTypeList[index],
-                                                onChanged: (value) {
-                                                  print("select serviceee typeee hereree ${selectedServiceTypeList[index]}");
-                                                  setState(() {
-                                                    selectedServiceTypeList[index] = value as String;
-                                                    // // serviceName.text = serviceModel.data!
-                                                    //     .firstWhere((element) => element.id == value)
-                                                    //     .cName
-                                                    //     .toString();
-                                                  });
-                                                },
-                                                icon: const Icon(Icons.arrow_forward_ios_outlined, color: AppColor.PrimaryDark),
-                                                iconSize: 14,
-                                                buttonHeight: 50,
-                                                buttonWidth: 160,
-                                                buttonPadding: EdgeInsets.only(left: 14, right: 14),
-                                                buttonDecoration: BoxDecoration(borderRadius: BorderRadius.circular(14), color: AppColor().colorBg1(),
-                                                  //color: Colors.grey.withOpacity(0.05)
-                                                ),
-                                                buttonElevation: 0,
-                                                itemHeight: 40,
-                                                itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                                                dropdownMaxHeight: 300,
-                                                dropdownPadding: null,
-                                                dropdownDecoration:
-                                                BoxDecoration(borderRadius: BorderRadius.circular(14)),
-                                                dropdownElevation: 8,
-                                                scrollbarRadius: const Radius.circular(40),
-                                                scrollbarThickness: 6,
-                                                scrollbarAlwaysShow: true,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 2,
-                                          child: SizedBox(
-                                            height: 6.h,
-                                            child: TextField(
-                                              controller: addonServicePriceControllerList[index],
-                                              keyboardType: TextInputType.number,
-                                              decoration: InputDecoration(
-                                                  hintText: "I will charge",
-                                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10),
-                                                  ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
                                           flex: 2,
@@ -1596,8 +1514,7 @@ getUpdate(){
                                             height: 6.h,
                                             decoration: boxDecoration(
                                                 radius: 10.0,
-                                                color: AppColor().colorEdit(),
-                                            ),
+                                                color: AppColor().colorEdit()),
                                             child: DropdownButtonHideUnderline(
                                               child: DropdownButton2(
                                                 isExpanded: true,
@@ -1606,37 +1523,41 @@ getUpdate(){
                                                   style: TextStyle(
                                                     fontSize: 14,
                                                     fontWeight:
-                                                    FontWeight.normal,
+                                                        FontWeight.normal,
                                                   ),
                                                   overflow:
-                                                  TextOverflow.ellipsis,
+                                                      TextOverflow.ellipsis,
                                                 ),
-                                                items: ['Hours', 'Days']
-                                                    .map((String? item) =>
-                                                    DropdownMenuItem<
-                                                        String>(
-                                                      value: item,
-                                                      child: Text(
-                                                        item.toString(),
-                                                        style:
-                                                        const TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                          FontWeight
-                                                              .bold,
-                                                          color:
-                                                          Colors.black,
+                                                items: addonServiceList
+                                                    .map(
+                                                      (String? item) =>
+                                                          DropdownMenuItem<
+                                                              String>(
+                                                        value: item,
+                                                        child: Text(
+                                                          item.toString(),
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors.black,
+                                                          ),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
                                                         ),
-                                                        overflow:
-                                                        TextOverflow
-                                                            .ellipsis,
                                                       ),
-                                                    ),).toList(),
-                                                value: selectedServiceHourList[index],
+                                                    )
+                                                    .toList(),
+                                                value: selectedServiceTypeList[
+                                                    index],
                                                 onChanged: (value) {
+                                                  print(
+                                                      "select serviceee typeee hereree ${selectedServiceTypeList[index]}");
                                                   setState(() {
-                                                    //selectedServiceHour = value as String;
-                                                    selectedServiceHourList[index] = value as String;
+                                                    selectedServiceTypeList[
+                                                            index] =
+                                                        value as String;
                                                     // // serviceName.text = serviceModel.data!
                                                     //     .firstWhere((element) => element.id == value)
                                                     //     .cName
@@ -1644,33 +1565,36 @@ getUpdate(){
                                                   });
                                                 },
                                                 icon: const Icon(
-                                                  Icons.arrow_forward_ios_outlined,
-                                                  color: AppColor.PrimaryDark,
-                                                ),
+                                                    Icons
+                                                        .arrow_forward_ios_outlined,
+                                                    color:
+                                                        AppColor.PrimaryDark),
                                                 iconSize: 14,
                                                 buttonHeight: 50,
                                                 buttonWidth: 160,
-                                                buttonPadding:
-                                                const EdgeInsets.only(
+                                                buttonPadding: EdgeInsets.only(
                                                     left: 14, right: 14),
                                                 buttonDecoration: BoxDecoration(
                                                   borderRadius:
-                                                  BorderRadius.circular(14),
+                                                      BorderRadius.circular(14),
                                                   color: AppColor().colorBg1(),
                                                   //color: Colors.grey.withOpacity(0.05)
                                                 ),
                                                 buttonElevation: 0,
                                                 itemHeight: 40,
                                                 itemPadding:
-                                                const EdgeInsets.only(left: 14, right: 14),
+                                                    const EdgeInsets.only(
+                                                        left: 14, right: 14),
                                                 dropdownMaxHeight: 300,
                                                 dropdownPadding: null,
                                                 dropdownDecoration:
-                                                BoxDecoration(borderRadius: BorderRadius.circular(14),
-                                                ),
+                                                    BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(14)),
                                                 dropdownElevation: 8,
                                                 scrollbarRadius:
-                                                const Radius.circular(40),
+                                                    const Radius.circular(40),
                                                 scrollbarThickness: 6,
                                                 scrollbarAlwaysShow: true,
                                               ),
@@ -1682,12 +1606,143 @@ getUpdate(){
                                           child: SizedBox(
                                             height: 6.h,
                                             child: TextField(
-                                              controller: addonHourDayPriceControllerList[index],
+                                              controller:
+                                                  addonServicePriceControllerList[
+                                                      index],
                                               keyboardType:
-                                              TextInputType.number,
+                                                  TextInputType.number,
+                                              decoration: InputDecoration(
+                                                hintText: "I will charge",
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            width: double.infinity,
+                                            height: 6.h,
+                                            decoration: boxDecoration(
+                                              radius: 10.0,
+                                              color: AppColor().colorEdit(),
+                                            ),
+                                            child: DropdownButtonHideUnderline(
+                                              child: DropdownButton2(
+                                                isExpanded: true,
+                                                hint: Text(
+                                                  'Select Hours / Day',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                items: ['Hours', 'Days']
+                                                    .map(
+                                                      (String? item) =>
+                                                          DropdownMenuItem<
+                                                              String>(
+                                                        value: item,
+                                                        child: Text(
+                                                          item.toString(),
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors.black,
+                                                          ),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ),
+                                                    )
+                                                    .toList(),
+                                                value: selectedServiceHourList[
+                                                    index],
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    //selectedServiceHour = value as String;
+                                                    selectedServiceHourList[
+                                                            index] =
+                                                        value as String;
+                                                    // // serviceName.text = serviceModel.data!
+                                                    //     .firstWhere((element) => element.id == value)
+                                                    //     .cName
+                                                    //     .toString();
+                                                  });
+                                                },
+                                                icon: const Icon(
+                                                  Icons
+                                                      .arrow_forward_ios_outlined,
+                                                  color: AppColor.PrimaryDark,
+                                                ),
+                                                iconSize: 14,
+                                                buttonHeight: 50,
+                                                buttonWidth: 160,
+                                                buttonPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 14, right: 14),
+                                                buttonDecoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(14),
+                                                  color: AppColor().colorBg1(),
+                                                  //color: Colors.grey.withOpacity(0.05)
+                                                ),
+                                                buttonElevation: 0,
+                                                itemHeight: 40,
+                                                itemPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 14, right: 14),
+                                                dropdownMaxHeight: 300,
+                                                dropdownPadding: null,
+                                                dropdownDecoration:
+                                                    BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(14),
+                                                ),
+                                                dropdownElevation: 8,
+                                                scrollbarRadius:
+                                                    const Radius.circular(40),
+                                                scrollbarThickness: 6,
+                                                scrollbarAlwaysShow: true,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: SizedBox(
+                                            height: 6.h,
+                                            child: TextField(
+                                              controller:
+                                                  addonHourDayPriceControllerList[
+                                                      index],
+                                              keyboardType:
+                                                  TextInputType.number,
                                               decoration: InputDecoration(
                                                   hintText: "Hour/Day",
-                                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                                                  border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10))),
                                             ),
                                           ),
                                         ),
@@ -1700,16 +1755,16 @@ getUpdate(){
                           ),
                         ),
                         Positioned(
-                            child: InkWell(
-                                onTap: () {
-                                  selectedServiceTypeList.removeAt(index);
-                                  selectedServiceHourList.removeAt(index);
-                                  addonServicePriceControllerList.removeAt(index);
-                                  addonHourDayPriceControllerList.removeAt(index);
-                                  addonList2.removeAt(index);
-                                  setState(() {});
-                                },
-                                child: Icon(Icons.remove_circle_outline)),
+                          child: InkWell(
+                              onTap: () {
+                                selectedServiceTypeList.removeAt(index);
+                                selectedServiceHourList.removeAt(index);
+                                addonServicePriceControllerList.removeAt(index);
+                                addonHourDayPriceControllerList.removeAt(index);
+                                addonList2.removeAt(index);
+                                setState(() {});
+                              },
+                              child: Icon(Icons.remove_circle_outline)),
                         )
                       ],
                     );
@@ -1728,17 +1783,19 @@ getUpdate(){
                 if (_formKey.currentState!.validate()) {
                   if (selectedCategory!.isNotEmpty &&
                       subcateid!.isNotEmpty &&
-                      serviceCharge.text.isNotEmpty ) {
+                      serviceCharge.text.isNotEmpty) {
                     setState(() {
                       buttonLogin = true;
                     });
 
-                    for (int i = 0; i < addonServicePriceControllerList.length; i++) {
+                    for (int i = 0;
+                        i < addonServicePriceControllerList.length;
+                        i++) {
                       if (addonServicePriceControllerList[i].text.isNotEmpty &&
                           addonHourDayPriceControllerList[i].text.isNotEmpty &&
-                           selectedServiceTypeList[i] != null &&
+                          selectedServiceTypeList[i] != null &&
                           selectedServiceHourList[i] != null) {
-                          addonList.add(jsonEncode({
+                        addonList.add(jsonEncode({
                           "service": selectedServiceTypeList[i],
                           "price_a": addonServicePriceControllerList[i].text,
                           "hrly": selectedServiceHourList[i],
@@ -1751,20 +1808,24 @@ getUpdate(){
                       'name': '${serviceName.text.toString()}',
                       'description': '${descriptionController.text}',
                       'cat_id': '$selectedCategory',
-                      'scat_id':categorylist.isEmpty?subcateid.map((dynamic value) {
-                        return value.toString();
-                      }).join(', '): categorylist.map((String value) {
-                        return value.toString();
-                      }).join(', '),
+                      'scat_id': categorylist.isEmpty
+                          ? subcateid.map((dynamic value) {
+                              return value.toString();
+                            }).join(', ')
+                          : categorylist.map((String value) {
+                              return value.toString();
+                            }).join(', '),
                       'vid': '$userId',
                       'price': '${serviceCharge.text.toString()}',
                       // 'hours': '${onpenTime.text.toString()}',
                       // 'experts': '${expertsC.text}',
                       'id': widget.serviceId,
                       'country_id': "${selectedCountry.id.toString()}",
-                      "state_id":"${selectedState.id.toString()}",
-                      "city_id":"${selectedCity.id.toString()}",
-                      "currency": "${selectedCurrency.symbol}",
+                      "state_id": "${selectedState.id.toString()}",
+                      "city_id": "${selectedCity.id.toString()}",
+                      "currency": selectedCurrency == null
+                          ? "₹"
+                          : "${selectedCurrency.symbol}",
                       "addon": addonList.toString(),
                     };
                     print("ADD SERVICE PARAM=====" + param.toString());
@@ -1775,11 +1836,9 @@ getUpdate(){
                     } else {
                       UtilityHlepar.getToast(addModel.message);
                     }
-                  }
-                  else if (selectedCategory!.isEmpty) {
+                  } else if (selectedCategory!.isEmpty) {
                     UtilityHlepar.getToast(ToastString.msgSelectServiceType);
-                  }
-                  else if (subcateid!.isEmpty) {
+                  } else if (subcateid!.isEmpty) {
                     UtilityHlepar.getToast(ToastString.msgSelectServiceSubType);
                   }
                   // else if (onpenTime.text.isEmpty) {
@@ -1787,7 +1846,7 @@ getUpdate(){
                   // }
                   else if (serviceCharge.text.isEmpty) {
                     UtilityHlepar.getToast(ToastString.msgServiceCharge);
-                  } else if(servicePic == null) {
+                  } else if (servicePic == null) {
                     UtilityHlepar.getToast("Service Image Required");
                   }
                 }
@@ -1803,7 +1862,8 @@ getUpdate(){
       ),
     );
   }
-  ServiceCategoryModel ?serviceCategoryModel11;
+
+  ServiceCategoryModel? serviceCategoryModel11;
   Future<ServiceCategoryModel?> getServiceCategory() async {
     // var userId = await MyToken.getUserID();
     var request = http.MultipartRequest(
@@ -1816,14 +1876,15 @@ getUpdate(){
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
-      serviceCategoryModel11=ServiceCategoryModel.fromJson(json.decode(str));
+      serviceCategoryModel11 = ServiceCategoryModel.fromJson(json.decode(str));
 
       return ServiceCategoryModel.fromJson(json.decode(str));
     } else {
       return null;
     }
   }
-  ServiceSubCategoryModel ?subCategory;
+
+  ServiceSubCategoryModel? subCategory;
 
   Future<ServiceSubCategoryModel?> getServicesSubCategory(catId) async {
     var request = http.MultipartRequest(
@@ -1838,10 +1899,8 @@ getUpdate(){
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
       print(str);
-      subCategory=ServiceSubCategoryModel.fromJson(json.decode(str));
-      setState(() {
-
-      });
+      subCategory = ServiceSubCategoryModel.fromJson(json.decode(str));
+      setState(() {});
       return ServiceSubCategoryModel.fromJson(json.decode(str));
     } else {
       return null;
@@ -1849,11 +1908,9 @@ getUpdate(){
   }
 
   Future<void> getFromGallery() async {
-
     fileResult = await FilePicker.platform.pickFiles(
       type: FileType.image,
       allowMultiple: true,
-
     );
     if (fileResult != null) {
       setState(() {
@@ -1887,10 +1944,11 @@ getUpdate(){
     print("servicePic list here ${servicePic}");
     var request = http.MultipartRequest(
         'POST', Uri.parse('${Apipath.BASH_URL}edit_restaurant'));
-     for(var i=0;i<servicePic.length;i++){
-      fileResult == null ? "" :
-        request.files.add(
-          await http.MultipartFile.fromPath('res_image[]', servicePic[i].toString()));
+    for (var i = 0; i < servicePic.length; i++) {
+      fileResult == null
+          ? ""
+          : request.files.add(await http.MultipartFile.fromPath(
+              'res_image[]', servicePic[i].toString()));
     }
     // if(widget.serviceImage == null){
     //   request.files.add(await http.MultipartFile.fromPath(
@@ -1905,7 +1963,7 @@ getUpdate(){
     http.StreamedResponse response = await request.send();
     print(request.toString());
     print(request.fields.toString());
-    print(response.statusCode.toString()+"___________________");
+    print(response.statusCode.toString() + "___________________");
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
       print(str.toString());
@@ -1934,6 +1992,6 @@ getUpdate(){
       });
     }
   }
+
   bool isChange = false;
 }
-

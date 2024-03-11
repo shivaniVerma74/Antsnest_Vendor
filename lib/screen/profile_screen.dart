@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animated_widgets/widgets/scale_animated.dart';
+import 'package:fixerking/screen/blogs/blogsScreen.dart';
 import 'package:fixerking/screen/paymentHistory.dart';
 import 'package:fixerking/screen/plan_history.dart';
 import 'package:fixerking/screen/privacy_policy.dart';
@@ -298,6 +299,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     context, 14, "images/BOOKING LIST.png", "My BookingList"),
                 tabItem(context, 7, walletIcon, "My Wallet"),
                 tabItem(context, 1, payment, "Plan History"),
+                tabItem(context, 20, blogs, "My Blogs"),
                 // tabItem(context, 2, serviceIcon, "Service History"),
                 tabItem(context, 6, chatIcon, "Chat With User"),
                 tabItem(context, 8, service, "Reviews"),
@@ -601,6 +603,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: CancellationScreen(
                     // walletAmount: walletAmount.toString(),
                     ),
+                type: PageTransitionType.rightToLeft,
+                duration: Duration(milliseconds: 500),
+              ));
+        }
+        if (pos == 20) {
+          Navigator.push(
+              context,
+              PageTransition(
+                child: BlogsPage(),
                 type: PageTransitionType.rightToLeft,
                 duration: Duration(milliseconds: 500),
               ));

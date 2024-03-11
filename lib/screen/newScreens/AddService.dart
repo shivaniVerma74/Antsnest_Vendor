@@ -1558,7 +1558,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:path/path.dart' as path;
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -1613,6 +1612,7 @@ class _AddServicesState extends State<AddServices> {
   TextEditingController descriptionController = new TextEditingController();
   TextEditingController servicePrice = new TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey();
+  final MultiSelectController multiSelectController = MultiSelectController();
 
   TextEditingController serviceLocation = TextEditingController();
   TextEditingController serviceOfferedController = TextEditingController();
@@ -2160,7 +2160,7 @@ class _AddServicesState extends State<AddServices> {
                       .map((item) => DropdownMenuItem<String>(
                             value: item.id,
                             child: Text(
-                              item.name!,
+                              item.nicename!,
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -2735,229 +2735,418 @@ class _AddServicesState extends State<AddServices> {
               )
            )*/
 
-          Container(
-            width: double.infinity,
-            height: 6.h,
-            decoration: boxDecoration(
-              radius: 10.0,
-            ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton2<dynamic>(
-                isExpanded: true,
-                hint: Row(
-                  children: [
-                    Image.asset(
-                      service,
-                      width: 6.04.w,
-                      height: 5.04.w,
-                      fit: BoxFit.fill,
+          Material(
+            elevation: 4,
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(6),
+            child: Container(
+                width: double.infinity,
+                height: 6.h,
+                decoration: boxDecoration(
+                  radius: 10.0,
+                ),
+                child: FutureBuilder(
+                    future: getServiceCategory(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      ServiceCategoryModel serviceModel = snapshot.data;
+                      if (snapshot.hasData) {
+                        return DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            isExpanded: true,
+                            hint: Text(
+                              'Select Category',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            items: serviceModel.data!
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: item.id,
+                                      child: Text(
+                                        item.cName!,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ))
+                                .toList(),
+                            value: selectedCategory,
+                            onChanged: (value) {
+                              var serviceName = "";
+
+                              setState(() {
+                                var serviceName = "";
+                                selectedCategory = value as String;
+                              });
+                              categorylist.clear();
+                              print(selectedCategory);
+                              serviceName = serviceModel.data!
+                                  .firstWhere((element) => element.id == value)
+                                  .cName
+                                  .toString();
+                              print(serviceName.toString());
+
+                              getServicesSubCategory(
+                                  selectedCategory, serviceName);
+                              print("CATEGORY ID issssss== $selectedCategory");
+                            },
+                            icon: const Icon(
+                              Icons.arrow_forward_ios_outlined,
+                              color: AppColor.PrimaryDark,
+                            ),
+                            iconSize: 14,
+                            buttonHeight: 50,
+                            buttonWidth: 160,
+                            buttonPadding:
+                                const EdgeInsets.only(left: 14, right: 14),
+                            buttonDecoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                // color: AppColor().colorEdit(),
+                                color: Colors.grey.withOpacity(0.05)),
+                            buttonElevation: 0,
+                            itemHeight: 40,
+                            itemPadding:
+                                const EdgeInsets.only(left: 14, right: 14),
+                            dropdownMaxHeight: 300,
+                            dropdownPadding: null,
+                            dropdownDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            dropdownElevation: 8,
+                            scrollbarRadius: const Radius.circular(40),
+                            scrollbarThickness: 6,
+                            scrollbarAlwaysShow: true,
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        print("ERROR===" + snapshot.error.toString());
+                        return Icon(Icons.error_outline);
+                      } else {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    })),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          subCategory == null
+              ? SizedBox()
+              : Material(
+                  elevation: 4,
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(6),
+                  child: MultiSelectDropDown(
+                    hint: "Select Sub Category",
+                    clearIcon: const Icon(Icons.cancel),
+
+                    controller: multiSelectController,
+                    borderColor: Colors.transparent,
+
+                    onOptionSelected: (options) {
+                      categorylist.clear();
+                      for (int i = 0; i < options.length; i++) {
+                        String value = options[i].value ?? "";
+
+                        // Check if the value is not already in the set
+                        // if (uniqueValues.add(value)) {
+                        //   print(value);
+
+                        categorylist.add(value);
+                        setState(() {});
+                        // }
+                      }
+
+                      // setState(() {
+                      //
+                      // });
+                      debugPrint(categorylist.toString());
+                    },
+                    options: <ValueItem>[
+                      for (int i = 0; i < subCategory!.data!.length; i++) ...[
+                        ValueItem(
+                          label: "${subCategory!.data![i].cName}",
+                          value: "${subCategory!.data![i].id}",
+                        )
+                      ]
+                    ],
+
+                    selectionType: SelectionType.multi,
+                    // selectedOptions: [
+                    //   for (int i = 0; i < serviceSubCategoryModel!.data!.length; i++) ...[
+                    //     "${subCategory!.data![i].id}" == widget.profileResponse?.user?.jsonData?.subCat.toString()
+                    //         ? ValueItem(
+                    //       label: "${subCategory!.data![i].cName}",
+                    //       value: "${subCategory!.data![i].id}",
+                    //     )
+                    //         : ValueItem(label: "")
+                    //   ]
+                    // ]..removeWhere((element) => element.label == ""), // Remove null entries
+                    chipConfig: const ChipConfig(
+                      wrapType: WrapType.scroll,
+                      backgroundColor: AppColor.PrimaryDark,
+                    ),
+                    dropdownHeight: 300,
+                    optionTextStyle: const TextStyle(fontSize: 16),
+                    selectedOptionIcon: const Icon(
+                      Icons.check_circle,
                       color: AppColor.PrimaryDark,
                     ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Expanded(
-                      child: Text(
-                        'Select Category',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
+                    selectedOptionTextColor: AppColor.PrimaryDark,
+                    // suffixIcon: IconData(),
+                    // selectedItemBuilder: (BuildContext context, ValueItem item,) {
+                    //   // Customize the appearance of the selected item here
+                    //   return Container(
+                    //     padding: EdgeInsets.all(8.0),
+                    //     decoration: BoxDecoration(
+                    //       color: Colors.red, // Set the background color to red
+                    //       borderRadius: BorderRadius.circular(5.0),
+                    //     ),
+                    //     child: Row(
+                    //       mainAxisSize: MainAxisSize.min,
+                    //       children: [
+                    //         Text(item.label),
+                    //         const SizedBox(width: 8.0),
+                    //         Icon(Icons.close, color: Colors.white, size: 18.0),
+                    //       ],
+                    //     ),
+                    //   );
+                    // },
+                  ),
                 ),
-                items: serviceModel?.data!
-                    .map((item) => DropdownMenuItem<dynamic>(
-                          value: item,
-                          child: Text(
-                            item.cName!,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ))
-                    .toList(),
-                value: selectedCategory11,
-                // onChanged: (value) {
-                //   setState(() {
-                //     selectedCategory11 = value;
-                //     // // serviceName.text = serviceModel.data!
-                //     //     .firstWhere((element) => element.id == value)
-                //     //     .cName
-                //     //     .toString();
-                //     print("selectedCategory=>" +
-                //         selectedCategory.toString() +
-                //         "serviceName" +
-                //         serviceName.text);
-                //     getServicesSubCategory(selectedCategory11?.id);
-                //   });
-                //   print("CATEGORY ID== $selectedCategory");
-                // },
-                // icon: const Icon(
-                //   Icons.arrow_forward_ios_outlined,
-                //   color: AppColor.PrimaryDark,
-                // ),
-                iconSize: 0,
-                buttonHeight: 50,
-                buttonWidth: 160,
-                buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                buttonDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  color: AppColor().colorEdit(),
-                ),
-                buttonElevation: 0,
-                itemHeight: 40,
-                itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                dropdownMaxHeight: 300,
-                dropdownPadding: null,
-                dropdownDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                dropdownElevation: 8,
-                scrollbarRadius: const Radius.circular(40),
-                scrollbarThickness: 6,
-                scrollbarAlwaysShow: true,
-              ),
-            ),
+          SizedBox(
+            height: 15,
           ),
 
-          // selectedCategory == "" || selectedCategory == null
-          //     ? SizedBox.shrink()
-          //     : SizedBox(height: 2.5.h
-          // ),
-          // SERVICE SUBCATEGORY
-          //  subCategory == null
-          //     ? SizedBox.shrink()
-          //     : Card(
-          //   elevation: 0,
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(14.0),
-          //   ),
-          //   color: AppColor().colorEdit(),
-          //   child: Container(
-          //       width: double.infinity,
-          //       height: 6.h,
-          //       decoration: boxDecoration(
-          //         radius: 14.0,
-          //         bgColor: AppColor().colorEdit(),
-          //       ),
-          //       child: TextFormField(
-          //         keyboardType: TextInputType.text,
-          //         controller: serviceSubCategory,
-          //         readOnly: true,
-          //         style: const TextStyle(
-          //           fontSize: 14,
-          //           fontWeight: FontWeight.bold,
-          //           color: Colors.black,
-          //           overflow: TextOverflow.ellipsis,
-          //         ),
-          //         inputFormatters: [LengthLimitingTextInputFormatter(5)],
-          //         textAlignVertical: TextAlignVertical.center,
-          //         decoration: InputDecoration(
-          //           hintText: "Sub Category",
-          //           border: InputBorder.none,
-          //           contentPadding:
-          //           EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
-          //           /*prefixIcon: Icon(
-          //             Icons.credit_card_outlined,
-          //             color: AppColor.PrimaryDark,
-          //           ),*/
-          //         ),
-          //       ),
-          //   ),
-          // ),
+// //start here
+//           Container(
+//             width: double.infinity,
+//             height: 6.h,
+//             decoration: boxDecoration(
+//               radius: 10.0,
+//             ),
+//             child: DropdownButtonHideUnderline(
+//               child: DropdownButton2<dynamic>(
+//                 isExpanded: true,
+//                 hint: Row(
+//                   children: [
+//                     Image.asset(
+//                       service,
+//                       width: 6.04.w,
+//                       height: 5.04.w,
+//                       fit: BoxFit.fill,
+//                       color: AppColor.PrimaryDark,
+//                     ),
+//                     SizedBox(
+//                       width: 4,
+//                     ),
+//                     Expanded(
+//                       child: Text(
+//                         'Select Category',
+//                         style: TextStyle(
+//                           fontSize: 14,
+//                           fontWeight: FontWeight.normal,
+//                         ),
+//                         overflow: TextOverflow.ellipsis,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//                 items: serviceModel?.data!
+//                     .map((item) => DropdownMenuItem<dynamic>(
+//                           value: item,
+//                           child: Text(
+//                             item.cName!,
+//                             style: const TextStyle(
+//                               fontSize: 14,
+//                               fontWeight: FontWeight.bold,
+//                               color: Colors.black,
+//                             ),
+//                             overflow: TextOverflow.ellipsis,
+//                           ),
+//                         ))
+//                     .toList(),
+//                 value: selectedCategory11,
+//                 // onChanged: (value) {
+//                 //   setState(() {
+//                 //     selectedCategory11 = value;
+//                 //     // // serviceName.text = serviceModel.data!
+//                 //     //     .firstWhere((element) => element.id == value)
+//                 //     //     .cName
+//                 //     //     .toString();
+//                 //     print("selectedCategory=>" +
+//                 //         selectedCategory.toString() +
+//                 //         "serviceName" +
+//                 //         serviceName.text);
+//                 //     getServicesSubCategory(selectedCategory11?.id);
+//                 //   });
+//                 //   print("CATEGORY ID== $selectedCategory");
+//                 // },
+//                 // icon: const Icon(
+//                 //   Icons.arrow_forward_ios_outlined,
+//                 //   color: AppColor.PrimaryDark,
+//                 // ),
+//                 iconSize: 0,
+//                 buttonHeight: 50,
+//                 buttonWidth: 160,
+//                 buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+//                 buttonDecoration: BoxDecoration(
+//                   borderRadius: BorderRadius.circular(14),
+//                   color: AppColor().colorEdit(),
+//                 ),
+//                 buttonElevation: 0,
+//                 itemHeight: 40,
+//                 itemPadding: const EdgeInsets.only(left: 14, right: 14),
+//                 dropdownMaxHeight: 300,
+//                 dropdownPadding: null,
+//                 dropdownDecoration: BoxDecoration(
+//                   borderRadius: BorderRadius.circular(14),
+//                 ),
+//                 dropdownElevation: 8,
+//                 scrollbarRadius: const Radius.circular(40),
+//                 scrollbarThickness: 6,
+//                 scrollbarAlwaysShow: true,
+//               ),
+//             ),
+//           ),
 
-          subCategory?.data == null
-              ? SizedBox.shrink()
-              : Column(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    MultiSelectDropDown(
-                      hint: "Select Sub Category",
-                      showClearIcon: true,
-                      controller: _controller,
-                      onOptionSelected: (options) {
-                        for (int i = 0; i < options.length; i++) {
-                          String value = options[i].value ?? "";
+//           // selectedCategory == "" || selectedCategory == null
+//           //     ? SizedBox.shrink()
+//           //     : SizedBox(height: 2.5.h
+//           // ),
+//           // SERVICE SUBCATEGORY
+//           //  subCategory == null
+//           //     ? SizedBox.shrink()
+//           //     : Card(
+//           //   elevation: 0,
+//           //   shape: RoundedRectangleBorder(
+//           //     borderRadius: BorderRadius.circular(14.0),
+//           //   ),
+//           //   color: AppColor().colorEdit(),
+//           //   child: Container(
+//           //       width: double.infinity,
+//           //       height: 6.h,
+//           //       decoration: boxDecoration(
+//           //         radius: 14.0,
+//           //         bgColor: AppColor().colorEdit(),
+//           //       ),
+//           //       child: TextFormField(
+//           //         keyboardType: TextInputType.text,
+//           //         controller: serviceSubCategory,
+//           //         readOnly: true,
+//           //         style: const TextStyle(
+//           //           fontSize: 14,
+//           //           fontWeight: FontWeight.bold,
+//           //           color: Colors.black,
+//           //           overflow: TextOverflow.ellipsis,
+//           //         ),
+//           //         inputFormatters: [LengthLimitingTextInputFormatter(5)],
+//           //         textAlignVertical: TextAlignVertical.center,
+//           //         decoration: InputDecoration(
+//           //           hintText: "Sub Category",
+//           //           border: InputBorder.none,
+//           //           contentPadding:
+//           //           EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
+//           //           /*prefixIcon: Icon(
+//           //             Icons.credit_card_outlined,
+//           //             color: AppColor.PrimaryDark,
+//           //           ),*/
+//           //         ),
+//           //       ),
+//           //   ),
+//           // ),
 
-                          // Check if the value is not already in the set
-                          if (uniqueValues.add(value)) {
-                            print(value);
+//           subCategory?.data == null
+//               ? SizedBox.shrink()
+//               : Column(
+//                   children: [
+//                     SizedBox(
+//                       height: 20,
+//                     ),
+//                     MultiSelectDropDown(
+//                       hint: "Select Sub Category",
+//                       clearIcon: const Icon(Icons.cancel),
+//                       controller: _controller,
+//                       onOptionSelected: (options) {
+//                         for (int i = 0; i < options.length; i++) {
+//                           String value = options[i].value ?? "";
 
-                            categorylist.add(value);
-                            setState(() {});
-                          }
-                        }
-                        debugPrint(categorylist.toString() + "+++++++++++++");
+//                           // Check if the value is not already in the set
+//                           if (uniqueValues.add(value)) {
+//                             print(value);
 
-                        // setState(() {
-                        //
-                        // });
-                      },
-                      options: <ValueItem>[
-                        for (int i = 0; i < subCategory!.data!.length; i++) ...[
-                          ValueItem(
-                            label: "${subCategory!.data![i].cName}",
-                            value: "${subCategory!.data![i].id}",
-                          )
-                        ]
-                      ],
+//                             categorylist.add(value);
+//                             setState(() {});
+//                           }
+//                         }
+//                         debugPrint(categorylist.toString() + "+++++++++++++");
 
-                      selectionType: SelectionType.multi,
-                      selectedOptions: [
-                        for (int i = 0; i < subCategory!.data!.length; i++) ...[
-                          for (int j = 0; j < subcateid.length; j++) ...[
-                            "${subCategory!.data![i].id}" ==
-                                    subcateid[j].toString()
-                                ? ValueItem(
-                                    label: "${subCategory!.data![i].cName}",
-                                    value: "${subCategory!.data![i].id}",
-                                  )
-                                : ValueItem(label: "")
-                          ]
-                        ]
-                      ]..removeWhere((element) =>
-                          element.label == ""), // Remove null entries
-                      chipConfig: const ChipConfig(
-                        wrapType: WrapType.scroll,
-                        backgroundColor: AppColor.PrimaryDark,
-                      ),
-                      dropdownHeight: 300,
-                      optionTextStyle: const TextStyle(fontSize: 16),
-                      selectedOptionIcon: const Icon(
-                        Icons.check_circle,
-                        color: AppColor.PrimaryDark,
-                      ),
-                      selectedOptionTextColor: AppColor.PrimaryDark,
-                      // suffixIcon: IconData(),
-                      // selectedItemBuilder: (BuildContext context, ValueItem item,) {
-                      //   // Customize the appearance of the selected item here
-                      //   return Container(
-                      //     padding: EdgeInsets.all(8.0),
-                      //     decoration: BoxDecoration(
-                      //       color: Colors.red, // Set the background color to red
-                      //       borderRadius: BorderRadius.circular(5.0),
-                      //     ),
-                      //     child: Row(
-                      //       mainAxisSize: MainAxisSize.min,
-                      //       children: [
-                      //         Text(item.label),
-                      //         const SizedBox(width: 8.0),
-                      //         Icon(Icons.close, color: Colors.white, size: 18.0),
-                      //       ],
-                      //     ),
-                      //   );
-                      // },
-                    ),
-                  ],
-                ),
+//                         // setState(() {
+//                         //
+//                         // });
+//                       },
+//                       options: <ValueItem>[
+//                         for (int i = 0; i < subCategory!.data!.length; i++) ...[
+//                           ValueItem(
+//                             label: "${subCategory!.data![i].cName}",
+//                             value: "${subCategory!.data![i].id}",
+//                           )
+//                         ]
+//                       ],
+
+//                       selectionType: SelectionType.multi,
+//                       selectedOptions: [
+//                         for (int i = 0; i < subCategory!.data!.length; i++) ...[
+//                           for (int j = 0; j < subcateid.length; j++) ...[
+//                             "${subCategory!.data![i].id}" ==
+//                                     subcateid[j].toString()
+//                                 ? ValueItem(
+//                                     label: "${subCategory!.data![i].cName}",
+//                                     value: "${subCategory!.data![i].id}",
+//                                   )
+//                                 : ValueItem(label: "", value: "")
+//                           ]
+//                         ]
+//                       ]..removeWhere((element) =>
+//                           element.label == ""), // Remove null entries
+//                       chipConfig: const ChipConfig(
+//                         wrapType: WrapType.scroll,
+//                         backgroundColor: AppColor.PrimaryDark,
+//                       ),
+//                       dropdownHeight: 300,
+//                       optionTextStyle: const TextStyle(fontSize: 16),
+//                       selectedOptionIcon: const Icon(
+//                         Icons.check_circle,
+//                         color: AppColor.PrimaryDark,
+//                       ),
+//                       selectedOptionTextColor: AppColor.PrimaryDark,
+//                       // suffixIcon: IconData(),
+//                       // selectedItemBuilder: (BuildContext context, ValueItem item,) {
+//                       //   // Customize the appearance of the selected item here
+//                       //   return Container(
+//                       //     padding: EdgeInsets.all(8.0),
+//                       //     decoration: BoxDecoration(
+//                       //       color: Colors.red, // Set the background color to red
+//                       //       borderRadius: BorderRadius.circular(5.0),
+//                       //     ),
+//                       //     child: Row(
+//                       //       mainAxisSize: MainAxisSize.min,
+//                       //       children: [
+//                       //         Text(item.label),
+//                       //         const SizedBox(width: 8.0),
+//                       //         Icon(Icons.close, color: Colors.white, size: 18.0),
+//                       //       ],
+//                       //     ),
+//                       //   );
+//                       // },
+//                     ),
+//                   ],
+//                 ),
+//           //ends here
           // Container(
           //         width: double.infinity,
           //         height: 6.h,
@@ -3063,20 +3252,20 @@ class _AddServicesState extends State<AddServices> {
             color: AppColor().colorEdit(),
             child: Container(
               width: double.infinity,
-              height: 6.h,
+              height: 20.h,
               decoration: boxDecoration(
                 radius: 14.0,
                 bgColor: AppColor().colorEdit(),
               ),
               child: TextFormField(
                 controller: descriptionController,
-                // maxLines: 2,
-
+                maxLines: 100,
                 keyboardType: TextInputType.multiline,
                 textAlignVertical: TextAlignVertical.center,
                 decoration: InputDecoration(
                   hintText: "Service Description",
                   border: InputBorder.none,
+                  hintStyle: TextStyle(),
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 15.0, vertical: 16),
                   prefixIcon: Icon(
@@ -3839,7 +4028,7 @@ class _AddServicesState extends State<AddServices> {
         });
         print(selectedCategory11.cName);
 
-        getServicesSubCategory(selectedCategory11.id);
+        //  getServicesSubCategory(selectedCategory11.id);
       });
 
       // serviceModel?.data?.forEach((element) {
@@ -3860,7 +4049,45 @@ class _AddServicesState extends State<AddServices> {
   }
 
   ServiceSubCategoryModel? subCategory;
-  Future<void> getServicesSubCategory(catId) async {
+  // Future<void> getServicesSubCategory(catId) async {
+  //   var request = http.MultipartRequest(
+  //       'POST', Uri.parse("${Apipath.BASH_URL}get_categories_list"));
+
+  //   request.fields.addAll({'p_id': '$catId'});
+
+  //   print(request);
+  //   print(request.fields);
+  //   http.StreamedResponse response = await request.send();
+
+  //   if (response.statusCode == 200) {
+  //     final str = await response.stream.bytesToString();
+
+  //     subCategory = ServiceSubCategoryModel.fromJson(json.decode(str));
+
+  //     subCategory?.data?.forEach((element) {
+  //       if (element.id.toString() ==
+  //           widget.profileResponse?.user?.jsonData?.subCat.toString()) {
+  //         serviceSubCategory.text = element.cName ?? '';
+  //       }
+  //     });
+  //     setState(() {});
+  //   } else {
+  //     return null;
+  //   }
+  // }
+
+  Map<String, List<SubData>> customMap = {};
+
+  void addData(String key, List<SubData> newData) {
+    if (customMap.containsKey(key)) {
+      customMap[key]!.addAll(newData);
+    } else {
+      customMap[key] = newData;
+    }
+  }
+
+  Future<ServiceSubCategoryModel?> getServicesSubCategory(
+      catId, String serviceName) async {
     var request = http.MultipartRequest(
         'POST', Uri.parse("${Apipath.BASH_URL}get_categories_list"));
 
@@ -3872,16 +4099,12 @@ class _AddServicesState extends State<AddServices> {
 
     if (response.statusCode == 200) {
       final str = await response.stream.bytesToString();
-
-      subCategory = ServiceSubCategoryModel.fromJson(json.decode(str));
-
-      subCategory?.data?.forEach((element) {
-        if (element.id.toString() ==
-            widget.profileResponse?.user?.jsonData?.subCat.toString()) {
-          serviceSubCategory.text = element.cName ?? '';
-        }
+      var finalResult = ServiceSubCategoryModel.fromJson(json.decode(str));
+      setState(() {
+        subCategory = finalResult;
       });
-      setState(() {});
+      addData(serviceName, subCategory!.data!);
+      //customMap.addEntries(serviceName, serviceSubCategoryModel.data!);
     } else {
       return null;
     }
@@ -3943,7 +4166,7 @@ class _AddServicesState extends State<AddServices> {
       print("SERVICE PIC === ${servicePic.toString()}");
     }*/
     try {
-      final image = await ImagePicker().getImage(source: ImageSource.gallery);
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return;
       final imageTemp = File(image.path);
       setState(() => servicePic = imageTemp);

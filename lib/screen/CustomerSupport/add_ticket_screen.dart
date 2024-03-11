@@ -9,8 +9,6 @@ import '../../utils/colors.dart';
 import 'customer_support_faq.dart';
 import 'models/ticket_type_model.dart';
 
-
-
 class TicketPage extends StatefulWidget {
   String? bookingId;
   TicketPage({this.bookingId});
@@ -23,15 +21,13 @@ class _TicketPageState extends State<TicketPage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController ticketController = TextEditingController();
 
-  int currentIndex =  -1;
+  int currentIndex = -1;
   var selectedTicketId;
-   var selectedType;
+  var selectedType;
   List<TicketType> typeList = [];
   Future getType() async {
-
-
-    var request = http.MultipartRequest(
-        'GET', Uri.parse('${Apipath.getTicketsTypeApi}'));
+    var request =
+        http.MultipartRequest('GET', Uri.parse('${Apipath.getTicketsTypeApi}'));
 
     print("this is request !!${Apipath.getTicketsTypeApi}");
 
@@ -56,15 +52,16 @@ class _TicketPageState extends State<TicketPage> {
     }
   }
 
-  submitTicket()async{
+  submitTicket() async {
     var userid = await MyToken.getUserID();
 
     var headers = {
       'Cookie': 'ci_session=9ec6a655b0715f9e32df3d727d7ced4d696b01eb'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('${Apipath.addTicketApi}'));
+    var request =
+        http.MultipartRequest('POST', Uri.parse('${Apipath.addTicketApi}'));
     request.fields.addAll({
-      'vendor_id':userid.toString(),
+      'vendor_id': userid.toString(),
       'booking_id': widget.bookingId.toString(),
       'title': ticketController.text.toString(),
       'support_ticket_type': selectedTicketId.toString(),
@@ -79,22 +76,101 @@ class _TicketPageState extends State<TicketPage> {
       print('=================${finalResult}');
 
       final jsonResponse = json.decode(finalResult);
-      if(jsonResponse['status'] == "0"){
-        var snackBar = SnackBar(
-          content: Text(jsonResponse['message'].toString()),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        setState(() {
-          ticketController.clear();
-          currentIndex = -1;
-        });
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> CustomerSupport()));
+      if (jsonResponse['status'] == "0") {
+        showWarningDialog(context);
+        // var snackBar = SnackBar(
+        //   content: Text(jsonResponse['message'].toString()),
+        // );
+        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
+  }
 
+  void showWarningDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+            side: BorderSide(color: AppColor.PrimaryDark, width: 5),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.check_circle_outline,
+                  size: 50,
+                  color: AppColor.PrimaryDark,
+                ),
+                SizedBox(
+                    height:
+                        10), // Provides spacing between the icon and the text.
+                Text(
+                  "",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    color: AppColor.PrimaryDark,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                    height:
+                        20), // Provides spacing between the warning text and the message.
+                Text(
+                  "You are in good hands, and we are doing our best to get back to you within 24 hours,if not sooner. We appreciate your patience, and apologize in advance if it takes a little longer.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 20),
+                Align(
+                    alignment: Alignment.center,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          ticketController.clear();
+                          currentIndex = -1;
+                        });
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CustomerSupport()));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: AppColor.PrimaryDark.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(3),
+                            border: Border.all(color: AppColor.PrimaryDark)),
+                        child: Text(
+                          "OK",
+                          style: TextStyle(
+                              color: AppColor.PrimaryDark,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )),
+                // ElevatedButton(
+                //   onPressed: () => Navigator.of(context).pop(),
+                //   child: Text('OK'),
+                //   style: ElevatedButton.styleFrom(
+                //     primary: Colors.red, // Button color
+                //   ),
+                // ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -107,232 +183,262 @@ class _TicketPageState extends State<TicketPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     appBar: AppBar(
-       title: Text(
-         "Generate Support Ticket",
-         style: TextStyle(
-           color: Colors.white,
-         ),
-       ),
+      appBar: AppBar(
+        title: Text(
+          "Generate Support Ticket",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20)
-            )
-        ),
+                bottomRight: Radius.circular(20))),
         backgroundColor: AppColor.PrimaryDark,
         elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12,vertical: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Subject",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w600),),
-                SizedBox(height: 10,),
-              Form(
-                key: _formKey,
-                child: TextFormField(
-                  controller: ticketController,
-                  decoration: InputDecoration(
-                    hintText: "Subject",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: Colors.grey)
-                    )
-                  ),
-
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text in subject field';
-                    }
-                    return null;
-                  },
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Subject",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
                 ),
-              ),
-              SizedBox(height: 10,),
-              Text("What issue are you having with this order?",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w600,fontSize: 15),),
-              SizedBox(height: 25,),
-
-              ListView.builder(
-                shrinkWrap: true,
-                  itemCount: typeList.length,
-                  itemBuilder: (context, index){
-                return InkWell(
-                  onTap: (){
-                    setState(() {
-                      currentIndex = index;
-                      selectedTicketId = typeList[index].id.toString();
-                      selectedType = typeList[index].title.toString();
-                      print(selectedTicketId);
-                      print(selectedType);
-                    });
-                  },
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Row(
-
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          currentIndex == index ? Icon(Icons.check_circle_outlined)  :   Icon(Icons.circle_outlined,size: 20,),
-                          SizedBox(width: 10,),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width/1.2,
-
-                              child: Text(typeList[index].title.toString()))
-                        ],
-                      ),
-                    ),
+                SizedBox(
+                  height: 10,
+                ),
+                Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    controller: ticketController,
+                    decoration: InputDecoration(
+                        hintText: "Subject",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey))),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text in subject field';
+                      }
+                      return null;
+                    },
                   ),
-                );
-              }),
-              // InkWell(
-              //   onTap: (){
-              //     setState(() {
-              //       currentIndex = "The seller can't deliver on time";
-              //     });
-              //   },
-              //   child: Container(
-              //     child: Row(
-              //       crossAxisAlignment: CrossAxisAlignment.center,
-              //       children: [
-              //         currentIndex == "The seller can't deliver on time" ? Icon(Icons.check_circle_outlined)  :   Icon(Icons.circle_outlined,size: 20,),
-              //         SizedBox(width: 10,),
-              //         Text("The seller can't deliver on time")
-              //       ],
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(height: 10,),
-              // InkWell(
-              //   onTap: (){
-              //     setState(() {
-              //       currentIndex = "I am not satisfied with the stock image selection";
-              //     });
-              //   },
-              //   child: Container(
-              //     child: Row(
-              //       crossAxisAlignment: CrossAxisAlignment.center,
-              //       children: [
-              //         currentIndex == "I am not satisfied with the stock image selection" ? Icon(Icons.check_circle_outlined)  :  Icon(Icons.circle_outlined,size: 20,),
-              //         SizedBox(width: 10,),
-              //         Container(
-              //             width: MediaQuery.of(context).size.width/1.2,
-              //             child: Text("I am not satisfied with the stock image selection",maxLines: 2,))
-              //       ],
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(height: 10,),
-              // InkWell(
-              //   onTap: (){
-              //     setState(() {
-              //       currentIndex = "The quality of the work i recived was poor";
-              //     });
-              //   },
-              //   child: Container(
-              //     child: Row(
-              //       crossAxisAlignment: CrossAxisAlignment.center,
-              //       children: [
-              //         currentIndex == "The quality of the work i recived was poor" ? Icon(Icons.check_circle_outlined)  :    Icon(Icons.circle_outlined,size: 20,),
-              //         SizedBox(width: 10,),
-              //         Container(
-              //             width: MediaQuery.of(context).size.width/1.2,
-              //             child: Text("The quality of the work i recived was poor"))
-              //       ],
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(height: 10,),
-              // InkWell(
-              //   onTap: (){
-              //     setState(() {
-              //       currentIndex = "The seller is not responding";
-              //     });
-              //   },
-              //   child: Container(
-              //     child: Row(
-              //       crossAxisAlignment: CrossAxisAlignment.center,
-              //       children: [
-              //         currentIndex == "The seller is not responding" ? Icon(Icons.check_circle_outlined)  :  Icon(Icons.circle_outlined,size: 20,),
-              //         SizedBox(width: 10,),
-              //         Text("The seller is not responding")
-              //       ],
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(height: 10,),
-              // InkWell(
-              //   onTap: (){
-              //     setState(() {
-              //       currentIndex = "I didn't receive was i ordered";
-              //     });
-              //   },
-              //   child: Container(
-              //     child: Row(
-              //       crossAxisAlignment: CrossAxisAlignment.center,
-              //       children: [
-              //         currentIndex == "I didn't receive was i ordered" ? Icon(Icons.check_circle_outlined)  : Icon(Icons.circle_outlined,size: 20,),
-              //         SizedBox(width: 10,),
-              //         Text("I didn't receive was i ordered")
-              //       ],
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(height: 10,),
-              // InkWell(
-              //   onTap: (){
-              //     setState(() {
-              //       currentIndex = "Other";
-              //     });
-              //   },
-              //   child: Container(
-              //     child: Row(
-              //       crossAxisAlignment: CrossAxisAlignment.center,
-              //       children: [
-              //         currentIndex == "Other" ? Icon(Icons.check_circle_outlined) :  Icon(Icons.circle_outlined,size: 20,),
-              //         SizedBox(width: 10,),
-              //         Text("Other")
-              //       ],
-              //     ),
-              //   ),
-              // ),
-              
-              SizedBox(height: 20,),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "What issue are you having with this order?",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15),
+                ),
+                SizedBox(
+                  height: 25,
+                ),
 
-              InkWell(
-                  onTap: () {
-if(_formKey.currentState!.validate()){
-print(selectedType.runtimeType);
-print(selectedType);
-print(selectedTicketId);
-  if(selectedType==null){
-    Fluttertoast.showToast(msg: 'Please Select Any One Issue');
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: typeList.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          setState(() {
+                            currentIndex = index;
+                            selectedTicketId = typeList[index].id.toString();
+                            selectedType = typeList[index].title.toString();
+                            print(selectedTicketId);
+                            print(selectedType);
+                          });
+                        },
+                        child: Container(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                currentIndex == index
+                                    ? Icon(Icons.check_circle_outlined)
+                                    : Icon(
+                                        Icons.circle_outlined,
+                                        size: 20,
+                                      ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width / 1.2,
+                                    child:
+                                        Text(typeList[index].title.toString()))
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                // InkWell(
+                //   onTap: (){
+                //     setState(() {
+                //       currentIndex = "The seller can't deliver on time";
+                //     });
+                //   },
+                //   child: Container(
+                //     child: Row(
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       children: [
+                //         currentIndex == "The seller can't deliver on time" ? Icon(Icons.check_circle_outlined)  :   Icon(Icons.circle_outlined,size: 20,),
+                //         SizedBox(width: 10,),
+                //         Text("The seller can't deliver on time")
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                // SizedBox(height: 10,),
+                // InkWell(
+                //   onTap: (){
+                //     setState(() {
+                //       currentIndex = "I am not satisfied with the stock image selection";
+                //     });
+                //   },
+                //   child: Container(
+                //     child: Row(
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       children: [
+                //         currentIndex == "I am not satisfied with the stock image selection" ? Icon(Icons.check_circle_outlined)  :  Icon(Icons.circle_outlined,size: 20,),
+                //         SizedBox(width: 10,),
+                //         Container(
+                //             width: MediaQuery.of(context).size.width/1.2,
+                //             child: Text("I am not satisfied with the stock image selection",maxLines: 2,))
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                // SizedBox(height: 10,),
+                // InkWell(
+                //   onTap: (){
+                //     setState(() {
+                //       currentIndex = "The quality of the work i recived was poor";
+                //     });
+                //   },
+                //   child: Container(
+                //     child: Row(
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       children: [
+                //         currentIndex == "The quality of the work i recived was poor" ? Icon(Icons.check_circle_outlined)  :    Icon(Icons.circle_outlined,size: 20,),
+                //         SizedBox(width: 10,),
+                //         Container(
+                //             width: MediaQuery.of(context).size.width/1.2,
+                //             child: Text("The quality of the work i recived was poor"))
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                // SizedBox(height: 10,),
+                // InkWell(
+                //   onTap: (){
+                //     setState(() {
+                //       currentIndex = "The seller is not responding";
+                //     });
+                //   },
+                //   child: Container(
+                //     child: Row(
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       children: [
+                //         currentIndex == "The seller is not responding" ? Icon(Icons.check_circle_outlined)  :  Icon(Icons.circle_outlined,size: 20,),
+                //         SizedBox(width: 10,),
+                //         Text("The seller is not responding")
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                // SizedBox(height: 10,),
+                // InkWell(
+                //   onTap: (){
+                //     setState(() {
+                //       currentIndex = "I didn't receive was i ordered";
+                //     });
+                //   },
+                //   child: Container(
+                //     child: Row(
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       children: [
+                //         currentIndex == "I didn't receive was i ordered" ? Icon(Icons.check_circle_outlined)  : Icon(Icons.circle_outlined,size: 20,),
+                //         SizedBox(width: 10,),
+                //         Text("I didn't receive was i ordered")
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                // SizedBox(height: 10,),
+                // InkWell(
+                //   onTap: (){
+                //     setState(() {
+                //       currentIndex = "Other";
+                //     });
+                //   },
+                //   child: Container(
+                //     child: Row(
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       children: [
+                //         currentIndex == "Other" ? Icon(Icons.check_circle_outlined) :  Icon(Icons.circle_outlined,size: 20,),
+                //         SizedBox(width: 10,),
+                //         Text("Other")
+                //       ],
+                //     ),
+                //   ),
+                // ),
 
+                SizedBox(
+                  height: 20,
+                ),
 
-  }else
-    {
-      submitTicket();
-
-    }
-
-
-}
-
-                  },
-                  child: Center(child: Container(height: 40,width: 150,decoration: BoxDecoration(color: AppColor.PrimaryDark,borderRadius: BorderRadius.circular(8)),child: Center(child: Text("Submit",style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.w500),)) ,))),
-              // Center(
-              //   child: MaterialButton(
-              //     onPressed: (){
-              //     submitTicket();
-              //   },child:
-              //   Text("Submit",style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.w500),),color: AppColor.PrimaryDark,),
-              // )
-            ],
-          )
-        ),
+                InkWell(
+                    onTap: () {
+                      if (_formKey.currentState!.validate()) {
+                        print(selectedType.runtimeType);
+                        print(selectedType);
+                        print(selectedTicketId);
+                        if (selectedType == null) {
+                          Fluttertoast.showToast(
+                              msg: 'Please Select Any One Issue');
+                        } else {
+                          submitTicket();
+                        }
+                      }
+                    },
+                    child: Center(
+                        child: Container(
+                      height: 40,
+                      width: 150,
+                      decoration: BoxDecoration(
+                          color: AppColor.PrimaryDark,
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Center(
+                          child: Text(
+                        "Submit",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500),
+                      )),
+                    ))),
+                // Center(
+                //   child: MaterialButton(
+                //     onPressed: (){
+                //     submitTicket();
+                //   },child:
+                //   Text("Submit",style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.w500),),color: AppColor.PrimaryDark,),
+                // )
+              ],
+            )),
       ),
     );
   }

@@ -353,6 +353,84 @@ class _WalletScreenState extends State<WalletScreen> {
     }));
   }
 
+  void showAlertDialog(BuildContext context, String msg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+            side: BorderSide(color: AppColor.PrimaryDark, width: 5),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.check_circle,
+                  size: 50,
+                  color: Colors.green,
+                ),
+                SizedBox(
+                    height:
+                        10), // Provides spacing between the icon and the text.
+                Text(
+                  "Alert",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    color: AppColor.PrimaryDark,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                    height:
+                        20), // Provides spacing between the warning text and the message.
+                Text(
+                  msg,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 20),
+                Align(
+                    alignment: Alignment.center,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: AppColor.PrimaryDark.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(3),
+                            border: Border.all(color: AppColor.PrimaryDark)),
+                        child: Text(
+                          "OK",
+                          style: TextStyle(
+                              color: AppColor.PrimaryDark,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )),
+                // ElevatedButton(
+                //   onPressed: () => Navigator.of(context).pop(),
+                //   child: Text('OK'),
+                //   style: ElevatedButton.styleFrom(
+                //     primary: Colors.red, // Button color
+                //   ),
+                // ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   _showDialog1() async {
     bool payWarn = false;
     await dialogAnimate(context, StatefulBuilder(
@@ -545,7 +623,7 @@ class _WalletScreenState extends State<WalletScreen> {
               )
             ]),
         actions: <Widget>[
-           ElevatedButton(
+          ElevatedButton(
               style:
                   ElevatedButton.styleFrom(primary: AppColor().colorPrimary()),
               child: Text(
@@ -561,7 +639,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 msgC.clear();
                 Navigator.pop(context1);
               }),
-           ElevatedButton(
+          ElevatedButton(
               style:
                   ElevatedButton.styleFrom(primary: AppColor().colorPrimary()),
               child: Text(
@@ -618,7 +696,6 @@ class _WalletScreenState extends State<WalletScreen> {
                   //   } else if (payMethod ==
                   //       getTranslated(context, 'FLUTTERWAVE_LBL'))
                   //     flutterwavePayment(amtC.text);
-
                 }
               }
               // }
@@ -670,21 +747,25 @@ class _WalletScreenState extends State<WalletScreen> {
     print('==============${request.fields}===============');
     print('==============${request.url}===============');
     http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
+    Navigator.pop(context);
 
+    if (response.statusCode == 200) {
       var finalResult = await response.stream.bytesToString();
       final result = json.decode(finalResult);
-      setState(() {
-        var snackBar = SnackBar(
-          content: Text('${result['message']}'),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      });
+
+      showAlertDialog(context, result['message']);
+      // setState(() {
+      //   var snackBar = SnackBar(
+      //     content: Text('${result['message']}'),
+      //   );
+      //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      // });
 
       getWalletHistory();
       getProfile();
-      Navigator.pop(context);
     } else {
+      showAlertDialog(context, "Something went wrong");
+
       print(response.reasonPhrase);
     }
   }
@@ -991,15 +1072,14 @@ class _WalletScreenState extends State<WalletScreen> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Container(
-                  height: MediaQuery.of(context).size.height/1.6,
+                  height: MediaQuery.of(context).size.height / 1.6,
                   child: ListView.builder(
-                    shrinkWrap: true,
-                    //physics: NeverScrollableScrollPhysics(),
-                    reverse: false,
+                      shrinkWrap: true,
+                      //physics: NeverScrollableScrollPhysics(),
+                      reverse: false,
                       itemCount: walletHistory.length,
                       itemBuilder: (context, index) {
-                        return
-                          Card(
+                        return Card(
                           child: Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 15.0),
@@ -1039,8 +1119,6 @@ class _WalletScreenState extends State<WalletScreen> {
                                               fontSize: 15,
                                               fontWeight: FontWeight.w500,
                                             ),
-
-
                                             children: <InlineSpan>[
                                               TextSpan(text: " "),
                                               TextSpan(
@@ -1084,32 +1162,39 @@ class _WalletScreenState extends State<WalletScreen> {
                                     ),
                                   ],
                                 ),
-                                walletHistory[index].finalPayout== "0.00"?
-                                Text(
-                                  "₹ " + walletHistory[index].amount.toString(),
-                                  //  ['amount'].toString(),
-                                  style: TextStyle(
-                                    color: walletHistory[index].creditOrDebit ==
-                                            "credit"
-                                        ? Colors.green
-                                        : AppColor().colorPrimary(),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ):
-
-                                Text(
-                                  "₹ " + walletHistory[index].finalPayout.toString(),
-                                  //  ['amount'].toString(),
-                                  style: TextStyle(
-                                    color: walletHistory[index].creditOrDebit ==
-                                        "credit"
-                                        ? Colors.green
-                                        : AppColor().colorPrimary(),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
+                                walletHistory[index].finalPayout == "0.00"
+                                    ? Text(
+                                        "₹ " +
+                                            walletHistory[index]
+                                                .amount
+                                                .toString(),
+                                        //  ['amount'].toString(),
+                                        style: TextStyle(
+                                          color: walletHistory[index]
+                                                      .creditOrDebit ==
+                                                  "credit"
+                                              ? Colors.green
+                                              : AppColor().colorPrimary(),
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      )
+                                    : Text(
+                                        "₹ " +
+                                            walletHistory[index]
+                                                .finalPayout
+                                                .toString(),
+                                        //  ['amount'].toString(),
+                                        style: TextStyle(
+                                          color: walletHistory[index]
+                                                      .creditOrDebit ==
+                                                  "credit"
+                                              ? Colors.green
+                                              : AppColor().colorPrimary(),
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
                               ],
                             ),
                           ),

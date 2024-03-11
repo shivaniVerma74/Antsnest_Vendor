@@ -7,11 +7,13 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
@@ -54,6 +56,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
   GlobalKey<FormState> _formKey = GlobalKey();
 
   TextEditingController portfolioController = TextEditingController();
+  TextEditingController pinCodeController = TextEditingController();
   TextEditingController twitterController = TextEditingController();
   TextEditingController instagramController = TextEditingController();
   TextEditingController linkedInController = TextEditingController();
@@ -95,7 +98,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
   List<StateData> stateList = [];
   List<CityData> cityList = [];
   List<String> selectedCities = [];
-  String? selectedCountry, selectedState;
+  String? selectedCountry, selectedState, selectedCity;
   String? countryName, stateName, cityName;
   List _selectedItems = [];
   String? noOfDays;
@@ -393,8 +396,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       alignment: Alignment.bottomRight,
                       children: [
                         InkWell(
-                          onTap: () =>
-                              getImage(context, ImgSource.Both, from: 1),
+                          onTap: () => _showImagePickerOptions(context),
+                          //   getImage(context, ImgSource.Both, from: 1),
                           child: Container(
                             height: 12.66.h,
                             width: 12.66.h,
@@ -489,6 +492,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
           "can_travel": selectedTravel.toString(),
           "service_cities": newCityIdsList.toString(),
           "website": portfolioController.text,
+          "pincode": pinCodeController.text,
           "t_link": twitterController.text,
           "i_link": instagramController.text,
           "l_link": linkedInController.text,
@@ -523,6 +527,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
           "payContact": payContactController.text,
           "payMode": paymentMode.toString(),
           "paying": paying.toString(),
+          "pincode": pinCodeController.text.toString(),
           "razorpay_id": razorpayController.text
         };
     print("bbbbb" + tojson().toString());
@@ -562,6 +567,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     selectedCountry = widget.response.user!.countryId.toString();
     selectedState = widget.response.user!.stateId.toString();
     SelectedSignleCity = widget.response.user!.cityId.toString();
+    //Fluttertoast.showToast(msg: SelectedSignleCity.toString());
     portfolioController.text =
         widget.response.user!.jsonData!.website.toString();
     twitterController.text = widget.response.user!.jsonData!.tLink.toString();
@@ -988,6 +994,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                   ),
                 ),
                 //COUNTRY
+
                 Container(
                     width: 69.99.w,
                     // height: 6.h,
@@ -1027,7 +1034,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                             .map((item) => DropdownMenuItem<String>(
                                   value: item.id,
                                   child: Text(
-                                    item.name!,
+                                    item.nicename!,
                                     style: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
@@ -1041,6 +1048,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                         onChanged: (value) {
                           setState(() {
                             selectedCountry = value as String;
+                            selectedState = null;
+                            getState();
                           });
                         },
                         icon: const Icon(
@@ -1090,16 +1099,6 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                                 isExpanded: true,
                                 hint: Row(
                                   children: [
-                                    // Image.asset(
-                                    //   city,
-                                    //   width: 6.04.w,
-                                    //   height: 5.04.w,
-                                    //   fit: BoxFit.fill,
-                                    //   color: AppColor.PrimaryDark,
-                                    // ),
-                                    // SizedBox(
-                                    //   width: 4,
-                                    // ),
                                     Expanded(
                                       child: Text(
                                         '$stateName',
@@ -1130,7 +1129,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                                 onChanged: (value) {
                                   setState(() {
                                     selectedState = value as String;
-                                    getCities();
+                                    SelectedSignleCity = null;
+
+                                    getCities("STATE");
                                   });
                                 },
                                 icon: const Icon(
@@ -1170,207 +1171,209 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 SizedBox(
                   height: 20,
                 ),
-                // CITY
-                //  InkWell(
-                //    onTap: (){
-                //      _showMultiSelect();
-                //    },
-                //    child: Container(
-                //        width: 70.99.w,
-                //        height: 7.26.h,
-                //        decoration: BoxDecoration(
-                //            borderRadius: BorderRadius.circular(10),
-                //            color: AppColor().colorEdit()
-                //        ),
-                //        // boxDecoration(
-                //        //   radius: 10.0,
-                //        // ),
-                //        child: _selectedItems.isEmpty ?
-                //        Padding(
-                //          padding: const EdgeInsets.only(left: 10.0, right: 10),
-                //          child: Row(
-                //            children: [
-                //              Image.asset(
-                //                city,
-                //                width: 6.04.w,
-                //                height: 5.04.w,
-                //                fit: BoxFit.fill,
-                //                color: AppColor.PrimaryDark,
-                //              ),
-                //              Padding(
-                //                padding: EdgeInsets.only(left: 8),
-                //                child: Text(
-                //                  'Select Multiple Cities',
-                //                  style: TextStyle(
-                //                    fontSize: 14,
-                //                    color: Colors.black54,
-                //                    fontWeight: FontWeight.normal,
-                //                  ),
-                //                  overflow: TextOverflow.ellipsis,
-                //                ),
-                //              ),
-                //            ],
-                //          ),
-                //        )
-                //            :  Wrap(
-                //          children: _selectedItems
-                //              .map((item){
-                //            print("okok ${item.id}");
-                //            return Padding(
-                //              padding: const EdgeInsets.only(left: 8.0, right: 8),
-                //              child: Chip(
-                //                label:
-                //                Text(
-                //                    "${item.name}"
-                //                  //item.name
-                //                ),
-                //              ),
-                //            );
-                //          })
-                //              .toList(),
-                //        )
-                //      // FutureBuilder(
-                //      //     future: getCities(),
-                //      //     builder: (BuildContext context,
-                //      //         AsyncSnapshot snapshot) {
-                //      //       if (snapshot.hasData) {
-                //      //         return DropdownButtonHideUnderline(
-                //      //           child: DropdownButton2(
-                //      //             isExpanded: true,
-                //      //             hint: Row(
-                //      //               children: [
-                //      //                 Image.asset(
-                //      //                   city,
-                //      //                   width: 6.04.w,
-                //      //                   height: 5.04.w,
-                //      //                   fit: BoxFit.fill,
-                //      //                   color: AppColor.PrimaryDark,
-                //      //                 ),
-                //      //                 SizedBox(
-                //      //                   width: 4,
-                //      //                 ),
-                //      //                 Expanded(
-                //      //                   child: Text(
-                //      //                     'Select Multiple Cities',
-                //      //                     style: TextStyle(
-                //      //                       fontSize: 14,
-                //      //                       fontWeight: FontWeight.normal,
-                //      //                     ),
-                //      //                     overflow: TextOverflow.ellipsis,
-                //      //                   ),
-                //      //                 ),
-                //      //               ],
-                //      //             ),
-                //      //             items: cityList.map((item) {
-                //      //               return DropdownMenuItem<String>(
-                //      //                 value: item.id,
-                //      //                 enabled: false,
-                //      //                 child: StatefulBuilder(
-                //      //                   builder: (context, menuSetState) {
-                //      //                     final _isSelected =
-                //      //                         selectedCities
-                //      //                             .contains(item);
-                //      //                     print("SLECTED CITY");
-                //      //                     return InkWell(
-                //      //                       onTap: () {
-                //      //                         _isSelected
-                //      //                             ? selectedCities
-                //      //                                 .remove(item.id)
-                //      //                             : selectedCities
-                //      //                                 .add(item.id!);
-                //      //                         setState(() {});
-                //      //                         menuSetState(() {});
-                //      //                       },
-                //      //                       child: Container(
-                //      //                         height: double.infinity,
-                //      //                         padding: const EdgeInsets
-                //      //                                 .symmetric(
-                //      //                             horizontal: 16.0),
-                //      //                         child: Row(
-                //      //                           children: [
-                //      //                             _isSelected
-                //      //                                 ? const Icon(Icons
-                //      //                                     .check_box_outlined)
-                //      //                                 : const Icon(Icons
-                //      //                                     .check_box_outline_blank),
-                //      //                             const SizedBox(
-                //      //                                 width: 16),
-                //      //                             Text(
-                //      //                               item.name!,
-                //      //                               style:
-                //      //                                   const TextStyle(
-                //      //                                 fontSize: 14,
-                //      //                               ),
-                //      //                             ),
-                //      //                           ],
-                //      //                         ),
-                //      //                       ),
-                //      //                     );
-                //      //                   },
-                //      //                 ),
-                //      //               );
-                //      //             }).toList(),
-                //      //             //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
-                //      //             value: selectedCities.isEmpty
-                //      //                 ? null
-                //      //                 : selectedCities.last,
-                //      //             onChanged: (value) {},
-                //      //             buttonHeight: 50,
-                //      //             buttonWidth: 160,
-                //      //             buttonPadding: const EdgeInsets.only(
-                //      //                 left: 14, right: 14),
-                //      //             buttonDecoration: BoxDecoration(
-                //      //               borderRadius:
-                //      //                   BorderRadius.circular(14),
-                //      //               color: Color(0xffF9F9F9),
-                //      //             ),
-                //      //             buttonElevation: 0,
-                //      //             itemHeight: 40,
-                //      //             itemPadding: const EdgeInsets.only(
-                //      //                 left: 14, right: 14),
-                //      //             dropdownMaxHeight: 300,
-                //      //             dropdownPadding: null,
-                //      //             dropdownDecoration: BoxDecoration(
-                //      //               borderRadius:
-                //      //                   BorderRadius.circular(14),
-                //      //             ),
-                //      //             dropdownElevation: 8,
-                //      //             scrollbarRadius:
-                //      //                 const Radius.circular(40),
-                //      //             scrollbarThickness: 6,
-                //      //             scrollbarAlwaysShow: true,
-                //      //             selectedItemBuilder: (context) {
-                //      //               return cityList.map(
-                //      //                 (item) {
-                //      //                   return Container(
-                //      //                     // alignment: AlignmentDirectional.center,
-                //      //                     padding:
-                //      //                         const EdgeInsets.symmetric(
-                //      //                             horizontal: 16.0),
-                //      //                     child: Text(
-                //      //                       selectedCities.join(','),
-                //      //                       style: const TextStyle(
-                //      //                         fontSize: 14,
-                //      //                         overflow:
-                //      //                             TextOverflow.ellipsis,
-                //      //                       ),
-                //      //                       maxLines: 1,
-                //      //                     ),
-                //      //                   );
-                //      //                 },
-                //      //               ).toList();
-                //      //             },
-                //      //           ),
-                //      //         );
-                //      //       } else if (snapshot.hasError) {
-                //      //         return Icon(Icons.error_outline);
-                //      //       } else {
-                //      //         return Center(
-                //      //             child: CircularProgressIndicator());
-                //      //       }
-                //      //     })
-                //    ),
-                //  ),
+                // {
+                // // CITY
+                // //  InkWell(
+                // //    onTap: (){
+                // //      _showMultiSelect();
+                // //    },
+                // //    child: Container(
+                // //        width: 70.99.w,
+                // //        height: 7.26.h,
+                // //        decoration: BoxDecoration(
+                // //            borderRadius: BorderRadius.circular(10),
+                // //            color: AppColor().colorEdit()
+                // //        ),
+                // //        // boxDecoration(
+                // //        //   radius: 10.0,
+                // //        // ),
+                // //        child: _selectedItems.isEmpty ?
+                // //        Padding(
+                // //          padding: const EdgeInsets.only(left: 10.0, right: 10),
+                // //          child: Row(
+                // //            children: [
+                // //              Image.asset(
+                // //                city,
+                // //                width: 6.04.w,
+                // //                height: 5.04.w,
+                // //                fit: BoxFit.fill,
+                // //                color: AppColor.PrimaryDark,
+                // //              ),
+                // //              Padding(
+                // //                padding: EdgeInsets.only(left: 8),
+                // //                child: Text(
+                // //                  'Select Multiple Cities',
+                // //                  style: TextStyle(
+                // //                    fontSize: 14,
+                // //                    color: Colors.black54,
+                // //                    fontWeight: FontWeight.normal,
+                // //                  ),
+                // //                  overflow: TextOverflow.ellipsis,
+                // //                ),
+                // //              ),
+                // //            ],
+                // //          ),
+                // //        )
+                // //            :  Wrap(
+                // //          children: _selectedItems
+                // //              .map((item){
+                // //            print("okok ${item.id}");
+                // //            return Padding(
+                // //              padding: const EdgeInsets.only(left: 8.0, right: 8),
+                // //              child: Chip(
+                // //                label:
+                // //                Text(
+                // //                    "${item.name}"
+                // //                  //item.name
+                // //                ),
+                // //              ),
+                // //            );
+                // //          })
+                // //              .toList(),
+                // //        )
+                // //      // FutureBuilder(
+                // //      //     future: getCities(),
+                // //      //     builder: (BuildContext context,
+                // //      //         AsyncSnapshot snapshot) {
+                // //      //       if (snapshot.hasData) {
+                // //      //         return DropdownButtonHideUnderline(
+                // //      //           child: DropdownButton2(
+                // //      //             isExpanded: true,
+                // //      //             hint: Row(
+                // //      //               children: [
+                // //      //                 Image.asset(
+                // //      //                   city,
+                // //      //                   width: 6.04.w,
+                // //      //                   height: 5.04.w,
+                // //      //                   fit: BoxFit.fill,
+                // //      //                   color: AppColor.PrimaryDark,
+                // //      //                 ),
+                // //      //                 SizedBox(
+                // //      //                   width: 4,
+                // //      //                 ),
+                // //      //                 Expanded(
+                // //      //                   child: Text(
+                // //      //                     'Select Multiple Cities',
+                // //      //                     style: TextStyle(
+                // //      //                       fontSize: 14,
+                // //      //                       fontWeight: FontWeight.normal,
+                // //      //                     ),
+                // //      //                     overflow: TextOverflow.ellipsis,
+                // //      //                   ),
+                // //      //                 ),
+                // //      //               ],
+                // //      //             ),
+                // //      //             items: cityList.map((item) {
+                // //      //               return DropdownMenuItem<String>(
+                // //      //                 value: item.id,
+                // //      //                 enabled: false,
+                // //      //                 child: StatefulBuilder(
+                // //      //                   builder: (context, menuSetState) {
+                // //      //                     final _isSelected =
+                // //      //                         selectedCities
+                // //      //                             .contains(item);
+                // //      //                     print("SLECTED CITY");
+                // //      //                     return InkWell(
+                // //      //                       onTap: () {
+                // //      //                         _isSelected
+                // //      //                             ? selectedCities
+                // //      //                                 .remove(item.id)
+                // //      //                             : selectedCities
+                // //      //                                 .add(item.id!);
+                // //      //                         setState(() {});
+                // //      //                         menuSetState(() {});
+                // //      //                       },
+                // //      //                       child: Container(
+                // //      //                         height: double.infinity,
+                // //      //                         padding: const EdgeInsets
+                // //      //                                 .symmetric(
+                // //      //                             horizontal: 16.0),
+                // //      //                         child: Row(
+                // //      //                           children: [
+                // //      //                             _isSelected
+                // //      //                                 ? const Icon(Icons
+                // //      //                                     .check_box_outlined)
+                // //      //                                 : const Icon(Icons
+                // //      //                                     .check_box_outline_blank),
+                // //      //                             const SizedBox(
+                // //      //                                 width: 16),
+                // //      //                             Text(
+                // //      //                               item.name!,
+                // //      //                               style:
+                // //      //                                   const TextStyle(
+                // //      //                                 fontSize: 14,
+                // //      //                               ),
+                // //      //                             ),
+                // //      //                           ],
+                // //      //                         ),
+                // //      //                       ),
+                // //      //                     );
+                // //      //                   },
+                // //      //                 ),
+                // //      //               );
+                // //      //             }).toList(),
+                // //      //             //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
+                // //      //             value: selectedCities.isEmpty
+                // //      //                 ? null
+                // //      //                 : selectedCities.last,
+                // //      //             onChanged: (value) {},
+                // //      //             buttonHeight: 50,
+                // //      //             buttonWidth: 160,
+                // //      //             buttonPadding: const EdgeInsets.only(
+                // //      //                 left: 14, right: 14),
+                // //      //             buttonDecoration: BoxDecoration(
+                // //      //               borderRadius:
+                // //      //                   BorderRadius.circular(14),
+                // //      //               color: Color(0xffF9F9F9),
+                // //      //             ),
+                // //      //             buttonElevation: 0,
+                // //      //             itemHeight: 40,
+                // //      //             itemPadding: const EdgeInsets.only(
+                // //      //                 left: 14, right: 14),
+                // //      //             dropdownMaxHeight: 300,
+                // //      //             dropdownPadding: null,
+                // //      //             dropdownDecoration: BoxDecoration(
+                // //      //               borderRadius:
+                // //      //                   BorderRadius.circular(14),
+                // //      //             ),
+                // //      //             dropdownElevation: 8,
+                // //      //             scrollbarRadius:
+                // //      //                 const Radius.circular(40),
+                // //      //             scrollbarThickness: 6,
+                // //      //             scrollbarAlwaysShow: true,
+                // //      //             selectedItemBuilder: (context) {
+                // //      //               return cityList.map(
+                // //      //                 (item) {
+                // //      //                   return Container(
+                // //      //                     // alignment: AlignmentDirectional.center,
+                // //      //                     padding:
+                // //      //                         const EdgeInsets.symmetric(
+                // //      //                             horizontal: 16.0),
+                // //      //                     child: Text(
+                // //      //                       selectedCities.join(','),
+                // //      //                       style: const TextStyle(
+                // //      //                         fontSize: 14,
+                // //      //                         overflow:
+                // //      //                             TextOverflow.ellipsis,
+                // //      //                       ),
+                // //      //                       maxLines: 1,
+                // //      //                     ),
+                // //      //                   );
+                // //      //                 },
+                // //      //               ).toList();
+                // //      //             },
+                // //      //           ),
+                // //      //         );
+                // //      //       } else if (snapshot.hasError) {
+                // //      //         return Icon(Icons.error_outline);
+                // //      //       } else {
+                // //      //         return Center(
+                // //      //             child: CircularProgressIndicator());
+                // //      //       }
+                // //      //     })
+                // //    ),
+                // //  ),
+                // }
 
                 Container(
                     width: 69.99.w,
@@ -1379,7 +1382,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       radius: 10.0,
                     ),
                     child: FutureBuilder(
-                        future: getCities(),
+                        future: cityList.isEmpty
+                            ? getCities("City")
+                            : getDownloadsDirectory(),
                         builder:
                             (BuildContext context, AsyncSnapshot snapshot) {
                           if (snapshot.hasData) {
@@ -1388,16 +1393,6 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                                 isExpanded: true,
                                 hint: Row(
                                   children: [
-                                    // Image.asset(
-                                    //   city,
-                                    //   width: 6.04.w,
-                                    //   height: 5.04.w,
-                                    //   fit: BoxFit.fill,
-                                    //   color: AppColor.PrimaryDark,
-                                    // ),
-                                    // SizedBox(
-                                    //   width: 4,
-                                    // ),
                                     Expanded(
                                       child: Text(
                                         '$cityName',
@@ -1428,7 +1423,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                                 onChanged: (value) {
                                   setState(() {
                                     SelectedSignleCity = value as String;
-                                    getCities();
+                                    //  getCities();
                                   });
                                 },
                                 icon: const Icon(
@@ -1558,6 +1553,38 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 //   ),
                 // ),
 
+                SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  height: 55,
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(vertical: 6),
+                  decoration: BoxDecoration(
+                      color: AppColor().colorEdit(),
+                      borderRadius: BorderRadius.circular(12)),
+                  child: TextFormField(
+                    controller: pinCodeController,
+
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                      hintText: "Pincode",
+                      label: Text(
+                        "Pincode",
+                      ),
+                      hintStyle: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.w400),
+                      border: InputBorder.none,
+                    ),
+                    // validator: (v) {
+                    //   if (v!.isEmpty) {
+                    //     return "Enter valid value";
+                    //   }
+                    //   return null;
+                    // },
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
                 SizedBox(
                   height: 15,
                 ),
@@ -2127,7 +2154,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                             // )
                             MultiSelectDropDown(
                           hint: "Select Sub Category",
-                          showClearIcon: true,
+                          clearIcon: const Icon(Icons.cancel),
                           controller: multiSelectController,
                           borderColor: Colors.transparent,
 
@@ -2175,7 +2202,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                                         value:
                                             "${serviceSubCategory!.data![i].id}",
                                       )
-                                    : ValueItem(label: "")
+                                    : ValueItem(label: "", value: "")
                               ]
                             ]
                           ]..removeWhere((element) =>
@@ -2552,9 +2579,17 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 //   ),
                 // ),
                 SizedBox(
-                  height: 15,
+                  height: 0,
                 ),
-
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Can Travel',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )),
+                ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   width: double.infinity,
@@ -2627,232 +2662,232 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 SizedBox(
                   height: 15,
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Select City',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                InkWell(
-                  onTap: () {
-                    _showMultiSelect();
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    width: double.infinity,
-                    height: 6.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColor().colorEdit(),
-                    ),
-                    // boxDecoration(
-                    //   radius: 10.0,
-                    // ),
-                    child: _selectedItems.isEmpty
-                        ? Padding(
-                            padding:
-                                const EdgeInsets.only(left: 10.0, right: 10),
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  city,
-                                  width: 6.04.w,
-                                  height: 5.04.w,
-                                  fit: BoxFit.fill,
-                                  color: AppColor.PrimaryDark,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 8),
-                                  child: Text(
-                                    'Select Multiple Cities',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        : ListView.builder(
-                            physics: AlwaysScrollableScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            itemCount: _selectedItems.length,
-                            itemBuilder: (c, i) {
-                              return Padding(
-                                padding: EdgeInsets.only(right: 5),
-                                child:
-                                    Chip(label: Text("${_selectedItems[i]}")),
-                              );
-                            }),
-                    // Wrap(
-                    //   children: _selectedItems
-                    //       .map((item){
-                    //
-                    //     return Padding(
-                    //       padding: const EdgeInsets.only(left: 8.0, right: 8),
-                    //       child: Chip(
-                    //         label:
-                    //        Text(
-                    //             "${item}"
-                    //           //item.name
-                    //         ),
-                    //       ),
-                    //     );
-                    //   })
-                    //       .toList(),
-                    // )
-                    ///
-                    // FutureBuilder(
-                    //     future: getCities(),
-                    //     builder: (BuildContext context,
-                    //         AsyncSnapshot snapshot) {
-                    //       if (snapshot.hasData) {
-                    //         return DropdownButtonHideUnderline(
-                    //           child: DropdownButton2(
-                    //             isExpanded: true,
-                    //             hint: Row(
-                    //               children: [
-                    //                 Image.asset(
-                    //                   city,
-                    //                   width: 6.04.w,
-                    //                   height: 5.04.w,
-                    //                   fit: BoxFit.fill,
-                    //                   color: AppColor.PrimaryDark,
-                    //                 ),
-                    //                 SizedBox(
-                    //                   width: 4,
-                    //                 ),
-                    //                 Expanded(
-                    //                   child: Text(
-                    //                     'Select Multiple Cities',
-                    //                     style: TextStyle(
-                    //                       fontSize: 14,
-                    //                       fontWeight: FontWeight.normal,
-                    //                     ),
-                    //                     overflow: TextOverflow.ellipsis,
-                    //                   ),
-                    //                 ),
-                    //               ],
-                    //             ),
-                    //             items: cityList.map((item) {
-                    //               return DropdownMenuItem<String>(
-                    //                 value: item.id,
-                    //                 enabled: false,
-                    //                 child: StatefulBuilder(
-                    //                   builder: (context, menuSetState) {
-                    //                     final _isSelected =
-                    //                         selectedCities
-                    //                             .contains(item);
-                    //                     print("SLECTED CITY");
-                    //                     return InkWell(
-                    //                       onTap: () {
-                    //                         _isSelected
-                    //                             ? selectedCities
-                    //                                 .remove(item.id)
-                    //                             : selectedCities
-                    //                                 .add(item.id!);
-                    //                         setState(() {});
-                    //                         menuSetState(() {});
-                    //                       },
-                    //                       child: Container(
-                    //                         height: double.infinity,
-                    //                         padding: const EdgeInsets
-                    //                                 .symmetric(
-                    //                             horizontal: 16.0),
-                    //                         child: Row(
-                    //                           children: [
-                    //                             _isSelected
-                    //                                 ? const Icon(Icons
-                    //                                     .check_box_outlined)
-                    //                                 : const Icon(Icons
-                    //                                     .check_box_outline_blank),
-                    //                             const SizedBox(
-                    //                                 width: 16),
-                    //                             Text(
-                    //                               item.name!,
-                    //                               style:
-                    //                                   const TextStyle(
-                    //                                 fontSize: 14,
-                    //                               ),
-                    //                             ),
-                    //                           ],
-                    //                         ),
-                    //                       ),
-                    //                     );
-                    //                   },
-                    //                 ),
-                    //               );
-                    //             }).toList(),
-                    //             //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
-                    //             value: selectedCities.isEmpty
-                    //                 ? null
-                    //                 : selectedCities.last,
-                    //             onChanged: (value) {},
-                    //             buttonHeight: 50,
-                    //             buttonWidth: 160,
-                    //             buttonPadding: const EdgeInsets.only(
-                    //                 left: 14, right: 14),
-                    //             buttonDecoration: BoxDecoration(
-                    //               borderRadius:
-                    //                   BorderRadius.circular(14),
-                    //               color: Color(0xffF9F9F9),
-                    //             ),
-                    //             buttonElevation: 0,
-                    //             itemHeight: 40,
-                    //             itemPadding: const EdgeInsets.only(
-                    //                 left: 14, right: 14),
-                    //             dropdownMaxHeight: 300,
-                    //             dropdownPadding: null,
-                    //             dropdownDecoration: BoxDecoration(
-                    //               borderRadius:
-                    //                   BorderRadius.circular(14),
-                    //             ),
-                    //             dropdownElevation: 8,
-                    //             scrollbarRadius:
-                    //                 const Radius.circular(40),
-                    //             scrollbarThickness: 6,
-                    //             scrollbarAlwaysShow: true,
-                    //             selectedItemBuilder: (context) {
-                    //               return cityList.map(
-                    //                 (item) {
-                    //                   return Container(
-                    //                     // alignment: AlignmentDirectional.center,
-                    //                     padding:
-                    //                         const EdgeInsets.symmetric(
-                    //                             horizontal: 16.0),
-                    //                     child: Text(
-                    //                       selectedCities.join(','),
-                    //                       style: const TextStyle(
-                    //                         fontSize: 14,
-                    //                         overflow:
-                    //                             TextOverflow.ellipsis,
-                    //                       ),
-                    //                       maxLines: 1,
-                    //                     ),
-                    //                   );
-                    //                 },
-                    //               ).toList();
-                    //             },
-                    //           ),
-                    //         );
-                    //       } else if (snapshot.hasError) {
-                    //         return Icon(Icons.error_outline);
-                    //       } else {
-                    //         return Center(
-                    //             child: CircularProgressIndicator());
-                    //       }
-                    //     })
-                  ),
-                ),
+                // Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 20),
+                //   child: Align(
+                //       alignment: Alignment.topLeft,
+                //       child: Text(
+                //         'Select City',
+                //         style: TextStyle(fontWeight: FontWeight.bold),
+                //       )),
+                // ),
+                // SizedBox(
+                //   height: 5,
+                // ),
+                // InkWell(
+                //   onTap: () {
+                //     _showMultiSelect();
+                //   },
+                //   child: Container(
+                //     margin: EdgeInsets.symmetric(horizontal: 20),
+                //     width: double.infinity,
+                //     height: 6.h,
+                //     decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(10),
+                //       color: AppColor().colorEdit(),
+                //     ),
+                //     // boxDecoration(
+                //     //   radius: 10.0,
+                //     // ),
+                //     child: _selectedItems.isEmpty
+                //         ? Padding(
+                //             padding:
+                //                 const EdgeInsets.only(left: 10.0, right: 10),
+                //             child: Row(
+                //               children: [
+                //                 Image.asset(
+                //                   city,
+                //                   width: 6.04.w,
+                //                   height: 5.04.w,
+                //                   fit: BoxFit.fill,
+                //                   color: AppColor.PrimaryDark,
+                //                 ),
+                //                 Padding(
+                //                   padding: EdgeInsets.only(left: 8),
+                //                   child: Text(
+                //                     'Select Multiple Cities',
+                //                     style: TextStyle(
+                //                       fontSize: 14,
+                //                       color: Colors.black54,
+                //                       fontWeight: FontWeight.normal,
+                //                     ),
+                //                     overflow: TextOverflow.ellipsis,
+                //                   ),
+                //                 ),
+                //               ],
+                //             ),
+                //           )
+                //         : ListView.builder(
+                //             physics: AlwaysScrollableScrollPhysics(),
+                //             scrollDirection: Axis.horizontal,
+                //             itemCount: _selectedItems.length,
+                //             itemBuilder: (c, i) {
+                //               return Padding(
+                //                 padding: EdgeInsets.only(right: 5),
+                //                 child:
+                //                     Chip(label: Text("${_selectedItems[i]}")),
+                //               );
+                //             }),
+                //     // Wrap(
+                //     //   children: _selectedItems
+                //     //       .map((item){
+                //     //
+                //     //     return Padding(
+                //     //       padding: const EdgeInsets.only(left: 8.0, right: 8),
+                //     //       child: Chip(
+                //     //         label:
+                //     //        Text(
+                //     //             "${item}"
+                //     //           //item.name
+                //     //         ),
+                //     //       ),
+                //     //     );
+                //     //   })
+                //     //       .toList(),
+                //     // )
+                //     ///
+                //     // FutureBuilder(
+                //     //     future: getCities(),
+                //     //     builder: (BuildContext context,
+                //     //         AsyncSnapshot snapshot) {
+                //     //       if (snapshot.hasData) {
+                //     //         return DropdownButtonHideUnderline(
+                //     //           child: DropdownButton2(
+                //     //             isExpanded: true,
+                //     //             hint: Row(
+                //     //               children: [
+                //     //                 Image.asset(
+                //     //                   city,
+                //     //                   width: 6.04.w,
+                //     //                   height: 5.04.w,
+                //     //                   fit: BoxFit.fill,
+                //     //                   color: AppColor.PrimaryDark,
+                //     //                 ),
+                //     //                 SizedBox(
+                //     //                   width: 4,
+                //     //                 ),
+                //     //                 Expanded(
+                //     //                   child: Text(
+                //     //                     'Select Multiple Cities',
+                //     //                     style: TextStyle(
+                //     //                       fontSize: 14,
+                //     //                       fontWeight: FontWeight.normal,
+                //     //                     ),
+                //     //                     overflow: TextOverflow.ellipsis,
+                //     //                   ),
+                //     //                 ),
+                //     //               ],
+                //     //             ),
+                //     //             items: cityList.map((item) {
+                //     //               return DropdownMenuItem<String>(
+                //     //                 value: item.id,
+                //     //                 enabled: false,
+                //     //                 child: StatefulBuilder(
+                //     //                   builder: (context, menuSetState) {
+                //     //                     final _isSelected =
+                //     //                         selectedCities
+                //     //                             .contains(item);
+                //     //                     print("SLECTED CITY");
+                //     //                     return InkWell(
+                //     //                       onTap: () {
+                //     //                         _isSelected
+                //     //                             ? selectedCities
+                //     //                                 .remove(item.id)
+                //     //                             : selectedCities
+                //     //                                 .add(item.id!);
+                //     //                         setState(() {});
+                //     //                         menuSetState(() {});
+                //     //                       },
+                //     //                       child: Container(
+                //     //                         height: double.infinity,
+                //     //                         padding: const EdgeInsets
+                //     //                                 .symmetric(
+                //     //                             horizontal: 16.0),
+                //     //                         child: Row(
+                //     //                           children: [
+                //     //                             _isSelected
+                //     //                                 ? const Icon(Icons
+                //     //                                     .check_box_outlined)
+                //     //                                 : const Icon(Icons
+                //     //                                     .check_box_outline_blank),
+                //     //                             const SizedBox(
+                //     //                                 width: 16),
+                //     //                             Text(
+                //     //                               item.name!,
+                //     //                               style:
+                //     //                                   const TextStyle(
+                //     //                                 fontSize: 14,
+                //     //                               ),
+                //     //                             ),
+                //     //                           ],
+                //     //                         ),
+                //     //                       ),
+                //     //                     );
+                //     //                   },
+                //     //                 ),
+                //     //               );
+                //     //             }).toList(),
+                //     //             //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
+                //     //             value: selectedCities.isEmpty
+                //     //                 ? null
+                //     //                 : selectedCities.last,
+                //     //             onChanged: (value) {},
+                //     //             buttonHeight: 50,
+                //     //             buttonWidth: 160,
+                //     //             buttonPadding: const EdgeInsets.only(
+                //     //                 left: 14, right: 14),
+                //     //             buttonDecoration: BoxDecoration(
+                //     //               borderRadius:
+                //     //                   BorderRadius.circular(14),
+                //     //               color: Color(0xffF9F9F9),
+                //     //             ),
+                //     //             buttonElevation: 0,
+                //     //             itemHeight: 40,
+                //     //             itemPadding: const EdgeInsets.only(
+                //     //                 left: 14, right: 14),
+                //     //             dropdownMaxHeight: 300,
+                //     //             dropdownPadding: null,
+                //     //             dropdownDecoration: BoxDecoration(
+                //     //               borderRadius:
+                //     //                   BorderRadius.circular(14),
+                //     //             ),
+                //     //             dropdownElevation: 8,
+                //     //             scrollbarRadius:
+                //     //                 const Radius.circular(40),
+                //     //             scrollbarThickness: 6,
+                //     //             scrollbarAlwaysShow: true,
+                //     //             selectedItemBuilder: (context) {
+                //     //               return cityList.map(
+                //     //                 (item) {
+                //     //                   return Container(
+                //     //                     // alignment: AlignmentDirectional.center,
+                //     //                     padding:
+                //     //                         const EdgeInsets.symmetric(
+                //     //                             horizontal: 16.0),
+                //     //                     child: Text(
+                //     //                       selectedCities.join(','),
+                //     //                       style: const TextStyle(
+                //     //                         fontSize: 14,
+                //     //                         overflow:
+                //     //                             TextOverflow.ellipsis,
+                //     //                       ),
+                //     //                       maxLines: 1,
+                //     //                     ),
+                //     //                   );
+                //     //                 },
+                //     //               ).toList();
+                //     //             },
+                //     //           ),
+                //     //         );
+                //     //       } else if (snapshot.hasError) {
+                //     //         return Icon(Icons.error_outline);
+                //     //       } else {
+                //     //         return Center(
+                //     //             child: CircularProgressIndicator());
+                //     //       }
+                //     //     })
+                //   ),
+                // ),
 
                 SizedBox(
                   height: 15,
@@ -2880,9 +2915,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     decoration: InputDecoration(
                       counterText: "",
                       contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      hintText: "Enter name",
+                      hintText: "Enter account holder name",
                       label: Text(
-                        "Name",
+                        "Account Holder Name",
                       ),
                       hintStyle: TextStyle(
                           color: Colors.black, fontWeight: FontWeight.w400),
@@ -3360,6 +3395,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     },
                   ),
                 ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    "(Please enter your current ID or create a free Razorpay ID in order to get immediate payments from your wallet to your bank account)",
+                    style: TextStyle(color: AppColor.PrimaryDark, fontSize: 12),
+                  ),
+                ),
                 SizedBox(
                   height: 15,
                 ),
@@ -3411,33 +3453,107 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     );
   }
 
-  Future getImage(context, ImgSource source, {from}) async {
-    var image = await ImagePickerGC.pickImage(
-        enableCloseButton: true,
-        closeIcon: Icon(
-          Icons.close,
-          color: Colors.red,
-          size: 12,
-        ),
-        context: context,
-        source: source,
-        barrierDismissible: true,
-        cameraIcon: Icon(
-          Icons.camera_alt,
-          color: Colors.red,
-        ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
-        cameraText: Text(
-          "From Camera",
-          style: TextStyle(color: Colors.red),
-        ),
-        galleryText: Text(
-          "From Gallery",
-          style: TextStyle(color: Colors.blue),
-        ));
-    setState(() {
-      profilePic = image;
-    });
+  void _showImagePickerOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: Colors.white,
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(
+                  Icons.photo_library,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  'Choose from Gallery',
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        color: Colors.black,
+                      ),
+                ),
+                onTap: () {
+                  _pickImage(ImageSource.gallery);
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.camera_alt,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  'Take a Picture',
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        color: Colors.black,
+                      ),
+                ),
+                onTap: () {
+                  _pickImage(ImageSource.camera);
+                  //  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final pickedFile = await ImagePicker().pickImage(source: source);
+
+      if (pickedFile != null) {
+        setState(() {
+          profilePic = pickedFile;
+          // profileProvider.uploadFile(context);
+        });
+      }
+    } catch (e) {
+      print('Error picking image: $e');
+    }
+  }
+
+  // Future getImage(context, ImgSource source, {from}) async {
+  //   var status = await Permission.camera.status;
+  //   var status2 = await Permission.photos.status;
+  //   if (status.isDenied) {
+  //     // Here you can open app settings so that the user can give permission
+  //     openAppSettings();
+  //   } else if (status2.isDenied) {
+  //     // Here you can open app settings so that the user can give permission
+  //     openAppSettings();
+  //   } else {
+  //     var image = await ImagePickerGC.pickImage(
+  //         enableCloseButton: true,
+  //         closeIcon: Icon(
+  //           Icons.close,
+  //           color: Colors.red,
+  //           size: 12,
+  //         ),
+  //         context: context,
+  //         source: source,
+  //         barrierDismissible: true,
+  //         cameraIcon: Icon(
+  //           Icons.camera_alt,
+  //           color: Colors.red,
+  //         ), //cameraIcon and galleryIcon can change. If no icon provided default icon will be present
+  //         cameraText: Text(
+  //           "From Camera",
+  //           style: TextStyle(color: Colors.red),
+  //         ),
+  //         galleryText: Text(
+  //           "From Gallery",
+  //           style: TextStyle(color: Colors.blue),
+  //         ));
+  //     setState(() {
+  //       profilePic = image;
+  //     });
+  //   }
+  // }
 
   Future getCountries() async {
     subcateid =
@@ -3484,16 +3600,21 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     }
   }
 
-  Future getCities() async {
-    var request = http.MultipartRequest(
-        'POST', Uri.parse('${Apipath.BASH_URL}get_cities'));
-    request.fields.addAll({'state_id': '$selectedState'});
+  Future getCities(String text) async {
+    try {
+      print(text + "CITY TYPE FROM");
+      var request = http.MultipartRequest(
+          'POST', Uri.parse('${Apipath.BASH_URL}get_cities'));
+      request.fields.addAll({'state_id': '$selectedState'});
 
-    http.StreamedResponse response = await request.send();
+      print("CITY  $selectedState");
 
-    if (response.statusCode == 200) {
-      final str = await response.stream.bytesToString();
-      /*var fullResponse = json.decode(str);
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        final str = await response.stream.bytesToString();
+        /*{
+        var fullResponse = json.decode(str);
       serviceList = fullResponse["data"];
       print(serviceList.length);
       setState(() {});
@@ -3504,16 +3625,25 @@ class _EditProfileScreenState extends State<EditProfileScreen>
         boolServiceMapList[element["id"]] = false;
       });
       print(boolServiceMapList.length);
-      print(boolList.length);*/
-      final jsonResponse = CityModel.fromJson(json.decode(str));
-      if (jsonResponse.responseCode == "1") {
-        setState(() {
-          cityList = jsonResponse.data!;
-        });
+      print(boolList.length);
+      }*/
+        final jsonResponse = CityModel.fromJson(json.decode(str));
+        if (jsonResponse.responseCode == "1") {
+          cityList.clear();
+
+          setState(() {
+            cityList = jsonResponse.data!;
+          });
+          print(cityList.length.toString() + " City Length");
+        }
+        return CityModel.fromJson(json.decode(str));
+      } else {
+        print(response.reasonPhrase);
+        return null;
       }
-      return CityModel.fromJson(json.decode(str));
-    } else {
-      print(response.reasonPhrase);
+    } catch (stacktrace, err) {
+      print(stacktrace.toString());
+      print(err.toString());
     }
   }
 }
@@ -3606,7 +3736,7 @@ class _MultiSelectState extends State<MultiSelect> {
     // TODO: implement initState
     super.initState();
 
-    getCities();
+    // getCities();
   }
 
   @override

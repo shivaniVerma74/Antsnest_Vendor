@@ -268,7 +268,13 @@ class _ManageServiceState extends State<ManageService> {
                                                   WidgetSpan(
                                                       child: Icon(
                                                     Icons.star,
-                                                    color: Colors.yellow,
+                                                    color: vendorServiceModel!
+                                                                .restaurants![
+                                                                    index]
+                                                                .reviewCount! >
+                                                            0
+                                                        ? Colors.yellow
+                                                        : Colors.grey,
                                                     size: 15,
                                                   )),
                                                   TextSpan(
@@ -756,8 +762,8 @@ class _ManageServiceState extends State<ManageService> {
       'Cookie': 'ci_session=a0fad83c35b72f9b6b96e4fc773d876b8d6ca021'
     };
     var request = http.MultipartRequest(
-        'POST', Uri.parse(Apipath.BASH_URL + 'get_cat_res1'));
-    request.fields.addAll({'vid': '${userId}'});
+        'POST', Uri.parse(Apipath.BASH_URL + 'get_cat_res'));
+    request.fields.addAll({'vid': '${userId}', 'type': "vendor"});
     print("checking api with parameter here ${request.fields} and $request");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();

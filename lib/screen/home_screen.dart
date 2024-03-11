@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:fixerking/modal/countModel.dart';
+import 'package:fixerking/screen/bottom_bar.dart';
 import 'package:fixerking/screen/service_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -51,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // getNewOders();
     getMessageCount();
     getNotification();
+    getCounts();
   }
 
   @override
@@ -64,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
   LatestPostModel? latestPostModel;
   int countmessage = 0;
   MessageChatModel? messageChatModel;
+  CountModel? countModel;
   getMessageCount() async {
     var vendorId = await MyToken.getUserID();
     var request =
@@ -76,6 +80,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
     //countmessage=int.parse(finalResponse[""].toString());
     countmessage = int.parse(messageChatModel?.count.toString() ?? "0");
+    setState(() {});
+  }
+
+  getCounts() async {
+    var vendorId = await MyToken.getUserID();
+    var request =
+        http.MultipartRequest('POST', Uri.parse(BaseUrl + 'vendor_dashboard'));
+    request.fields.addAll({'vendor_id': '${vendorId.toString()}'});
+    http.StreamedResponse response = await request.send();
+    var finalResponse = await response.stream.bytesToString();
+    countModel = CountModel.fromJson(json.decode(finalResponse));
+
     setState(() {});
   }
 
@@ -252,23 +268,120 @@ class _HomeScreenState extends State<HomeScreen> {
             return getVendorBooking("");
           },
           child: SingleChildScrollView(
-            child:
-
-                //starting
-                Container(
-              // decoration: BoxDecoration(
-              //   gradient: RadialGradient(
-              //     center: Alignment(0.0, -0.1),
-              //     colors: [
-              //       AppColor().colorBg2(),
-              //       AppColor().colorBg2(),
-              //     ],
-              //     radius: 0.8,
-              //   ),
-              // ),
-              //  padding: EdgeInsets.symmetric(horizontal: ),
+            child: Container(
               child: Column(
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            height: 80,
+                            decoration: BoxDecoration(
+                                color: Color(0xfff5b5be),
+                                borderRadius: BorderRadius.circular(12)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircleAvatar(
+                                    child: Text(countModel == null
+                                        ? "0"
+                                        : countModel!.data.bookings.total),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text("Bookings")
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          flex: 1,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          NotificationScreen()));
+                            },
+                            child: Container(
+                              height: 80,
+                              decoration: BoxDecoration(
+                                  color: Color(0xfffff9bf),
+                                  borderRadius: BorderRadius.circular(12)),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: Colors.orange[200],
+                                    child: Text(countModel == null
+                                        ? "0"
+                                        : countModel!.data.notifications.total),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text("Notifications")
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          flex: 1,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BottomBar(
+                                            index: 1,
+                                          )),
+                                  (route) => false);
+                            },
+                            child: Container(
+                              height: 80,
+                              decoration: BoxDecoration(
+                                  color: Color(0xffc7ebf2),
+                                  borderRadius: BorderRadius.circular(12)),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.blue[200],
+                                      child: Text(countModel == null
+                                          ? "0"
+                                          : countModel!.data.services.total),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text("Services")
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   Container(
                     height: 11.40.h,
                     margin: EdgeInsets.only(
@@ -353,37 +466,39 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                      margin: EdgeInsets.only(right: 20, bottom: 10),
-                      padding: EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: AppColor.PrimaryDark)),
-                      child: DropdownButton(
-                        value: selectedStatus,
-                        underline: Container(),
-                        hint: Text("Select Status"),
-                        icon: Icon(
-                          Icons.keyboard_arrow_down,
-                          color: AppColor.PrimaryDark,
+                  Visibility(
+                    visible: currentIndex == 1,
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        margin: EdgeInsets.only(right: 20, bottom: 10),
+                        padding: EdgeInsets.symmetric(horizontal: 5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: AppColor.PrimaryDark)),
+                        child: DropdownButton(
+                          value: selectedStatus,
+                          underline: Container(),
+                          hint: Text("Select Status"),
+                          icon: Icon(
+                            Icons.keyboard_arrow_down,
+                            color: AppColor.PrimaryDark,
+                          ),
+                          items: statusList.map((String items) {
+                            return DropdownMenuItem(
+                              value: items,
+                              child: Text(items),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedStatus = newValue;
+                              getVendorBooking(selectedStatus == "Confirmed"
+                                  ? "Confirm"
+                                  : selectedStatus.toString());
+                            });
+                          },
                         ),
-                        items: statusList.map((String items) {
-                          return DropdownMenuItem(
-                            value: items,
-                            child: Text(items),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedStatus = newValue;
-
-                            getVendorBooking(selectedStatus == "Confirmed"
-                                ? "Confirm"
-                                : selectedStatus.toString());
-                          });
-                        },
                       ),
                     ),
                   ),

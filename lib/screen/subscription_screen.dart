@@ -225,13 +225,17 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                                                           .isTrue ==
                                                                       "0"
                                                                   ? Container(
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                              border: Border.all(color: Colors.black)),
+                                                                      decoration: BoxDecoration(
+                                                                          color: Colors
+                                                                              .black,
+                                                                          border:
+                                                                              Border.all(color: Colors.black)),
                                                                       child:
                                                                           Icon(
                                                                         Icons
                                                                             .clear,
+                                                                        color: Colors
+                                                                            .white,
                                                                         size:
                                                                             13,
                                                                       ),
@@ -240,12 +244,16 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                                                       decoration: BoxDecoration(
                                                                           borderRadius: BorderRadius.circular(
                                                                               100),
+                                                                          color: Colors
+                                                                              .black,
                                                                           border:
                                                                               Border.all(color: Colors.black)),
                                                                       child:
                                                                           Icon(
                                                                         Icons
                                                                             .check,
+                                                                        color: Colors
+                                                                            .white,
                                                                         size:
                                                                             13,
                                                                       ),
@@ -294,7 +302,11 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                                   //   checkOut(amounts);
                                                   // }
                                                 },
-                                                child: Text("Purchase"))
+                                                child: Text(
+                                                  "Purchase",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ))
                                           ],
                                         )
                                       ],

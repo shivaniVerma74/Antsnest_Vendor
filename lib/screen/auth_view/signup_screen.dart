@@ -500,47 +500,120 @@ class _SignUpScreenState extends State<SignUpScreen>
     var finalStr = SignupModel.fromJson(json.decode(response.body));
     print("final status ${finalStr.status}");
     if (finalStr.status == "success") {
-      Navigator.of(context).pop();
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LoginScreen()));
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: Colors.green,
-              content: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(finalStr.message ?? ""),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        "Your form was successfully submitted! We'll review your application and get back to you within 48 hours.",
-                        style: TextStyle(color: Colors.white),
-                      )),
+      showWarningDialog(context);
+      // showDialog(
+      //     context: context,
+      //     builder: (context) {
+      //       return AlertDialog(
+      //         backgroundColor: Colors.green,
+      //         content: Column(
+      //           crossAxisAlignment: CrossAxisAlignment.center,
+      //           mainAxisSize: MainAxisSize.min,
+      //           mainAxisAlignment: MainAxisAlignment.center,
+      //           children: [
+      //             Text(finalStr.message ?? ""),
+      //             SizedBox(
+      //               height: 4,
+      //             ),
+      //             ElevatedButton(
+      //                 onPressed: () {
+      //                   Navigator.pop(context);
+      //                 },
+      //                 child: Text(
+      //                   "Your form was successfully submitted! We'll review your application and get back to you within 48 hours.",
+      //                   style: TextStyle(color: Colors.white),
+      //                 )),
 
-                  //CircularProgressIndicator(),
-                ],
-              ),
-            );
-          });
-      const snackBar = SnackBar(
-        backgroundColor: Colors.green,
-        content: Text(
-            "Your form was successfully submitted! We'll review your application and get back to you within 48 hours."),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      //             //CircularProgressIndicator(),
+      //           ],
+      //         ),
+      //       );
+      //     });
+      // // const snackBar = SnackBar(
+      //   backgroundColor: Colors.green,
+      //   content: Text(
+      //       "Your form was successfully submitted! We'll review your application and get back to you within 48 hours."),
+      // );
+      //  ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       Navigator.of(context).pop();
       Fluttertoast.showToast(msg: "${finalStr.message}");
     }
+  }
+
+  void showWarningDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+            side: BorderSide(color: AppColor.PrimaryDark, width: 5),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.check_circle_rounded,
+                  size: 50,
+                  color: AppColor.PrimaryDark,
+                ),
+                SizedBox(
+                    height:
+                        10), // Provides spacing between the icon and the text.
+                Text(
+                  "Alert",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    color: AppColor.PrimaryDark,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                    height:
+                        20), // Provides spacing between the warning text and the message.
+                Text(
+                  "Your form was successfully submitted! We'll review your application and get back to you within 48 hours.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 20),
+                Align(
+                    alignment: Alignment.center,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen()));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: AppColor.PrimaryDark.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(3),
+                            border: Border.all(color: AppColor.PrimaryDark)),
+                        child: Text(
+                          "OK",
+                          style: TextStyle(
+                              color: AppColor.PrimaryDark,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Future<ServiceCategoryModel?> getServiceCategory() async {
@@ -593,6 +666,14 @@ class _SignUpScreenState extends State<SignUpScreen>
     } else {
       customMap[key] = newData;
     }
+  }
+
+  bool isValidUrl(String url) {
+    final RegExp urlRegExp = RegExp(
+      r'^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$',
+      caseSensitive: false,
+    );
+    return urlRegExp.hasMatch(url);
   }
 
   openLanguageList() {
@@ -1562,7 +1643,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                 initialCountryCode: 'IN',
                                 validator: (v) {
                                   if (v!.number.isEmpty ||
-                                      v.number.length != 10) {
+                                      v.number.length < 6) {
                                     return "Enter mobile number";
                                   }
                                   return null;
@@ -1573,7 +1654,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                               ),
                             ),
                             SizedBox(
-                              height: 15,
+                              height: 35,
                             ),
 
                             InkWell(
@@ -1608,7 +1689,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                 alignment: Alignment.center,
                                 //width: MediaQuery.of(context).size.width/2,
                                 decoration: BoxDecoration(
-                                  color: AppColor.PrimaryDark,
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
@@ -1724,6 +1805,8 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   validator: (v) {
                                     if (v!.isEmpty) {
                                       return "Portfolio / website is required";
+                                    } else if (!isValidUrl(v!)) {
+                                      return "Portfolio / website is invalid";
                                     }
                                   },
                                   decoration: InputDecoration(
@@ -1958,7 +2041,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                 borderRadius: BorderRadius.circular(6),
                                 child: Container(
                                   width: double.infinity,
-                                  height: 6.h,
+                                  height: 6.5.h,
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 2.h),
                                   decoration: BoxDecoration(
@@ -2012,12 +2095,14 @@ class _SignUpScreenState extends State<SignUpScreen>
                             SizedBox(
                               height: 15,
                             ),
+
                             Material(
                               elevation: 4,
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(6),
                               child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 6),
+                                //  /   height: 65,
+                                padding: EdgeInsets.symmetric(vertical: 0),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(12)),
@@ -2029,7 +2114,8 @@ class _SignUpScreenState extends State<SignUpScreen>
                                     hintText:
                                         "What kinds of Service do you feel most comfortable doing ?",
                                     label: Text(
-                                      "What kinds of Service do you feel most comfortable...",
+                                      "What kinds of Service do you feel most comfortable doing ?",
+                                      style: TextStyle(fontSize: 14),
                                     ),
                                     hintStyle: TextStyle(
                                         color: Colors.black,
@@ -2102,7 +2188,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                     hintText:
                                         "Why do you want to join antsnest?",
                                     label: Text(
-                                      "Why Antsnest?",
+                                      "Why do you want to join antsnest?",
                                     ),
                                     hintStyle: TextStyle(
                                         color: Colors.black,
@@ -2249,7 +2335,8 @@ class _SignUpScreenState extends State<SignUpScreen>
                                     borderRadius: BorderRadius.circular(6),
                                     child: MultiSelectDropDown(
                                       hint: "Select Sub Category",
-                                      showClearIcon: true,
+                                      clearIcon: const Icon(Icons.cancel),
+
                                       controller: multiSelectController,
                                       borderColor: Colors.transparent,
 

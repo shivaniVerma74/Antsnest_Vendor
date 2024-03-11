@@ -32,6 +32,7 @@ const notificationIcon = "images/notification_icon.png";
 const picture = "images/antsLogo.png";
 const edit = "images/edit.png";
 const payment = "images/payment.png";
+const blogs = "images/bookmark-white.png";
 const serviceIcon = "images/service_history.png";
 const changePass = "images/change_pass.png";
 const support = "images/support.png";
