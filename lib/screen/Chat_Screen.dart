@@ -214,15 +214,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                                             ),
                                                           ],
                                                         ),
-                                                        // Text(
-                                                        //   chat.time.toString(),
-                                                        //   style: TextStyle(
-                                                        //     fontSize: 11,
-                                                        //     fontWeight: FontWeight.w300,
-                                                        //     color: Colors.black54,
-                                                        //   ),
-                                                        // ),
-
                                                         InkWell(
                                                             onTap: () {
                                                               Navigator.push(
@@ -267,21 +258,26 @@ class _ChatScreenState extends State<ChatScreen> {
                                                             )),
                                                       ],
                                                     ),
-                                                    // SizedBox(
-                                                    //   height: 10,
-                                                    // ),
-                                                    // Container(
-                                                    //   alignment: Alignment.topLeft,
-                                                    //   child: Text(
-                                                    //     chat.text.toString(),
-                                                    //     style: TextStyle(
-                                                    //       fontSize: 13,
-                                                    //       color: Colors.black54,
-                                                    //     ),
-                                                    //     overflow: TextOverflow.ellipsis,
-                                                    //     maxLines: 2,
-                                                    //   ),
-                                                    // ),
+                                                    Container(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: Text(
+                                                        " #" +
+                                                            model
+                                                                .data![index].id
+                                                                .toString() +
+                                                            " (${model.data![index].resName.toString()})",
+                                                        style: TextStyle(
+                                                          fontSize: 13,
+                                                          color: const Color
+                                                              .fromARGB(
+                                                              174, 0, 0, 0),
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 2,
+                                                      ),
+                                                    ),
                                                   ],
                                                 ),
                                               ),

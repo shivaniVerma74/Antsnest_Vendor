@@ -467,7 +467,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Visibility(
-                    visible: currentIndex == 1,
+                    visible: currentIndex == 0,
                     child: Align(
                       alignment: Alignment.topRight,
                       child: Container(
@@ -1256,7 +1256,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           color:
                                                                               AppColor.PrimaryDark)),
                                                                   child: Text(
-                                                                    "Cancel",
+                                                                    "Reject",
                                                                     style: TextStyle(
                                                                         color: Colors
                                                                             .black),

@@ -226,10 +226,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                                                       "0"
                                                                   ? Container(
                                                                       decoration: BoxDecoration(
-                                                                          color: Colors
-                                                                              .black,
+                                                                          color: AppColor
+                                                                              .PrimaryDark,
                                                                           border:
-                                                                              Border.all(color: Colors.black)),
+                                                                              Border.all(color: AppColor.PrimaryDark)),
                                                                       child:
                                                                           Icon(
                                                                         Icons
@@ -244,10 +244,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                                                       decoration: BoxDecoration(
                                                                           borderRadius: BorderRadius.circular(
                                                                               100),
-                                                                          color: Colors
-                                                                              .black,
+                                                                          color: AppColor
+                                                                              .PrimaryDark,
                                                                           border:
-                                                                              Border.all(color: Colors.black)),
+                                                                              Border.all(color: AppColor.PrimaryDark)),
                                                                       child:
                                                                           Icon(
                                                                         Icons
@@ -270,43 +270,47 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                                 ],
                                               ),
                                             ),
-                                            ElevatedButton(
-                                                style: ButtonStyle(
-                                                    backgroundColor:
-                                                        MaterialStateProperty
-                                                            .all(AppColor()
-                                                                .colorPrimary())),
-                                                onPressed: () async {
-                                                  var userId =
-                                                      await MyToken.getUserID();
-                                                  planI = item.id.toString();
-                                                  if (item.price == 0 ||
-                                                      item.price == "0") {
-                                                    // Fluttertoast.showToast(msg: "Plan amount is not valid");
-                                                    purchasePlan(
-                                                        "$userId", planI, "");
-                                                  } else {
-                                                    checkOut(item.price);
-                                                  }
-                                                  // var userId = await MyToken.getUserID();
-                                                  // print("purchase Plan");
-                                                  // // print("purchase Plan2 ==== $price");
-                                                  // // price = int.parse(item.price.toString()) * 100;
-                                                  // amounts = item.price;
-                                                  // print("purchase Plan3 ==== $amounts");
-                                                  // planI = item.id.toString();
-                                                  // if(item.price.toString() == "0" || item.price == 0){
-                                                  //   purchasePlan(userId.toString(),planI.toString(),"");
-                                                  // }
-                                                  // else{
-                                                  //   checkOut(amounts);
-                                                  // }
-                                                },
-                                                child: Text(
-                                                  "Purchase",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ))
+                                            (item.price == 0 ||
+                                                    item.price == "0")
+                                                ? Container()
+                                                : ElevatedButton(
+                                                    style: ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStateProperty
+                                                                .all(AppColor()
+                                                                    .colorPrimary())),
+                                                    onPressed: () async {
+                                                      var userId = await MyToken
+                                                          .getUserID();
+                                                      planI =
+                                                          item.id.toString();
+                                                      if (item.price == 0 ||
+                                                          item.price == "0") {
+                                                        // Fluttertoast.showToast(msg: "Plan amount is not valid");
+                                                        purchasePlan("$userId",
+                                                            planI, "");
+                                                      } else {
+                                                        checkOut(item.price);
+                                                      }
+                                                      // var userId = await MyToken.getUserID();
+                                                      // print("purchase Plan");
+                                                      // // print("purchase Plan2 ==== $price");
+                                                      // // price = int.parse(item.price.toString()) * 100;
+                                                      // amounts = item.price;
+                                                      // print("purchase Plan3 ==== $amounts");
+                                                      // planI = item.id.toString();
+                                                      // if(item.price.toString() == "0" || item.price == 0){
+                                                      //   purchasePlan(userId.toString(),planI.toString(),"");
+                                                      // }
+                                                      // else{
+                                                      //   checkOut(amounts);
+                                                      // }
+                                                    },
+                                                    child: Text(
+                                                      "Purchase",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ))
                                           ],
                                         )
                                       ],
@@ -545,6 +549,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       'currency': 'INR',
       'name': 'Antsnest',
       'description': '',
+      "image":
+          "https://developmentalphawizz.com/antsnest/uploads/logo/Antsnest-fev1.png",
       // 'prefill': {'contact': userMobile, 'email': userEmail},
     };
     print("OPTIONS ===== $options");

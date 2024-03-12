@@ -24,6 +24,8 @@ class _TicketPageState extends State<TicketPage> {
   int currentIndex = -1;
   var selectedTicketId;
   var selectedType;
+  TextEditingController descriptionController = TextEditingController();
+
   List<TicketType> typeList = [];
   Future getType() async {
     var request =
@@ -65,7 +67,9 @@ class _TicketPageState extends State<TicketPage> {
       'booking_id': widget.bookingId.toString(),
       'title': ticketController.text.toString(),
       'support_ticket_type': selectedTicketId.toString(),
-      'description': selectedType.toString()
+      'description': selectedType.toString() == "Others"
+          ? descriptionController.text
+          : selectedType.toString()
     });
     print("request fields here now ${request.url}");
     print("request fields here now ${request.fields}");
@@ -124,7 +128,7 @@ class _TicketPageState extends State<TicketPage> {
                     height:
                         20), // Provides spacing between the warning text and the message.
                 Text(
-                  "You are in good hands, and we are doing our best to get back to you within 24 hours,if not sooner. We appreciate your patience, and apologize in advance if it takes a little longer.",
+                  "Report Submitted Successfully Our team will review the matter and take appropriate action if needed. We appreciate your contribution to maintaining a safe and positive environment for all users. If you have any additional information to provide, please feel free to contact our support team at info@antsnest.co. Your cooperation is valued.",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16),
                 ),
@@ -265,7 +269,11 @@ class _TicketPageState extends State<TicketPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 currentIndex == index
-                                    ? Icon(Icons.check_circle_outlined)
+                                    ? Icon(
+                                        Icons.check_circle_outlined,
+                                        color: Colors.green,
+                                        size: 20,
+                                      )
                                     : Icon(
                                         Icons.circle_outlined,
                                         size: 20,
@@ -395,6 +403,33 @@ class _TicketPageState extends State<TicketPage> {
                 //     ),
                 //   ),
                 // ),
+                Visibility(
+                  visible: selectedType == "Others",
+                  child: Text(
+                    "Description",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+                Visibility(
+                  visible: selectedType == "Others",
+                  child: SizedBox(
+                    height: 4,
+                  ),
+                ),
+                Visibility(
+                  visible: selectedType == "Others",
+                  child: TextFormField(
+                    controller: descriptionController,
+                    decoration: InputDecoration(
+                        hintText: "Reason",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey))),
+                  ),
+                ),
 
                 SizedBox(
                   height: 20,

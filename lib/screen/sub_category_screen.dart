@@ -48,105 +48,105 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
         ),
         body: collectionModal == null
             ? Center(
-          child: CupertinoActivityIndicator(),
-        )
+                child: CupertinoActivityIndicator(),
+              )
             : Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: bestSellerItems(context),
-        )
-    );
+                padding: const EdgeInsets.only(top: 20),
+                child: bestSellerItems(context),
+              ));
   }
 
   Widget bestSellerItems(BuildContext context) {
     return collectionModal!.responseCode == "1"
         ? GridView.builder(
-      shrinkWrap: true,
-      primary: false,
-      padding: EdgeInsets.all(10),
-      itemCount: collectionModal!.data!.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 250 / 290,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 30),
-          child: InkWell(
-            onTap: () {
-              // Navigator.push(
-              //   context,
-              //   CupertinoPageRoute(
-              //     builder: (context) => ViewCategory(
-              //       id: collectionModal!.categories![index].id,
-              //       name: collectionModal!.categories![index].cName!,
-              //       catId: widget.id,
-              //       fromSeller: false,
-              //     ),
-              //   ),
-              // );
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  Card(
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Container(
-                      width: 180,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            bottom: 15, left: 15, right: 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              collectionModal!.data![index].cName!,
-                              maxLines: 1,
-                              style: TextStyle(
-                                  color: AppColor.PrimaryDark,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold),
+            shrinkWrap: true,
+            primary: false,
+            padding: EdgeInsets.all(10),
+            itemCount: collectionModal!.data!.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 250 / 290,
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 30),
+                child: InkWell(
+                  onTap: () {
+                    // Navigator.push(
+                    //   context,
+                    //   CupertinoPageRoute(
+                    //     builder: (context) => ViewCategory(
+                    //       id: collectionModal!.categories![index].id,
+                    //       name: collectionModal!.categories![index].cName!,
+                    //       catId: widget.id,
+                    //       fromSeller: false,
+                    //     ),
+                    //   ),
+                    // );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Container(
+                            width: 180,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  bottom: 15, left: 15, right: 5),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    collectionModal!.data![index].cName!,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        color: AppColor.PrimaryDark,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Container(height: 10),
+                                ],
+                              ),
                             ),
-                            Container(height: 10),
-                          ],
+                          ),
                         ),
-                      ),
+                        Container(
+                          height: 100,
+                          width: 140,
+                          alignment: Alignment.topCenter,
+                          decoration: BoxDecoration(
+                            color: Colors.black45,
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  collectionModal!.data![index].img!),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Container(
-                    height: 100,
-                    width: 140,
-                    alignment: Alignment.topCenter,
-                    decoration: BoxDecoration(
-                      color: Colors.black45,
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: NetworkImage(collectionModal!.data![index].img!),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
+              );
+            },
+          )
+        : Center(
+            child: Text(
+              "No Sub Category Available",
+              style: TextStyle(
+                color: Colors.black,
+                fontStyle: FontStyle.italic,
               ),
             ),
-          ),
-        );
-      },
-    )
-        : Center(
-      child: Text(
-        "No Sub Category Available",
-        style: TextStyle(
-          color: Colors.black,
-          fontStyle: FontStyle.italic,
-        ),
-      ),
-    );
+          );
   }
 
   Future<ServiceSubCategoryModel?> getServicesSubCategory(catId) async {

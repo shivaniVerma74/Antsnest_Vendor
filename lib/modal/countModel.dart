@@ -38,23 +38,26 @@ class Data {
   Bookings bookings;
   Bookings services;
   Bookings notifications;
+  bool is_active;
 
-  Data({
-    required this.bookings,
-    required this.services,
-    required this.notifications,
-  });
+  Data(
+      {required this.bookings,
+      required this.services,
+      required this.notifications,
+      required this.is_active});
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         bookings: Bookings.fromJson(json["bookings"]),
         services: Bookings.fromJson(json["services"]),
         notifications: Bookings.fromJson(json["notifications"]),
+        is_active: json["is_active"],
       );
 
   Map<String, dynamic> toJson() => {
         "bookings": bookings.toJson(),
         "services": services.toJson(),
         "notifications": notifications.toJson(),
+        "is_active": is_active,
       };
 }
 

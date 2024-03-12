@@ -1553,6 +1553,7 @@
 // }
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
@@ -2029,7 +2030,7 @@ class _AddServicesState extends State<AddServices> {
             UtilityHlepar.getToast("Service Image Required");
           }
         } else {
-          UtilityHlepar.getToast("PLease select fields");
+          UtilityHlepar.getToast("Please select fields");
         }
       },
       child: UtilityWidget.lodingButton(
@@ -2790,9 +2791,10 @@ class _AddServicesState extends State<AddServices> {
                                   .cName
                                   .toString();
                               print(serviceName.toString());
-
+                              serviceSubCategoryModel = null;
                               getServicesSubCategory(
                                   selectedCategory, serviceName);
+                              setState(() {});
                               print("CATEGORY ID issssss== $selectedCategory");
                             },
                             icon: const Icon(
@@ -2834,7 +2836,7 @@ class _AddServicesState extends State<AddServices> {
           SizedBox(
             height: 15,
           ),
-          subCategory == null
+          serviceSubCategoryModel == null
               ? SizedBox()
               : Material(
                   elevation: 4,
@@ -2866,14 +2868,17 @@ class _AddServicesState extends State<AddServices> {
                       // });
                       debugPrint(categorylist.toString());
                     },
-                    options: <ValueItem>[
-                      for (int i = 0; i < subCategory!.data!.length; i++) ...[
-                        ValueItem(
-                          label: "${subCategory!.data![i].cName}",
-                          value: "${subCategory!.data![i].id}",
-                        )
-                      ]
-                    ],
+                    options: listValues,
+                    //  <ValueItem>[
+                    //   for (int i = 0;
+                    //       i < serviceSubCategoryModel!.data!.length;
+                    //       i++) ...[
+                    //     ValueItem(
+                    //       label: "${serviceSubCategoryModel!.data![i].cName}",
+                    //       value: "${serviceSubCategoryModel!.data![i].id}",
+                    //     )
+                    //   ]
+                    // ],
 
                     selectionType: SelectionType.multi,
                     // selectedOptions: [
@@ -4086,27 +4091,44 @@ class _AddServicesState extends State<AddServices> {
     }
   }
 
+  ServiceSubCategoryModel? serviceSubCategoryModel;
+  List<ValueItem> listValues = [];
   Future<ServiceSubCategoryModel?> getServicesSubCategory(
       catId, String serviceName) async {
-    var request = http.MultipartRequest(
-        'POST', Uri.parse("${Apipath.BASH_URL}get_categories_list"));
+    listValues.clear();
+    try {
+      var request = http.MultipartRequest(
+          'POST', Uri.parse("${Apipath.BASH_URL}get_categories_list"));
 
-    request.fields.addAll({'p_id': '$catId'});
+      request.fields.addAll({'p_id': '$catId'});
 
-    print(request);
-    print(request.fields);
-    http.StreamedResponse response = await request.send();
+      print(request);
+      print(request.fields);
+      http.StreamedResponse response = await request.send();
 
-    if (response.statusCode == 200) {
-      final str = await response.stream.bytesToString();
-      var finalResult = ServiceSubCategoryModel.fromJson(json.decode(str));
-      setState(() {
-        subCategory = finalResult;
-      });
-      addData(serviceName, subCategory!.data!);
-      //customMap.addEntries(serviceName, serviceSubCategoryModel.data!);
-    } else {
-      return null;
+      if (response.statusCode == 200) {
+        final str = await response.stream.bytesToString();
+        log(str);
+        var finalResult = ServiceSubCategoryModel.fromJson(json.decode(str));
+        setState(() {
+          serviceSubCategoryModel = finalResult;
+        });
+        listValues.clear();
+        for (int i = 0; i < serviceSubCategoryModel!.data!.length; i++) {
+          listValues.add(ValueItem(
+            label: "${serviceSubCategoryModel!.data![i].cName}",
+            value: "${serviceSubCategoryModel!.data![i].id}",
+          ));
+        }
+
+        addData(serviceName, serviceSubCategoryModel!.data!);
+        //customMap.addEntries(serviceName, serviceSubCategoryModel.data!);
+      } else {
+        return null;
+      }
+    } catch (stacktrace, error) {
+      log(stacktrace.toString());
+      log(error.toString());
     }
   }
 

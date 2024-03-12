@@ -1,4 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:fixerking/api/api_helper/ApiList.dart';
+import 'package:fixerking/modal/countModel.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:animated_widgets/widgets/scale_animated.dart';
 import 'package:fixerking/screen/blogs/blogsScreen.dart';
@@ -56,12 +60,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     getProfile();
+    getCounts();
   }
 
   @override
   void dispose() {
     super.dispose();
     profileResponseStram.close();
+  }
+
+  CountModel? countModel;
+
+  bool showBlogs = false;
+
+  getCounts() async {
+    var vendorId = await MyToken.getUserID();
+    var request =
+        http.MultipartRequest('POST', Uri.parse(BaseUrl + 'vendor_dashboard'));
+    request.fields.addAll({'vendor_id': '${vendorId.toString()}'});
+    http.StreamedResponse response = await request.send();
+    var finalResponse = await response.stream.bytesToString();
+    countModel = CountModel.fromJson(json.decode(finalResponse));
+    print(finalResponse.toString());
+    showBlogs = countModel?.data.is_active ?? false;
+    setState(() {});
   }
 
   @override
@@ -299,7 +321,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     context, 14, "images/BOOKING LIST.png", "My BookingList"),
                 tabItem(context, 7, walletIcon, "My Wallet"),
                 tabItem(context, 1, payment, "Plan History"),
-                tabItem(context, 20, blogs, "My Blogs"),
+                if (showBlogs) tabItem(context, 20, blogs, "My Blogs"),
                 // tabItem(context, 2, serviceIcon, "Service History"),
                 tabItem(context, 6, chatIcon, "Chat With User"),
                 tabItem(context, 8, service, "Reviews"),

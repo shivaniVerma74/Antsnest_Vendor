@@ -559,7 +559,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                 Icon(
                   Icons.check_circle_rounded,
                   size: 50,
-                  color: AppColor.PrimaryDark,
+                  color: Colors.green,
                 ),
                 SizedBox(
                     height:
@@ -2275,6 +2275,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                                 getServicesSubCategory(
                                                     selectedCategory,
                                                     serviceName);
+                                                setState(() {});
                                                 print(
                                                     "CATEGORY ID issssss== $selectedCategory");
                                               },
