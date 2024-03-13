@@ -504,19 +504,19 @@ class _LoginScreenState extends State<LoginScreen>
                       SizedBox(
                         width: 10,
                       ),
+                      // SizedBox(
+                      //     width: 30,
+                      //     child: Image.asset("images/instagram.png")),
+                      // SizedBox(
+                      //   width: 10,
+                      // ),
+                      // SizedBox(
+                      //     width: 30, child: Image.asset("images/twitter.png")),
+                      // SizedBox(
+                      //   width: 10,
+                      // ),
                       SizedBox(
-                          width: 30,
-                          child: Image.asset("images/instagram.png")),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      SizedBox(
-                          width: 30, child: Image.asset("images/twitter.png")),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      SizedBox(
-                          width: 30, child: Image.asset("images/linkdin.png")),
+                          width: 30, child: Image.asset("images/google.png")),
                     ],
                   ),
                   Spacer(),

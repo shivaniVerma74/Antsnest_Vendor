@@ -110,26 +110,16 @@ class _TicketPageState extends State<TicketPage> {
                 Icon(
                   Icons.check_circle_outline,
                   size: 50,
-                  color: AppColor.PrimaryDark,
+                  color: Colors.green,
                 ),
-                SizedBox(
-                    height:
-                        10), // Provides spacing between the icon and the text.
-                Text(
-                  "",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    color: AppColor.PrimaryDark,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                    height:
-                        20), // Provides spacing between the warning text and the message.
+                // SizedBox(
+                //     height:
+                //         10), // Provides spacing between the icon and the text.
+
+                // Provides spacing between the warning text and the message.
                 Text(
                   "Report Submitted Successfully Our team will review the matter and take appropriate action if needed. We appreciate your contribution to maintaining a safe and positive environment for all users. If you have any additional information to provide, please feel free to contact our support team at info@antsnest.co. Your cooperation is valued.",
-                  textAlign: TextAlign.center,
+                  //textAlign: TextAlign.start,
                   style: TextStyle(fontSize: 16),
                 ),
                 SizedBox(height: 20),

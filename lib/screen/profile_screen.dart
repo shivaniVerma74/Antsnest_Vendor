@@ -118,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 //   height: 9.92.h,
                 //   width: 100.w,
                 //   decoration: BoxDecoration(
-                //    /*   image: DecorationImage(
+                //    /*   image: DecorationImaxge(
                 //     image: AssetImage(profileBg),
                 //     fit: BoxFit.fill,
                 //   )*/

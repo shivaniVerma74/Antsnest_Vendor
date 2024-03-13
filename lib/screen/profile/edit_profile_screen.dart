@@ -121,7 +121,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
 
     if (status.isDenied) {
       // Permission is denied, open app settings
-      openAppSettings();
+      // openAppSettings();
     }
   }
 
