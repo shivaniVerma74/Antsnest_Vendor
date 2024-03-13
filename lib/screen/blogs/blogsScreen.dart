@@ -124,6 +124,8 @@ class _BlogsPageState extends State<BlogsPage> {
                             mainAxisSpacing: 5.0,
                           ),
                           itemBuilder: (BuildContext context, int index) {
+                            var isActive =
+                                his.data[index].status == "0" ? false : true;
                             return Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Card(
@@ -132,16 +134,37 @@ class _BlogsPageState extends State<BlogsPage> {
                                     borderRadius: BorderRadius.circular(15)),
                                 child: Column(
                                   children: [
-                                    Container(
-                                      height: 100,
-                                      width: 150,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            topRight: Radius.circular(8)),
-                                        child: Image.network(
-                                          "${his.data[index].image}",
-                                          fit: BoxFit.fill,
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            PageTransition(
+                                              child: EditAddBlogScreen(
+                                                forEdit: true,
+                                                title: his.data[index].title,
+                                                description:
+                                                    his.data[index].description,
+                                                blog_id: his.data[index].id,
+                                                status: his.data[index].status,
+                                                image: his.data[index].image,
+                                              ),
+                                              type: PageTransitionType
+                                                  .rightToLeft,
+                                              duration:
+                                                  Duration(milliseconds: 500),
+                                            ));
+                                      },
+                                      child: Container(
+                                        height: 100,
+                                        width: 150,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(8)),
+                                          child: Image.network(
+                                            "${his.data[index].image}",
+                                            fit: BoxFit.fill,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -179,15 +202,19 @@ class _BlogsPageState extends State<BlogsPage> {
                                                         milliseconds: 500),
                                                   ));
                                             },
-                                            child: Icon(Icons.edit)),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Icon(Icons.edit),
+                                            )),
                                         CupertinoSwitch(
                                           // thumbColor: Colors.red,
                                           trackColor: Colors.red,
-                                          value: his.data[index].status == "0"
-                                              ? false
-                                              : true,
+                                          value: isActive,
 
                                           onChanged: (value) async {
+                                            isActive = !isActive;
+                                            setState(() {});
                                             multipartRequestWithoutImage(
                                                 '${Apipath.BASH_URL}add_blog',
                                                 blog_id: his.data[index].id,
@@ -199,6 +226,8 @@ class _BlogsPageState extends State<BlogsPage> {
                                                 title: his.data[index].title,
                                                 description: his
                                                     .data[index].description);
+                                            getMyBlogs();
+                                            setState(() {});
                                             // enablelist[index] =
                                             //     value == true ? "1" : "0";
                                             // setState(() {});

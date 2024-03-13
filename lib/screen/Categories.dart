@@ -34,39 +34,38 @@ class _CategoriesState extends State<Categories> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: collectionModal == null
-              ? Center(
-            child: CupertinoActivityIndicator(),
-          )
-              : collectionModal!.data!.length > 0
-              ? Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              //physics: const NeverScrollableScrollPhysics(),
-              itemCount: collectionModal!.data!.length,
-              itemBuilder: (context, int index) {
-                return widgetCatedata(
-                    collectionModal!.data![index]);
-              },
-            ),
-          )
-              : Center(
-            child: Text(
-              "Don't have any categories now",
-              style: TextStyle(
-                color: Colors.white,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          )
-        ),
+            child: collectionModal == null
+                ? Center(
+                    child: CupertinoActivityIndicator(),
+                  )
+                : collectionModal!.data!.length > 0
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          //physics: const NeverScrollableScrollPhysics(),
+                          itemCount: collectionModal!.data!.length,
+                          itemBuilder: (context, int index) {
+                            return widgetCatedata(
+                                collectionModal!.data![index]);
+                          },
+                        ),
+                      )
+                    : Center(
+                        child: Text(
+                          "Don't have any categories now",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      )),
       ),
     );
   }
 
-  Widget widgetCatedata(Data categories) {
+  Widget widgetCatedata(Data2 categories) {
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -74,8 +73,8 @@ class _CategoriesState extends State<Categories> {
           MaterialPageRoute(
               builder: (context) =>
                   SubCategoryScreen(id: categories.id!, name: categories.cName!)
-            // ViewCategory(id: categories.id!, name: categories.cName!)
-          ),
+              // ViewCategory(id: categories.id!, name: categories.cName!)
+              ),
         );
       },
       child: Padding(
@@ -94,7 +93,7 @@ class _CategoriesState extends State<Categories> {
                 Container(width: 20),
                 Container(
                     height: 70,
-                    width: 100 ,
+                    width: 100,
                     child: Image.network(
                       categories.img!,
                       fit: BoxFit.cover,

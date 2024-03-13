@@ -1960,10 +1960,9 @@ class _AddServicesState extends State<AddServices> {
         }
 
         if (serviceName.text.isNotEmpty &&
-            selectedCategory11.id != "null" &&
-            selectedCurrency != "" &&
+            selectedCAtegoryId != "" &&
             serviceCharge.text.isNotEmpty) {
-          if (selectedCategory11.id.isNotEmpty && categorylist.isNotEmpty ||
+          if (selectedCAtegoryId.isEmpty && categorylist.isNotEmpty ||
               subcateid.isNotEmpty && serviceCharge.text.isNotEmpty) {
             setState(() {
               buttonLogin = true;
@@ -1986,7 +1985,7 @@ class _AddServicesState extends State<AddServices> {
             Map<String, String> param = {
               'name': '${serviceName.text.toString()}',
               'description': '${descriptionController.text}',
-              'cat_id': selectedCategory11.id ?? '',
+              'cat_id': selectedCAtegoryId,
               'scat_id': categorylist.isEmpty
                   ? subcateid.map((dynamic value) {
                       return value.toString();
@@ -2792,6 +2791,8 @@ class _AddServicesState extends State<AddServices> {
                                   .toString();
                               print(serviceName.toString());
                               serviceSubCategoryModel = null;
+                              selectedCAtegoryId = selectedCategory.toString();
+                              selectedCAtegoryName = serviceName;
                               getServicesSubCategory(
                                   selectedCategory, serviceName);
                               setState(() {});
@@ -2902,25 +2903,6 @@ class _AddServicesState extends State<AddServices> {
                       color: AppColor.PrimaryDark,
                     ),
                     selectedOptionTextColor: AppColor.PrimaryDark,
-                    // suffixIcon: IconData(),
-                    // selectedItemBuilder: (BuildContext context, ValueItem item,) {
-                    //   // Customize the appearance of the selected item here
-                    //   return Container(
-                    //     padding: EdgeInsets.all(8.0),
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.red, // Set the background color to red
-                    //       borderRadius: BorderRadius.circular(5.0),
-                    //     ),
-                    //     child: Row(
-                    //       mainAxisSize: MainAxisSize.min,
-                    //       children: [
-                    //         Text(item.label),
-                    //         const SizedBox(width: 8.0),
-                    //         Icon(Icons.close, color: Colors.white, size: 18.0),
-                    //       ],
-                    //     ),
-                    //   );
-                    // },
                   ),
                 ),
           SizedBox(
@@ -4083,6 +4065,8 @@ class _AddServicesState extends State<AddServices> {
 
   Map<String, List<SubData>> customMap = {};
 
+  String selectedCAtegoryId = "";
+  String selectedCAtegoryName = "";
   void addData(String key, List<SubData> newData) {
     if (customMap.containsKey(key)) {
       customMap[key]!.addAll(newData);
@@ -4120,6 +4104,10 @@ class _AddServicesState extends State<AddServices> {
             value: "${serviceSubCategoryModel!.data![i].id}",
           ));
         }
+        multiSelectController.setOptions(listValues);
+        // for (int i = 0; i < listValues.length; i++) {
+        //   print(listValues[i].toString() + "LIST VALUUES");
+        // }
 
         addData(serviceName, serviceSubCategoryModel!.data!);
         //customMap.addEntries(serviceName, serviceSubCategoryModel.data!);

@@ -7,6 +7,9 @@ class MultipartHelper {
     img,
   }) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
+
+    print(url.toString());
+    print(img.toString());
     request.fields.addAll(requestBody);
     if (img != null) {
       request.files
@@ -21,6 +24,7 @@ class MultipartHelper {
     //   print(response.reasonPhrase);
     // }
     var newdata = await response.stream.bytesToString();
+    print(newdata.toString() + "Image res");
     return newdata;
   }
 }

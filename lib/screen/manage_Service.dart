@@ -374,6 +374,10 @@ class _ManageServiceState extends State<ManageService> {
                                                                         .restaurants![
                                                                             index]
                                                                         .baseCurrency,
+                                                                    servicesOffered: vendorServiceModel!
+                                                                        .restaurants![
+                                                                            index]
+                                                                        .serviceOffered,
                                                                     // experts: vendorModel.restaurants![index].experts,
                                                                   )));
                                               if (result == true) {
