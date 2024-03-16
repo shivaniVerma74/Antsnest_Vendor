@@ -276,6 +276,7 @@ class _EditServicesState extends State<EditServices> {
     }
   }
 
+  List<String> selectedSubCategories = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -301,6 +302,10 @@ class _EditServicesState extends State<EditServices> {
     servicePic = widget.serviceImage;
     selectedCategory = widget.catId;
     selectSubCategory = widget.subCatId;
+    try {
+      selectedSubCategories = selectSubCategory!.split(',');
+    } catch (stacktrace) {}
+    //here
     //selectedCurrency = widget.currency.toString();
 
     print("${widget.country}" + "_______________________");
@@ -930,26 +935,28 @@ class _EditServicesState extends State<EditServices> {
                                     ))
                                 .toList(),
                             value: selectedCategory,
-                            onChanged: (value) {
-                              var serviceName = "";
+                            onChanged: null,
 
-                              setState(() {
-                                var serviceName = "";
-                                selectedCategory = value as String;
-                              });
-                              categorylist.clear();
-                              print(selectedCategory);
-                              serviceName = serviceModel.data!
-                                  .firstWhere((element) => element.id == value)
-                                  .cName
-                                  .toString();
-                              print(serviceName.toString());
-                              serviceSubCategoryModel = null;
-                              getServicesSubCategory(
-                                  selectedCategory, serviceName, false);
-                              setState(() {});
-                              print("CATEGORY ID issssss== $selectedCategory");
-                            },
+                            // (value) {
+                            //   var serviceName = "";
+
+                            //   setState(() {
+                            //     var serviceName = "";
+                            //     selectedCategory = value as String;
+                            //   });
+                            //   categorylist.clear();
+                            //   print(selectedCategory);
+                            //   serviceName = serviceModel.data!
+                            //       .firstWhere((element) => element.id == value)
+                            //       .cName
+                            //       .toString();
+                            //   print(serviceName.toString());
+                            //   serviceSubCategoryModel = null;
+                            //   getServicesSubCategory(
+                            //       selectedCategory, serviceName, false);
+                            //   setState(() {});
+                            //   print("CATEGORY ID issssss== $selectedCategory");
+                            // },
                             icon: const Icon(
                               Icons.arrow_forward_ios_outlined,
                               color: AppColor.PrimaryDark,
@@ -2134,8 +2141,16 @@ class _EditServicesState extends State<EditServices> {
         // }
 
         if (forFirstTym) {
-          _controller.addSelectedOption(
-              ValueItem(label: widget.subName, value: widget.subCatId));
+          for (int i = 0; i < serviceSubCategoryModel!.data!.length; i++) {
+            for (int j = 0; j < selectedSubCategories.length; j++) {
+              if (selectedSubCategories[j].trim() ==
+                  serviceSubCategoryModel!.data![i].id) {
+                _controller.addSelectedOption(ValueItem(
+                    label: serviceSubCategoryModel!.data![i].cName!,
+                    value: serviceSubCategoryModel!.data![i].id));
+              }
+            }
+          }
         }
 
         ///  addData(serviceName, serviceSubCategoryModel!.data!);

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:fixerking/modal/NewCurrencyModel.dart';
 import 'package:fixerking/modal/countModel.dart';
 import 'package:fixerking/screen/bottom_bar.dart';
 import 'package:fixerking/screen/service_details_screen.dart';
@@ -51,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     // getNewOders();
+    getCurrency();
     getMessageCount();
     getNotification();
     getCounts();
@@ -199,6 +201,31 @@ class _HomeScreenState extends State<HomeScreen> {
     "Cancelled by user"
   ];
 
+  NewCurrencyModel? currencyModel;
+  getCurrency() async {
+    var headers = {
+      'Cookie': 'ci_session=bba38841200d796c5a2c59f6faf3664a74756f90'
+    };
+    var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            'https://developmentalphawizz.com/antsnest/api/get_currency'));
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      var finalResult = await response.stream.bytesToString();
+      print('${finalResult}____________');
+      final jsonResponse = NewCurrencyModel.fromJson(json.decode(finalResult));
+      setState(() {
+        currencyModel = jsonResponse;
+      });
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
+  String selectedCurrency = '';
+
   @override
   Widget build(BuildContext context) {
     changeStatusBarColor(AppColor().colorBg2());
@@ -213,6 +240,44 @@ class _HomeScreenState extends State<HomeScreen> {
           centerTitle: false,
           backgroundColor: AppColor.PrimaryDark,
           actions: [
+            currencyModel == null
+                ? SizedBox.shrink()
+                : SizedBox(
+                    width: 70,
+                    child: DropdownButton(
+                      isExpanded: true,
+
+                      // Initial Value
+                      value: selectedCurrency == null || selectedCurrency == ""
+                          ? 'INR'
+                          : selectedCurrency,
+
+                      // Down Arrow Icon
+                      icon: const Icon(Icons.keyboard_arrow_down),
+
+                      // Array list of items
+                      items: currencyModel!.data!.map((items) {
+                        return DropdownMenuItem(
+                          value: items.name,
+                          child: Text("${items.name}"),
+                        );
+                      }).toList(),
+                      // After selecting the desired option,it will
+                      // change button value to selected value
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedCurrency = newValue!;
+
+                          //  currency = selectedCurrency!;
+                          //   updateCurrencyApi();
+                          print("selected currency here ${selectedCurrency}");
+                        });
+                      },
+                    ),
+                  ),
+            SizedBox(
+              width: 10,
+            ),
             InkWell(
               onTap: () {
                 Navigator.push(
@@ -264,6 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onRefresh: () {
             setState(() {
               getVendorBooking("");
+              getCurrency();
             });
             return getVendorBooking("");
           },
@@ -2047,6 +2113,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   //             child: Center(child: Image.asset("images/icons/loader.gif")));
                   //       }
                   //     }),
+
+                  Image.asset(
+                    "images/icons/homebanner.png",
+                    fit: BoxFit.contain,
+                  ),
                 ],
               ),
             ),

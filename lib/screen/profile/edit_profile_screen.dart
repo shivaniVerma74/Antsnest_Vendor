@@ -497,7 +497,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
           "i_link": instagramController.text,
           "l_link": linkedInController.text,
           "f_link": facebookController.text,
-          "provide_services": serviceInfoController.text,
+          "provide_services": comfertableServiceController.text,
           "number": noOfDays.toString(),
           "equipments": equipmentController.text,
           "birthday": dateFormate.toString(),
@@ -1826,17 +1826,24 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(vertical: 6),
+                  padding: EdgeInsets.symmetric(vertical: 0),
                   decoration: BoxDecoration(
                       color: AppColor().colorEdit(),
                       borderRadius: BorderRadius.circular(12)),
                   child: TextFormField(
                     controller: comfertableServiceController,
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      hintText: "Enter your comfortable service",
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      hintText:
+                          "What kinds of Service do you feel most comfortable doing ?",
                       label: Text(
-                        "Comfortable service",
+                        "What kinds of Service do you feel most comfortable doing ?",
+                        style: TextStyle(
+                            fontSize:
+                                comfertableServiceController.text.length > 0
+                                    ? 11
+                                    : 14),
                       ),
                       hintStyle: TextStyle(
                           color: Colors.black, fontWeight: FontWeight.w400),
@@ -1864,9 +1871,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     controller: whyJoinController,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      hintText: "Why want to join antsnest?",
+                      hintText: "Why do you want to join antsnest?",
                       label: Text(
-                        "Why Antsnest",
+                        "Why do you want to join antsnest?",
                       ),
                       hintStyle: TextStyle(
                           color: Colors.black, fontWeight: FontWeight.w400),
@@ -1884,33 +1891,42 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 SizedBox(
                   height: 15,
                 ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(
-                      color: AppColor().colorEdit(),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: TextFormField(
-                    controller: serviceInfoController,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      hintText: "Service Info",
-                      label: Text(
-                        "Service Info",
-                      ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w400),
-                      border: InputBorder.none,
-                    ),
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "Enter service info";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.text,
-                  ),
+
+                Text(
+                  "Service Info",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
                 ),
+                // Container(
+                //   margin: EdgeInsets.symmetric(horizontal: 20),
+                //   padding: EdgeInsets.symmetric(vertical: 6),
+                //   decoration: BoxDecoration(
+                //       color: AppColor().colorEdit(),
+                //       borderRadius: BorderRadius.circular(12)),
+                //   child: TextFormField(
+                //     controller: serviceInfoController,
+                //     decoration: InputDecoration(
+                //       contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                //       hintText: "Service Info",
+                //       label: Text(
+                //         "Service Info",
+                //       ),
+                //       hintStyle: TextStyle(
+                //           color: Colors.black, fontWeight: FontWeight.w400),
+                //       border: InputBorder.none,
+                //     ),
+                //     validator: (v) {
+                //       if (v!.isEmpty) {
+                //         return "Enter service info";
+                //       }
+                //       return null;
+                //     },
+                //     keyboardType: TextInputType.text,
+                //   ),
+                // ),
+
                 SizedBox(
                   height: 15,
                 ),

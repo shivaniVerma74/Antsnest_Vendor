@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:fixerking/api/api_helper/ApiList.dart';
 import 'package:fixerking/modal/countModel.dart';
+import 'package:fixerking/screen/AboutUs.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:animated_widgets/widgets/scale_animated.dart';
@@ -322,6 +323,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 tabItem(context, 7, walletIcon, "My Wallet"),
                 tabItem(context, 1, payment, "Plan History"),
                 if (showBlogs) tabItem(context, 20, blogs, "My Blogs"),
+                tabItem(context, 25, aboutUs, "About Us"),
+
                 // tabItem(context, 2, serviceIcon, "Service History"),
                 tabItem(context, 6, chatIcon, "Chat With User"),
                 tabItem(context, 8, service, "Reviews"),
@@ -634,6 +637,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               context,
               PageTransition(
                 child: BlogsPage(),
+                type: PageTransitionType.rightToLeft,
+                duration: Duration(milliseconds: 500),
+              ));
+        }
+        if (pos == 25) {
+          Navigator.push(
+              context,
+              PageTransition(
+                child: AboutUs(),
                 type: PageTransitionType.rightToLeft,
                 duration: Duration(milliseconds: 500),
               ));
