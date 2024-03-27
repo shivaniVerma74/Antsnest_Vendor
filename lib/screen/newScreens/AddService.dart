@@ -3901,7 +3901,14 @@ class _AddServicesState extends State<AddServices> {
                 height: 50,
                 width: double.maxFinite,
                 child: isPlanAvailable == "0" ? SizedBox() : bottomButton()),
-          )
+          ),
+          Text(
+            "Note: Please add time availability to start booking on your service",
+            style: TextStyle(color: AppColor.PrimaryDark, fontSize: 12),
+          ),
+          SizedBox(
+            height: 1.h,
+          ),
         ],
       ),
     );

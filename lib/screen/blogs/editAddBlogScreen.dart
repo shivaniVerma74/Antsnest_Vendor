@@ -7,6 +7,7 @@ import 'package:fixerking/token/app_token_data.dart';
 import 'package:fixerking/utility_widget/utility_widget.dart';
 import 'package:fixerking/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -257,10 +258,15 @@ class _EditAddBlogScreenState extends State<EditAddBlogScreen> {
                         status: "1");
                   }
 
-                  Navigator.pop(context);
+                  Navigator.pop(context, true);
+                  if (widget.forEdit) {
+                    Fluttertoast.showToast(msg: "Blog updated successfully");
+                  } else {
+                    Fluttertoast.showToast(msg: "Blog is under review.");
+                  }
                 },
                 child: UtilityWidget.lodingButton(
-                    buttonLogin: buttonLogin, btntext: 'Submit'),
+                    buttonLogin: buttonLogin, btntext: 'Submit For Approval'),
               ),
             )
           ],

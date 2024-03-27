@@ -104,156 +104,181 @@ class _BlogsPageState extends State<BlogsPage> {
               ),
             ),
           ),
-          body: FutureBuilder(
-              future: getMyBlogs(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  BlogsModel his = snapshot.data;
-                  return his.responseCode == "1"
-                      ? GridView.builder(
-                          shrinkWrap: true,
-                          //physics: NeverScrollableScrollPhysics(),
-                          primary: false,
-                          padding: EdgeInsets.all(8),
-                          itemCount: his!.data!.length ?? 0,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 95 / 110,
-                            crossAxisSpacing: 0.0,
-                            mainAxisSpacing: 5.0,
-                          ),
-                          itemBuilder: (BuildContext context, int index) {
-                            var isActive =
-                                his.data[index].status == "0" ? false : true;
-                            return Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Card(
-                                elevation: 4,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: Column(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            PageTransition(
-                                              child: EditAddBlogScreen(
-                                                forEdit: true,
-                                                title: his.data[index].title,
-                                                description:
-                                                    his.data[index].description,
-                                                blog_id: his.data[index].id,
-                                                status: his.data[index].status,
-                                                image: his.data[index].image,
-                                              ),
-                                              type: PageTransitionType
-                                                  .rightToLeft,
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                            ));
-                                      },
-                                      child: Container(
-                                        height: 100,
-                                        width: 150,
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(8),
-                                              topRight: Radius.circular(8)),
-                                          child: Image.network(
-                                            "${his.data[index].image}",
-                                            fit: BoxFit.fill,
+          body: Padding(
+            padding: const EdgeInsets.only(bottom: 50.0),
+            child: FutureBuilder(
+                future: getMyBlogs(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    BlogsModel his = snapshot.data;
+                    return his.responseCode == "1"
+                        ? GridView.builder(
+                            shrinkWrap: true,
+                            //physics: NeverScrollableScrollPhysics(),
+                            primary: false,
+                            padding: EdgeInsets.all(8),
+                            itemCount: his!.data!.length ?? 0,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 90 / 110,
+                              crossAxisSpacing: 0.0,
+                              mainAxisSpacing: 5.0,
+                            ),
+                            itemBuilder: (BuildContext context, int index) {
+                              var isActive =
+                                  his.data[index].status == "0" ? false : true;
+                              return Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Card(
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Column(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                child: EditAddBlogScreen(
+                                                  forEdit: true,
+                                                  title: his.data[index].title,
+                                                  description: his
+                                                      .data[index].description,
+                                                  blog_id: his.data[index].id,
+                                                  status:
+                                                      his.data[index].status,
+                                                  image: his.data[index].image,
+                                                ),
+                                                type: PageTransitionType
+                                                    .rightToLeft,
+                                                duration:
+                                                    Duration(milliseconds: 500),
+                                              ));
+                                        },
+                                        child: Container(
+                                          height: 100,
+                                          width: 150,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                topRight: Radius.circular(8)),
+                                            child: Image.network(
+                                              "${his.data[index].image}",
+                                              fit: BoxFit.fill,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Text(
-                                      his.data[index].title,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  PageTransition(
-                                                    child: EditAddBlogScreen(
-                                                      forEdit: true,
-                                                      title:
-                                                          his.data[index].title,
-                                                      description: his
-                                                          .data[index]
-                                                          .description,
-                                                      blog_id:
-                                                          his.data[index].id,
-                                                      status: his
-                                                          .data[index].status,
-                                                      image:
-                                                          his.data[index].image,
-                                                    ),
-                                                    type: PageTransitionType
-                                                        .rightToLeft,
-                                                    duration: Duration(
-                                                        milliseconds: 500),
-                                                  ));
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Icon(Icons.edit),
-                                            )),
-                                        CupertinoSwitch(
-                                          // thumbColor: Colors.red,
-                                          trackColor: Colors.red,
-                                          value: isActive,
+                                      Text(
+                                        his.data[index].title,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          GestureDetector(
+                                              onTap: () async {
+                                                var res = await Navigator.push(
+                                                        context,
+                                                        PageTransition(
+                                                          child:
+                                                              EditAddBlogScreen(
+                                                            forEdit: true,
+                                                            title: his
+                                                                .data[index]
+                                                                .title,
+                                                            description: his
+                                                                .data[index]
+                                                                .description,
+                                                            blog_id: his
+                                                                .data[index].id,
+                                                            status: his
+                                                                .data[index]
+                                                                .status,
+                                                            image: his
+                                                                .data[index]
+                                                                .image,
+                                                          ),
+                                                          type:
+                                                              PageTransitionType
+                                                                  .rightToLeft,
+                                                          duration: Duration(
+                                                              milliseconds:
+                                                                  500),
+                                                        ))
+                                                    .then((value) =>
+                                                        getMyBlogs());
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Icon(Icons.edit),
+                                              )),
+                                          CupertinoSwitch(
+                                            // thumbColor: Colors.red,
+                                            trackColor: Colors.red,
+                                            value: isActive,
 
-                                          onChanged: (value) async {
-                                            isActive = !isActive;
-                                            setState(() {});
-                                            multipartRequestWithoutImage(
-                                                '${Apipath.BASH_URL}add_blog',
-                                                blog_id: his.data[index].id,
-                                                status:
-                                                    his.data[index].status ==
-                                                            "0"
-                                                        ? "1"
-                                                        : "0",
-                                                title: his.data[index].title,
-                                                description: his
-                                                    .data[index].description);
-                                            getMyBlogs();
-                                            setState(() {});
-                                            // enablelist[index] =
-                                            //     value == true ? "1" : "0";
-                                            // setState(() {});
-                                            // activeDeactiveService(
-                                            //     "${vendorServiceModel?.restaurants?[index].resId}",
-                                            //     "${enablelist[index]}");
-                                            // getVendorAllServices();
-                                          },
-                                        ),
-                                      ],
-                                    )
-                                  ],
+                                            onChanged: (value) async {
+                                              isActive = !isActive;
+                                              setState(() {});
+                                              multipartRequestWithoutImage(
+                                                  '${Apipath.BASH_URL}add_blog',
+                                                  blog_id: his.data[index].id,
+                                                  status:
+                                                      his.data[index].status ==
+                                                              "0"
+                                                          ? "1"
+                                                          : "0",
+                                                  title: his.data[index].title,
+                                                  description: his
+                                                      .data[index].description);
+                                              getMyBlogs();
+                                              setState(() {});
+                                              // enablelist[index] =
+                                              //     value == true ? "1" : "0";
+                                              // setState(() {});
+                                              // activeDeactiveService(
+                                              //     "${vendorServiceModel?.restaurants?[index].resId}",
+                                              //     "${enablelist[index]}");
+                                              // getVendorAllServices();
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        his.data[index].is_approve == "1"
+                                            ? "Active"
+                                            : "Inactive",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                            color: his.data[index].is_approve ==
+                                                    "1"
+                                                ? Colors.green
+                                                : Colors.red),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        )
-                      : Center(
-                          child: Text("No Blogs"),
-                        );
-                } else if (snapshot.hasError) {
-                  return Icon(Icons.error_outline);
-                } else {
-                  return Center(child: Image.asset("images/icons/loader.gif"));
-                }
-              })),
+                              );
+                            },
+                          )
+                        : Center(
+                            child: Text("No Blogs"),
+                          );
+                  } else if (snapshot.hasError) {
+                    return Icon(Icons.error_outline);
+                  } else {
+                    return Center(
+                        child: Image.asset("images/icons/loader.gif"));
+                  }
+                }),
+          )),
     );
   }
 

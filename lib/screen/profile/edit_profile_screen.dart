@@ -204,6 +204,49 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     }
   }
 
+  int id = 0;
+
+  Widget _addressType(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 30, right: 30),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Radio(
+            value: 0,
+            groupValue: id,
+            activeColor: AppColor.PrimaryDark,
+            onChanged: (val) {
+              setState(() {
+                id = 0;
+              });
+            },
+          ),
+          Text(
+            'Bank Details',
+            style: new TextStyle(fontSize: 12.0),
+          ),
+          Radio(
+            value: 1,
+            groupValue: id,
+            activeColor: AppColor.PrimaryDark,
+            onChanged: (val) {
+              setState(() {
+                id = 1;
+              });
+            },
+          ),
+          Text(
+            'Razorpay',
+            style: new TextStyle(
+              fontSize: 12.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   var dateFormate;
   String _dateValue = '';
   Future _selectDate() async {
@@ -287,6 +330,14 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     } else {
       return null;
     }
+  }
+
+  String _selectedOption = 'account';
+
+  void handleRadioValueChanged(String value) {
+    setState(() {
+      _selectedOption = value;
+    });
   }
 
   @override
@@ -631,6 +682,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     paymentMode = widget.response.user!.paymentDetails?.mode.toString();
     paying = widget.response.user!.paymentDetails?.purpose.toString();
     getServicesSubCategory(selectedCategory);
+    if (razorpayController.text != "") {
+      id = 1;
+    }
     setState(() {});
     // print("checking birthday ${widget.response.user!.cityId.toString()} and ${widget.response.user!.stateId.toString()}");
   }
@@ -2919,508 +2973,556 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 SizedBox(
                   height: 10,
                 ),
-
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(
-                      color: AppColor().colorEdit(),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: TextFormField(
-                    controller: payNameController,
-                    decoration: InputDecoration(
-                      counterText: "",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      hintText: "Enter account holder name",
-                      label: Text(
-                        "Account Holder Name",
-                      ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w400),
-                      border: InputBorder.none,
-                    ),
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "Enter name";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.name,
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(
-                      color: AppColor().colorEdit(),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: TextFormField(
-                    controller: accController,
-                    decoration: InputDecoration(
-                      counterText: "",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      hintText: "Accout Number",
-                      label: Text(
-                        "Account Number",
-                      ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w400),
-                      border: InputBorder.none,
-                    ),
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "Enter Account Number";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.number,
-                    maxLength: 12,
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(
-                      color: AppColor().colorEdit(),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: TextFormField(
-                    controller: bankNameController,
-                    decoration: InputDecoration(
-                      counterText: "",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      hintText: "Bank Name",
-                      label: Text(
-                        "Bank Name",
-                      ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w400),
-                      border: InputBorder.none,
-                    ),
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "Bank Name";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.name,
-                  ),
-                ),
-
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(
-                      color: AppColor().colorEdit(),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: TextFormField(
-                    controller: bankAddressController,
-                    decoration: InputDecoration(
-                      counterText: "",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      hintText: "Bank Address",
-                      label: Text(
-                        "Bank Address",
-                      ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w400),
-                      border: InputBorder.none,
-                    ),
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "Bank Address";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.name,
-                  ),
-                ),
-
-                SizedBox(
-                  height: 15,
-                ),
-
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(
-                      color: AppColor().colorEdit(),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: TextFormField(
-                    controller: ifscController,
-                    decoration: InputDecoration(
-                      counterText: "",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      hintText: "Ifsc code",
-                      label: Text(
-                        "Ifsc code",
-                      ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w400),
-                      border: InputBorder.none,
-                    ),
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "Ifsc";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.name,
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(
-                      color: AppColor().colorEdit(),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: TextFormField(
-                    controller: panNoController,
-                    decoration: InputDecoration(
-                      counterText: "",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      hintText: "Pan Number",
-                      label: Text(
-                        "Pan Number",
-                      ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w400),
-                      border: InputBorder.none,
-                    ),
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "Enter pan";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.name,
-                  ),
-                ),
-
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(
-                      color: AppColor().colorEdit(),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: TextFormField(
-                    controller: sortCodeController,
-                    decoration: InputDecoration(
-                      counterText: "",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      hintText: "Sort Code",
-                      label: Text(
-                        "Sort Code",
-                      ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w400),
-                      border: InputBorder.none,
-                    ),
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "Sort Code";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.name,
-                  ),
-                ),
-
-                SizedBox(
-                  height: 15,
-                ),
-
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(
-                      color: AppColor().colorEdit(),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: TextFormField(
-                    controller: routingController,
-                    decoration: InputDecoration(
-                      counterText: "",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      hintText: "Routing No",
-                      label: Text(
-                        "Routing No",
-                      ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w400),
-                      border: InputBorder.none,
-                    ),
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "Routing No";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.name,
-                  ),
-                ),
-                SizedBox(height: 15),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(
-                      color: AppColor().colorEdit(),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: TextFormField(
-                    controller: paymailController,
-                    decoration: InputDecoration(
-                      counterText: "",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      hintText: "Email",
-                      label: Text(
-                        "Email",
-                      ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w400),
-                      border: InputBorder.none,
-                    ),
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "Enter email";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                ),
-
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(
-                      color: AppColor().colorEdit(),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: TextFormField(
-                    controller: payContactController,
-                    decoration: InputDecoration(
-                      counterText: "",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      hintText: "Contact Number",
-                      label: Text(
-                        "Contact Number",
-                      ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w400),
-                      border: InputBorder.none,
-                    ),
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "Enter Contact Number";
-                      }
-                      return null;
-                    },
-                    maxLength: 10,
-                    keyboardType: TextInputType.number,
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
-                  height: 6.h,
-                  decoration: boxDecoration(
-                    radius: 10.0,
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      isExpanded: true,
-                      hint: Text(
-                        'Payment Mode ',
-                        style: TextStyle(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Paymnet options : *",
+                      style: TextStyle(
+                          color: Colors.black,
                           fontSize: 14,
-                          fontWeight: FontWeight.normal,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+
+                _addressType(context),
+                Visibility(
+                  visible: id == 0,
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                            color: AppColor().colorEdit(),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: TextFormField(
+                          controller: payNameController,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            hintText: "Enter account holder name",
+                            label: Text(
+                              "Account Holder Name",
+                            ),
+                            hintStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                            border: InputBorder.none,
+                          ),
+                          validator: (v) {
+                            if (v!.isEmpty && id == 0) {
+                              return "Enter name";
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.name,
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
-                      items: ['NEFT', 'RTGS', 'IMPS', 'UPI']
-                          .map((String? item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ))
-                          .toList(),
-                      value: paymentMode,
-                      onChanged: (value) {
-                        setState(() {
-                          paymentMode = value as String;
-                          // // serviceName.text = serviceModel.data!
-                          //     .firstWhere((element) => element.id == value)
-                          //     .cName
-                          //     .toString();
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.arrow_forward_ios_outlined,
-                        color: AppColor.PrimaryDark,
+                      SizedBox(
+                        height: 15,
                       ),
-                      iconSize: 14,
-                      buttonHeight: 50,
-                      buttonWidth: 160,
-                      buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                      buttonDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
-                        color: AppColor().colorEdit(),
-                        //color: Colors.grey.withOpacity(0.05)
-                      ),
-                      buttonElevation: 0,
-                      itemHeight: 40,
-                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                      dropdownMaxHeight: 300,
-                      dropdownPadding: null,
-                      dropdownDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      dropdownElevation: 8,
-                      scrollbarRadius: const Radius.circular(40),
-                      scrollbarThickness: 6,
-                      scrollbarAlwaysShow: true,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
-                  height: 6.h,
-                  decoration: boxDecoration(
-                    radius: 10.0,
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      isExpanded: true,
-                      hint: Text(
-                        'Paying',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                            color: AppColor().colorEdit(),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: TextFormField(
+                          controller: accController,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            hintText: "Accout Number",
+                            label: Text(
+                              "Account Number",
+                            ),
+                            hintStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                            border: InputBorder.none,
+                          ),
+                          validator: (v) {
+                            if (v!.isEmpty && id == 0) {
+                              return "Enter Account Number";
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.number,
+                          maxLength: 12,
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
-                      items: ['Payout', 'Refund']
-                          .map((String? item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ))
-                          .toList(),
-                      value: paying,
-                      onChanged: (value) {
-                        setState(() {
-                          paying = value as String;
-                          // // serviceName.text = serviceModel.data!
-                          //     .firstWhere((element) => element.id == value)
-                          //     .cName
-                          //     .toString();
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.arrow_forward_ios_outlined,
-                        color: AppColor.PrimaryDark,
+                      SizedBox(
+                        height: 15,
                       ),
-                      iconSize: 14,
-                      buttonHeight: 50,
-                      buttonWidth: 160,
-                      buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                      buttonDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
-                        color: AppColor().colorEdit(),
-                        //color: Colors.grey.withOpacity(0.05)
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                            color: AppColor().colorEdit(),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: TextFormField(
+                          controller: bankNameController,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            hintText: "Bank Name",
+                            label: Text(
+                              "Bank Name",
+                            ),
+                            hintStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                            border: InputBorder.none,
+                          ),
+                          validator: (v) {
+                            if (v!.isEmpty && id == 0) {
+                              return "Bank Name";
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.name,
+                        ),
                       ),
-                      buttonElevation: 0,
-                      itemHeight: 40,
-                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                      dropdownMaxHeight: 300,
-                      dropdownPadding: null,
-                      dropdownDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
+                      SizedBox(
+                        height: 15,
                       ),
-                      dropdownElevation: 8,
-                      scrollbarRadius: const Radius.circular(40),
-                      scrollbarThickness: 6,
-                      scrollbarAlwaysShow: true,
-                    ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                            color: AppColor().colorEdit(),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: TextFormField(
+                          controller: bankAddressController,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            hintText: "Bank Address",
+                            label: Text(
+                              "Bank Address",
+                            ),
+                            hintStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                            border: InputBorder.none,
+                          ),
+                          validator: (v) {
+                            if (v!.isEmpty && id == 0) {
+                              return "Bank Address";
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.name,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                            color: AppColor().colorEdit(),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: TextFormField(
+                          controller: ifscController,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            hintText: "Ifsc code",
+                            label: Text(
+                              "Ifsc code",
+                            ),
+                            hintStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                            border: InputBorder.none,
+                          ),
+                          validator: (v) {
+                            if (v!.isEmpty && id == 0) {
+                              return "Ifsc";
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.name,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                            color: AppColor().colorEdit(),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: TextFormField(
+                          controller: panNoController,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            hintText: "PanCard Number",
+                            label: Text(
+                              "PanCard Number",
+                            ),
+                            hintStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                            border: InputBorder.none,
+                          ),
+                          validator: (v) {
+                            if (v!.isEmpty && id == 0) {
+                              return "Enter pan";
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.name,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                            color: AppColor().colorEdit(),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: TextFormField(
+                          controller: sortCodeController,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            hintText: "Sort Code/ABA/IBAN",
+                            label: Text(
+                              "Sort Code/ABA/IBAN",
+                            ),
+                            hintStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                            border: InputBorder.none,
+                          ),
+                          validator: (v) {
+                            if (v!.isEmpty && id == 0) {
+                              return "Sort Code";
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.name,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                            color: AppColor().colorEdit(),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: TextFormField(
+                          controller: routingController,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            hintText: "Routing No",
+                            label: Text(
+                              "Routing No",
+                            ),
+                            hintStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                            border: InputBorder.none,
+                          ),
+                          validator: (v) {
+                            if (v!.isEmpty && id == 0) {
+                              return "Routing No";
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.name,
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                            color: AppColor().colorEdit(),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: TextFormField(
+                          controller: paymailController,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            hintText: "Email Id",
+                            label: Text(
+                              "Email Id",
+                            ),
+                            hintStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                            border: InputBorder.none,
+                          ),
+                          validator: (v) {
+                            if (v!.isEmpty && id == 0) {
+                              return "Enter email";
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                            color: AppColor().colorEdit(),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: TextFormField(
+                          controller: payContactController,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            hintText: "Contact Number",
+                            label: Text(
+                              "Contact Number",
+                            ),
+                            hintStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                            border: InputBorder.none,
+                          ),
+                          validator: (v) {
+                            if (v!.isEmpty && id == 0) {
+                              return "Enter Contact Number";
+                            }
+                            return null;
+                          },
+                          maxLength: 10,
+                          keyboardType: TextInputType.number,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        width: double.infinity,
+                        height: 6.h,
+                        decoration: boxDecoration(
+                          radius: 10.0,
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            isExpanded: true,
+                            hint: Text(
+                              'Payment Mode ',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            items: ['NEFT', 'RTGS', 'IMPS', 'UPI']
+                                .map((String? item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item.toString(),
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ))
+                                .toList(),
+                            value: paymentMode,
+                            onChanged: (value) {
+                              setState(() {
+                                paymentMode = value as String;
+                                // // serviceName.text = serviceModel.data!
+                                //     .firstWhere((element) => element.id == value)
+                                //     .cName
+                                //     .toString();
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.arrow_forward_ios_outlined,
+                              color: AppColor.PrimaryDark,
+                            ),
+                            iconSize: 14,
+                            buttonHeight: 50,
+                            buttonWidth: 160,
+                            buttonPadding:
+                                const EdgeInsets.only(left: 14, right: 14),
+                            buttonDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                              color: AppColor().colorEdit(),
+                              //color: Colors.grey.withOpacity(0.05)
+                            ),
+                            buttonElevation: 0,
+                            itemHeight: 40,
+                            itemPadding:
+                                const EdgeInsets.only(left: 14, right: 14),
+                            dropdownMaxHeight: 300,
+                            dropdownPadding: null,
+                            dropdownDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            dropdownElevation: 8,
+                            scrollbarRadius: const Radius.circular(40),
+                            scrollbarThickness: 6,
+                            scrollbarAlwaysShow: true,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        width: double.infinity,
+                        height: 6.h,
+                        decoration: boxDecoration(
+                          radius: 10.0,
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            isExpanded: true,
+                            hint: Text(
+                              'Paying',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            items: ['Payout', 'Refund']
+                                .map((String? item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item.toString(),
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ))
+                                .toList(),
+                            value: paying,
+                            onChanged: (value) {
+                              setState(() {
+                                paying = value as String;
+                                // // serviceName.text = serviceModel.data!
+                                //     .firstWhere((element) => element.id == value)
+                                //     .cName
+                                //     .toString();
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.arrow_forward_ios_outlined,
+                              color: AppColor.PrimaryDark,
+                            ),
+                            iconSize: 14,
+                            buttonHeight: 50,
+                            buttonWidth: 160,
+                            buttonPadding:
+                                const EdgeInsets.only(left: 14, right: 14),
+                            buttonDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                              color: AppColor().colorEdit(),
+                              //color: Colors.grey.withOpacity(0.05)
+                            ),
+                            buttonElevation: 0,
+                            itemHeight: 40,
+                            itemPadding:
+                                const EdgeInsets.only(left: 14, right: 14),
+                            dropdownMaxHeight: 300,
+                            dropdownPadding: null,
+                            dropdownDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            dropdownElevation: 8,
+                            scrollbarRadius: const Radius.circular(40),
+                            scrollbarThickness: 6,
+                            scrollbarAlwaysShow: true,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(
-                      color: AppColor().colorEdit(),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: TextFormField(
-                    controller: razorpayController,
-                    decoration: InputDecoration(
-                      counterText: "",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      hintText: "Razorpay Id",
-                      label: Text(
-                        "RazorPay Id",
+                Visibility(
+                  visible: id == 1,
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                            color: AppColor().colorEdit(),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: TextFormField(
+                          controller: razorpayController,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            hintText: "Razorpay Id",
+                            label: Text(
+                              "RazorPay Id",
+                            ),
+                            hintStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                            border: InputBorder.none,
+                          ),
+                          validator: (v) {
+                            if (v!.isEmpty && id == 1) {
+                              return "Enter razorPay ID";
+                            }
+                            return null;
+                          },
+                        ),
                       ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w400),
-                      border: InputBorder.none,
-                    ),
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "Enter razorPay ID";
-                      }
-                      return null;
-                    },
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          "(Please enter your current ID or create a free Razorpay ID in order to get immediate payments from your wallet to your bank account)",
+                          style: TextStyle(
+                              color: AppColor.PrimaryDark, fontSize: 12),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    "(Please enter your current ID or create a free Razorpay ID in order to get immediate payments from your wallet to your bank account)",
-                    style: TextStyle(color: AppColor.PrimaryDark, fontSize: 12),
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
+
                 Container(
                     margin: EdgeInsets.only(bottom: 7.h),
                     child: InkWell(
@@ -3439,7 +3541,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                         }
                       },
                       child: UtilityWidget.lodingButton(
-                          buttonLogin: buttonLogin, btntext: 'Save'),
+                          buttonLogin: buttonLogin, btntext: 'Update'),
                     )),
                 SizedBox(
                   height: 15,

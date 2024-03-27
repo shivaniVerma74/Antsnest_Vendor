@@ -42,6 +42,7 @@ class DatumBlogs {
   String description;
   String image;
   String status;
+  String is_approve;
 
   DatumBlogs({
     required this.id,
@@ -50,6 +51,7 @@ class DatumBlogs {
     required this.description,
     required this.image,
     required this.status,
+    required this.is_approve,
   });
 
   factory DatumBlogs.fromJson(Map<String, dynamic> json) => DatumBlogs(
@@ -59,6 +61,7 @@ class DatumBlogs {
         description: json["description"] ?? "",
         image: json["image"] ?? "",
         status: json["status"],
+        is_approve: json["is_approve"] ?? "1",
       );
 
   Map<String, dynamic> toJson() => {
@@ -68,5 +71,6 @@ class DatumBlogs {
         "description": description,
         "image": image,
         "status": status,
+        "is_approve": is_approve,
       };
 }

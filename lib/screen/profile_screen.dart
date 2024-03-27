@@ -271,14 +271,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       SizedBox(
                                         height: 0.5.h,
                                       ),
-                                      Container(
-                                        child: text(
-                                          snapshot.data!.user!.email.toString(),
-                                          textColor: Color(0xff2a2a2a),
-                                          fontSize: 10.sp,
-                                          overFlow: true,
-                                          fontFamily: fontRegular,
-                                          maxLine: 2,
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.45,
+                                        child: Container(
+                                          child: text(
+                                            snapshot.data!.user!.email
+                                                .toString(),
+                                            textColor: Color(0xff2a2a2a),
+                                            fontSize: 10.sp,
+                                            overFlow: true,
+                                            fontFamily: fontRegular,
+                                            maxLine: 1,
+                                          ),
                                         ),
                                       ),
                                     ],

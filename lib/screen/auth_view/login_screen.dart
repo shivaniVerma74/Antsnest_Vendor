@@ -67,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen>
     setState(() {
       token = prefs.getString(TokenString.fcmToken) ?? "";
     });
+    print(token);
     print("FCM ID=== $token");
   }
 
@@ -96,6 +97,7 @@ class _LoginScreenState extends State<LoginScreen>
       "mobile========": phoneController.text,
       "device_token======": "$token"
     });
+
     var response = await http.post(Uri.parse(VendorLogin),
         body: {"mobile": phoneController.text, "device_token": "$token"});
     print("checking response here ${response.body}");

@@ -2425,27 +2425,6 @@ class _SignUpScreenState extends State<SignUpScreen>
                             SizedBox(
                               height: 15,
                             ),
-                            // GestureDetector(
-                            //     onTap: () {
-                            //       showDialog(
-                            //         context: context,
-                            //         builder: (BuildContext context) {
-                            //           return FruitSelectionDialog(customMap: customMap,);
-                            //         },
-                            //       ).then((selectedFruits) {
-                            //         if (selectedFruits != null) {
-                            //           print('Selected fruits: $selectedFruits');
-                            //         }
-                            //         customMap.forEach((key, value) {
-                            //           print('Key: $key');
-                            //           value.forEach((element) {
-                            //             print(
-                            //                 'Id: ${element.id}, Name: ${element.cName}');
-                            //           });
-                            //         });
-                            //       });
-                            //     },
-                            //     child: Text("SELECT SUB CATEGORY")),
 
                             Material(
                               elevation: 4,
